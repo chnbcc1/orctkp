@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v6-12-private";
+const CACHE="ogrenci-takip-v6-13-private";
 const ASSETS=[
   "./",
   "./index.html",
@@ -34,8 +34,16 @@ self.addEventListener("fetch",event=>{
 
   const url=new URL(event.request.url);
 
-  // Maksimum gizlilik: dış origin isteklerini engelle.
+  // Yerel Veri Modu: dış origin istekleri engellenir. Tek istisna PDF.js motorunun sabit iki dosyasıdır.
   if(url.origin!==self.location.origin){
+    const allowedPDFAssets=new Set([
+      "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js",
+      "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js"
+    ]);
+    if(allowedPDFAssets.has(url.href)){
+      event.respondWith(fetch(event.request,{cache:"force-cache"}));
+      return;
+    }
     event.respondWith(new Response("Blocked by Local Data Mode",{status:403,statusText:"Blocked"}));
     return;
   }

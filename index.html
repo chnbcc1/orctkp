@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v6.12</title>
+<title>Öğrenci Takip Sistemi v6.13</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -259,6 +259,21 @@ input,select,textarea,button{max-width:100%}
   .tab{min-width:0}
 }
 
+
+/* v6.13 mobil ve veri giriş düzeltmeleri */
+.full-action{width:100%;min-height:44px}
+.file-import-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.file-import-row input[type=file]{flex:1;min-width:210px}.file-import-row button{min-height:40px}
+.student-detail-mobile,.report-mobile{display:none}
+.grade-average-stack{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}.missing-grade-note{font-size:10px;font-weight:800;color:#9a3412;background:#fff7ed;border:1px solid #fed7aa;border-radius:999px;padding:4px 7px}.field-missing-mark{float:right;font-size:9px;color:#9a3412;background:#fff7ed;border-radius:999px;padding:2px 5px}.grade-missing-field input{border-color:#fdba74;background:#fffaf5}.grade-missing-summary{margin-top:8px;font-size:11px;color:#9a3412;background:#fff7ed;border:1px solid #fed7aa;border-radius:9px;padding:7px 8px}
+.report-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:10px}.report-card-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.report-status-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.report-stat{display:flex;justify-content:space-between;align-items:center;padding:8px 9px;border-radius:10px;font-size:12px;font-weight:700}.report-stat.done{background:#dcfce7;color:#166534}.report-stat.partial{background:#ede9fe;color:#5b21b6}.report-stat.excused{background:#ffedd5;color:#9a3412}.report-stat.missing{background:#fee2e2;color:#991b1b}
+.student-homework-card{border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:9px;background:#fff}.student-homework-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}.student-homework-card .status-group{display:grid;grid-template-columns:1fr 1fr;gap:7px}.student-homework-card .status-btn{width:100%;min-height:39px;font-size:12px!important}
+@media(max-width:700px){
+  .student-detail-desktop,.reports-desktop{display:none!important}.student-detail-mobile,.report-mobile{display:block!important}
+  .tabs{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px!important;overflow:visible!important}.tab{padding:8px 3px!important;font-size:10.5px!important;text-align:center;white-space:normal!important;line-height:1.15}
+  .matrix-homework-row .status-group{grid-template-columns:1fr 1fr!important}.matrix-homework-row .status-btn{min-height:39px!important;font-size:12px!important}
+  .file-import-row{display:grid;grid-template-columns:1fr}.file-import-row input[type=file],.file-import-row button{width:100%;min-width:0}
+}
+
 </style>
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -268,7 +283,7 @@ input,select,textarea,button{max-width:100%}
 <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; worker-src 'self' blob:; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; worker-src 'self' blob: https://cdn.jsdelivr.net; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
 </head>
 <body>
 
@@ -296,7 +311,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.12</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.13</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -349,7 +364,7 @@ input,select,textarea,button{max-width:100%}
 <div class="card table-wrap homeworks-desktop"><table><thead><tr><th>Ödev</th><th>Verilme</th><th>Son Teslim</th><th>Yapan</th><th></th></tr></thead><tbody id="homeworksBody"></tbody></table><div id="homeworksEmpty" class="empty" style="display:none">Bu dönemde ödev yok.</div></div><div id="homeworksMobile" class="homeworks-mobile"></div>
 </section>
 
-<section id="matrix" class="panel"><div class="toolbar"><div class="tiny">Hücreye tıklayarak durumu sırayla değiştirin: Yapmadı → Yaptı → Kısmen → Mazeretli.</div></div><div class="card table-wrap" id="matrixWrap"></div></section>
+<section id="matrix" class="panel"><div class="toolbar"><div class="tiny">Ödev durumunu aşağıdaki seçeneklerden belirleyin: Yaptı · Kısmen · Mazeretli · Yapmadı.</div></div><div class="card table-wrap" id="matrixWrap"></div></section>
 
 
 <section id="grades" class="panel">
@@ -362,7 +377,7 @@ input,select,textarea,button{max-width:100%}
 
 <section id="reports" class="panel">
 <div class="toolbar"><div></div><div class="toolbar-right"><button onclick="exportClassJPEG()">Sınıf JPEG</button><button class="secondary" onclick="exportClassCSV()">CSV Aktar</button></div></div>
-<div class="card table-wrap"><table><thead><tr><th>No</th><th>Öğrenci</th><th>Yaptı</th><th>Kısmen</th><th>Mazeretli</th><th>Yapmadı</th><th>Başarı %</th></tr></thead><tbody id="reportBody"></tbody></table></div>
+<div class="card table-wrap reports-desktop"><table><thead><tr><th>No</th><th>Öğrenci</th><th>Yaptı</th><th>Kısmen</th><th>Mazeretli</th><th>Yapmadı</th><th>Başarı %</th></tr></thead><tbody id="reportBody"></tbody></table></div><div id="reportMobile" class="report-mobile"></div>
 </section>
 </div>
 </main>
@@ -651,10 +666,11 @@ function saveNewStudent(){
   if(c.students.some(s=>normName(s.name)===normName(name)&&String(s.number||"")===no))return alert("Bu öğrenci zaten listede.");
   pushUndo();c.students.push({id:uid(),number:no,name});save();closeModal();render();
 }
-function openBulkStudents(){el("modalTitle").textContent="Toplu Öğrenci Ekle";el("modalSubtitle").textContent="Her satır: numara, ad soyad. Numara yoksa sadece ad yazabilirsiniz.";el("modalBody").innerHTML=`<textarea id="bulkStudents" class="note" placeholder="101, Ali Yılmaz&#10;102, Ayşe Demir&#10;Mehmet Kaya"></textarea><div style="margin-top:10px"><button onclick="saveBulkStudents()">Listeyi Ekle</button></div>`;el("modal").classList.add("open")}
-function saveBulkStudents(){const c=cls(),lines=el("bulkStudents").value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),ex=new Set(c.students.map(s=>normName(s.name)));pushUndo();for(const line of lines){let no="",name=line;const m=line.match(/^\s*(\d{1,6})\s*[,;\t-]\s*(.+)$/);if(m){no=m[1];name=m[2].trim()}if(name&&!ex.has(normName(name))){c.students.push({id:uid(),number:no,name});ex.add(normName(name))}}save();closeModal();render()}
+function openBulkStudents(){el("modalTitle").textContent="Toplu Öğrenci Ekle";el("modalSubtitle").textContent="Her satır: numara, ad soyad. Numara yoksa sadece ad yazabilirsiniz.";el("modalBody").innerHTML=`<textarea id="bulkStudents" class="note" placeholder="101, Ali Yılmaz&#10;102, Ayşe Demir&#10;Mehmet Kaya"></textarea><div style="margin-top:10px"><button class="full-action" onclick="saveBulkStudents()">Listeyi Ekle</button></div>`;el("modal").classList.add("open")}
+function saveBulkStudents(){const c=cls(),lines=el("bulkStudents").value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),ex=new Set(c.students.map(s=>normName(s.name)));pushUndo();let added=0,skipped=0;for(const line of lines){let no="",name=line;const m=line.match(/^\s*(\d{1,6})\s*[,;\t-]\s*(.+)$/);if(m){no=m[1];name=m[2].trim()}if(name&&!ex.has(normName(name))){c.students.push({id:uid(),number:no,name});ex.add(normName(name));added++}else if(name)skipped++}save();closeModal();render();alert(`${added} öğrenci eklendi${skipped?`, ${skipped} mükerrer kayıt atlandı`:""}.`)}
 
-function openFileStudentImport(){el("modalTitle").textContent="CSV / XLSX'ten Öğrenci Al";el("modalSubtitle").textContent="Tamamen çevrimdışı. Dosya cihazdan dışarı çıkmaz.";el("modalBody").innerHTML=`<div class="notice">İlk sütunda öğrenci numarası, ikinci sütunda ad-soyad olması önerilir. Başlık satırı varsa otomatik atlanmaya çalışılır.</div><input id="studentFile" type="file" accept=".csv,.txt,.xlsx"><button style="margin-left:8px" onclick="importStudentFile()">Dosyayı Oku</button><div id="filePreview" style="margin-top:12px"></div>`;el("modal").classList.add("open")}
+function openFileStudentImport(){el("modalTitle").textContent="CSV / XLSX'ten Öğrenci Al";el("modalSubtitle").textContent="Tamamen çevrimdışı. Dosya cihazdan dışarı çıkmaz.";el("modalBody").innerHTML=`<div class="notice">İlk sütunda öğrenci numarası, ikinci sütunda ad-soyad olması önerilir. Başlık satırı varsa otomatik atlanmaya çalışılır.</div><div class="file-import-row"><input id="studentFile" type="file" accept=".csv,.txt,.xlsx" onchange="toggleStudentFileButton()"><button id="studentFileReadBtn" class="secondary" disabled onclick="importStudentFile()">Dosyayı Oku</button></div><div id="filePreview" style="margin-top:12px"></div>`;el("modal").classList.add("open")}
+function toggleStudentFileButton(){const b=el("studentFileReadBtn"),f=el("studentFile");if(b)b.disabled=!(f&&f.files&&f.files.length)}
 async function importStudentFile(){const f=el("studentFile").files[0];if(!f)return alert("Dosya seçin.");try{let rows;if(f.name.toLowerCase().endsWith(".xlsx"))rows=await readXlsxFirstSheet(f);else rows=parseDelimited(await f.text());showImportPreview(rows)}catch(err){console.error(err);alert("Dosya okunamadı: "+err.message)}}
 function parseDelimited(t){return t.split(/\r?\n/).map(l=>l.trim()).filter(Boolean).map(l=>{const sep=l.includes(";")?";":l.includes("\t")?"\t":",";return l.split(sep).map(x=>x.trim().replace(/^"|"$/g,""))})}
 async function readXlsxFirstSheet(file){
@@ -690,8 +706,8 @@ function saveNewHomework(){
   pushUndo();c.homeworks.push({id:uid(),name,given:el("newHomeworkGiven")?.value||"",due:el("newHomeworkDue")?.value||"",period:currentPeriod});
   save();closeModal();render();
 }
-function openBulkHomeworks(){el("modalTitle").textContent="Toplu Ödev Ekle";el("modalSubtitle").textContent=(currentPeriod==="1"?"1. Dönem":"2. Dönem")+" · Her satıra bir ödev";el("modalBody").innerHTML=`<textarea id="bulkHomeworks" class="note" placeholder="Üslü Sayılar Testi&#10;Köklü Sayılar Çalışması"></textarea><div style="margin-top:10px"><button onclick="saveBulkHomeworks()">Ödevleri Ekle</button></div>`;el("modal").classList.add("open")}
-function saveBulkHomeworks(){const c=cls(),a=el("bulkHomeworks").value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);pushUndo();a.forEach(n=>c.homeworks.push({id:uid(),name:n,given:"",due:"",period:currentPeriod}));save();closeModal();render()}
+function openBulkHomeworks(){el("modalTitle").textContent="Toplu Ödev Ekle";el("modalSubtitle").textContent=(currentPeriod==="1"?"1. Dönem":"2. Dönem")+" · Her satıra bir ödev";el("modalBody").innerHTML=`<textarea id="bulkHomeworks" class="note" placeholder="Üslü Sayılar Testi&#10;Köklü Sayılar Çalışması"></textarea><div style="margin-top:10px"><button class="full-action" onclick="saveBulkHomeworks()">Ödevleri Ekle</button></div>`;el("modal").classList.add("open")}
+function saveBulkHomeworks(){const c=cls(),a=el("bulkHomeworks").value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),ex=new Set(hwPeriod(c).map(h=>h.name.toLocaleLowerCase("tr")));pushUndo();let added=0,skipped=0;a.forEach(n=>{const k=n.toLocaleLowerCase("tr");if(!ex.has(k)){c.homeworks.push({id:uid(),name:n,given:"",due:"",period:currentPeriod});ex.add(k);added++}else skipped++});save();closeModal();render();alert(`${added} ödev eklendi${skipped?`, ${skipped} tekrar eden ödev atlandı`:""}.`)}
 
 function status(c,sid,hid){let v=c.checks?.[sid]?.[hid];return ["done","partial","excused","missing"].includes(v)?v:"missing"}
 function setStatus(c,sid,hid,v,doPush=true){
@@ -772,9 +788,11 @@ function statusButtons(sid,hid){
 function openStudent(sid){
  window._activeStudentModalId=sid;
  const c=cls(),s=c.students.find(x=>x.id===sid),st=sstat(c,sid);el("modalTitle").textContent=s.name;el("modalSubtitle").textContent=`No: ${s.number||"-"} · ${st.done}/${st.total} yaptı · %${st.rate}`;
+ const hs=hwPeriod(c);
  el("modalBody").innerHTML=`
  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px"><button onclick="exportStudentJPEG('${sid}')">Öğrenci JPEG</button><button class="secondary" onclick="openMoveCopyStudent('${sid}','copy')">Başka Sınıfa Kopyala</button><button class="secondary" onclick="openMoveCopyStudent('${sid}','move')">Başka Sınıfa Taşı</button></div>
- <div class="card table-wrap"><table><thead><tr><th>Ödev</th><th>Durum</th><th>Hızlı İşlem</th></tr></thead><tbody>${hwPeriod(c).map(h=>`<tr><td><b>${esc(h.name)}</b></td><td>${statusBadge(status(c,sid,h.id),sid,h.id)}</td><td>${statusButtons(sid,h.id)}</td></tr>`).join("")}</tbody></table></div>
+ <div class="card table-wrap student-detail-desktop"><table><thead><tr><th>Ödev</th><th>Durum</th><th>Hızlı İşlem</th></tr></thead><tbody>${hs.map(h=>`<tr><td><b>${esc(h.name)}</b></td><td>${statusBadge(status(c,sid,h.id),sid,h.id)}</td><td>${statusButtons(sid,h.id)}</td></tr>`).join("")}</tbody></table></div>
+ <div class="student-detail-mobile">${hs.length?hs.map(h=>`<div class="student-homework-card"><div class="student-homework-head"><b>${esc(h.name)}</b>${statusBadge(status(c,sid,h.id),sid,h.id)}</div>${statusButtons(sid,h.id)}</div>`).join(""):'<div class="empty card">Bu dönemde ödev yok.</div>'}</div>
  <div style="margin-top:12px"><b>Öğretmen Notu</b><textarea class="note" oninput="cls().notes['${sid}']=this.value;save()">${esc(c.notes[sid]||"")}</textarea></div>`;
  el("modal").classList.add("open")
 }
@@ -825,6 +843,14 @@ function gradeAverage(g){
   if(project!==null)used.push(project);
   return used.length?Math.round((used.reduce((a,b)=>a+b,0)/used.length)*100)/100:null;
 }
+function missingGradeLabels(g){
+  const fields=[["exam1","1. Sınav"],["exam2","2. Sınav"],["perf1","1. Performans"],["perf2","2. Performans"]];
+  return fields.filter(([k])=>parseGrade(g[k])===null).map(([,label])=>label);
+}
+function gradeAverageHTML(g,avg){
+  const miss=missingGradeLabels(g),cls=avg===null?"avg-empty":avg<50?"avg-fail":"avg-pass",val=avg===null?"-":avg.toLocaleString("tr-TR",{maximumFractionDigits:2});
+  return `<span class="avg-pill ${cls}">${val}</span>${miss.length?`<span class="missing-grade-note" title="Eksik: ${esc(miss.join(", "))}">Eksik not</span>`:""}`;
+}
 function setGrade(sid,key,val){
   const c=cls(),g=getGradeRecord(c,sid);
   const clean=val===""?"":String(Math.max(0,Math.min(100,Number(val)||0)));
@@ -834,8 +860,8 @@ function setGrade(sid,key,val){
 function renderGrades(){
   const c=cls();if(!c||!el("gradesWrap"))return;
   if(!c.students.length){el("gradesWrap").innerHTML='<div class="empty">Bu sınıfta öğrenci yok.</div>';return;}
-  const table=`<div class="desktop-grade-table"><table class="grade-table"><thead><tr><th>No</th><th>Öğrenci</th><th>1. Sınav</th><th>2. Sınav</th><th>1. Performans</th><th>2. Performans</th><th>Proje</th><th>Ortalama</th></tr></thead><tbody>${c.students.map(s=>{const g=getGradeRecord(c,s.id),avg=gradeAverage(g);return `<tr><td>${esc(s.number||"-")}</td><td><b>${esc(s.name)}</b></td>${["exam1","exam2","perf1","perf2","project"].map(k=>`<td><input class="grade-input" type="number" min="0" max="100" step="1" value="${esc(g[k])}" onchange="setGrade('${s.id}','${k}',this.value)" placeholder="-"></td>`).join("")}<td><span class="avg-pill ${avg===null?"avg-empty":avg<50?"avg-fail":"avg-pass"}">${avg===null?"-":avg.toLocaleString("tr-TR",{maximumFractionDigits:2})}</span></td></tr>`}).join("")}</tbody></table></div>`;
-  const cards=`<div class="mobile-grade-cards">${c.students.map(s=>{const g=getGradeRecord(c,s.id),avg=gradeAverage(g),fields=[["exam1","1. Sınav"],["exam2","2. Sınav"],["perf1","1. Performans"],["perf2","2. Performans"],["project","Proje (isteğe bağlı)"]];return `<div class="mobile-grade-card"><div class="mobile-grade-head"><div class="mobile-grade-title">${esc(s.number?s.number+" - ":"")}${esc(s.name)}</div><span class="avg-pill ${avg===null?"avg-empty":avg<50?"avg-fail":"avg-pass"}">${avg===null?"-":avg.toLocaleString("tr-TR",{maximumFractionDigits:2})}</span></div><div class="grade-card-grid">${fields.map(([k,label])=>`<label>${label}<input type="number" min="0" max="100" step="1" value="${esc(g[k])}" onchange="setGrade('${s.id}','${k}',this.value)" placeholder="-"></label>`).join("")}</div><div class="grade-card-average"><b>Ortalama</b><span class="avg-pill ${avg===null?"avg-empty":avg<50?"avg-fail":"avg-pass"}">${avg===null?"-":avg.toLocaleString("tr-TR",{maximumFractionDigits:2})}</span></div></div>`}).join("")}</div>`;
+  const table=`<div class="desktop-grade-table"><table class="grade-table"><thead><tr><th>No</th><th>Öğrenci</th><th>1. Sınav</th><th>2. Sınav</th><th>1. Performans</th><th>2. Performans</th><th>Proje</th><th>Ortalama</th></tr></thead><tbody>${c.students.map(s=>{const g=getGradeRecord(c,s.id),avg=gradeAverage(g);return `<tr><td>${esc(s.number||"-")}</td><td><b>${esc(s.name)}</b></td>${["exam1","exam2","perf1","perf2","project"].map(k=>`<td><input class="grade-input" type="number" min="0" max="100" step="1" value="${esc(g[k])}" onchange="setGrade('${s.id}','${k}',this.value)" placeholder="-"></td>`).join("")}<td><div class="grade-average-stack">${gradeAverageHTML(g,avg)}</div></td></tr>`}).join("")}</tbody></table></div>`;
+  const cards=`<div class="mobile-grade-cards">${c.students.map(s=>{const g=getGradeRecord(c,s.id),avg=gradeAverage(g),miss=missingGradeLabels(g),fields=[["exam1","1. Sınav"],["exam2","2. Sınav"],["perf1","1. Performans"],["perf2","2. Performans"],["project","Proje (isteğe bağlı)"]];return `<div class="mobile-grade-card"><div class="mobile-grade-head"><div class="mobile-grade-title">${esc(s.number?s.number+" - ":"")}${esc(s.name)}</div><div class="grade-average-stack">${gradeAverageHTML(g,avg)}</div></div><div class="grade-card-grid">${fields.map(([k,label])=>`<label class="${k!=="project"&&parseGrade(g[k])===null?"grade-missing-field":""}">${label}${k!=="project"&&parseGrade(g[k])===null?'<span class="field-missing-mark">Eksik</span>':""}<input type="number" min="0" max="100" step="1" value="${esc(g[k])}" onchange="setGrade('${s.id}','${k}',this.value)" placeholder="-"></label>`).join("")}</div><div class="grade-card-average"><b>Ortalama</b><div class="grade-average-stack">${gradeAverageHTML(g,avg)}</div></div>${miss.length?`<div class="grade-missing-summary">Eksik: ${esc(miss.join(" · "))}</div>`:""}</div>`}).join("")}</div>`;
   el("gradesWrap").innerHTML=table+cards;
 }
 function exportGradesCSV(){
@@ -844,21 +870,10 @@ function exportGradesCSV(){
   downloadBlob("\uFEFF"+rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(";")).join("\n"),`${safe(c.name)}_${currentPeriod}_donem_notlar.csv`,"text/csv;charset=utf-8");
 }
 
-function renderReport(){const c=cls();el("reportBody").innerHTML="";c.students.forEach(s=>{const st=sstat(c,s.id),tr=document.createElement("tr");tr.innerHTML=`<td>${esc(s.number||"-")}</td><td>${esc(s.name)}</td><td>${st.done}</td><td>${st.partial}</td><td>${st.excused}</td><td>${st.missing}</td><td>%${st.rate}</td>`;el("reportBody").appendChild(tr)})}
-function switchTab(id){document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===id));document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("active",x.id===id))}
-function closeModal(){window._activeStudentModalId=null;el("modal").classList.remove("open")}
-
-/* Yerel resim OCR: sadece tarayıcı native TextDetector destekliyorsa. Harici servis yok. */
-async function tryLocalImageOCR(file){if(!("TextDetector" in window))throw new Error("Bu tarayıcı yerel OCR TextDetector özelliğini desteklemiyor.");const bmp=await createImageBitmap(file),det=new TextDetector(),res=await det.detect(bmp);return res.map(x=>x.rawValue).join("\n")}
-
-
-/* ===== PDF BÖLGESİNDEN ÖĞRENCİ AL =====
-   PDF.js motoru bir kez çevrimiçi olarak önbelleğe alınabilir.
-   Sonraki kullanımlarda motor IndexedDB'den yüklenir ve PDF dosyası cihazdan çıkmaz.
-*/
-let pdfRegion = {
-  pdf:null, pageNum:1, page:null, viewport:null, canvas:null, ctx:null,
-  start:null, rect:null, dragging:false, items:[], scale:1.0, file:null
+function renderReport(){
+ const c=cls();el("reportBody").innerHTML="";
+ c.students.forEach(s=>{const st=sstat(c,s.id),tr=document.createElement("tr");tr.innerHTML=`<td>${esc(s.number||"-")}</td><td>${esc(s.name)}</td><td>${st.done}</td><td>${st.partial}</td><td>${st.excused}</td><td>${st.missing}</td><td>%${st.rate}</td>`;el("reportBody").appendChild(tr)});
+ const mobile=el("reportMobile");if(mobile)mobile.innerHTML=c.students.length?c.students.map(s=>{const st=sstat(c,s.id);return `<div class="report-card"><div class="report-card-head"><b>${esc(s.number?s.number+" - ":"")}${esc(s.name)}</b><span class="avg-pill ${st.rate>=50?"avg-pass":"avg-fail"}">%${st.rate}</span></div><div class="report-status-grid"><span class="report-stat done">Yaptı <b>${st.done}</b></span><span class="report-stat partial">Kısmen <b>${st.partial}</b></span><span class="report-stat excused">Mazeretli <b>${st.excused}</b></span><span class="report-stat missing">Yapmadı <b>${st.missing}</b></span></div></div>`}).join(""):'<div class="empty card">Bu sınıfta öğrenci yok.</div>';
 };
 
 const PDF_LIB_URL = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js";
@@ -884,29 +899,27 @@ async function idbSet(k,v){
   });
 }
 async function ensurePDFEngine(){
-  if(window.pdfjsLib) return true;
-  let lib=await idbGet("pdf.min.js"), worker=await idbGet("pdf.worker.min.js");
-  if(!lib || !worker){
-    if(!navigator.onLine) throw new Error("PDF motoru bu cihazda henüz kurulmamış. İlk kurulum için bir kez internet bağlantısı gerekiyor.");
-    setPDFInfo("PDF motoru ilk kez cihaza kuruluyor…");
-    const [a,b]=await Promise.all([fetch(PDF_LIB_URL),fetch(PDF_WORKER_URL)]);
-    if(!a.ok||!b.ok) throw new Error("PDF motoru indirilemedi.");
-    lib=await a.text(); worker=await b.text();
-    await idbSet("pdf.min.js",lib); await idbSet("pdf.worker.min.js",worker);
-  }
-  (0,eval)(lib);
-  const workerBlob=new Blob([worker],{type:"application/javascript"});
-  pdfjsLib.GlobalWorkerOptions.workerSrc=URL.createObjectURL(workerBlob);
+  if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc=PDF_WORKER_URL;return true;}
+  if(!navigator.onLine) throw new Error("PDF motoru ilk kullanım için internet bağlantısı istiyor. Bu bağlantı yalnızca PDF.js motorunu indirir; PDF ve öğrenci verileri gönderilmez.");
+  setPDFInfo("PDF motoru yükleniyor… PDF dosyanız cihazdan çıkmaz.");
+  await new Promise((resolve,reject)=>{
+    const existing=document.querySelector('script[data-pdfjs-engine="1"]');
+    if(existing){existing.addEventListener("load",resolve,{once:true});existing.addEventListener("error",()=>reject(new Error("PDF motoru yüklenemedi.")),{once:true});return;}
+    const s=document.createElement("script");s.src=PDF_LIB_URL;s.async=true;s.dataset.pdfjsEngine="1";
+    s.onload=resolve;s.onerror=()=>reject(new Error("PDF motoru yüklenemedi. İnternet bağlantısını kontrol edin."));document.head.appendChild(s);
+  });
+  if(!window.pdfjsLib) throw new Error("PDF motoru başlatılamadı.");
+  pdfjsLib.GlobalWorkerOptions.workerSrc=PDF_WORKER_URL;
   return true;
 }
 
 function openPDFRegionImport(){
   pdfRegion={pdf:null,pageNum:1,page:null,viewport:null,canvas:null,ctx:null,start:null,rect:null,dragging:false,items:[],scale:1.0,file:null};
   el("modalTitle").textContent="PDF'de Bölge Seçerek Öğrenci Al";
-  el("modalSubtitle").textContent="PDF cihazda işlenir · isim sütununu fareyle seçin";
+  el("modalSubtitle").textContent="PDF cihazda işlenir · isim sütununu seçin";
   el("modalBody").innerHTML=`
     <div class="notice">
-      PDF dosyanız sunucuya yüklenmez. PDF dosyası cihazdan dışarı çıkmaz. Metin tabanlı PDF'lerde seçili bölge doğrudan okunur. Taranmış PDF'lerde tarayıcının yerel OCR desteği varsa seçili alan çevrimdışı OCR ile okunur.
+      PDF dosyanız sunucuya yüklenmez ve cihazdan dışarı çıkmaz. PDF.js motoru ilk kullanımda yalnızca güvenilir CDN'den statik kod olarak yüklenir; öğrenci/PDF verisi gönderilmez. Metin tabanlı PDF'lerde seçili bölge doğrudan okunur. Taranmış PDF'lerde tarayıcının yerel OCR desteği varsa seçili alan cihazda okunur.
     </div>
     <div class="pdf-toolbar">
       <input id="pdfRegionFile" type="file" accept=".pdf,application/pdf">
