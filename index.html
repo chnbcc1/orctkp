@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v6.14.1</title>
+<title>Öğrenci Takip Sistemi v6.14.2</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -260,7 +260,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.14.1 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
+/* v6.14.2 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
 .full-action{width:100%;min-height:44px}
 .file-import-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.file-import-row input[type=file]{flex:1;min-width:210px}.file-import-row button{min-height:40px}
 .student-detail-mobile,.report-mobile{display:none}
@@ -275,7 +275,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.14.1 — mobil PDF seçim ekranı */
+/* v6.14.2 — mobil PDF seçim ekranı */
 .pdf-stage.pdf-selecting{touch-action:none!important;user-select:none;-webkit-user-select:none;cursor:crosshair}
 .pdf-selection{border:3px solid #2563eb!important;background:rgba(37,99,235,.16)!important;box-shadow:0 0 0 9999px rgba(15,23,42,.16);pointer-events:none}
 .pdf-select-help{padding:9px 11px;border-radius:10px;background:#eff6ff;color:#1e3a8a;margin:8px 0;font-size:12px}
@@ -292,13 +292,25 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.14.1.1 PDF touch/zoom hotfix */
+/* v6.14.2.1 PDF touch/zoom hotfix */
 #modal.pdf-mobile-full .pdf-preview-wrap{touch-action:pan-x pan-y;overscroll-behavior:contain;text-align:left}
 #modal.pdf-mobile-full .pdf-stage{max-width:none!important;margin:0!important}
 #modal.pdf-mobile-full .pdf-stage canvas{max-width:none!important;width:auto!important;height:auto!important}
 #modal.pdf-mobile-full .pdf-stage.pdf-selecting,
 #modal.pdf-mobile-full .pdf-stage.pdf-selecting canvas{touch-action:none!important}
 #pdfZoomLabel{display:inline-flex;align-items:center;justify-content:center;min-width:52px;font-size:12px;font-weight:700;color:#334155}
+
+
+/* v6.14.2 — iOS PDF alan seçimi */
+#modal.pdf-mobile-full .pdf-stage.pdf-selecting{
+  touch-action:none!important;
+  -webkit-user-select:none!important;
+  user-select:none!important;
+}
+#modal.pdf-mobile-full .pdf-stage.pdf-selecting canvas{
+  touch-action:none!important;
+  -webkit-user-drag:none!important;
+}
 
 </style>
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
@@ -337,7 +349,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.14.1</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.14.2</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1026,10 +1038,19 @@ async function renderPDFRegionPage(){
 
 function togglePDFSelectMode(force){
   pdfRegion.selectMode=typeof force==="boolean"?force:!pdfRegion.selectMode;
-  const stage=el("pdfStage"),btn=el("pdfSelectModeBtn");
+  const stage=el("pdfStage"),btn=el("pdfSelectModeBtn"),wrap=stage?.parentElement;
   stage?.classList.toggle("pdf-selecting",pdfRegion.selectMode);
+  if(stage)stage.style.touchAction=pdfRegion.selectMode?"none":"auto";
+  if(wrap){
+    wrap.style.touchAction=pdfRegion.selectMode?"none":"pan-x pan-y";
+    wrap.style.overflow=pdfRegion.selectMode?"hidden":"auto";
+  }
   btn?.classList.toggle("active-select",pdfRegion.selectMode);
   if(btn)btn.textContent=pdfRegion.selectMode?"Seçim Modu Açık":"Alan Seç";
+  const help=el("pdfSelectHelp");
+  if(help)help.innerHTML=pdfRegion.selectMode
+    ? "<b>Seçim modu açık.</b> PDF artık kaymaz. Parmağınızı alanın bir köşesinden karşı köşesine sürükleyin."
+    : "Önce <b>Alan Seç</b>'e dokunun. Sonra isim sütununun bir köşesinden karşı köşesine parmağınızı sürükleyin.";
 }
 function clearPDFSelection(){
   pdfRegion.rect=null;pdfRegion.start=null;pdfRegion.dragging=false;
@@ -1046,23 +1067,87 @@ function pdfFitWidth(){
 }
 function bindPDFSelection(){
   const stage=el("pdfStage");
-  stage.onpointerdown=(ev)=>{
+  if(!stage)return;
+
+  const pointFromClient=(clientX,clientY)=>{
+    const r=stage.getBoundingClientRect();
+    const sx=pdfRegion.canvas.width/r.width,sy=pdfRegion.canvas.height/r.height;
+    return {
+      x:Math.max(0,Math.min(pdfRegion.canvas.width,(clientX-r.left)*sx)),
+      y:Math.max(0,Math.min(pdfRegion.canvas.height,(clientY-r.top)*sy))
+    };
+  };
+
+  const begin=(clientX,clientY)=>{
+    if(!pdfRegion.selectMode)return false;
+    pdfRegion.start=pointFromClient(clientX,clientY);
+    pdfRegion.dragging=true;
+    pdfRegion.rect={x:pdfRegion.start.x,y:pdfRegion.start.y,w:1,h:1};
+    drawPDFSelection();
+    return true;
+  };
+
+  const move=(clientX,clientY)=>{
+    if(!pdfRegion.dragging||!pdfRegion.selectMode)return false;
+    const cur=pointFromClient(clientX,clientY);
+    const x=Math.min(pdfRegion.start.x,cur.x),y=Math.min(pdfRegion.start.y,cur.y);
+    const w=Math.abs(cur.x-pdfRegion.start.x),h=Math.abs(cur.y-pdfRegion.start.y);
+    pdfRegion.rect={x,y,w,h};
+    drawPDFSelection();
+    return true;
+  };
+
+  const finish=()=>{
+    if(!pdfRegion.dragging)return false;
+    pdfRegion.dragging=false;
+    if(pdfRegion.rect && pdfRegion.rect.w>=8 && pdfRegion.rect.h>=8){
+      togglePDFSelectMode(false);
+      setPDFInfo("Alan seçildi. Şimdi “Seçili Alanı Oku” düğmesine dokunun.");
+    }
+    return true;
+  };
+
+  /* iPhone / iPad: pointer event tek başına güvenilir olmadığı için
+     touch eventleri non-passive olarak ayrıca dinlenir. */
+  stage.ontouchstart=null;stage.ontouchmove=null;stage.ontouchend=null;
+  stage.addEventListener("touchstart",(ev)=>{
     if(!pdfRegion.selectMode)return;
+    const t=ev.touches[0];if(!t)return;
+    ev.preventDefault();ev.stopPropagation();
+    begin(t.clientX,t.clientY);
+  },{passive:false});
+
+  stage.addEventListener("touchmove",(ev)=>{
+    if(!pdfRegion.selectMode||!pdfRegion.dragging)return;
+    const t=ev.touches[0];if(!t)return;
+    ev.preventDefault();ev.stopPropagation();
+    move(t.clientX,t.clientY);
+  },{passive:false});
+
+  stage.addEventListener("touchend",(ev)=>{
+    if(!pdfRegion.dragging)return;
+    ev.preventDefault();ev.stopPropagation();
+    finish();
+  },{passive:false});
+
+  /* Fare / masaüstü */
+  stage.onpointerdown=(ev)=>{
+    if(ev.pointerType==="touch")return;
+    if(!begin(ev.clientX,ev.clientY))return;
     ev.preventDefault();
-    const r=stage.getBoundingClientRect(),sx=pdfRegion.canvas.width/r.width,sy=pdfRegion.canvas.height/r.height;
-    pdfRegion.start={x:Math.max(0,Math.min(pdfRegion.canvas.width,(ev.clientX-r.left)*sx)),y:Math.max(0,Math.min(pdfRegion.canvas.height,(ev.clientY-r.top)*sy))};
-    pdfRegion.dragging=true;pdfRegion.rect={x:pdfRegion.start.x,y:pdfRegion.start.y,w:1,h:1};drawPDFSelection();
-    stage.setPointerCapture?.(ev.pointerId);
+    try{stage.setPointerCapture?.(ev.pointerId)}catch(e){}
   };
   stage.onpointermove=(ev)=>{
-    if(!pdfRegion.dragging||!pdfRegion.selectMode)return;
-    ev.preventDefault();
-    const r=stage.getBoundingClientRect(),sx=pdfRegion.canvas.width/r.width,sy=pdfRegion.canvas.height/r.height;
-    const cur={x:Math.max(0,Math.min(pdfRegion.canvas.width,(ev.clientX-r.left)*sx)),y:Math.max(0,Math.min(pdfRegion.canvas.height,(ev.clientY-r.top)*sy))};
-    const x=Math.min(pdfRegion.start.x,cur.x),y=Math.min(pdfRegion.start.y,cur.y),w=Math.abs(cur.x-pdfRegion.start.x),h=Math.abs(cur.y-pdfRegion.start.y);
-    pdfRegion.rect={x,y,w,h};drawPDFSelection();
+    if(ev.pointerType==="touch")return;
+    if(move(ev.clientX,ev.clientY))ev.preventDefault();
   };
-  stage.onpointerup=(ev)=>{if(pdfRegion.dragging){ev.preventDefault();pdfRegion.dragging=false;try{stage.releasePointerCapture?.(ev.pointerId)}catch(e){}togglePDFSelectMode(false)}};
+  stage.onpointerup=(ev)=>{
+    if(ev.pointerType==="touch")return;
+    if(finish()){
+      ev.preventDefault();
+      try{stage.releasePointerCapture?.(ev.pointerId)}catch(e){}
+    }
+  };
   stage.onpointercancel=()=>{pdfRegion.dragging=false};
 }
 function drawPDFSelection(){
