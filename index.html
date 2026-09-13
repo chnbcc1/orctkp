@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v6.15</title>
+<title>Öğrenci Takip Sistemi v6.16</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -133,8 +133,7 @@ border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;fon
     white-space:nowrap;
   }
   .mobile-lock{grid-column:1 / 2}
-  .mobile-backup-wide{grid-column:1 / 3}
-  .mobile-backup{grid-column:3 / 4}
+  .mobile-backup{grid-column:2 / 4}
   .header-controls button,.header-controls select{
     width:100%;
     min-height:40px!important;
@@ -260,7 +259,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.15 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
+/* v6.16 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
 .full-action{width:100%;min-height:44px}
 .file-import-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.file-import-row input[type=file]{flex:1;min-width:210px}.file-import-row button{min-height:40px}
 .student-detail-mobile,.report-mobile{display:none}
@@ -275,7 +274,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.15 — mobil PDF seçim ekranı */
+/* v6.16 — mobil PDF seçim ekranı */
 .pdf-stage.pdf-selecting{touch-action:none!important;user-select:none;-webkit-user-select:none;cursor:crosshair}
 .pdf-selection{border:3px solid #2563eb!important;background:rgba(37,99,235,.16)!important;box-shadow:0 0 0 9999px rgba(15,23,42,.16);pointer-events:none}
 .pdf-select-help{padding:9px 11px;border-radius:10px;background:#eff6ff;color:#1e3a8a;margin:8px 0;font-size:12px}
@@ -292,7 +291,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.15.1 PDF touch/zoom hotfix */
+/* v6.16.1 PDF touch/zoom hotfix */
 #modal.pdf-mobile-full .pdf-preview-wrap{touch-action:pan-x pan-y;overscroll-behavior:contain;text-align:left}
 #modal.pdf-mobile-full .pdf-stage{max-width:none!important;margin:0!important}
 #modal.pdf-mobile-full .pdf-stage canvas{max-width:none!important;width:auto!important;height:auto!important}
@@ -301,7 +300,7 @@ input,select,textarea,button{max-width:100%}
 #pdfZoomLabel{display:inline-flex;align-items:center;justify-content:center;min-width:52px;font-size:12px;font-weight:700;color:#334155}
 
 
-/* v6.15 — iOS PDF alan seçimi */
+/* v6.16 — iOS PDF alan seçimi */
 #modal.pdf-mobile-full .pdf-stage.pdf-selecting{
   touch-action:none!important;
   -webkit-user-select:none!important;
@@ -313,7 +312,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.15 — seçilen alan kalıcı görünür */
+/* v6.16 — seçilen alan kalıcı görünür */
 #modal.pdf-mobile-full .pdf-stage{position:relative!important;overflow:visible}
 #modal.pdf-mobile-full .pdf-stage canvas{position:relative;z-index:1}
 #modal.pdf-mobile-full .pdf-selection{
@@ -327,7 +326,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.15 — zoom sonrası seçim görünürlüğü */
+/* v6.16 — zoom sonrası seçim görünürlüğü */
 #modal.pdf-mobile-full #pdfSelection{
   display:none;
   position:absolute!important;
@@ -378,7 +377,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.15</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.16</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -391,8 +390,7 @@ input,select,textarea,button{max-width:100%}
 <select id="periodSelect" class="mobile-period" onchange="changePeriod(this.value)"><option value="1">1. Dönem</option><option value="2">2. Dönem</option></select>
 <button id="undoBtn" class="secondary mobile-history" onclick="undo()" disabled>↶ Geri Al</button><button id="redoBtn" class="secondary mobile-history" onclick="redo()" disabled>↷ Yinele</button>
 <button class="secondary mobile-hide-install" onclick="openInstallHelp()">Telefona Kur</button><button class="secondary mobile-compact-btn" onclick="openPrivacyInfo()">Gizlilik</button><span id="connectionState" class="offline-pill mobile-connection"></span><span class="privacy-strip mobile-privacy" id="privacyState"><span class="privacy-dot"></span><span>Yerel Veri Modu: Açık</span></span><button class="secondary mobile-lock" onclick="lockNow()">Kilitle</button>
-<button class="secondary mobile-backup-wide" onclick="exportTransferBackup()">Tam Yedek / Cihaz Aktarımı</button>
-<button class="secondary mobile-backup" onclick="exportData()">Tam Yedek Al</button>
+<button class="secondary mobile-backup" onclick="exportData()">Yedek Al</button>
 </div>
 </header>
 
@@ -400,7 +398,7 @@ input,select,textarea,button{max-width:100%}
 <aside>
 <div class="section-title">Sınıflar</div><div id="classList"></div>
 <button style="width:100%;margin-top:7px" onclick="addClass()">+ Sınıf Ekle</button>
-<div class="footer-note">Veriler cihazdaki tarayıcıda saklanır. Farklı cihazda devam etmek için “Tam Yedek / Cihaz Aktarımı” kullanın.</div>
+<div class="footer-note">Veriler cihazdaki tarayıcıda saklanır. “Yedek Al” tüm uygulama verilerini kaydeder ve farklı cihaza aktarım için de kullanılabilir.</div>
 </aside>
 
 <main>
@@ -1365,7 +1363,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v6.15",
+    appVersion:"v6.16",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -1376,7 +1374,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v6.15",
+    appVersion:"v6.16",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
