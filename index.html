@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v6.14.2</title>
+<title>Öğrenci Takip Sistemi v6.14.3</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -260,7 +260,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.14.2 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
+/* v6.14.3 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
 .full-action{width:100%;min-height:44px}
 .file-import-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.file-import-row input[type=file]{flex:1;min-width:210px}.file-import-row button{min-height:40px}
 .student-detail-mobile,.report-mobile{display:none}
@@ -275,7 +275,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.14.2 — mobil PDF seçim ekranı */
+/* v6.14.3 — mobil PDF seçim ekranı */
 .pdf-stage.pdf-selecting{touch-action:none!important;user-select:none;-webkit-user-select:none;cursor:crosshair}
 .pdf-selection{border:3px solid #2563eb!important;background:rgba(37,99,235,.16)!important;box-shadow:0 0 0 9999px rgba(15,23,42,.16);pointer-events:none}
 .pdf-select-help{padding:9px 11px;border-radius:10px;background:#eff6ff;color:#1e3a8a;margin:8px 0;font-size:12px}
@@ -292,7 +292,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.14.2.1 PDF touch/zoom hotfix */
+/* v6.14.3.1 PDF touch/zoom hotfix */
 #modal.pdf-mobile-full .pdf-preview-wrap{touch-action:pan-x pan-y;overscroll-behavior:contain;text-align:left}
 #modal.pdf-mobile-full .pdf-stage{max-width:none!important;margin:0!important}
 #modal.pdf-mobile-full .pdf-stage canvas{max-width:none!important;width:auto!important;height:auto!important}
@@ -301,7 +301,7 @@ input,select,textarea,button{max-width:100%}
 #pdfZoomLabel{display:inline-flex;align-items:center;justify-content:center;min-width:52px;font-size:12px;font-weight:700;color:#334155}
 
 
-/* v6.14.2 — iOS PDF alan seçimi */
+/* v6.14.3 — iOS PDF alan seçimi */
 #modal.pdf-mobile-full .pdf-stage.pdf-selecting{
   touch-action:none!important;
   -webkit-user-select:none!important;
@@ -310,6 +310,20 @@ input,select,textarea,button{max-width:100%}
 #modal.pdf-mobile-full .pdf-stage.pdf-selecting canvas{
   touch-action:none!important;
   -webkit-user-drag:none!important;
+}
+
+
+/* v6.14.3 — seçilen alan kalıcı görünür */
+#modal.pdf-mobile-full .pdf-stage{position:relative}
+#modal.pdf-mobile-full .pdf-stage canvas{position:relative;z-index:1}
+#modal.pdf-mobile-full .pdf-selection{
+  position:absolute;
+  z-index:5;
+  display:none;
+  border:3px solid #2563eb!important;
+  background:rgba(37,99,235,.18)!important;
+  box-shadow:0 0 0 2px rgba(255,255,255,.85),0 0 0 9999px rgba(15,23,42,.12);
+  pointer-events:none;
 }
 
 </style>
@@ -349,7 +363,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.14.2</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.14.3</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1055,6 +1069,7 @@ function togglePDFSelectMode(force){
 function clearPDFSelection(){
   pdfRegion.rect=null;pdfRegion.start=null;pdfRegion.dragging=false;
   const s=el("pdfSelection");if(s)s.style.display="none";
+  const b=el("pdfSelectModeBtn");if(b)b.textContent="Alan Seç";
   const r=el("pdfRegionResults");if(r)r.innerHTML="";
 }
 function pdfFitWidth(){
@@ -1101,7 +1116,16 @@ function bindPDFSelection(){
     if(!pdfRegion.dragging)return false;
     pdfRegion.dragging=false;
     if(pdfRegion.rect && pdfRegion.rect.w>=8 && pdfRegion.rect.h>=8){
-      togglePDFSelectMode(false);
+      pdfRegion.selectMode=false;
+      const btn=el("pdfSelectModeBtn"),wrap=stage?.parentElement;
+      stage.classList.remove("pdf-selecting");
+      stage.style.touchAction="auto";
+      if(wrap){wrap.style.touchAction="pan-x pan-y";wrap.style.overflow="auto";}
+      btn?.classList.remove("active-select");
+      if(btn)btn.textContent="Alanı Değiştir";
+      drawPDFSelection();
+      const help=el("pdfSelectHelp");
+      if(help)help.innerHTML="<b>Alan seçildi.</b> Mavi çerçeve seçili alanı gösterir. Değiştirmek için <b>Alanı Değiştir</b>'e dokunun.";
       setPDFInfo("Alan seçildi. Şimdi “Seçili Alanı Oku” düğmesine dokunun.");
     }
     return true;
