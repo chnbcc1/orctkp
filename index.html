@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Öğrenci Takip Sistemi v6.10</title>
+<title>Öğrenci Takip Sistemi v6.11</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -179,6 +179,53 @@ border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;fon
   .profile-chip .profile-avatar{width:36px;height:36px;flex:0 0 36px}
 }
 
+
+/* ===== v6.11 mobile usability ===== */
+.students-mobile,.homeworks-mobile,.mobile-grade-cards,.mobile-matrix{display:none}
+.student-status-dot{flex:0 0 auto!important;margin-left:8px!important;margin-top:0!important;vertical-align:middle!important;transform:translateY(-1px)}
+.student-name-with-dot{display:flex!important;align-items:center!important;line-height:1.2!important}
+.mobile-list-card,.mobile-grade-card,.mobile-matrix-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:10px}
+.mobile-list-head,.mobile-grade-head,.mobile-matrix-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mobile-list-title,.mobile-grade-title,.mobile-matrix-title{font-weight:800;min-width:0}
+.mobile-list-meta{font-size:12px;color:var(--muted);margin-top:5px}
+.mobile-list-actions{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+.mobile-list-actions button{min-height:38px}
+.grade-card-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.grade-card-grid label{font-size:11px;color:var(--muted);font-weight:700}
+.grade-card-grid input{width:100%;margin-top:4px}
+.grade-card-average{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.matrix-homework-row{padding:10px 0;border-top:1px solid var(--border)}
+.matrix-homework-row:first-of-type{border-top:0}
+.matrix-homework-name{font-size:12px;font-weight:800;margin-bottom:7px}
+.matrix-homework-row .status-group{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.matrix-homework-row .status-btn{padding:7px 5px!important;min-height:36px!important;font-size:11px!important}
+.app-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.app-form-grid .full{grid-column:1/-1}
+.app-form-grid label{font-size:12px;font-weight:700;color:var(--muted)}
+.app-form-grid input{width:100%;margin-top:5px}
+.danger-zone{margin-top:18px;padding:12px;border:1px solid #fecaca;background:#fef2f2;border-radius:12px}
+.danger-zone b{color:#991b1b}
+.tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;white-space:nowrap}
+@media(max-width:700px){
+  header{position:static!important;top:auto!important}
+  .students-desktop,.homeworks-desktop,.desktop-grade-table,.desktop-matrix{display:none!important}
+  .students-mobile,.homeworks-mobile,.mobile-grade-cards,.mobile-matrix{display:block!important}
+  .toolbar{align-items:stretch!important}
+  .toolbar-left,.toolbar-right{width:100%!important}
+  .toolbar-right{display:grid!important;grid-template-columns:1fr 1fr;gap:7px!important}
+  .toolbar-right button{width:100%!important}
+  .class-settings-btn{min-height:38px!important;padding:8px 10px!important;font-size:12px!important}
+  .top-title{align-items:center!important}
+  .top-title h1{font-size:25px!important}
+  .tabs{gap:2px!important}
+  .tab{padding:11px 12px!important;font-size:13px!important}
+  .app-form-grid{grid-template-columns:1fr}
+  .app-form-grid .full{grid-column:auto}
+  .modal-box{width:min(96vw,760px)!important}
+}
+
 </style>
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -216,7 +263,7 @@ border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;fon
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.10</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.11</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -244,7 +291,7 @@ border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;fon
 <main>
 <div id="noClass" class="empty card"><h2>Henüz sınıf yok</h2><p>Yukarıdaki + Sınıf Ekle düğmesinden ilk sınıfınızı oluşturun.</p></div>
 <div id="classView" style="display:none">
-<div class="top-title"><div><h1 id="currentClassTitle"></h1><div class="tiny" id="periodLabel"></div></div><button class="danger" onclick="deleteCurrentClass()">Sınıfı Sil</button></div>
+<div class="top-title"><div><h1 id="currentClassTitle"></h1><div class="tiny" id="periodLabel"></div></div><button class="secondary class-settings-btn" onclick="openClassSettings()">Sınıf Ayarları</button></div>
 <div class="grid" style="margin-top:14px">
 <div class="stat"><span>Öğrenci</span><b id="statStudents">0</b></div><div class="stat"><span>Dönem Ödevi</span><b id="statHomeworks">0</b></div><div class="stat"><span>Tamamlanma</span><b id="statRate">%0</b></div><div class="stat"><span>Eksik</span><b id="statMissing">0</b></div>
 </div>
@@ -261,12 +308,12 @@ border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;fon
 <button class="secondary" onclick="openFileStudentImport()">CSV / XLSX'ten Al</button>
 <button class="secondary" onclick="openPDFRegionImport()">PDF Bölgesinden Al</button>
 <button class="secondary" onclick="openBulkStudents()">Toplu Öğrenci Ekle</button><button onclick="addStudent()">+ Öğrenci Ekle</button></div></div>
-<div class="card table-wrap"><table><thead><tr><th>No</th><th>Öğrenci</th><th>Tamamlanan</th><th>Oran</th><th>Eksik</th><th></th></tr></thead><tbody id="studentsBody"></tbody></table><div id="studentsEmpty" class="empty" style="display:none">Bu sınıfta öğrenci yok.</div></div>
+<div class="card table-wrap students-desktop"><table><thead><tr><th>No</th><th>Öğrenci</th><th>Tamamlanan</th><th>Oran</th><th>Eksik</th><th></th></tr></thead><tbody id="studentsBody"></tbody></table><div id="studentsEmpty" class="empty" style="display:none">Bu sınıfta öğrenci yok.</div></div><div id="studentsMobile" class="students-mobile"></div>
 </section>
 
 <section id="homeworks" class="panel">
 <div class="toolbar"><div class="toolbar-left"><input id="homeworkSearch" placeholder="Ödev ara..." oninput="renderHomeworks()"></div><div class="toolbar-right"><button class="secondary" onclick="openBulkHomeworks()">Toplu Ödev Ekle</button><button onclick="addHomework()">+ Ödev Ekle</button></div></div>
-<div class="card table-wrap"><table><thead><tr><th>Ödev</th><th>Verilme</th><th>Son Teslim</th><th>Yapan</th><th></th></tr></thead><tbody id="homeworksBody"></tbody></table><div id="homeworksEmpty" class="empty" style="display:none">Bu dönemde ödev yok.</div></div>
+<div class="card table-wrap homeworks-desktop"><table><thead><tr><th>Ödev</th><th>Verilme</th><th>Son Teslim</th><th>Yapan</th><th></th></tr></thead><tbody id="homeworksBody"></tbody></table><div id="homeworksEmpty" class="empty" style="display:none">Bu dönemde ödev yok.</div></div><div id="homeworksMobile" class="homeworks-mobile"></div>
 </section>
 
 <section id="matrix" class="panel"><div class="toolbar"><div class="tiny">Hücreye tıklayarak durumu sırayla değiştirin: Yapmadı → Yaptı → Kısmen → Mazeretli.</div></div><div class="card table-wrap" id="matrixWrap"></div></section>
@@ -516,10 +563,44 @@ function openInstallHelp(){
 
 function renderClasses(){el("classList").innerHTML="";state.classes.forEach(c=>{const d=document.createElement("div");d.className="class-item"+(c.id===currentClassId?" active":"");d.onclick=()=>{currentClassId=c.id;save();render()};d.innerHTML=`<div class="class-name">${esc(c.name)}</div><div class="tiny">${c.students.length} öğrenci · ${hwPeriod(c).length} dönem ödevi</div>`;el("classList").appendChild(d)})}
 function changePeriod(v){currentPeriod=String(v);save();render()}
-function addClass(){const n=prompt("Sınıf adı:");if(!n?.trim())return;pushUndo();const c={id:uid(),name:n.trim(),students:[],homeworks:[],checks:{},notes:{}};state.classes.push(c);currentClassId=c.id;save();render()}
-function deleteCurrentClass(){const c=cls();if(c&&confirm(`${c.name} sınıfı silinsin mi?`)){pushUndo();state.classes=state.classes.filter(x=>x.id!==c.id);currentClassId=state.classes[0]?.id??null;save();render()}}
-
-function addStudent(){const c=cls();if(!c)return;const no=prompt("Öğrenci numarası (boş bırakılabilir):","")??"";const n=prompt("Öğrenci adı soyadı:");if(!n?.trim())return;pushUndo();c.students.push({id:uid(),number:no.trim(),name:n.trim()});save();render()}
+function addClass(){
+  el("modalTitle").textContent="Yeni Sınıf";
+  el("modalSubtitle").textContent="Sınıf bilgisi bu cihazda yerel olarak saklanır.";
+  el("modalBody").innerHTML=`<div class="app-form-grid"><label class="full">Sınıf Adı<input id="newClassName" placeholder="Örn. 9/D" autocomplete="off"></label><button class="full" onclick="saveNewClass()">Sınıfı Oluştur</button></div>`;
+  el("modal").classList.add("open");setTimeout(()=>el("newClassName")?.focus(),100);
+}
+function saveNewClass(){
+  const n=(el("newClassName")?.value||"").trim();if(!n)return alert("Sınıf adı girin.");
+  pushUndo();const c={id:uid(),name:n,students:[],homeworks:[],checks:{},notes:{},grades:{}};
+  state.classes.push(c);currentClassId=c.id;save();closeModal();render();
+}
+function openClassSettings(){
+  const c=cls();if(!c)return;
+  el("modalTitle").textContent="Sınıf Ayarları";el("modalSubtitle").textContent=c.name;
+  el("modalBody").innerHTML=`<div class="app-form-grid"><label class="full">Sınıf Adı<input id="editClassName" value="${esc(c.name)}"></label><button class="full" onclick="saveClassName()">Adı Kaydet</button></div><div class="danger-zone"><b>Tehlikeli işlem</b><div class="tiny" style="margin:6px 0 10px">Sınıf silinirse öğrenci, ödev, not ve durum kayıtları da silinir. Geri Al ile aynı oturum içinde geri getirilebilir.</div><button class="danger" onclick="deleteCurrentClass()">Sınıfı Sil</button></div>`;
+  el("modal").classList.add("open");
+}
+function saveClassName(){
+  const c=cls(),n=(el("editClassName")?.value||"").trim();if(!c||!n)return alert("Sınıf adı boş olamaz.");
+  pushUndo();c.name=n;save();closeModal();render();
+}
+function deleteCurrentClass(){
+  const c=cls();if(c&&confirm(`${c.name} sınıfı ve bu sınıfa ait tüm kayıtlar silinsin mi?`)){
+    pushUndo();state.classes=state.classes.filter(x=>x.id!==c.id);currentClassId=state.classes[0]?.id??null;save();closeModal();render();
+  }
+}
+function addStudent(){
+  if(!cls())return;
+  el("modalTitle").textContent="Yeni Öğrenci";el("modalSubtitle").textContent=cls().name;
+  el("modalBody").innerHTML=`<div class="app-form-grid"><label>Öğrenci No<input id="newStudentNo" inputmode="numeric" placeholder="İsteğe bağlı"></label><label>Ad Soyad<input id="newStudentName" placeholder="Öğrencinin adı soyadı" autocomplete="off"></label><button class="full" onclick="saveNewStudent()">Öğrenciyi Ekle</button></div>`;
+  el("modal").classList.add("open");setTimeout(()=>el("newStudentNo")?.focus(),100);
+}
+function saveNewStudent(){
+  const c=cls(),no=(el("newStudentNo")?.value||"").trim(),name=(el("newStudentName")?.value||"").trim();
+  if(!c||!name)return alert("Öğrenci adı soyadı girin.");
+  if(c.students.some(s=>normName(s.name)===normName(name)&&String(s.number||"")===no))return alert("Bu öğrenci zaten listede.");
+  pushUndo();c.students.push({id:uid(),number:no,name});save();closeModal();render();
+}
 function openBulkStudents(){el("modalTitle").textContent="Toplu Öğrenci Ekle";el("modalSubtitle").textContent="Her satır: numara, ad soyad. Numara yoksa sadece ad yazabilirsiniz.";el("modalBody").innerHTML=`<textarea id="bulkStudents" class="note" placeholder="101, Ali Yılmaz&#10;102, Ayşe Demir&#10;Mehmet Kaya"></textarea><div style="margin-top:10px"><button onclick="saveBulkStudents()">Listeyi Ekle</button></div>`;el("modal").classList.add("open")}
 function saveBulkStudents(){const c=cls(),lines=el("bulkStudents").value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),ex=new Set(c.students.map(s=>normName(s.name)));pushUndo();for(const line of lines){let no="",name=line;const m=line.match(/^\s*(\d{1,6})\s*[,;\t-]\s*(.+)$/);if(m){no=m[1];name=m[2].trim()}if(name&&!ex.has(normName(name))){c.students.push({id:uid(),number:no,name});ex.add(normName(name))}}save();closeModal();render()}
 
@@ -548,7 +629,17 @@ function showImportPreview(rows){
 }
 function commitFileStudents(){const c=cls(),rows=window._fileRows||[],ex=new Set(c.students.map(s=>normName(s.name)));pushUndo();let n=0;for(const r of rows){if(r.name&&!ex.has(normName(r.name))){c.students.push({id:uid(),number:r.number,name:r.name});ex.add(normName(r.name));n++}}save();closeModal();render();alert(n+" öğrenci eklendi.")}
 
-function addHomework(){const c=cls(),n=prompt("Ödev adı:");if(c&&n?.trim()){pushUndo();c.homeworks.push({id:uid(),name:n.trim(),given:"",due:"",period:currentPeriod});save();render()}}
+function addHomework(){
+  const c=cls();if(!c)return;
+  el("modalTitle").textContent="Yeni Ödev";el("modalSubtitle").textContent=`${c.name} · ${currentPeriod}. Dönem`;
+  el("modalBody").innerHTML=`<div class="app-form-grid"><label class="full">Ödev Adı<input id="newHomeworkName" placeholder="Örn. Üslü Sayılar Testi" autocomplete="off"></label><label>Verilme Tarihi<input id="newHomeworkGiven" type="date"></label><label>Son Teslim<input id="newHomeworkDue" type="date"></label><button class="full" onclick="saveNewHomework()">Ödevi Ekle</button></div>`;
+  el("modal").classList.add("open");setTimeout(()=>el("newHomeworkName")?.focus(),100);
+}
+function saveNewHomework(){
+  const c=cls(),name=(el("newHomeworkName")?.value||"").trim();if(!c||!name)return alert("Ödev adı girin.");
+  pushUndo();c.homeworks.push({id:uid(),name,given:el("newHomeworkGiven")?.value||"",due:el("newHomeworkDue")?.value||"",period:currentPeriod});
+  save();closeModal();render();
+}
 function openBulkHomeworks(){el("modalTitle").textContent="Toplu Ödev Ekle";el("modalSubtitle").textContent=(currentPeriod==="1"?"1. Dönem":"2. Dönem")+" · Her satıra bir ödev";el("modalBody").innerHTML=`<textarea id="bulkHomeworks" class="note" placeholder="Üslü Sayılar Testi&#10;Köklü Sayılar Çalışması"></textarea><div style="margin-top:10px"><button onclick="saveBulkHomeworks()">Ödevleri Ekle</button></div>`;el("modal").classList.add("open")}
 function saveBulkHomeworks(){const c=cls(),a=el("bulkHomeworks").value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);pushUndo();a.forEach(n=>c.homeworks.push({id:uid(),name:n,given:"",due:"",period:currentPeriod}));save();closeModal();render()}
 
@@ -592,9 +683,26 @@ function syncStatusUI(sid,hid,v){
     if(s) el("modalSubtitle").textContent=`No: ${s.number||"-"} · ${st.done}/${st.total} yaptı · %${st.rate}`;
   }
 }
-function renderStudents(){const c=cls(),q=(el("studentSearch")?.value||"").toLocaleLowerCase("tr"),arr=c.students.filter(s=>(s.name+" "+s.number).toLocaleLowerCase("tr").includes(q));el("studentsBody").innerHTML="";el("studentsEmpty").style.display=arr.length?"none":"block";arr.forEach(s=>{const st=sstat(c,s.id),tr=document.createElement("tr");tr.className="clickable";tr.onclick=()=>openStudent(s.id);tr.innerHTML=`<td>${esc(s.number||"-")}</td><td><b>${esc(s.name)}</b></td><td>${st.done}/${st.total}</td><td><div class="progress"><i style="width:${st.rate}%"></i></div> %${st.rate}</td><td><span class="badge missing">${st.missing}</span></td><td><button class="ghost" onclick="event.stopPropagation();deleteStudent('${s.id}')">Sil</button></td>`;el("studentsBody").appendChild(tr)})}
-function deleteStudent(id){const c=cls(),s=c.students.find(x=>x.id===id);if(s&&confirm(`${s.name} silinsin mi?`)){pushUndo();c.students=c.students.filter(x=>x.id!==id);delete c.checks[id];delete c.notes[id];delete c.grades?.[id];save();render()}}
-function renderHomeworks(){const c=cls(),q=(el("homeworkSearch")?.value||"").toLocaleLowerCase("tr"),arr=hwPeriod(c).filter(h=>h.name.toLocaleLowerCase("tr").includes(q));el("homeworksBody").innerHTML="";el("homeworksEmpty").style.display=arr.length?"none":"block";arr.forEach(h=>{const st=hstat(c,h.id),tr=document.createElement("tr");tr.className="clickable";tr.onclick=()=>openHomework(h.id);tr.innerHTML=`<td><b>${esc(h.name)}</b></td><td>${esc(h.given||"-")}</td><td>${esc(h.due||"-")}</td><td>${st.done}/${st.total} (%${st.rate})</td><td><button class="ghost" onclick="event.stopPropagation();deleteHomework('${h.id}')">Sil</button></td>`;el("homeworksBody").appendChild(tr)})}
+function renderStudents(){
+  const c=cls(),q=(el("studentSearch")?.value||"").toLocaleLowerCase("tr"),arr=c.students.filter(s=>(s.name+" "+s.number).toLocaleLowerCase("tr").includes(q));
+  el("studentsBody").innerHTML="";el("studentsEmpty").style.display=arr.length?"none":"block";
+  arr.forEach(s=>{const st=sstat(c,s.id),tr=document.createElement("tr");tr.className="clickable";tr.onclick=()=>openStudent(s.id);tr.innerHTML=`<td>${esc(s.number||"-")}</td><td><b>${esc(s.name)}</b></td><td>${st.done}/${st.total}</td><td><div class="progress"><i style="width:${st.rate}%"></i></div> %${st.rate}</td><td><span class="badge missing">${st.missing}</span></td><td><button class="ghost" onclick="event.stopPropagation();deleteStudent('${s.id}')">Sil</button></td>`;el("studentsBody").appendChild(tr)});
+  const mobile=el("studentsMobile");if(mobile)mobile.innerHTML=arr.length?arr.map(s=>{const st=sstat(c,s.id);return `<div class="mobile-list-card"><div class="mobile-list-head" onclick="openStudent('${s.id}')"><div class="mobile-list-title">${esc(s.number?s.number+" - ":"")}${esc(s.name)}</div><span class="avg-pill ${st.rate>=50?"avg-pass":"avg-fail"}">%${st.rate}</span></div><div class="mobile-list-meta">Tamamlanan: ${st.done}/${st.total} · Eksik: ${st.missing}</div><div class="mobile-list-actions"><button class="secondary" onclick="openStudent('${s.id}')">Ayrıntı</button><button class="danger" onclick="deleteStudent('${s.id}')">Öğrenciyi Sil</button></div></div>`}).join(""):'<div class="empty card">Bu sınıfta öğrenci yok.</div>';
+}
+function deleteStudent(id){
+  const c=cls(),s=c.students.find(x=>x.id===id);if(!s)return;
+  if(confirm(`${s.name} adlı öğrenci silinsin mi?\n\nÖdev durumları, öğretmen notu ve not kayıtları da silinecek. Bu oturumda Geri Al ile geri getirilebilir.`)){
+    pushUndo();c.students=c.students.filter(x=>x.id!==id);delete c.checks[id];delete c.notes[id];
+    if(c.grades){delete c.grades[id];Object.keys(c.grades).forEach(p=>{if(c.grades[p]&&typeof c.grades[p]==="object")delete c.grades[p][id]})}
+    save();render();
+  }
+}
+function renderHomeworks(){
+  const c=cls(),q=(el("homeworkSearch")?.value||"").toLocaleLowerCase("tr"),arr=hwPeriod(c).filter(h=>h.name.toLocaleLowerCase("tr").includes(q));
+  el("homeworksBody").innerHTML="";el("homeworksEmpty").style.display=arr.length?"none":"block";
+  arr.forEach(h=>{const st=hstat(c,h.id),tr=document.createElement("tr");tr.className="clickable";tr.onclick=()=>openHomework(h.id);tr.innerHTML=`<td><b>${esc(h.name)}</b></td><td>${esc(h.given||"-")}</td><td>${esc(h.due||"-")}</td><td>${st.done}/${st.total} (%${st.rate})</td><td><button class="ghost" onclick="event.stopPropagation();deleteHomework('${h.id}')">Sil</button></td>`;el("homeworksBody").appendChild(tr)});
+  const mobile=el("homeworksMobile");if(mobile)mobile.innerHTML=arr.length?arr.map(h=>{const st=hstat(c,h.id);return `<div class="mobile-list-card"><div class="mobile-list-head" onclick="openHomework('${h.id}')"><div class="mobile-list-title">${esc(h.name)}</div><span class="avg-pill ${st.rate>=50?"avg-pass":"avg-fail"}">%${st.rate}</span></div><div class="mobile-list-meta">Verilme: ${esc(h.given||"-")} · Son teslim: ${esc(h.due||"-")} · Yaptı: ${st.done}/${st.total}</div><div class="mobile-list-actions"><button class="secondary" onclick="openHomework('${h.id}')">Ayrıntı</button><button class="danger" onclick="deleteHomework('${h.id}')">Ödevi Sil</button></div></div>`}).join(""):'<div class="empty card">Bu dönemde ödev yok.</div>';
+}
 function deleteHomework(id){const c=cls(),h=c.homeworks.find(x=>x.id===id);if(h&&confirm(`${h.name} silinsin mi?`)){pushUndo();c.homeworks=c.homeworks.filter(x=>x.id!==id);Object.keys(c.checks).forEach(sid=>delete c.checks[sid]?.[id]);save();render()}}
 
 function statusBadge(v,sid="",hid=""){
@@ -635,12 +743,24 @@ function openCopyHomework(hid){const c=cls(),h=c.homeworks.find(x=>x.id===hid),t
 function commitCopyHomework(hid){const c=cls(),h=c.homeworks.find(x=>x.id===hid),ids=[...document.querySelectorAll(".copyClass:checked")].map(x=>x.value);if(!ids.length)return;pushUndo();ids.forEach(id=>{const t=state.classes.find(x=>x.id===id);t.homeworks.push({id:uid(),name:h.name,given:h.given,due:h.due,period:currentPeriod})});save();closeModal();render();alert("Ödev kopyalandı.")}
 
 function renderMatrix(){
- const c=cls(),hs=hwPeriod(c);if(!c)return;el("matrixWrap").innerHTML=!hs.length?'<div class="empty">Bu dönemde ödev yok.</div>':`<table class="matrix"><thead><tr><th>Öğrenci</th>${hs.map(h=>`<th>${esc(h.name)}</th>`).join("")}</tr></thead><tbody>${c.students.map(s=>`<tr><td>${esc(s.number? s.number+" - ":"")}${esc(s.name)}</td>${hs.map(h=>`<td><button class="${status(c,s.id,h.id)==="done"?"success":status(c,s.id,h.id)==="partial"?"partial":status(c,s.id,h.id)==="excused"?"warn":"danger"}" onclick="cycleStatus('${s.id}','${h.id}')">${status(c,s.id,h.id)==="done"?"Yaptı":status(c,s.id,h.id)==="partial"?"Kısmen":status(c,s.id,h.id)==="excused"?"Mazeret":"Yapmadı"}</button></td>`).join("")}</tr>`).join("")}</tbody></table>`
+  const c=cls(),hs=hwPeriod(c);if(!c)return;
+  if(!hs.length){el("matrixWrap").innerHTML='<div class="empty">Bu dönemde ödev yok.</div>';return;}
+  const desktop=`<div class="desktop-matrix"><table class="matrix"><thead><tr><th>Öğrenci</th>${hs.map(h=>`<th>${esc(h.name)}</th>`).join("")}</tr></thead><tbody>${c.students.map(s=>`<tr><td>${esc(s.number?s.number+" - ":"")}${esc(s.name)}</td>${hs.map(h=>`<td><button class="${status(c,s.id,h.id)==="done"?"success":status(c,s.id,h.id)==="partial"?"partial":status(c,s.id,h.id)==="excused"?"warn":"danger"}" onclick="cycleStatus('${s.id}','${h.id}')">${status(c,s.id,h.id)==="done"?"Yaptı":status(c,s.id,h.id)==="partial"?"Kısmen":status(c,s.id,h.id)==="excused"?"Mazeret":"Yapmadı"}</button></td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  const mobile=`<div class="mobile-matrix">${c.students.map(s=>`<div class="mobile-matrix-card"><div class="mobile-matrix-head"><div class="mobile-matrix-title">${esc(s.number?s.number+" - ":"")}${esc(s.name)}</div></div>${hs.map(h=>`<div class="matrix-homework-row"><div class="matrix-homework-name">${esc(h.name)}</div>${statusButtons(s.id,h.id)}</div>`).join("")}</div>`).join("")}</div>`;
+  el("matrixWrap").innerHTML=desktop+mobile;
 }
 
 function getGradeRecord(c,sid){
-  c.grades??={}; c.grades[sid]??={};
-  const g=c.grades[sid];
+  c.grades??={};
+  if(c.grades[sid] && typeof c.grades[sid]==="object" &&
+     ["exam1","exam2","perf1","perf2","project"].some(k=>k in c.grades[sid])){
+    c.grades["1"]??={};
+    c.grades["1"][sid]={...c.grades[sid]};
+    delete c.grades[sid];
+  }
+  c.grades[currentPeriod]??={};
+  c.grades[currentPeriod][sid]??={};
+  const g=c.grades[currentPeriod][sid];
   for(const k of ["exam1","exam2","perf1","perf2","project"]) if(g[k]===undefined) g[k]="";
   return g;
 }
@@ -662,18 +782,11 @@ function setGrade(sid,key,val){
   pushUndo();g[key]=clean;save();renderGrades();
 }
 function renderGrades(){
-  const c=cls(); if(!c||!el("gradesWrap"))return;
+  const c=cls();if(!c||!el("gradesWrap"))return;
   if(!c.students.length){el("gradesWrap").innerHTML='<div class="empty">Bu sınıfta öğrenci yok.</div>';return;}
-  el("gradesWrap").innerHTML=`<table class="grade-table"><thead><tr><th>No</th><th>Öğrenci</th><th>1. Sınav</th><th>2. Sınav</th><th>1. Performans</th><th>2. Performans</th><th>Proje</th><th>Ortalama</th></tr></thead><tbody>${
-    c.students.map(s=>{
-      const g=getGradeRecord(c,s.id),avg=gradeAverage(g);
-      return `<tr>
-        <td>${esc(s.number||"-")}</td><td><b>${esc(s.name)}</b></td>
-        ${["exam1","exam2","perf1","perf2","project"].map(k=>`<td><input class="grade-input" type="number" min="0" max="100" step="1" value="${esc(g[k])}" onfocus="this.dataset.old=this.value" onchange="setGrade('${s.id}','${k}',this.value)" placeholder="-"></td>`).join("")}
-        <td><span class="avg-pill ${avg===null?"avg-empty":avg<50?"avg-fail":"avg-pass"}">${avg===null?"-":avg.toLocaleString("tr-TR",{maximumFractionDigits:2})}</span></td>
-      </tr>`;
-    }).join("")
-  }</tbody></table>`;
+  const table=`<div class="desktop-grade-table"><table class="grade-table"><thead><tr><th>No</th><th>Öğrenci</th><th>1. Sınav</th><th>2. Sınav</th><th>1. Performans</th><th>2. Performans</th><th>Proje</th><th>Ortalama</th></tr></thead><tbody>${c.students.map(s=>{const g=getGradeRecord(c,s.id),avg=gradeAverage(g);return `<tr><td>${esc(s.number||"-")}</td><td><b>${esc(s.name)}</b></td>${["exam1","exam2","perf1","perf2","project"].map(k=>`<td><input class="grade-input" type="number" min="0" max="100" step="1" value="${esc(g[k])}" onchange="setGrade('${s.id}','${k}',this.value)" placeholder="-"></td>`).join("")}<td><span class="avg-pill ${avg===null?"avg-empty":avg<50?"avg-fail":"avg-pass"}">${avg===null?"-":avg.toLocaleString("tr-TR",{maximumFractionDigits:2})}</span></td></tr>`}).join("")}</tbody></table></div>`;
+  const cards=`<div class="mobile-grade-cards">${c.students.map(s=>{const g=getGradeRecord(c,s.id),avg=gradeAverage(g),fields=[["exam1","1. Sınav"],["exam2","2. Sınav"],["perf1","1. Performans"],["perf2","2. Performans"],["project","Proje (isteğe bağlı)"]];return `<div class="mobile-grade-card"><div class="mobile-grade-head"><div class="mobile-grade-title">${esc(s.number?s.number+" - ":"")}${esc(s.name)}</div><span class="avg-pill ${avg===null?"avg-empty":avg<50?"avg-fail":"avg-pass"}">${avg===null?"-":avg.toLocaleString("tr-TR",{maximumFractionDigits:2})}</span></div><div class="grade-card-grid">${fields.map(([k,label])=>`<label>${label}<input type="number" min="0" max="100" step="1" value="${esc(g[k])}" onchange="setGrade('${s.id}','${k}',this.value)" placeholder="-"></label>`).join("")}</div><div class="grade-card-average"><b>Ortalama</b><span class="avg-pill ${avg===null?"avg-empty":avg<50?"avg-fail":"avg-pass"}">${avg===null?"-":avg.toLocaleString("tr-TR",{maximumFractionDigits:2})}</span></div></div>`}).join("")}</div>`;
+  el("gradesWrap").innerHTML=table+cards;
 }
 function exportGradesCSV(){
   const c=cls(),rows=[["Sınıf","Dönem","No","Öğrenci","1. Sınav","2. Sınav","1. Performans","2. Performans","Proje","Ortalama"]];
