@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v6.18</title>
+<title>Öğrenci Takip Sistemi v6.19</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -259,7 +259,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.18 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
+/* v6.19 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
 .full-action{width:100%;min-height:44px}
 .file-import-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.file-import-row input[type=file]{flex:1;min-width:210px}.file-import-row button{min-height:40px}
 .student-detail-mobile,.report-mobile{display:none}
@@ -274,7 +274,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.18 — mobil PDF seçim ekranı */
+/* v6.19 — mobil PDF seçim ekranı */
 .pdf-stage.pdf-selecting{touch-action:none!important;user-select:none;-webkit-user-select:none;cursor:crosshair}
 .pdf-selection{border:3px solid #2563eb!important;background:rgba(37,99,235,.16)!important;box-shadow:0 0 0 9999px rgba(15,23,42,.16);pointer-events:none}
 .pdf-select-help{padding:9px 11px;border-radius:10px;background:#eff6ff;color:#1e3a8a;margin:8px 0;font-size:12px}
@@ -291,7 +291,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.18.1 PDF touch/zoom hotfix */
+/* v6.19.1 PDF touch/zoom hotfix */
 #modal.pdf-mobile-full .pdf-preview-wrap{touch-action:pan-x pan-y;overscroll-behavior:contain;text-align:left}
 #modal.pdf-mobile-full .pdf-stage{max-width:none!important;margin:0!important}
 #modal.pdf-mobile-full .pdf-stage canvas{max-width:none!important;width:auto!important;height:auto!important}
@@ -300,7 +300,7 @@ input,select,textarea,button{max-width:100%}
 #pdfZoomLabel{display:inline-flex;align-items:center;justify-content:center;min-width:52px;font-size:12px;font-weight:700;color:#334155}
 
 
-/* v6.18 — iOS PDF alan seçimi */
+/* v6.19 — iOS PDF alan seçimi */
 #modal.pdf-mobile-full .pdf-stage.pdf-selecting{
   touch-action:none!important;
   -webkit-user-select:none!important;
@@ -312,7 +312,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.18 — seçilen alan kalıcı görünür */
+/* v6.19 — seçilen alan kalıcı görünür */
 #modal.pdf-mobile-full .pdf-stage{position:relative!important;overflow:visible}
 #modal.pdf-mobile-full .pdf-stage canvas{position:relative;z-index:1}
 #modal.pdf-mobile-full .pdf-selection{
@@ -326,7 +326,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.18 — zoom sonrası seçim görünürlüğü */
+/* v6.19 — zoom sonrası seçim görünürlüğü */
 #modal.pdf-mobile-full #pdfSelection{
   display:none;
   position:absolute!important;
@@ -341,7 +341,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.18 — mobil başlık ve tıklanabilir Eksik kutusu */
+/* v6.19 — mobil başlık ve tıklanabilir Eksik kutusu */
 .stat-clickable{cursor:pointer;position:relative;transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease}
 .stat-clickable small{display:block;margin-top:5px;font-size:9px;color:var(--muted);font-weight:700}
 .stat-clickable:active{transform:scale(.985)}
@@ -354,7 +354,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.18 — Gelişmiş Rapor */
+/* v6.19 — Gelişmiş Rapor */
 .report-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:14px}
 .report-summary-card{border:1px solid var(--border);border-radius:14px;background:#fff;padding:12px}
 .report-summary-card span{display:block;color:var(--muted);font-size:10px;font-weight:800}
@@ -373,6 +373,19 @@ input,select,textarea,button{max-width:100%}
  .report-summary-card{padding:11px}
  .report-summary-card b{font-size:20px}
  .homework-report-stats{grid-template-columns:1fr 1fr}
+}
+
+
+/* v6.19 — Rapor kullanılabilirlik */
+.report-section-head{display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer}
+.report-section-head .report-section-title{margin:16px 0 8px}
+.report-toggle{min-width:38px!important;min-height:34px!important;padding:5px 10px!important;font-size:18px!important}
+.report-collapsible{display:none}
+.report-collapsible.open{display:block}
+.report-filterbar{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:8px;margin-bottom:10px}
+.report-filterbar input,.report-filterbar select{width:100%}
+@media(max-width:700px){
+  .report-filterbar{grid-template-columns:1fr}
 }
 
 </style>
@@ -412,7 +425,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.18</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.19</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -478,10 +491,28 @@ input,select,textarea,button{max-width:100%}
 <section id="reports" class="panel">
 <div class="toolbar"><div></div><div class="toolbar-right"><button onclick="exportClassJPEG()">Sınıf JPEG</button><button class="secondary" onclick="exportClassCSV()">CSV Aktar</button></div></div>
 <div id="reportSummary" class="report-summary-grid"></div>
-<div class="report-section-title">Ödev Bazlı Durum</div>
-<div id="homeworkReport" class="homework-report-grid"></div>
-<div class="report-section-title">Öğrenci Durumu</div>
-<div class="card table-wrap reports-desktop"><table><thead><tr><th>No</th><th>Öğrenci</th><th>Yaptı</th><th>Kısmen</th><th>Mazeretli</th><th>Yapmadı</th><th>Başarı %</th></tr></thead><tbody id="reportBody"></tbody></table></div><div id="reportMobile" class="report-mobile"></div>
+
+<div class="report-section-head" onclick="toggleReportSection('homeworkReportWrap','homeworkReportToggle')">
+  <div class="report-section-title">Ödev Bazlı Durum</div><button id="homeworkReportToggle" class="ghost report-toggle" type="button">−</button>
+</div>
+<div id="homeworkReportWrap" class="report-collapsible open"><div id="homeworkReport" class="homework-report-grid"></div></div>
+
+<div class="report-section-head" onclick="toggleReportSection('studentReportWrap','studentReportToggle')">
+  <div class="report-section-title">Öğrenci Durumu</div><button id="studentReportToggle" class="ghost report-toggle" type="button">−</button>
+</div>
+<div id="studentReportWrap" class="report-collapsible open">
+  <div class="report-filterbar">
+    <input id="reportStudentSearch" placeholder="Öğrenci / numara ara..." oninput="renderReportStudents()">
+    <select id="reportStudentSort" onchange="renderReportStudents()">
+      <option value="name">Ada göre</option>
+      <option value="missing-desc">En çok eksiği olan</option>
+      <option value="rate-asc">En düşük tamamlanma</option>
+      <option value="rate-desc">En yüksek tamamlanma</option>
+    </select>
+  </div>
+  <div class="card table-wrap reports-desktop"><table><thead><tr><th>No</th><th>Öğrenci</th><th>Yaptı</th><th>Kısmen</th><th>Mazeretli</th><th>Yapmadı</th><th>Başarı %</th></tr></thead><tbody id="reportBody"></tbody></table></div>
+  <div id="reportMobile" class="report-mobile"></div>
+</div>
 </section>
 </div>
 </main>
@@ -539,7 +570,7 @@ async function tryLocalImageOCR(file){
 
 const STORAGE_KEY="odevTakipV1", SETTINGS_KEY="odevTakipV5Settings";
 let state=normalize(load()), settings=loadSettings(), currentClassId=state.currentClassId||(state.classes[0]?.id??null), currentPeriod=state.currentPeriod||"1";
-let undoStack=[], redoStack=[];
+let undoStack=[], redoStack=[]; let reportSectionState={homework:true,students:true};
 
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
 function load(){try{const x=localStorage.getItem(STORAGE_KEY);if(x)return JSON.parse(x)}catch(e){}return{classes:[],currentClassId:null,currentPeriod:"1"}}
@@ -1049,6 +1080,32 @@ function openHomeworkStatusList(hid,kind){
   el("modalBody").innerHTML=students.length?`<div style="display:grid;gap:8px">${students.map(s=>`<div class="card" style="padding:11px;display:flex;justify-content:space-between;align-items:center;gap:8px"><b>${esc(s.number?s.number+" - ":"")}${esc(s.name)}</b><button class="secondary" onclick="openStudent('${s.id}')">Ayrıntı</button></div>`).join("")}</div>`:'<div class="empty card">Bu durumda öğrenci bulunmuyor.</div>';
   el("modal").classList.add("open");
 }
+function toggleReportSection(wrapId,btnId){
+  const wrap=el(wrapId),btn=el(btnId);if(!wrap)return;
+  const opening=!wrap.classList.contains("open");
+  wrap.classList.toggle("open",opening);
+  if(btn)btn.textContent=opening?"−":"+";
+  if(wrapId==="homeworkReportWrap")reportSectionState.homework=opening;
+  if(wrapId==="studentReportWrap")reportSectionState.students=opening;
+}
+function renderReportStudents(){
+  const c=cls();if(!c)return;
+  const q=(el("reportStudentSearch")?.value||"").trim().toLocaleLowerCase("tr-TR");
+  const sort=el("reportStudentSort")?.value||"name";
+  let rows=c.students.map(s=>({s,st:sstat(c,s.id)}));
+  if(q)rows=rows.filter(x=>(`${x.s.number||""} ${x.s.name}`).toLocaleLowerCase("tr-TR").includes(q));
+  rows.sort((a,b)=>{
+    if(sort==="missing-desc")return b.st.missing-a.st.missing || a.s.name.localeCompare(b.s.name,"tr");
+    if(sort==="rate-asc")return a.st.rate-b.st.rate || a.s.name.localeCompare(b.s.name,"tr");
+    if(sort==="rate-desc")return b.st.rate-a.st.rate || a.s.name.localeCompare(b.s.name,"tr");
+    return a.s.name.localeCompare(b.s.name,"tr");
+  });
+
+  el("reportBody").innerHTML="";
+  rows.forEach(({s,st})=>{const tr=document.createElement("tr");tr.innerHTML=`<td>${esc(s.number||"-")}</td><td><button class="ghost" onclick="openStudent('${s.id}')"><b>${esc(s.name)}</b></button></td><td>${st.done}</td><td>${st.partial}</td><td>${st.excused}</td><td>${st.missing}</td><td>%${st.rate}</td>`;el("reportBody").appendChild(tr)});
+  const mobile=el("reportMobile");
+  if(mobile)mobile.innerHTML=rows.length?rows.map(({s,st})=>`<div class="report-card" onclick="openStudent('${s.id}')"><div class="report-card-head"><b>${esc(s.number?s.number+" - ":"")}${esc(s.name)}</b><span class="avg-pill ${st.rate>=50?"avg-pass":"avg-fail"}">%${st.rate}</span></div><div class="report-status-grid"><span class="report-stat done" onclick="event.stopPropagation();openStudentStatusList('${s.id}','done')">Yaptı <b>${st.done}</b></span><span class="report-stat partial" onclick="event.stopPropagation();openStudentStatusList('${s.id}','partial')">Kısmen <b>${st.partial}</b></span><span class="report-stat excused" onclick="event.stopPropagation();openStudentStatusList('${s.id}','excused')">Mazeretli <b>${st.excused}</b></span><span class="report-stat missing" onclick="event.stopPropagation();openStudentStatusList('${s.id}','missing')">Yapmadı <b>${st.missing}</b></span></div></div>`).join(""):'<div class="empty card">Aramaya uyan öğrenci bulunamadı.</div>';
+}
 function renderReport(){
  const c=cls();if(!c)return;
  const hs=hwPeriod(c),summary=el("reportSummary"),homeworkReport=el("homeworkReport");
@@ -1073,9 +1130,10 @@ function renderReport(){
     </div>
    </div>`}).join(""):'<div class="empty card">Bu dönemde ödev yok.</div>';
 
- el("reportBody").innerHTML="";
- c.students.forEach(s=>{const st=sstat(c,s.id),tr=document.createElement("tr");tr.innerHTML=`<td>${esc(s.number||"-")}</td><td><button class="ghost" onclick="openStudent('${s.id}')"><b>${esc(s.name)}</b></button></td><td>${st.done}</td><td>${st.partial}</td><td>${st.excused}</td><td>${st.missing}</td><td>%${st.rate}</td>`;el("reportBody").appendChild(tr)});
- const mobile=el("reportMobile");if(mobile)mobile.innerHTML=c.students.length?c.students.map(s=>{const st=sstat(c,s.id);return `<div class="report-card" onclick="openStudent('${s.id}')"><div class="report-card-head"><b>${esc(s.number?s.number+" - ":"")}${esc(s.name)}</b><span class="avg-pill ${st.rate>=50?"avg-pass":"avg-fail"}">%${st.rate}</span></div><div class="report-status-grid"><span class="report-stat done" onclick="event.stopPropagation();openStudentStatusList('${s.id}','done')">Yaptı <b>${st.done}</b></span><span class="report-stat partial" onclick="event.stopPropagation();openStudentStatusList('${s.id}','partial')">Kısmen <b>${st.partial}</b></span><span class="report-stat excused" onclick="event.stopPropagation();openStudentStatusList('${s.id}','excused')">Mazeretli <b>${st.excused}</b></span><span class="report-stat missing" onclick="event.stopPropagation();openStudentStatusList('${s.id}','missing')">Yapmadı <b>${st.missing}</b></span></div></div>`}).join(""):'<div class="empty card">Bu sınıfta öğrenci yok.</div>';
+ const hwWrap=el("homeworkReportWrap"),stWrap=el("studentReportWrap"),hwBtn=el("homeworkReportToggle"),stBtn=el("studentReportToggle");
+ hwWrap?.classList.toggle("open",reportSectionState.homework); stWrap?.classList.toggle("open",reportSectionState.students);
+ if(hwBtn)hwBtn.textContent=reportSectionState.homework?"−":"+"; if(stBtn)stBtn.textContent=reportSectionState.students?"−":"+";
+ renderReportStudents();
 };
 
 const PDF_LIB_URL = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js";
@@ -1516,7 +1574,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v6.18",
+    appVersion:"v6.19",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -1527,7 +1585,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v6.18",
+    appVersion:"v6.19",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
