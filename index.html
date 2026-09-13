@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v6.13.1</title>
+<title>Öğrenci Takip Sistemi v6.13.2</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -260,7 +260,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.13.1 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
+/* v6.13.2 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
 .full-action{width:100%;min-height:44px}
 .file-import-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.file-import-row input[type=file]{flex:1;min-width:210px}.file-import-row button{min-height:40px}
 .student-detail-mobile,.report-mobile{display:none}
@@ -311,7 +311,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.13.1</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.13.2</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -386,6 +386,18 @@ input,select,textarea,button{max-width:100%}
 <div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="modal-box"><div class="modal-head"><div><strong id="modalTitle"></strong><div class="tiny" id="modalSubtitle"></div></div><button class="secondary" onclick="closeModal()">Kapat</button></div><div class="modal-body" id="modalBody"></div></div></div>
 
 <script>
+
+function switchTab(id){
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===id));
+  document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("active",x.id===id));
+}
+
+async function tryLocalImageOCR(file){
+  if(!("TextDetector" in window)) throw new Error("Bu tarayıcı yerel OCR TextDetector özelliğini desteklemiyor.");
+  const bmp=await createImageBitmap(file),det=new TextDetector(),res=await det.detect(bmp);
+  return res.map(x=>x.rawValue).join("\n");
+}
+
 
 (function normalizeMobileViewport(){
   const meta=document.querySelector('meta[name="viewport"]');
