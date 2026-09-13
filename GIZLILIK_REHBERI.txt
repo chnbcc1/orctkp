@@ -1,0 +1,26 @@
+ÖĞRENCİ TAKİP SİSTEMİ v6.6 - MAKSİMUM GİZLİLİK PWA
+
+BU SÜRÜMDE
+- Öğrenci verileri yalnızca cihazın yerel depolamasında tutulur.
+- Uygulama içinden fetch, XMLHttpRequest, WebSocket, EventSource ve sendBeacon ile veri gönderimi engellenmiştir.
+- Content Security Policy ile dış bağlantılar kapatılmıştır (connect-src 'none').
+- Analytics, reklam, takip kodu ve üçüncü taraf script kullanılmaz.
+- Service Worker yalnızca aynı origin üzerindeki önceden önbelleğe alınmış uygulama dosyalarını servis eder.
+- Harici origin istekleri Service Worker tarafından 403 ile engellenir.
+
+iPHONE'DA
+1. Uygulamayı güvenilir bir HTTPS adreste yayınlayın.
+2. Safari ile açın.
+3. Paylaş > Ana Ekrana Ekle.
+4. Uygulamayı ana ekran simgesinden açın.
+5. Cihazda Face ID / ekran kilidi etkin olsun.
+
+ÖNEMLİ SINIRLAMA
+- Mevcut PIN yalnızca arayüz kilididir; localStorage içindeki tüm veriyi kriptografik olarak şifrelemez.
+- Maksimum güvenlik için cihaz kilidi/Face ID kullanın.
+- Düzenli JSON yedeği alın ve yedeği güvenli yerde saklayın.
+- Tarayıcı/site verileri silinirse yerel kayıtlar da silinebilir.
+
+GÜNCELLEME
+- Bu sürümde çalışma zamanında ağ çıkışı kapalıdır.
+- Yeni bir sürüme geçmek için yeni PWA dosyalarını hosting tarafında yayınlayıp uygulamayı Safari'den yeniden açmak gerekir.

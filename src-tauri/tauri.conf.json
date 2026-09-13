@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Öğrenci Takip Sistemi",
+  "version": "6.0.0",
+  "identifier": "tr.okul.ogrencitakip",
+  "build": {
+    "frontendDist": ".."
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Öğrenci Takip Sistemi",
+        "width": 1200,
+        "height": 800,
+        "resizable": true
+      }
+    ]
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all"
+  }
+}

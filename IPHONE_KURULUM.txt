@@ -1,0 +1,20 @@
+ÖĞRENCİ TAKİP SİSTEMİ v6.5 - PWA
+
+iPHONE KULLANIMI İÇİN
+1. Bu klasörü HTTPS destekli bir web adresinde yayınlayın.
+2. iPhone'da Safari ile uygulama adresini açın.
+3. Birkaç saniye bekleyin.
+4. Paylaş > Ana Ekrana Ekle > Ekle.
+5. Bundan sonra ana ekrandaki Öğrenci Takip simgesinden açın.
+
+ÇEVRİMDIŞI
+- Uygulama dosyaları Service Worker ile önbelleğe alınır.
+- HTTPS üzerinden en az bir kez açıldıktan sonra ana arayüz çevrimdışı açılabilir.
+- Öğrenci verileri cihazın yerel depolamasında tutulur.
+- Bilgisayar ve iPhone verileri şimdilik otomatik senkronize olmaz.
+- Cihaz Aktarım Yedeği ile veri taşıyabilirsiniz.
+
+ÖNEMLİ iOS NOTU
+- index.html dosyasını iPhone Dosyalar uygulamasından doğrudan açmak PWA kurulumu değildir.
+- Safari'nin Ana Ekrana Ekle özelliği için HTTPS üzerinden yayınlanan bir adres gerekir.
+- iOS depolama yönetimi nedeniyle düzenli JSON yedeği almak önerilir.
