@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Öğrenci Takip Sistemi v6.6</title>
+<title>Öğrenci Takip Sistemi v6.7</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -67,6 +67,38 @@ border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;fon
 .privacy-note{font-size:12px;line-height:1.55}
 .privacy-warning{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:10px;padding:10px}
 
+
+/* v6.7 iPhone/mobile compact layout */
+@media(max-width:700px){
+  body{font-size:15px}
+  .app{padding-left:12px!important;padding-right:12px!important}
+  .topbar{padding:10px 0 8px!important}
+  .topbar h1{font-size:22px!important;line-height:1.15!important;margin:0!important}
+  .topbar .subtitle,.topbar p{font-size:12px!important;line-height:1.35!important;margin-top:4px!important}
+  .mobile-hide-install{display:none!important}
+  .mobile-connection{display:none!important}
+  .mobile-privacy{padding:7px 9px!important;font-size:11px!important;border-radius:999px!important}
+  .mobile-privacy .privacy-dot{width:8px;height:8px}
+  .mobile-compact-btn{min-height:38px!important;padding:8px 12px!important}
+  .header-actions,.toolbar,.top-actions{gap:7px!important;margin-top:8px!important}
+  .header-actions button,.toolbar button,.top-actions button,
+  .header-actions select,.toolbar select,.top-actions select{
+    min-height:38px!important;padding:8px 11px!important;font-size:14px!important
+  }
+  .profile-chip,.profile-card,.teacher-chip{min-width:0!important;padding:6px!important}
+  .profile-chip:empty,.profile-card:empty,.teacher-chip:empty{display:none!important}
+  .sidebar,.classes-panel{margin-top:10px!important}
+  .section-title{margin-top:14px!important;margin-bottom:8px!important}
+  .empty{padding:28px 16px!important;min-height:0!important}
+  .empty h2,.empty h3{font-size:25px!important;margin-bottom:8px!important}
+  .empty p{font-size:14px!important;line-height:1.45!important}
+  .primary-wide,.add-class-btn{min-height:48px!important}
+}
+@media(max-width:430px){
+  .topbar h1{font-size:20px!important}
+  .mobile-privacy span:last-child{font-size:10.5px!important}
+}
+
 </style>
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -104,7 +136,7 @@ border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;fon
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.6</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.7</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <img id="headerProfilePhoto" alt="">
@@ -112,7 +144,7 @@ border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;fon
 </div>
 <select id="periodSelect" onchange="changePeriod(this.value)"><option value="1">1. Dönem</option><option value="2">2. Dönem</option></select>
 <button id="undoBtn" class="secondary" onclick="undo()" disabled>↶ Geri Al</button><button id="redoBtn" class="secondary" onclick="redo()" disabled>↷ Yinele</button>
-<button class="secondary" onclick="openInstallHelp()">Telefona Kur</button><button class="secondary" onclick="openPrivacyInfo()">Gizlilik</button><span id="connectionState" class="offline-pill"></span><span class="privacy-strip" id="privacyState"><span class="privacy-dot"></span><span>Yerel Veri Modu: Açık</span></span><button class="secondary" onclick="lockNow()">Kilitle</button>
+<button class="secondary mobile-hide-install" onclick="openInstallHelp()">Telefona Kur</button><button class="secondary mobile-compact-btn" onclick="openPrivacyInfo()">Gizlilik</button><span id="connectionState" class="offline-pill mobile-connection"></span><span class="privacy-strip mobile-privacy" id="privacyState"><span class="privacy-dot"></span><span>Yerel Veri Modu: Açık</span></span><button class="secondary" onclick="lockNow()">Kilitle</button>
 <button class="secondary" onclick="exportTransferBackup()">Cihaz Aktarım Yedeği</button>
 <button class="secondary" onclick="exportData()">Yedek Al</button>
 </div>
@@ -126,7 +158,7 @@ border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;fon
 </aside>
 
 <main>
-<div id="noClass" class="empty card"><h2>Henüz sınıf yok</h2><p>Sol menüden ilk sınıfınızı ekleyin.</p></div>
+<div id="noClass" class="empty card"><h2>Henüz sınıf yok</h2><p>Yukarıdaki + Sınıf Ekle düğmesinden ilk sınıfınızı oluşturun.</p></div>
 <div id="classView" style="display:none">
 <div class="top-title"><div><h1 id="currentClassTitle"></h1><div class="tiny" id="periodLabel"></div></div><button class="danger" onclick="deleteCurrentClass()">Sınıfı Sil</button></div>
 <div class="grid" style="margin-top:14px">
@@ -303,6 +335,17 @@ function changePin(){
   settings.pinHash=hashPin(np);saveSettings();alert("PIN değiştirildi.");openSettings();
 }
 
+
+
+function updateStandaloneUI(){
+  const standalone = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches)
+    || window.navigator.standalone === true;
+  document.querySelectorAll(".mobile-hide-install").forEach(x=>{
+    if(standalone) x.style.display="none";
+  });
+}
+window.addEventListener("DOMContentLoaded",updateStandaloneUI);
+window.addEventListener("pageshow",updateStandaloneUI);
 
 function updateConnectionState(){
   const x=el("connectionState"); if(!x)return;
