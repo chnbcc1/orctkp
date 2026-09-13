@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v6.13.2</title>
+<title>Öğrenci Takip Sistemi v6.14</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -260,7 +260,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.13.2 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
+/* v6.14 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
 .full-action{width:100%;min-height:44px}
 .file-import-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.file-import-row input[type=file]{flex:1;min-width:210px}.file-import-row button{min-height:40px}
 .student-detail-mobile,.report-mobile{display:none}
@@ -272,6 +272,23 @@ input,select,textarea,button{max-width:100%}
   .tabs{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px!important;overflow:visible!important}.tab{padding:8px 3px!important;font-size:10.5px!important;text-align:center;white-space:normal!important;line-height:1.15}
   .matrix-homework-row .status-group{grid-template-columns:1fr 1fr!important}.matrix-homework-row .status-btn{min-height:39px!important;font-size:12px!important}
   .file-import-row{display:grid;grid-template-columns:1fr}.file-import-row input[type=file],.file-import-row button{width:100%;min-width:0}
+}
+
+
+/* v6.14 — mobil PDF seçim ekranı */
+.pdf-selecting .pdf-stage{touch-action:none;user-select:none;-webkit-user-select:none;cursor:crosshair}
+.pdf-selection{border:3px solid #2563eb!important;background:rgba(37,99,235,.16)!important;box-shadow:0 0 0 9999px rgba(15,23,42,.16);pointer-events:none}
+.pdf-select-help{padding:9px 11px;border-radius:10px;background:#eff6ff;color:#1e3a8a;margin:8px 0;font-size:12px}
+.pdf-toolbar .active-select{background:#2563eb;color:white;border-color:#2563eb}
+@media(max-width:700px){
+  #modal.pdf-mobile-full .modal-box{width:100vw;max-width:none;height:100dvh;max-height:100dvh;border-radius:0;margin:0}
+  #modal.pdf-mobile-full .modal-body{padding:10px;overflow:auto}
+  #modal.pdf-mobile-full .modal-head{padding:10px 12px;position:sticky;top:0;z-index:20;background:white}
+  #modal.pdf-mobile-full .pdf-preview-wrap{max-width:100%;overflow:auto;-webkit-overflow-scrolling:touch;border-radius:10px}
+  #modal.pdf-mobile-full .pdf-toolbar{gap:6px}
+  #modal.pdf-mobile-full .pdf-toolbar button{min-height:42px}
+  #modal.pdf-mobile-full #pdfSelectModeBtn,#modal.pdf-mobile-full #pdfClearSelectionBtn,#modal.pdf-mobile-full #pdfReadBtn{flex:1 1 30%}
+  #modal.pdf-mobile-full #pdfReadBtn{width:100%;flex-basis:100%}
 }
 
 </style>
@@ -311,7 +328,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.13.2</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.14</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -928,13 +945,11 @@ async function ensurePDFEngine(){
 }
 
 function openPDFRegionImport(){
-  pdfRegion={pdf:null,pageNum:1,page:null,viewport:null,canvas:null,ctx:null,start:null,rect:null,dragging:false,items:[],scale:1.0,file:null};
-  el("modalTitle").textContent="PDF'de Bölge Seçerek Öğrenci Al";
-  el("modalSubtitle").textContent="PDF cihazda işlenir · isim sütununu seçin";
+  pdfRegion={pdf:null,pageNum:1,page:null,viewport:null,canvas:null,ctx:null,start:null,rect:null,dragging:false,items:[],scale:1.0,file:null,selectMode:false};
+  el("modalTitle").textContent="PDF'den Öğrenci Al";
+  el("modalSubtitle").textContent="Mobil seçim geliştirilmiş · PDF cihazda işlenir";
   el("modalBody").innerHTML=`
-    <div class="notice">
-      PDF dosyanız sunucuya yüklenmez ve cihazdan dışarı çıkmaz. PDF.js motoru ilk kullanımda yalnızca güvenilir CDN'den statik kod olarak yüklenir; öğrenci/PDF verisi gönderilmez. Metin tabanlı PDF'lerde seçili bölge doğrudan okunur. Taranmış PDF'lerde tarayıcının yerel OCR desteği varsa seçili alan cihazda okunur.
-    </div>
+    <div class="notice">Metin tabanlı PDF'lerde seçtiğiniz alanın gerçek PDF metni okunur. Taranmış/görüntü PDF'lerde ise yalnızca cihazın yerel OCR desteği varsa okuma yapılabilir.</div>
     <div class="pdf-toolbar">
       <input id="pdfRegionFile" type="file" accept=".pdf,application/pdf">
       <button onclick="loadPDFRegionFile()">PDF'yi Aç</button>
@@ -942,13 +957,20 @@ function openPDFRegionImport(){
     </div>
     <div id="pdfRegionControls" style="display:none">
       <div class="pdf-toolbar">
-        <button class="secondary" onclick="pdfRegionPrev()">← Önceki</button>
+        <button class="secondary" onclick="pdfRegionPrev()">←</button>
         <b id="pdfPageLabel"></b>
-        <button class="secondary" onclick="pdfRegionNext()">Sonraki →</button><button class="secondary" onclick="pdfZoomOut()">− Küçült</button><button class="secondary" onclick="pdfZoomIn()">+ Büyüt</button>
-        <label class="tiny"><input id="applyAllPages" type="checkbox"> Aynı bölgeyi tüm sayfalara uygula</label>
-        <button class="success" onclick="extractSelectedPDFRegion()">Seçili Alanı Oku</button>
+        <button class="secondary" onclick="pdfRegionNext()">→</button>
+        <button class="secondary" onclick="pdfFitWidth()">Genişliğe Sığdır</button>
+        <button class="secondary" onclick="pdfZoomOut()">−</button>
+        <button class="secondary" onclick="pdfZoomIn()">+</button>
       </div>
-      <div class="tiny" style="margin-bottom:7px">İsimlerin bulunduğu sütunu fareyle basılı tutup dikdörtgen olarak seçin.</div>
+      <div class="pdf-toolbar">
+        <button id="pdfSelectModeBtn" onclick="togglePDFSelectMode()">Alan Seç</button>
+        <button id="pdfClearSelectionBtn" class="secondary" onclick="clearPDFSelection()">Seçimi Temizle</button>
+        <label class="tiny"><input id="applyAllPages" type="checkbox"> Aynı alanı tüm sayfalarda kullan</label>
+        <button id="pdfReadBtn" class="success" onclick="extractSelectedPDFRegion()">Seçili Alanı Oku</button>
+      </div>
+      <div id="pdfSelectHelp" class="pdf-select-help">Önce <b>Alan Seç</b>'e dokunun. Sonra isim sütununun bir köşesinden karşı köşesine parmağınızı sürükleyin. Seçim sırasında sayfa kaydırılmaz.</div>
       <div class="pdf-preview-wrap">
         <div id="pdfStage" class="pdf-stage">
           <canvas id="pdfCanvas"></canvas>
@@ -957,9 +979,8 @@ function openPDFRegionImport(){
       </div>
       <div id="pdfRegionResults" style="margin-top:12px"></div>
     </div>`;
-  el("modal").classList.add("open");
+  el("modal").classList.add("open","pdf-mobile-full");
 }
-
 function setPDFInfo(t){ const x=el("pdfRegionInfo"); if(x)x.textContent=t; }
 
 async function loadPDFRegionFile(){
@@ -992,21 +1013,46 @@ async function renderPDFRegionPage(){
   bindPDFSelection();
 }
 
+function togglePDFSelectMode(force){
+  pdfRegion.selectMode=typeof force==="boolean"?force:!pdfRegion.selectMode;
+  const stage=el("pdfStage"),btn=el("pdfSelectModeBtn");
+  stage?.classList.toggle("pdf-selecting",pdfRegion.selectMode);
+  btn?.classList.toggle("active-select",pdfRegion.selectMode);
+  if(btn)btn.textContent=pdfRegion.selectMode?"Seçim Modu Açık":"Alan Seç";
+}
+function clearPDFSelection(){
+  pdfRegion.rect=null;pdfRegion.start=null;pdfRegion.dragging=false;
+  const s=el("pdfSelection");if(s)s.style.display="none";
+  const r=el("pdfRegionResults");if(r)r.innerHTML="";
+}
+function pdfFitWidth(){
+  if(!pdfRegion.page)return;
+  const base=pdfRegion.page.getViewport({scale:1});
+  const wrap=el("pdfStage")?.parentElement;
+  const available=Math.max(280,(wrap?.clientWidth||window.innerWidth)-8);
+  pdfRegion.scale=Math.min(2.2,available/base.width);
+  return renderPDFRegionPageAtScale();
+}
 function bindPDFSelection(){
   const stage=el("pdfStage");
   stage.onpointerdown=(ev)=>{
-    const r=stage.getBoundingClientRect(), sx=pdfRegion.canvas.width/r.width, sy=pdfRegion.canvas.height/r.height;
-    pdfRegion.start={x:(ev.clientX-r.left)*sx,y:(ev.clientY-r.top)*sy}; pdfRegion.dragging=true;
+    if(!pdfRegion.selectMode)return;
+    ev.preventDefault();
+    const r=stage.getBoundingClientRect(),sx=pdfRegion.canvas.width/r.width,sy=pdfRegion.canvas.height/r.height;
+    pdfRegion.start={x:Math.max(0,Math.min(pdfRegion.canvas.width,(ev.clientX-r.left)*sx)),y:Math.max(0,Math.min(pdfRegion.canvas.height,(ev.clientY-r.top)*sy))};
+    pdfRegion.dragging=true;pdfRegion.rect={x:pdfRegion.start.x,y:pdfRegion.start.y,w:1,h:1};drawPDFSelection();
     stage.setPointerCapture?.(ev.pointerId);
   };
   stage.onpointermove=(ev)=>{
-    if(!pdfRegion.dragging)return;
-    const r=stage.getBoundingClientRect(), sx=pdfRegion.canvas.width/r.width, sy=pdfRegion.canvas.height/r.height;
-    const cur={x:(ev.clientX-r.left)*sx,y:(ev.clientY-r.top)*sy};
+    if(!pdfRegion.dragging||!pdfRegion.selectMode)return;
+    ev.preventDefault();
+    const r=stage.getBoundingClientRect(),sx=pdfRegion.canvas.width/r.width,sy=pdfRegion.canvas.height/r.height;
+    const cur={x:Math.max(0,Math.min(pdfRegion.canvas.width,(ev.clientX-r.left)*sx)),y:Math.max(0,Math.min(pdfRegion.canvas.height,(ev.clientY-r.top)*sy))};
     const x=Math.min(pdfRegion.start.x,cur.x),y=Math.min(pdfRegion.start.y,cur.y),w=Math.abs(cur.x-pdfRegion.start.x),h=Math.abs(cur.y-pdfRegion.start.y);
-    pdfRegion.rect={x,y,w,h}; drawPDFSelection();
+    pdfRegion.rect={x,y,w,h};drawPDFSelection();
   };
-  stage.onpointerup=()=>{pdfRegion.dragging=false};
+  stage.onpointerup=(ev)=>{if(pdfRegion.dragging){ev.preventDefault();pdfRegion.dragging=false;togglePDFSelectMode(false)}};
+  stage.onpointercancel=()=>{pdfRegion.dragging=false};
 }
 function drawPDFSelection(){
   const s=el("pdfSelection"),r=pdfRegion.rect,stage=el("pdfStage").getBoundingClientRect();
@@ -1036,13 +1082,16 @@ async function textFromRegionOnPage(pageNum,rect){
   const p=await pdfRegion.pdf.getPage(pageNum),vp=p.getViewport({scale:pdfRegion.scale}),tc=await p.getTextContent();
   const hits=[];
   for(const it of tc.items||[]){
-    const rr=itemRectInViewport(it,vp);
-    if(intersects(rr,rect))hits.push({text:it.str||"",x:rr.x,y:rr.y});
+    const rr=itemRectInViewport(it,vp),cx=rr.x+rr.w/2,cy=rr.y+rr.h/2;
+    const centerInside=cx>=rect.x&&cx<=rect.x+rect.w&&cy>=rect.y&&cy<=rect.y+rect.h;
+    if(centerInside||intersects(rr,rect))hits.push({text:(it.str||"").trim(),x:rr.x,y:rr.y,h:rr.h});
   }
-  hits.sort((a,b)=>Math.abs(a.y-b.y)>7?a.y-b.y:a.x-b.x);
+  const tol=Math.max(6,Math.min(14,(hits.reduce((s,x)=>s+x.h,0)/(hits.length||1))*.65));
+  hits.sort((a,b)=>Math.abs(a.y-b.y)>tol?a.y-b.y:a.x-b.x);
   let lines=[],cur=[],lastY=null;
   for(const h of hits){
-    if(lastY===null||Math.abs(h.y-lastY)<=7){cur.push(h.text);lastY=lastY===null?h.y:(lastY+h.y)/2}
+    if(!h.text)continue;
+    if(lastY===null||Math.abs(h.y-lastY)<=tol){cur.push(h.text);lastY=lastY===null?h.y:(lastY+h.y)/2}
     else{lines.push(cur.join(" ").replace(/\s+/g," ").trim());cur=[h.text];lastY=h.y}
   }
   if(cur.length)lines.push(cur.join(" ").replace(/\s+/g," ").trim());
@@ -1133,7 +1182,24 @@ function exportClassCSV(){const c=cls(),rows=[["Sınıf","Dönem","No","Öğrenc
 
 function exportData(){downloadBlob(JSON.stringify(state,null,2),"odev_takip_yedek.json","application/json")}
 function exportTransferBackup(){downloadBlob(JSON.stringify({version:5,state,settings},null,2),"odev_takip_CIHAZ_AKTARIM_yedegi.json","application/json")}
-function importTransferBackup(ev){const f=ev.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.state)throw 0;state=normalize(d.state);settings=normalizeSettings(d.settings||{});currentClassId=state.currentClassId||state.classes[0]?.id||null;currentPeriod=state.currentPeriod||"1";save();saveSettings();initLock();alert("Cihaz aktarım yedeği yüklendi. Şimdi yedekteki PIN ile giriş yapın.")}catch(e){alert("Geçersiz aktarım yedeği.")}};r.readAsText(f);ev.target.value=""}
+function importTransferBackup(ev){
+  const f=ev.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      let incomingState=null,incomingSettings=null,kind="";
+      if(d&&d.state&&Array.isArray(d.state.classes)){incomingState=d.state;incomingSettings=d.settings||{};kind="cihaz aktarım";}
+      else if(d&&Array.isArray(d.classes)){incomingState=d;incomingSettings=settings;kind="normal";}
+      else throw new Error("Bilinmeyen yedek biçimi");
+      state=normalize(incomingState);settings=normalizeSettings(incomingSettings||{});
+      currentClassId=state.currentClassId||state.classes[0]?.id||null;currentPeriod=state.currentPeriod||"1";
+      save();saveSettings();initLock();render();
+      alert(kind==="normal"?"Normal yedek başarıyla yüklendi. Öğrenci takip verileri aktarıldı.":"Cihaz aktarım yedeği başarıyla yüklendi.");
+    }catch(e){console.error(e);alert("Yedek dosyası okunamadı veya bu uygulamaya ait geçerli bir yedek değil.");}
+  };
+  r.readAsText(f);ev.target.value="";
+}
 function downloadBlob(content,name,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 
 render();
