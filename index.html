@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v6.14</title>
+<title>Öğrenci Takip Sistemi v6.14.1</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -260,7 +260,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.14 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
+/* v6.14.1 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
 .full-action{width:100%;min-height:44px}
 .file-import-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.file-import-row input[type=file]{flex:1;min-width:210px}.file-import-row button{min-height:40px}
 .student-detail-mobile,.report-mobile{display:none}
@@ -275,8 +275,8 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.14 — mobil PDF seçim ekranı */
-.pdf-selecting .pdf-stage{touch-action:none;user-select:none;-webkit-user-select:none;cursor:crosshair}
+/* v6.14.1 — mobil PDF seçim ekranı */
+.pdf-stage.pdf-selecting{touch-action:none!important;user-select:none;-webkit-user-select:none;cursor:crosshair}
 .pdf-selection{border:3px solid #2563eb!important;background:rgba(37,99,235,.16)!important;box-shadow:0 0 0 9999px rgba(15,23,42,.16);pointer-events:none}
 .pdf-select-help{padding:9px 11px;border-radius:10px;background:#eff6ff;color:#1e3a8a;margin:8px 0;font-size:12px}
 .pdf-toolbar .active-select{background:#2563eb;color:white;border-color:#2563eb}
@@ -290,6 +290,15 @@ input,select,textarea,button{max-width:100%}
   #modal.pdf-mobile-full #pdfSelectModeBtn,#modal.pdf-mobile-full #pdfClearSelectionBtn,#modal.pdf-mobile-full #pdfReadBtn{flex:1 1 30%}
   #modal.pdf-mobile-full #pdfReadBtn{width:100%;flex-basis:100%}
 }
+
+
+/* v6.14.1.1 PDF touch/zoom hotfix */
+#modal.pdf-mobile-full .pdf-preview-wrap{touch-action:pan-x pan-y;overscroll-behavior:contain;text-align:left}
+#modal.pdf-mobile-full .pdf-stage{max-width:none!important;margin:0!important}
+#modal.pdf-mobile-full .pdf-stage canvas{max-width:none!important;width:auto!important;height:auto!important}
+#modal.pdf-mobile-full .pdf-stage.pdf-selecting,
+#modal.pdf-mobile-full .pdf-stage.pdf-selecting canvas{touch-action:none!important}
+#pdfZoomLabel{display:inline-flex;align-items:center;justify-content:center;min-width:52px;font-size:12px;font-weight:700;color:#334155}
 
 </style>
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
@@ -328,7 +337,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.14</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.14.1</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -962,6 +971,7 @@ function openPDFRegionImport(){
         <button class="secondary" onclick="pdfRegionNext()">→</button>
         <button class="secondary" onclick="pdfFitWidth()">Genişliğe Sığdır</button>
         <button class="secondary" onclick="pdfZoomOut()">−</button>
+        <span id="pdfZoomLabel">100%</span>
         <button class="secondary" onclick="pdfZoomIn()">+</button>
       </div>
       <div class="pdf-toolbar">
@@ -1009,6 +1019,7 @@ async function renderPDFRegionPage(){
   await p.render({canvasContext:pdfRegion.ctx,viewport:vp}).promise;
   const tc=await p.getTextContent(); pdfRegion.items=tc.items||[];
   el("pdfPageLabel").textContent=`Sayfa ${pdfRegion.pageNum} / ${pdfRegion.pdf.numPages}`;
+  updatePDFZoomLabel();
   pdfRegion.rect=null; const s=el("pdfSelection");s.style.display="none";
   bindPDFSelection();
 }
@@ -1030,7 +1041,7 @@ function pdfFitWidth(){
   const base=pdfRegion.page.getViewport({scale:1});
   const wrap=el("pdfStage")?.parentElement;
   const available=Math.max(280,(wrap?.clientWidth||window.innerWidth)-8);
-  pdfRegion.scale=Math.min(2.2,available/base.width);
+  pdfRegion.scale=Math.min(3,available/base.width);
   return renderPDFRegionPageAtScale();
 }
 function bindPDFSelection(){
@@ -1051,7 +1062,7 @@ function bindPDFSelection(){
     const x=Math.min(pdfRegion.start.x,cur.x),y=Math.min(pdfRegion.start.y,cur.y),w=Math.abs(cur.x-pdfRegion.start.x),h=Math.abs(cur.y-pdfRegion.start.y);
     pdfRegion.rect={x,y,w,h};drawPDFSelection();
   };
-  stage.onpointerup=(ev)=>{if(pdfRegion.dragging){ev.preventDefault();pdfRegion.dragging=false;togglePDFSelectMode(false)}};
+  stage.onpointerup=(ev)=>{if(pdfRegion.dragging){ev.preventDefault();pdfRegion.dragging=false;try{stage.releasePointerCapture?.(ev.pointerId)}catch(e){}togglePDFSelectMode(false)}};
   stage.onpointercancel=()=>{pdfRegion.dragging=false};
 }
 function drawPDFSelection(){
@@ -1061,14 +1072,25 @@ function drawPDFSelection(){
 }
 async function pdfRegionPrev(){if(pdfRegion.pageNum>1){pdfRegion.pageNum--;await renderPDFRegionPage()}}
 async function pdfRegionNext(){if(pdfRegion.pageNum<pdfRegion.pdf.numPages){pdfRegion.pageNum++;await renderPDFRegionPage()}}
-async function pdfZoomOut(){pdfRegion.scale=Math.max(.35,pdfRegion.scale*.85);await renderPDFRegionPageAtScale()}
-async function pdfZoomIn(){pdfRegion.scale=Math.min(1.8,pdfRegion.scale*1.15);await renderPDFRegionPageAtScale()}
+function updatePDFZoomLabel(){
+  const z=el("pdfZoomLabel");if(z)z.textContent=Math.round((pdfRegion.scale||1)*100)+"%";
+}
+async function pdfZoomOut(){
+  if(!pdfRegion.pdf)return;
+  pdfRegion.scale=Math.max(.3,pdfRegion.scale/1.25);
+  await renderPDFRegionPageAtScale();
+}
+async function pdfZoomIn(){
+  if(!pdfRegion.pdf)return;
+  pdfRegion.scale=Math.min(3,pdfRegion.scale*1.25);
+  await renderPDFRegionPageAtScale();
+}
 async function renderPDFRegionPageAtScale(){
   const p=await pdfRegion.pdf.getPage(pdfRegion.pageNum);pdfRegion.page=p;const vp=p.getViewport({scale:pdfRegion.scale});pdfRegion.viewport=vp;
   const c=el("pdfCanvas"),stage=el("pdfStage");pdfRegion.canvas=c;pdfRegion.ctx=c.getContext("2d");
   c.width=Math.floor(vp.width);c.height=Math.floor(vp.height);stage.style.width=c.width+"px";stage.style.height=c.height+"px";
   await p.render({canvasContext:pdfRegion.ctx,viewport:vp}).promise;const tc=await p.getTextContent();pdfRegion.items=tc.items||[];
-  el("pdfPageLabel").textContent=`Sayfa ${pdfRegion.pageNum} / ${pdfRegion.pdf.numPages}`;pdfRegion.rect=null;el("pdfSelection").style.display="none";bindPDFSelection();
+  el("pdfPageLabel").textContent=`Sayfa ${pdfRegion.pageNum} / ${pdfRegion.pdf.numPages}`;updatePDFZoomLabel();pdfRegion.rect=null;el("pdfSelection").style.display="none";bindPDFSelection();
 }
 
 function itemRectInViewport(item,viewport){
