@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v6.14.5</title>
+<title>Öğrenci Takip Sistemi v6.15</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -260,7 +260,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.14.5 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
+/* v6.15 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
 .full-action{width:100%;min-height:44px}
 .file-import-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.file-import-row input[type=file]{flex:1;min-width:210px}.file-import-row button{min-height:40px}
 .student-detail-mobile,.report-mobile{display:none}
@@ -275,7 +275,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.14.5 — mobil PDF seçim ekranı */
+/* v6.15 — mobil PDF seçim ekranı */
 .pdf-stage.pdf-selecting{touch-action:none!important;user-select:none;-webkit-user-select:none;cursor:crosshair}
 .pdf-selection{border:3px solid #2563eb!important;background:rgba(37,99,235,.16)!important;box-shadow:0 0 0 9999px rgba(15,23,42,.16);pointer-events:none}
 .pdf-select-help{padding:9px 11px;border-radius:10px;background:#eff6ff;color:#1e3a8a;margin:8px 0;font-size:12px}
@@ -292,7 +292,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.14.5.1 PDF touch/zoom hotfix */
+/* v6.15.1 PDF touch/zoom hotfix */
 #modal.pdf-mobile-full .pdf-preview-wrap{touch-action:pan-x pan-y;overscroll-behavior:contain;text-align:left}
 #modal.pdf-mobile-full .pdf-stage{max-width:none!important;margin:0!important}
 #modal.pdf-mobile-full .pdf-stage canvas{max-width:none!important;width:auto!important;height:auto!important}
@@ -301,7 +301,7 @@ input,select,textarea,button{max-width:100%}
 #pdfZoomLabel{display:inline-flex;align-items:center;justify-content:center;min-width:52px;font-size:12px;font-weight:700;color:#334155}
 
 
-/* v6.14.5 — iOS PDF alan seçimi */
+/* v6.15 — iOS PDF alan seçimi */
 #modal.pdf-mobile-full .pdf-stage.pdf-selecting{
   touch-action:none!important;
   -webkit-user-select:none!important;
@@ -313,7 +313,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.14.5 — seçilen alan kalıcı görünür */
+/* v6.15 — seçilen alan kalıcı görünür */
 #modal.pdf-mobile-full .pdf-stage{position:relative!important;overflow:visible}
 #modal.pdf-mobile-full .pdf-stage canvas{position:relative;z-index:1}
 #modal.pdf-mobile-full .pdf-selection{
@@ -327,7 +327,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.14.5 — zoom sonrası seçim görünürlüğü */
+/* v6.15 — zoom sonrası seçim görünürlüğü */
 #modal.pdf-mobile-full #pdfSelection{
   display:none;
   position:absolute!important;
@@ -378,7 +378,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.14.5</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.15</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -391,8 +391,8 @@ input,select,textarea,button{max-width:100%}
 <select id="periodSelect" class="mobile-period" onchange="changePeriod(this.value)"><option value="1">1. Dönem</option><option value="2">2. Dönem</option></select>
 <button id="undoBtn" class="secondary mobile-history" onclick="undo()" disabled>↶ Geri Al</button><button id="redoBtn" class="secondary mobile-history" onclick="redo()" disabled>↷ Yinele</button>
 <button class="secondary mobile-hide-install" onclick="openInstallHelp()">Telefona Kur</button><button class="secondary mobile-compact-btn" onclick="openPrivacyInfo()">Gizlilik</button><span id="connectionState" class="offline-pill mobile-connection"></span><span class="privacy-strip mobile-privacy" id="privacyState"><span class="privacy-dot"></span><span>Yerel Veri Modu: Açık</span></span><button class="secondary mobile-lock" onclick="lockNow()">Kilitle</button>
-<button class="secondary mobile-backup-wide" onclick="exportTransferBackup()">Cihaz Aktarım Yedeği</button>
-<button class="secondary mobile-backup" onclick="exportData()">Yedek Al</button>
+<button class="secondary mobile-backup-wide" onclick="exportTransferBackup()">Tam Yedek / Cihaz Aktarımı</button>
+<button class="secondary mobile-backup" onclick="exportData()">Tam Yedek Al</button>
 </div>
 </header>
 
@@ -400,7 +400,7 @@ input,select,textarea,button{max-width:100%}
 <aside>
 <div class="section-title">Sınıflar</div><div id="classList"></div>
 <button style="width:100%;margin-top:7px" onclick="addClass()">+ Sınıf Ekle</button>
-<div class="footer-note">Veriler cihazdaki tarayıcıda saklanır. Farklı cihazda devam etmek için “Cihaz Aktarım Yedeği” kullanın.</div>
+<div class="footer-note">Veriler cihazdaki tarayıcıda saklanır. Farklı cihazda devam etmek için “Tam Yedek / Cihaz Aktarımı” kullanın.</div>
 </aside>
 
 <main>
@@ -1361,8 +1361,28 @@ function exportClassJPEG(){const c=cls(),hs=hwPeriod(c),students=[...c.students]
 function downloadCanvas(cv,name){const a=document.createElement("a");a.href=cv.toDataURL("image/jpeg",.94);a.download=name;a.click()}
 function exportClassCSV(){const c=cls(),rows=[["Sınıf","Dönem","No","Öğrenci","Yaptı","Kısmen","Mazeretli","Yapmadı","Başarı %"]];c.students.forEach(s=>{const st=sstat(c,s.id);rows.push([c.name,currentPeriod,s.number,s.name,st.done,st.partial,st.excused,st.missing,st.rate])});downloadBlob("\uFEFF"+rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(";")).join("\n"),`${safe(c.name)}_${currentPeriod}_donem_rapor.csv`,"text/csv;charset=utf-8")}
 
-function exportData(){downloadBlob(JSON.stringify(state,null,2),"odev_takip_yedek.json","application/json")}
-function exportTransferBackup(){downloadBlob(JSON.stringify({version:5,state,settings},null,2),"odev_takip_CIHAZ_AKTARIM_yedegi.json","application/json")}
+function exportData(){
+  const backup={
+    backupType:"ogrenci-takip-tam-yedek",
+    version:6,
+    appVersion:"v6.15",
+    exportedAt:new Date().toISOString(),
+    state:state,
+    settings:settings
+  };
+  downloadBlob(JSON.stringify(backup,null,2),"ogrenci_takip_TAM_yedek.json","application/json")
+}
+function exportTransferBackup(){
+  const backup={
+    backupType:"ogrenci-takip-tam-yedek",
+    version:6,
+    appVersion:"v6.15",
+    exportedAt:new Date().toISOString(),
+    state:state,
+    settings:settings
+  };
+  downloadBlob(JSON.stringify(backup,null,2),"ogrenci_takip_CIHAZ_AKTARIM_TAM_yedegi.json","application/json")
+}
 function importTransferBackup(ev){
   const f=ev.target.files[0];if(!f)return;
   const r=new FileReader();
@@ -1370,14 +1390,34 @@ function importTransferBackup(ev){
     try{
       const d=JSON.parse(r.result);
       let incomingState=null,incomingSettings=null,kind="";
-      if(d&&d.state&&Array.isArray(d.state.classes)){incomingState=d.state;incomingSettings=d.settings||{};kind="cihaz aktarım";}
-      else if(d&&Array.isArray(d.classes)){incomingState=d;incomingSettings=settings;kind="normal";}
-      else throw new Error("Bilinmeyen yedek biçimi");
-      state=normalize(incomingState);settings=normalizeSettings(incomingSettings||{});
-      currentClassId=state.currentClassId||state.classes[0]?.id||null;currentPeriod=state.currentPeriod||"1";
-      save();saveSettings();initLock();render();
-      alert(kind==="normal"?"Normal yedek başarıyla yüklendi. Öğrenci takip verileri aktarıldı.":"Cihaz aktarım yedeği başarıyla yüklendi.");
-    }catch(e){console.error(e);alert("Yedek dosyası okunamadı veya bu uygulamaya ait geçerli bir yedek değil.");}
+      if(d&&d.state&&Array.isArray(d.state.classes)){
+        incomingState=d.state;
+        incomingSettings=d.settings||{};
+        kind=d.backupType==="ogrenci-takip-tam-yedek"?"tam yedek":"cihaz aktarım";
+      }else if(d&&Array.isArray(d.classes)){
+        incomingState=d;
+        incomingSettings=settings;
+        kind="eski normal yedek";
+      }else throw new Error("Bilinmeyen yedek biçimi");
+
+      state=normalize(incomingState);
+      settings=normalizeSettings(incomingSettings||{});
+      currentClassId=state.currentClassId||state.classes[0]?.id||null;
+      currentPeriod=state.currentPeriod||"1";
+      save();
+      saveSettings();
+      initLock();
+      render();
+
+      if(kind==="eski normal yedek"){
+        alert("Eski tip normal yedek başarıyla yüklendi. Bu eski dosyada öğretmen/profil ayarları bulunmadığı için mevcut cihazdaki ayarlar korundu.");
+      }else{
+        alert("Tam yedek başarıyla yüklendi. Sınıflar, öğrenciler, ödevler, notlar, öğretmen bilgileri, profil fotoğrafı ve uygulama ayarları aktarıldı.");
+      }
+    }catch(e){
+      console.error(e);
+      alert("Yedek dosyası okunamadı veya bu uygulamaya ait geçerli bir yedek değil.");
+    }
   };
   r.readAsText(f);ev.target.value="";
 }
