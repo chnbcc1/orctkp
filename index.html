@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Öğrenci Takip Sistemi v6.8</title>
+<title>Öğrenci Takip Sistemi v6.9</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -189,7 +189,7 @@ border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;fon
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.8</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.9</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <img id="headerProfilePhoto" alt="">
@@ -422,7 +422,7 @@ function openPrivacyInfo(){
         • Uygulama dış sunuculara bağlantı kurmaz.<br>
         • Öğrenci, not, ödev, profil ve durum verileri yalnızca bu cihazın yerel depolamasında tutulur.<br>
         • Analytics, reklam, takip kodu ve üçüncü taraf script kullanılmaz.<br>
-        • Ağ bağlantısı yalnızca uygulamanın kendisini HTTPS üzerinden ilk kez açmak ve yeni sürüm dosyalarını almak için gereklidir.<br>
+        • Ağ bağlantısı yalnızca uygulamanın kendisini HTTPS üzerinden açmak ve yeni sürüm dosyalarını almak için gereklidir.<br>
         • Yedek dosyasını yalnızca güvendiğiniz yerde saklayın.
       </div>
     </div>
@@ -895,5 +895,10 @@ function downloadBlob(content,name,type){const a=document.createElement("a");a.h
 
 render();
 </script>
-<script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")) navigator.serviceWorker.register("./sw.js").catch(()=>{});</script></body>
+<script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
+  navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).then(reg=>{
+    reg.update().catch(()=>{});
+    setInterval(()=>reg.update().catch(()=>{}), 60*60*1000);
+  }).catch(()=>{});
+}</script></body>
 </html>

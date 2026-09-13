@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v6-8-private";
+const CACHE="ogrenci-takip-v6-9-private";
 const ASSETS=[
   "./",
   "./index.html",
@@ -25,18 +25,46 @@ self.addEventListener("activate",event=>{
   );
 });
 
+self.addEventListener("message",event=>{
+  if(event.data==="SKIP_WAITING") self.skipWaiting();
+});
+
 self.addEventListener("fetch",event=>{
   if(event.request.method!=="GET") return;
+
   const url=new URL(event.request.url);
+
+  // Maksimum gizlilik: dış origin isteklerini engelle.
   if(url.origin!==self.location.origin){
     event.respondWith(new Response("Blocked by Local Data Mode",{status:403,statusText:"Blocked"}));
     return;
   }
+
+  // Sayfa gezinmelerinde ağdaki güncel uygulamayı tercih et.
+  // Bu yalnızca aynı GitHub Pages origin'inden uygulama dosyasını çeker;
+  // öğrenci verisi gönderilmez.
+  if(event.request.mode==="navigate"){
+    event.respondWith(
+      fetch(event.request,{cache:"no-store"})
+        .then(resp=>{
+          const copy=resp.clone();
+          caches.open(CACHE).then(cache=>cache.put("./index.html",copy)).catch(()=>{});
+          return resp;
+        })
+        .catch(()=>caches.match("./index.html"))
+    );
+    return;
+  }
+
+  // Diğer yerel dosyalarda cache-first + arka planda güncelleme.
   event.respondWith(
     caches.match(event.request).then(cached=>{
-      if(cached) return cached;
-      if(event.request.mode==="navigate") return caches.match("./index.html");
-      return new Response("Not cached",{status:404,statusText:"Offline"});
+      const network = fetch(event.request,{cache:"no-store"}).then(resp=>{
+        const copy=resp.clone();
+        caches.open(CACHE).then(cache=>cache.put(event.request,copy)).catch(()=>{});
+        return resp;
+      }).catch(()=>null);
+      return cached || network.then(resp=>resp || new Response("Offline",{status:404}));
     })
   );
 });
