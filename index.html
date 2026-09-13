@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Öğrenci Takip Sistemi v6.9</title>
+<title>Öğrenci Takip Sistemi v6.10</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -152,6 +152,33 @@ border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;fon
   .mobile-privacy{font-size:10.5px!important}
 }
 
+
+/* v6.10 profile display fix */
+.profile-chip{color:#111827;min-width:0}
+.profile-chip .profile-lines{display:flex;flex-direction:column;min-width:0;max-width:180px}
+.profile-chip .profile-lines b,
+.profile-chip .profile-lines span{
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap
+}
+.profile-avatar-fallback{
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:13px;color:#1d4ed8;background:#eff6ff
+}
+@media(max-width:700px){
+  .profile-chip{
+    grid-column:1 / 4;
+    width:100%;
+    min-height:54px!important;
+    padding:7px 10px!important;
+    justify-content:flex-start;
+  }
+  .profile-chip.profile-empty{display:none!important}
+  .profile-chip .profile-lines{max-width:none;flex:1}
+  .profile-chip .profile-lines b{font-size:13px!important}
+  .profile-chip .profile-lines span{font-size:10.5px!important}
+  .profile-chip .profile-avatar{width:36px;height:36px;flex:0 0 36px}
+}
+
 </style>
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -189,11 +216,15 @@ border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;fon
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.9</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.10</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
-  <img id="headerProfilePhoto" alt="">
-  <div class="profile-lines"><b id="headerTeacherName">Öğretmen Profili</b><span id="headerSchoolName"></span></div>
+  <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
+  <img id="headerProfilePhoto" class="profile-avatar" alt="Profil fotoğrafı">
+  <div class="profile-lines">
+    <b id="headerTeacherName">Öğretmen Profili</b>
+    <span id="headerSchoolName">Profil bilgisi ekleyin</span>
+  </div>
 </div>
 <select id="periodSelect" class="mobile-period" onchange="changePeriod(this.value)"><option value="1">1. Dönem</option><option value="2">2. Dönem</option></select>
 <button id="undoBtn" class="secondary mobile-history" onclick="undo()" disabled>↶ Geri Al</button><button id="redoBtn" class="secondary mobile-history" onclick="redo()" disabled>↷ Yinele</button>
@@ -323,13 +354,29 @@ function render(){
 }
 
 function renderProfileHeader(){
-  const p=settings.profile||{}, img=el("headerProfilePhoto"), chip=el("profileChip");
-  const hasProfile=!!(p.name||p.school||p.photo);
+  const p=settings.profile||{};
+  const chip=el("profileChip"), img=el("headerProfilePhoto"), fallback=el("profileAvatarFallback");
+  const name=(p.name||"").trim(), school=(p.school||"").trim(), photo=p.photo||"";
+  const hasProfile=!!(name||school||photo);
+
   if(chip) chip.classList.toggle("profile-empty",!hasProfile);
-  el("headerTeacherName").textContent=p.name||"Öğretmen Profili";
-  el("headerSchoolName").textContent=p.school||"Okul adı eklenmedi";
-  if(p.photo){img.src=p.photo;img.style.visibility="visible"}else{
-    img.removeAttribute("src"); img.style.visibility="hidden";
+
+  const nameEl=el("headerTeacherName"), schoolEl=el("headerSchoolName");
+  if(nameEl) nameEl.textContent=name || "Öğretmen Profili";
+  if(schoolEl) schoolEl.textContent=school || (hasProfile ? "Okul bilgisi eklenmedi" : "Profil bilgisi ekleyin");
+
+  if(photo){
+    img.src=photo;
+    img.style.display="block";
+    if(fallback) fallback.style.display="none";
+  }else{
+    img.removeAttribute("src");
+    img.style.display="none";
+    if(fallback){
+      fallback.style.display="flex";
+      const parts=(name||"Ö").split(/\s+/).filter(Boolean);
+      fallback.textContent=(parts.length>1 ? parts[0][0]+parts[parts.length-1][0] : parts[0]?.[0]||"Ö").toLocaleUpperCase("tr-TR");
+    }
   }
 }
 function openSettings(){window._activeStudentModalId=null;
@@ -379,9 +426,15 @@ function removeProfilePhoto(){pendingProfilePhoto="";const pr=el("profilePreview
 function saveProfile(){
   const name=el("profileName").value.trim(), school=el("profileSchool").value.trim();
   if(!name)return alert("Öğretmen adı soyadı girin.");
-  settings.profile=settings.profile||{}; settings.profile.name=name; settings.profile.school=school;
-  if(pendingProfilePhoto!==null)settings.profile.photo=pendingProfilePhoto;
-  saveSettings(); pendingProfilePhoto=null; renderProfileHeader(); closeModal();
+  settings.profile=settings.profile||{};
+  settings.profile.name=name;
+  settings.profile.school=school;
+  if(pendingProfilePhoto!==null) settings.profile.photo=pendingProfilePhoto;
+  saveSettings();
+  pendingProfilePhoto=null;
+  renderProfileHeader();
+  closeModal();
+  setTimeout(renderProfileHeader,0);
 }
 function changePin(){
   const old=el("oldPin").value, np=el("changeNewPin").value;
