@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v6.20</title>
+<title>Öğrenci Takip Sistemi v6.21</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -259,7 +259,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.20 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
+/* v6.21 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
 .full-action{width:100%;min-height:44px}
 .file-import-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.file-import-row input[type=file]{flex:1;min-width:210px}.file-import-row button{min-height:40px}
 .student-detail-mobile,.report-mobile{display:none}
@@ -274,7 +274,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.20 — mobil PDF seçim ekranı */
+/* v6.21 — mobil PDF seçim ekranı */
 .pdf-stage.pdf-selecting{touch-action:none!important;user-select:none;-webkit-user-select:none;cursor:crosshair}
 .pdf-selection{border:3px solid #2563eb!important;background:rgba(37,99,235,.16)!important;box-shadow:0 0 0 9999px rgba(15,23,42,.16);pointer-events:none}
 .pdf-select-help{padding:9px 11px;border-radius:10px;background:#eff6ff;color:#1e3a8a;margin:8px 0;font-size:12px}
@@ -291,7 +291,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.20.1 PDF touch/zoom hotfix */
+/* v6.21.1 PDF touch/zoom hotfix */
 #modal.pdf-mobile-full .pdf-preview-wrap{touch-action:pan-x pan-y;overscroll-behavior:contain;text-align:left}
 #modal.pdf-mobile-full .pdf-stage{max-width:none!important;margin:0!important}
 #modal.pdf-mobile-full .pdf-stage canvas{max-width:none!important;width:auto!important;height:auto!important}
@@ -300,7 +300,7 @@ input,select,textarea,button{max-width:100%}
 #pdfZoomLabel{display:inline-flex;align-items:center;justify-content:center;min-width:52px;font-size:12px;font-weight:700;color:#334155}
 
 
-/* v6.20 — iOS PDF alan seçimi */
+/* v6.21 — iOS PDF alan seçimi */
 #modal.pdf-mobile-full .pdf-stage.pdf-selecting{
   touch-action:none!important;
   -webkit-user-select:none!important;
@@ -312,7 +312,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.20 — seçilen alan kalıcı görünür */
+/* v6.21 — seçilen alan kalıcı görünür */
 #modal.pdf-mobile-full .pdf-stage{position:relative!important;overflow:visible}
 #modal.pdf-mobile-full .pdf-stage canvas{position:relative;z-index:1}
 #modal.pdf-mobile-full .pdf-selection{
@@ -326,7 +326,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.20 — zoom sonrası seçim görünürlüğü */
+/* v6.21 — zoom sonrası seçim görünürlüğü */
 #modal.pdf-mobile-full #pdfSelection{
   display:none;
   position:absolute!important;
@@ -341,7 +341,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.20 — mobil başlık ve tıklanabilir Eksik kutusu */
+/* v6.21 — mobil başlık ve tıklanabilir Eksik kutusu */
 .stat-clickable{cursor:pointer;position:relative;transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease}
 .stat-clickable small{display:block;margin-top:5px;font-size:9px;color:var(--muted);font-weight:700}
 .stat-clickable:active{transform:scale(.985)}
@@ -354,7 +354,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.20 — Gelişmiş Rapor */
+/* v6.21 — Gelişmiş Rapor */
 .report-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:14px}
 .report-summary-card{border:1px solid var(--border);border-radius:14px;background:#fff;padding:12px}
 .report-summary-card span{display:block;color:var(--muted);font-size:10px;font-weight:800}
@@ -376,7 +376,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.20 — Rapor kullanılabilirlik */
+/* v6.21 — Rapor kullanılabilirlik */
 .report-section-head{display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer}
 .report-section-head .report-section-title{margin:16px 0 8px}
 .report-toggle{min-width:38px!important;min-height:34px!important;padding:5px 10px!important;font-size:18px!important}
@@ -389,7 +389,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.20 — Öğrenci Ayrıntısı */
+/* v6.21 — Öğrenci Ayrıntısı */
 .student-detail-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:10px}
 .student-detail-summary .mini-summary{border:1px solid var(--border);border-radius:13px;background:#fff;padding:10px;cursor:pointer}
 .student-detail-summary .mini-summary span{display:block;color:var(--muted);font-size:9px;font-weight:800}
@@ -407,6 +407,17 @@ input,select,textarea,button{max-width:100%}
  .student-actions{grid-template-columns:1fr 1fr}
  .student-actions button:first-child{grid-column:1 / 3}
  .student-status-summary{grid-template-columns:1fr 1fr}
+}
+
+
+/* v6.21 — Öğrenci özeti görünürlüğü ve tekil taşıma */
+.student-summary-title{font-size:11px;font-weight:900;color:#334155;margin:2px 0 7px}
+.grade-summary-card{border-color:#bfdbfe!important;background:#f8fbff!important}
+.grade-summary-card .tap-hint{display:block;margin-top:4px;color:#2563eb;font-size:8px;font-weight:800}
+.student-actions-two{grid-template-columns:1fr 1fr!important}
+@media(max-width:700px){
+  .student-actions-two{grid-template-columns:1fr 1fr!important}
+  .student-actions-two button:first-child{grid-column:auto!important}
 }
 
 </style>
@@ -446,7 +457,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.20</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.21</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1016,9 +1027,10 @@ function openStudent(sid){
    <button class="${currentPeriod==="1"?"active":"secondary"}" onclick="studentDetailPeriod('${sid}','1')">1. Dönem</button>
    <button class="${currentPeriod==="2"?"active":"secondary"}" onclick="studentDetailPeriod('${sid}','2')">2. Dönem</button>
  </div>
+ <div class="student-summary-title">Öğrenci Özeti · ${currentPeriod}. Dönem</div>
  <div class="student-detail-summary">
    <div class="mini-summary"><span>ÖDEV TAMAMLAMA</span><b>%${st.rate}</b></div>
-   <div class="mini-summary" onclick="openStudentGrades('${sid}')"><span>NOT ORTALAMASI</span><b>${avg===null?"-":avg.toLocaleString("tr-TR",{maximumFractionDigits:2})}</b>${miss.length?`<small class="missing-grade-note">${miss.length} eksik not</small>`:""}</div>
+   <div class="mini-summary grade-summary-card" onclick="openStudentGrades('${sid}')"><span>NOT ORTALAMASI</span><b>${avg===null?"-":avg.toLocaleString("tr-TR",{maximumFractionDigits:2})}</b>${miss.length?`<small class="missing-grade-note">${miss.length} eksik not</small>`:""}<small class="tap-hint">Notları göster</small></div>
  </div>
  <div class="student-status-summary">
    <span class="report-stat done" onclick="openStudentStatusList('${sid}','done')">Yaptı <b>${st.done}</b></span>
@@ -1026,10 +1038,9 @@ function openStudent(sid){
    <span class="report-stat excused" onclick="openStudentStatusList('${sid}','excused')">Mazeretli <b>${st.excused}</b></span>
    <span class="report-stat missing" onclick="openStudentStatusList('${sid}','missing')">Yapmadı <b>${st.missing}</b></span>
  </div>
- <div class="student-actions">
+ <div class="student-actions student-actions-two">
    <button onclick="exportStudentJPEG('${sid}')">Öğrenci JPEG</button>
-   <button class="secondary" onclick="openMoveCopyStudent('${sid}','copy')">Sınıfa Kopyala</button>
-   <button class="secondary" onclick="openMoveCopyStudent('${sid}','move')">Sınıfa Taşı</button>
+   <button class="secondary" onclick="openMoveStudent('${sid}')">Başka Sınıfa Taşı</button>
  </div>
  <div class="card table-wrap student-detail-desktop"><table><thead><tr><th>Ödev</th><th>Durum</th><th>Hızlı İşlem</th></tr></thead><tbody>${hs.map(h=>`<tr><td><b>${esc(h.name)}</b></td><td>${statusBadge(status(c,sid,h.id),sid,h.id)}</td><td>${statusButtons(sid,h.id)}</td></tr>`).join("")}</tbody></table></div>
  <div class="student-detail-mobile">${hs.length?hs.map(h=>`<div class="student-homework-card"><div class="student-homework-head"><b>${esc(h.name)}</b>${statusBadge(status(c,sid,h.id),sid,h.id)}</div>${statusButtons(sid,h.id)}</div>`).join(""):'<div class="empty card">Bu dönemde ödev yok.</div>'}</div>
@@ -1037,8 +1048,58 @@ function openStudent(sid){
  <textarea class="note" oninput="cls().notes['${sid}']=this.value;save()">${esc(c.notes[sid]||"")}</textarea>`;
  el("modal").classList.add("open")
 }
-function openMoveCopyStudent(sid,mode){const c=cls(),s=c.students.find(x=>x.id===sid),targets=state.classes.filter(x=>x.id!==c.id);if(!targets.length)return alert("Başka sınıf yok.");el("modalBody").innerHTML=`<h3>${mode==="move"?"Taşı":"Kopyala"}: ${esc(s.name)}</h3><select id="targetClass">${targets.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join("")}</select><button style="margin-left:8px" onclick="commitMoveCopy('${sid}','${mode}')">${mode==="move"?"Taşı":"Kopyala"}</button>`}
-function commitMoveCopy(sid,mode){const from=cls(),to=state.classes.find(x=>x.id===el("targetClass").value),s=from.students.find(x=>x.id===sid);if(!to||!s)return;pushUndo();const ns={id:uid(),number:s.number,name:s.name};to.students.push(ns);to.notes[ns.id]=from.notes[sid]||"";to.grades??={};from.grades??={};to.grades[ns.id]=JSON.parse(JSON.stringify(from.grades[sid]||{}));if(mode==="move"){from.students=from.students.filter(x=>x.id!==sid);delete from.checks[sid];delete from.notes[sid];delete from.grades[sid]}save();closeModal();render()}
+function openMoveStudent(sid){
+  const from=cls(),s=from?.students.find(x=>x.id===sid),targets=state.classes.filter(x=>x.id!==from?.id);
+  if(!from||!s)return;
+  if(!targets.length)return alert("Öğrenciyi taşıyabileceğiniz başka sınıf yok.");
+  el("modalTitle").textContent="Başka Sınıfa Taşı";
+  el("modalSubtitle").textContent=`${s.number?s.number+" - ":""}${s.name}`;
+  el("modalBody").innerHTML=`
+    <div class="notice">Öğrencinin öğretmen notu ve 1./2. dönem notları yeni sınıfa taşınır. Sınıfların ödevleri farklı olabileceği için eski sınıftaki ödev durumları taşınmaz.</div>
+    <label class="tiny">Yeni sınıf</label>
+    <select id="targetClass" style="width:100%;margin:5px 0 10px">${targets.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join("")}</select>
+    <button style="width:100%" onclick="commitMoveStudent('${sid}')">Öğrenciyi Taşı</button>`;
+  el("modal").classList.add("open");
+}
+function commitMoveStudent(sid){
+  const from=cls(),to=state.classes.find(x=>x.id===el("targetClass")?.value),s=from?.students.find(x=>x.id===sid);
+  if(!from||!to||!s)return;
+  if(to.students.some(x=>String(x.number||"")===String(s.number||"") && normName(x.name)===normName(s.name))){
+    return alert("Bu öğrenci hedef sınıfta zaten bulunuyor.");
+  }
+  if(!confirm(`${s.name} öğrencisi ${to.name} sınıfına taşınsın mı?`))return;
+
+  pushUndo();
+  const ns={id:uid(),number:s.number,name:s.name};
+  to.students.push(ns);
+
+  // Öğretmen notunu taşı.
+  to.notes??={};
+  to.notes[ns.id]=from.notes?.[sid]||"";
+
+  // Her iki dönemin notlarını yeni öğrenci kimliğine taşı.
+  to.grades??={};
+  from.grades??={};
+  for(const period of ["1","2"]){
+    to.grades[period]??={};
+    const sourceGrade=from.grades?.[period]?.[sid];
+    if(sourceGrade)to.grades[period][ns.id]=JSON.parse(JSON.stringify(sourceGrade));
+  }
+
+  // Eski sınıftaki öğrenciye ait kayıtları temizle.
+  from.students=from.students.filter(x=>x.id!==sid);
+  if(from.checks)delete from.checks[sid];
+  if(from.notes)delete from.notes[sid];
+  if(from.grades){
+    delete from.grades[sid]; // eski biçim uyumluluğu
+    for(const period of ["1","2"]) if(from.grades[period]) delete from.grades[period][sid];
+  }
+
+  save();
+  closeModal();
+  render();
+  alert(`${s.name} öğrencisi ${to.name} sınıfına taşındı.`);
+}
 
 function openHomework(hid){window._activeStudentModalId=null;
  const c=cls(),h=c.homeworks.find(x=>x.id===hid),st=hstat(c,hid);el("modalTitle").textContent=h.name;el("modalSubtitle").textContent=`${c.name} · ${st.done}/${st.total} yaptı · %${st.rate}`;
@@ -1634,7 +1695,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v6.20",
+    appVersion:"v6.21",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -1645,7 +1706,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v6.20",
+    appVersion:"v6.21",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -1695,6 +1756,12 @@ function downloadBlob(content,name,type){const a=document.createElement("a");a.h
 render();
 </script>
 <script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
+  let swReloading=false;
+  navigator.serviceWorker.addEventListener("controllerchange",()=>{
+    if(swReloading)return;
+    swReloading=true;
+    location.reload();
+  });
   navigator.serviceWorker.register("./sw.js",{updateViaCache:"none"}).then(reg=>{
     reg.update().catch(()=>{});
     setInterval(()=>reg.update().catch(()=>{}), 60*60*1000);
