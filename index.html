@@ -2,8 +2,8 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Öğrenci Takip Sistemi v6.11</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Öğrenci Takip Sistemi v6.12</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -226,6 +226,39 @@ border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;fon
   .modal-box{width:min(96vw,760px)!important}
 }
 
+
+/* ===== v6.12 iPhone first-open viewport normalization ===== */
+html{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+  touch-action:manipulation;
+}
+body{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
+  margin:0;
+}
+header,.layout,aside,main,.card,.grid,.tabs,.toolbar,.top-title{
+  max-width:100%;
+}
+img,canvas,video{max-width:100%;height:auto}
+input,select,textarea,button{max-width:100%}
+@media(max-width:700px){
+  .layout{width:100%!important;max-width:100%!important;grid-template-columns:minmax(0,1fr)!important}
+  aside,main{width:100%!important;max-width:100%!important;min-width:0!important}
+  header{width:100%!important;max-width:100%!important}
+  .header-controls{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)!important}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .stat{min-width:0!important}
+  .mobile-list-card,.mobile-grade-card,.mobile-matrix-card{width:100%;max-width:100%;min-width:0}
+  .tabs{width:100%;max-width:100%;overflow-x:auto}
+  .tab{min-width:0}
+}
+
 </style>
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -263,7 +296,7 @@ border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;fon
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.11</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.12</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -338,6 +371,23 @@ border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;fon
 <div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="modal-box"><div class="modal-head"><div><strong id="modalTitle"></strong><div class="tiny" id="modalSubtitle"></div></div><button class="secondary" onclick="closeModal()">Kapat</button></div><div class="modal-body" id="modalBody"></div></div></div>
 
 <script>
+
+(function normalizeMobileViewport(){
+  const meta=document.querySelector('meta[name="viewport"]');
+  const value='width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
+  if(meta) meta.setAttribute('content',value);
+
+  const fix=()=>{
+    document.documentElement.style.width='100%';
+    document.body && (document.body.style.width='100%');
+    window.scrollTo(Math.max(0,window.scrollX),window.scrollY);
+  };
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fix,{once:true});
+  else fix();
+  window.addEventListener('pageshow',fix);
+})();
+
+
 
 // v6.6 Maksimum Gizlilik: uygulama çalışma zamanında ağ çıkışını kapatır.
 (function(){
