@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v6.13</title>
+<title>Öğrenci Takip Sistemi v6.13.1</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -260,7 +260,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v6.13 mobil ve veri giriş düzeltmeleri */
+/* v6.13.1 kapatma düğmesi düzeltmesi + v6.13 mobil ve veri giriş düzeltmeleri */
 .full-action{width:100%;min-height:44px}
 .file-import-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.file-import-row input[type=file]{flex:1;min-width:210px}.file-import-row button{min-height:40px}
 .student-detail-mobile,.report-mobile{display:none}
@@ -311,7 +311,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.13</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v6.13.1</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -446,6 +446,7 @@ function undo(){if(!undoStack.length)return;redoStack.push(JSON.stringify(state)
 function redo(){if(!redoStack.length)return;undoStack.push(JSON.stringify(state));state=normalize(JSON.parse(redoStack.pop()));currentClassId=state.currentClassId||(state.classes[0]?.id??null);currentPeriod=state.currentPeriod||"1";save();render();updateUndoRedo()}
 function cls(){return state.classes.find(c=>c.id===currentClassId)||null}
 function el(id){return document.getElementById(id)}
+function closeModal(){window._activeStudentModalId=null;const m=el("modal");if(m)m.classList.remove("open")}
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 function hwPeriod(c){return c.homeworks.filter(h=>String(h.period||"1")===currentPeriod)}
 function normName(s){return String(s||"").trim().toLocaleLowerCase("tr").replace(/\s+/g," ")}
@@ -456,6 +457,7 @@ function setupPin(){const a=el("newPin").value,b=el("newPin2").value;if(!/^\d{4,
 function unlockApp(){if(hashPin(el("loginPin").value)!==settings.pinHash)return alert("PIN yanlış.");el("lockScreen").classList.add("hidden");el("loginPin").value="";render()}
 function lockNow(){el("lockScreen").classList.remove("hidden");initLock()}
 initLock();
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&el("modal")?.classList.contains("open"))closeModal()});
 
 function render(){
  renderProfileHeader();
