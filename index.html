@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.1.8</title>
+<title>Öğrenci Takip Sistemi v7.1.9</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -500,7 +500,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.1.8</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.1.9</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1830,13 +1830,27 @@ function parseStudentLines(lines){
   const out=[]; for(let raw of lines){
     let s=raw.replace(/[|;]+/g," ").replace(/\s+/g," ").trim(); if(!s)continue;
     let number="",name=s;
-    let m=s.match(/^\s*(\d{1,6})\s*[-.)]?\s+(.+)$/); if(m){number=m[1];name=m[2].trim()}
+    let m=s.match(/^\s*(\d{1,6})\s*[-.)]?\s+(.+)$/);
+    if(m){number=m[1];name=m[2].trim()}
     name=name.replace(/^\d+\s*/,"").trim();
-    if(name.split(/\s+/).length<2)continue;
+
     if(!/[\p{L}]/u.test(name))continue;
+
+    // PDF satırında öğrenci numarası varsa, ad-soyad PDF tarafından yanlışlıkla
+    // tek parça halinde birleştirilmiş olsa bile öğrenciyi düşürme.
+    // Örn. "86 MANSURÖZCANAN" yine aday olarak gösterilir.
+    // Numarasız ham metinlerde ise başlık/gürültü almamak için en az 2 kelime şartı korunur.
+    if(!number && name.split(/\s+/).length<2)continue;
+
     out.push({number,name});
   }
-  const seen=new Set(); return out.filter(x=>{const k=normName(x.name);if(!k||seen.has(k))return false;seen.add(k);return true});
+  const seen=new Set();
+  return out.filter(x=>{
+    const k=(x.number?x.number+"|":"")+normName(x.name);
+    if(!k||seen.has(k))return false;
+    seen.add(k);
+    return true;
+  });
 }
 async function extractSelectedPDFRegion(){
   if(!pdfRegion.rect||pdfRegion.rect.w<8||pdfRegion.rect.h<8)return alert("Önce PDF üzerinde bir alan seçin.");
@@ -1879,7 +1893,7 @@ async function ocrSelectedRegionNative(){
 function renderPDFRegionResults(rows,raw){
   const c=cls(),existing=new Set(c.students.map(s=>normName(s.name)));
   el("pdfRegionResults").innerHTML=`
-    <b>Bulunan öğrenci adayları</b>
+    <b>Bulunan öğrenci adayları (${rows.length})</b>
     <div class="card" style="padding:8px;margin-top:7px">
       ${rows.length?rows.map((r,i)=>{const dup=existing.has(normName(r.name));return `<div class="pdf-result-row">
         <input class="pdf-row-check" data-i="${i}" type="checkbox" ${dup?"":"checked"} ${dup?"disabled":""}>
@@ -1943,7 +1957,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.1.8",
+    appVersion:"v7.1.9",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -1954,7 +1968,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.1.8",
+    appVersion:"v7.1.9",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -2010,7 +2024,7 @@ render();
     swReloading=true;
     location.reload();
   });
-  navigator.serviceWorker.register("./sw.js?v=7.1.8",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.1.9",{updateViaCache:"none"}).then(reg=>{
     if(reg.waiting) reg.waiting.postMessage("SKIP_WAITING");
     reg.update().catch(()=>{});
     reg.addEventListener("updatefound",()=>{
