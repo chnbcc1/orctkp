@@ -1,8 +1,8 @@
 {
-  "name": "Öğrenci Takip Sistemi v7.2.2",
+  "name": "Öğrenci Takip Sistemi v7.2.4",
   "short_name": "Öğrenci Takip",
-  "description": "Ders Programı profil kartında; sıradaki ders kısa özeti.",
-  "start_url": "./index.html?v=7.2.2",
+  "description": "v7.2.4 Kilit ve Yedek kontrolleri kompaktlaştırıldı.",
+  "start_url": "./index.html?v=7.2.4",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
