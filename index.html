@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.1.4</title>
+<title>Öğrenci Takip Sistemi v7.1.5</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -500,7 +500,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.1.4</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.1.5</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1732,8 +1732,11 @@ async function textFromRegionOnPage(pageNum,rect){
       x:rr.x,y:rr.y,w:Math.max(0,rr.w||0),h:Math.max(1,rr.h||0)
     });
   }
-  const tol=Math.max(6,Math.min(14,(hits.reduce((s,x)=>s+x.h,0)/(hits.length||1))*.65));
-  hits.sort((a,b)=>Math.abs(a.y-b.y)>tol?a.y-b.y:a.x-b.x);
+  // Satır toleransını küçük tut: önceki yüksek tolerans komşu öğrenci satırlarını
+  // zaman zaman tek satırda birleştirip bazı öğrencilerin atlanmasına neden oluyordu.
+  const avgH=hits.reduce((s,x)=>s+x.h,0)/(hits.length||1);
+  const tol=Math.max(2.2,Math.min(5,avgH*.34));
+  hits.sort((a,b)=>a.y-b.y||a.x-b.x);
 
   const buildLine=(parts)=>{
     if(!parts.length)return "";
@@ -1752,23 +1755,27 @@ async function textFromRegionOnPage(pageNum,rect){
     return cleanPdfTurkishSpacing(out.replace(/\s+/g," ").trim());
   };
 
-  let lines=[],cur=[],lastY=null;
+  // Her satır için sabit bir referans Y kullan. Hareketli ortalama komşu satırlara
+  // sürüklenebildiği için uzun seçimlerde satır kaybına yol açabiliyordu.
+  const groups=[];
   for(const h of hits){
     if(!h.text)continue;
-    if(lastY===null||Math.abs(h.y-lastY)<=tol){
-      cur.push(h);
-      lastY=lastY===null?h.y:(lastY+h.y)/2;
+    let best=null,bestD=Infinity;
+    for(const g of groups){
+      const d=Math.abs(h.y-g.y);
+      if(d<=tol && d<bestD){best=g;bestD=d}
+    }
+    if(best){
+      best.items.push(h);
+      // Referansı yalnızca çok hafif güncelle; bir sonraki satıra sürüklenmesini engelle.
+      best.y=(best.y*(best.items.length-1)+h.y)/best.items.length;
     }else{
-      const line=buildLine(cur);
-      if(line)lines.push(line);
-      cur=[h];lastY=h.y;
+      groups.push({y:h.y,items:[h]});
     }
   }
-  if(cur.length){
-    const line=buildLine(cur);
-    if(line)lines.push(line);
-  }
-  return lines.filter(Boolean);
+  groups.sort((a,b)=>a.y-b.y);
+  const lines=groups.map(g=>buildLine(g.items)).filter(Boolean);
+  return lines;
 }
 function parseStudentLines(lines){
   const out=[]; for(let raw of lines){
@@ -1887,7 +1894,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.1.4",
+    appVersion:"v7.1.5",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -1898,7 +1905,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.1.4",
+    appVersion:"v7.1.5",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -1954,7 +1961,7 @@ render();
     swReloading=true;
     location.reload();
   });
-  navigator.serviceWorker.register("./sw.js?v=7.1.4",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.1.5",{updateViaCache:"none"}).then(reg=>{
     if(reg.waiting) reg.waiting.postMessage("SKIP_WAITING");
     reg.update().catch(()=>{});
     reg.addEventListener("updatefound",()=>{
