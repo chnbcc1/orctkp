@@ -444,6 +444,25 @@ input,select,textarea,button{max-width:100%}
   .student-actions-two button:first-child{grid-column:auto!important}
 }
 
+
+/* ===== v7.1 Akıllı Uyarılar + Günlük Özet ===== */
+.smart-panel{margin-top:14px;margin-bottom:14px;background:linear-gradient(180deg,#fff,#f8fbff);border:1px solid var(--border);border-radius:16px;padding:13px}
+.smart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
+.smart-title{font-size:15px;font-weight:900}.smart-subtitle{font-size:11px;color:var(--muted);margin-top:2px}
+.smart-badge{white-space:nowrap;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;border-radius:999px;padding:6px 9px;font-size:11px;font-weight:800}
+.smart-summary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.smart-summary-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:9px 10px}
+.smart-summary-card span{display:block;font-size:9px;color:var(--muted);font-weight:800}.smart-summary-card b{display:block;font-size:19px;margin-top:2px}
+.smart-alert-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.smart-alert{appearance:none;width:100%;text-align:left;background:#fff;color:var(--text);border:1px solid var(--border);border-radius:12px;padding:10px;min-height:82px;cursor:pointer}
+.smart-alert:hover{border-color:#93c5fd}.smart-alert:active{transform:scale(.99)}
+.smart-alert .smart-alert-top{display:flex;align-items:center;justify-content:space-between;gap:7px}.smart-alert strong{font-size:12px;line-height:1.2}.smart-alert .count{font-size:18px;font-weight:900}
+.smart-alert small{display:block;color:var(--muted);font-size:10px;line-height:1.25;margin-top:5px}
+.smart-alert.danger{border-left:4px solid var(--danger)}.smart-alert.warn{border-left:4px solid var(--warn)}.smart-alert.partial{border-left:4px solid var(--partial)}.smart-alert.info{border-left:4px solid var(--primary)}
+.smart-all-clear{border:1px dashed #86efac;background:#f0fdf4;color:#166534;border-radius:12px;padding:12px;font-size:12px;font-weight:700}
+@media(max-width:900px){.smart-alert-grid{grid-template-columns:1fr 1fr}.smart-alert:last-child{grid-column:1 / -1}}
+@media(max-width:520px){.smart-panel{padding:11px}.smart-alert-grid{grid-template-columns:1fr}.smart-alert:last-child{grid-column:auto}.smart-head{align-items:center}.smart-badge{font-size:10px}.smart-alert{min-height:0}.smart-summary-card b{font-size:17px}}
+
 </style>
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -481,7 +500,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.0</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.1</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -511,6 +530,15 @@ input,select,textarea,button{max-width:100%}
 <div class="top-title"><div><h1 id="currentClassTitle"></h1><div class="tiny" id="periodLabel"></div></div><button class="secondary class-settings-btn" onclick="openClassSettings()">Sınıf Ayarları</button></div>
 <div class="grid" style="margin-top:14px">
 <div class="stat"><span>Öğrenci</span><b id="statStudents">0</b></div><div class="stat"><span>Dönem Ödevi</span><b id="statHomeworks">0</b></div><div class="stat"><span>Tamamlanma</span><b id="statRate">%0</b></div><div class="stat stat-clickable" role="button" tabindex="0" onclick="openMissingStudents()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMissingStudents()}"><span>Eksik</span><b id="statMissing">0</b><small>Listeyi göster</small></div>
+</div>
+
+<div id="smartPanel" class="smart-panel">
+  <div class="smart-head">
+    <div><div class="smart-title">Akıllı Uyarılar · Günlük Özet</div><div id="smartSubtitle" class="smart-subtitle"></div></div>
+    <div id="smartBadge" class="smart-badge">0 uyarı</div>
+  </div>
+  <div id="smartSummary" class="smart-summary"></div>
+  <div id="smartAlerts" class="smart-alert-grid"></div>
 </div>
 
 <div class="tabs">
@@ -667,7 +695,7 @@ function render(){
  updateConnectionState();
  el("periodSelect").value=currentPeriod;renderClasses();const c=cls();el("noClass").style.display=c?"none":"block";el("classView").style.display=c?"block":"none";if(!c)return;
  el("currentClassTitle").textContent=c.name;el("periodLabel").textContent=(currentPeriod==="1"?"1. Dönem":"2. Dönem")+" görünümü";
- renderStats();renderStudents();renderHomeworks();renderMatrix();renderGrades();renderReport();updateUndoRedo();
+ renderStats();renderSmartAlerts();renderStudents();renderHomeworks();renderMatrix();renderGrades();renderReport();updateUndoRedo();
 }
 
 function renderProfileHeader(){
@@ -926,6 +954,94 @@ function setStatus(c,sid,hid,v,doPush=true){
 function cycleStatus(sid,hid){const c=cls(),arr=["missing","done","partial","excused"],v=status(c,sid,hid);setStatus(c,sid,hid,arr[(arr.indexOf(v)+1)%arr.length])}
 function sstat(c,sid){const hs=hwPeriod(c),x={total:hs.length,done:0,partial:0,excused:0,missing:0};hs.forEach(h=>x[status(c,sid,h.id)]++);const denom=x.total-x.excused;x.rate=denom?Math.round((x.done+x.partial*.5)*100/denom):0;return x}
 function hstat(c,hid){const x={total:c.students.length,done:0,partial:0,excused:0,missing:0};c.students.forEach(s=>x[status(c,s.id,hid)]++);const denom=x.total-x.excused;x.rate=denom?Math.round((x.done+x.partial*.5)*100/denom):0;return x}
+function smartDateLabel(){
+  try{return new Intl.DateTimeFormat("tr-TR",{weekday:"long",day:"numeric",month:"long"}).format(new Date())}catch(e){return "Bugün"}
+}
+function hasAnyRequiredGrade(g){
+  return ["exam1","exam2","perf1","perf2"].some(k=>parseGrade(g?.[k])!==null)
+}
+function getSmartAlerts(c){
+  const hs=hwPeriod(c), students=c.students||[];
+  const missingRows=[], streakRows=[], lowCompletionRows=[], missingGradeRows=[], lowGradeRows=[];
+  students.forEach(s=>{
+    const missingHs=hs.filter(h=>status(c,s.id,h.id)==="missing");
+    if(missingHs.length) missingRows.push({student:s,count:missingHs.length,homeworks:missingHs});
+
+    if(hs.length>=3){
+      const last3=hs.slice(-3);
+      if(last3.every(h=>status(c,s.id,h.id)==="missing")) streakRows.push({student:s,homeworks:last3});
+    }
+
+    if(hs.length>=2){
+      const st=sstat(c,s.id);
+      const active=hs.filter(h=>status(c,s.id,h.id)!=="excused").length;
+      if(active>0 && st.rate<50) lowCompletionRows.push({student:s,rate:st.rate,stat:st});
+    }
+
+    const g=getGradeRecord(c,s.id), miss=missingGradeLabels(g), avg=gradeAverage(g);
+    if(hasAnyRequiredGrade(g) && miss.length) missingGradeRows.push({student:s,missing:miss,avg});
+    if(avg!==null && avg<50) lowGradeRows.push({student:s,avg});
+  });
+  missingRows.sort((a,b)=>b.count-a.count||a.student.name.localeCompare(b.student.name,"tr"));
+  streakRows.sort((a,b)=>a.student.name.localeCompare(b.student.name,"tr"));
+  lowCompletionRows.sort((a,b)=>a.rate-b.rate||a.student.name.localeCompare(b.student.name,"tr"));
+  missingGradeRows.sort((a,b)=>b.missing.length-a.missing.length||a.student.name.localeCompare(b.student.name,"tr"));
+  lowGradeRows.sort((a,b)=>a.avg-b.avg||a.student.name.localeCompare(b.student.name,"tr"));
+  const uniqueIds=new Set([...missingRows,...streakRows,...lowCompletionRows,...missingGradeRows,...lowGradeRows].map(x=>x.student.id));
+  const categories=[
+    {type:"missing",title:"Eksik ödev",count:missingRows.length,detail:missingRows.length?`${missingRows.reduce((n,x)=>n+x.count,0)} toplam eksik`:`Eksik ödev yok`,tone:"danger"},
+    {type:"streak",title:"Üst üste 3 eksik",count:streakRows.length,detail:"Son 3 ödevini yapmayanlar",tone:"danger"},
+    {type:"lowCompletion",title:"Düşük tamamlama",count:lowCompletionRows.length,detail:"En az 2 ödevde %50 altı",tone:"warn"},
+    {type:"missingGrade",title:"Eksik not",count:missingGradeRows.length,detail:"Not girişi başlamış, alanı eksik",tone:"partial"},
+    {type:"lowGrade",title:"Düşük ortalama",count:lowGradeRows.length,detail:"Girilen notlarda ortalama 50 altı",tone:"info"}
+  ];
+  return {hs,missingRows,streakRows,lowCompletionRows,missingGradeRows,lowGradeRows,uniqueCount:uniqueIds.size,categories,categoryCount:categories.filter(x=>x.count>0).length};
+}
+function renderSmartAlerts(){
+  const c=cls(),wrap=el("smartPanel"); if(!c||!wrap)return;
+  const a=getSmartAlerts(c), totalIssues=a.categories.reduce((n,x)=>n+x.count,0);
+  el("smartSubtitle").textContent=`${smartDateLabel()} · ${c.name} · ${currentPeriod}. Dönem`;
+  el("smartBadge").textContent=a.categoryCount?`${a.categoryCount} uyarı türü`:"Sorun görünmüyor";
+  el("smartSummary").innerHTML=`
+    <div class="smart-summary-card"><span>DİKKAT GEREKTİREN ÖĞRENCİ</span><b>${a.uniqueCount}</b></div>
+    <div class="smart-summary-card"><span>UYARI KAYDI</span><b>${totalIssues}</b></div>`;
+  el("smartAlerts").innerHTML=a.categoryCount ? a.categories.map(x=>`
+    <button class="smart-alert ${x.tone}" onclick="openSmartAlert('${x.type}')" ${x.count?"":'disabled style="opacity:.55;cursor:default"'}>
+      <span class="smart-alert-top"><strong>${x.title}</strong><span class="count">${x.count}</span></span>
+      <small>${x.detail}</small>
+    </button>`).join("") : `<div class="smart-all-clear" style="grid-column:1/-1">✓ Bu sınıf ve dönem için şu anda dikkat gerektiren bir durum görünmüyor.</div>`;
+}
+function smartStudentButton(c,s,extra=""){
+  return `<div class="card" style="padding:11px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+    <div><b>${esc(s.number?s.number+" - ":"")}${esc(s.name)}</b>${extra?`<div class="tiny" style="margin-top:3px">${extra}</div>`:""}</div>
+    <button class="secondary" onclick="openStudent('${s.id}')">Ayrıntı</button>
+  </div>`;
+}
+function openSmartAlert(type){
+  const c=cls(); if(!c)return; const a=getSmartAlerts(c);
+  let title="Akıllı Uyarı",rows=[],body="";
+  if(type==="missing"){
+    title="Eksik Ödevi Olan Öğrenciler"; rows=a.missingRows;
+    body=rows.map(x=>smartStudentButton(c,x.student,`${x.count} eksik · ${x.homeworks.map(h=>esc(h.name)).join(" · ")}`)).join("");
+  }else if(type==="streak"){
+    title="Üst Üste 3 Ödevi Eksik Olanlar"; rows=a.streakRows;
+    body=rows.map(x=>smartStudentButton(c,x.student,`Son 3: ${x.homeworks.map(h=>esc(h.name)).join(" · ")}`)).join("");
+  }else if(type==="lowCompletion"){
+    title="Düşük Ödev Tamamlama"; rows=a.lowCompletionRows;
+    body=rows.map(x=>smartStudentButton(c,x.student,`Tamamlama: %${x.rate} · Yapmadı: ${x.stat.missing}`)).join("");
+  }else if(type==="missingGrade"){
+    title="Eksik Not Girişi"; rows=a.missingGradeRows;
+    body=rows.map(x=>smartStudentButton(c,x.student,`Eksik: ${esc(x.missing.join(" · "))}${x.avg!==null?` · Mevcut ortalama: ${x.avg}`:""}`)).join("");
+  }else if(type==="lowGrade"){
+    title="Not Ortalaması 50 Altında"; rows=a.lowGradeRows;
+    body=rows.map(x=>smartStudentButton(c,x.student,`Not ortalaması: ${x.avg}`)).join("");
+  }
+  el("modalTitle").textContent=title;
+  el("modalSubtitle").textContent=`${c.name} · ${currentPeriod}. Dönem · ${rows.length} öğrenci`;
+  el("modalBody").innerHTML=body||'<div class="empty card">Bu uyarıya uyan öğrenci yok.</div>';
+  el("modal").classList.add("open");
+}
+
 function renderStats(){const c=cls(),hs=hwPeriod(c);let points=0,den=0,missing=0;c.students.forEach(s=>hs.forEach(h=>{const v=status(c,s.id,h.id);if(v!=="excused"){den++;if(v==="done")points++;else if(v==="partial")points+=.5;if(v==="missing")missing++}}));el("statStudents").textContent=c.students.length;el("statHomeworks").textContent=hs.length;el("statRate").textContent="%"+(den?Math.round(points*100/den):0);el("statMissing").textContent=missing}
 function openMissingStudents(){
   const c=cls(); if(!c)return;
@@ -977,7 +1093,9 @@ function syncStatusUI(sid,hid,v){
 
   // Hızlı işlem düğmelerindeki aktif durum
   document.querySelectorAll(`[data-status-group="${sid}:${hid}"] .status-btn`).forEach(btn=>{
-    btn.classList.toggle("active",btn.dataset.status===v);
+    const selected=btn.dataset.status===v;
+    btn.classList.toggle("active",selected);
+    btn.setAttribute("aria-pressed",selected?"true":"false");
   });
 
   // Öğrenci ayrıntısı açıksa üstteki özet de anında güncellensin
