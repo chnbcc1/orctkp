@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.1.11</title>
+<title>Öğrenci Takip Sistemi v7.1.12</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -500,7 +500,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.1.11</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.1.12</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1711,8 +1711,11 @@ function cleanPdfTurkishSpacing(s){
     prev=s;
     // Ortada tek başına kalan Türkçe glif: ALPTEK İ N -> ALPTEKİN
     s=s.replace(/([\p{L}])\s+([ÇĞİÖŞÜçğıöşü])\s+([\p{L}])/gu,"$1$2$3");
-    // Kelimenin sonunda ayrı kalan tek Türkçe glif: AYTON Ğ -> AYTONĞ/AYTONĞ
+    // Kelimenin sonunda ayrı kalan tek Türkçe glif: AYTON Ğ -> AYTONĞ
     s=s.replace(/\b([\p{L}]{2,})\s+([ÇĞİÖŞÜçğıöşü])\b/gu,"$1$2");
+    // PDF'nin Y İĞİ T gibi kısa Türkçe glif kümelerine böldüğü tek kelimeler.
+    // Sadece ortadaki parçada Türkçe karakter varsa hedeflenir.
+    s=s.replace(/\b([\p{L}])\s+([\p{L}]{1,3}[ÇĞİÖŞÜçğıöşü][\p{L}]{0,2})\s+([\p{L}])\b/gu,"$1$2$3");
     // Başta ayrılmış "Şİ RİN" benzeri durumlar artık PDF glif konumuna göre
     // buildLine içinde çözülür; burada normal ad-soyad boşluklarına dokunulmaz.
   }while(s!==prev);
@@ -1742,9 +1745,13 @@ async function textFromRegionOnPage(pageNum,rect){
       const gap=h.x-(prev.x+prev.w);
       const tinyGap=Math.max(1.2,Math.min(prev.h,h.h)*.12);
       const turkish=/[ÇĞİÖŞÜçğıöşü]/u;
-      const prevFrag=prev.text.length<=2 && turkish.test(prev.text);
-      const curFrag=h.text.length<=2 && turkish.test(h.text);
-      const joinFragment=(prevFrag||curFrag) && gap<=Math.max(tinyGap,4);
+      const prevFrag=prev.text.length<=3 && turkish.test(prev.text);
+      const curFrag=h.text.length<=3 && turkish.test(h.text);
+      const shortLetterFrag=/^[\p{L}]{1,3}$/u;
+      const splitWordFrag=(shortLetterFrag.test(prev.text)||shortLetterFrag.test(h.text))
+        && (turkish.test(prev.text)||turkish.test(h.text))
+        && gap<=Math.max(tinyGap,3.2);
+      const joinFragment=((prevFrag||curFrag) && gap<=Math.max(tinyGap,3.2)) || splitWordFrag;
 
       // Ad ve soyad ayrı PDF sütunlarındaysa aradaki fiziksel boşluk belirgin biçimde büyüktür.
       // Bu sınırı özel bir işaretle koruyoruz; sonraki Türkçe karakter temizliği bu boşluğu silemez.
@@ -1983,7 +1990,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.1.11",
+    appVersion:"v7.1.12",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -1994,7 +2001,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.1.11",
+    appVersion:"v7.1.12",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -2050,7 +2057,7 @@ render();
     swReloading=true;
     location.reload();
   });
-  navigator.serviceWorker.register("./sw.js?v=7.1.11",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.1.12",{updateViaCache:"none"}).then(reg=>{
     if(reg.waiting) reg.waiting.postMessage("SKIP_WAITING");
     reg.update().catch(()=>{});
     reg.addEventListener("updatefound",()=>{
