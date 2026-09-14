@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.2.0</title>
+<title>Öğrenci Takip Sistemi v7.2.1.1</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -539,7 +539,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.2.0</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.2.1</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -698,6 +698,20 @@ let undoStack=[], redoStack=[]; let reportSectionState={homework:true,students:t
 
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
 function load(){try{const x=localStorage.getItem(STORAGE_KEY);if(x)return JSON.parse(x)}catch(e){}return{classes:[],currentClassId:null,currentPeriod:"1"}}
+
+function scheduleDefaultPeriods(){
+  return [
+    {no:1,start:"08:00",end:"08:40"},
+    {no:2,start:"08:50",end:"09:30"},
+    {no:3,start:"09:40",end:"10:20"},
+    {no:4,start:"10:30",end:"11:10"},
+    {no:5,start:"11:20",end:"12:00"},
+    {no:6,start:"13:00",end:"13:40"},
+    {no:7,start:"13:50",end:"14:30"},
+    {no:8,start:"14:40",end:"15:20"}
+  ];
+}
+
 function loadSettings(){try{return normalizeSettings(JSON.parse(localStorage.getItem(SETTINGS_KEY)||"{}"))}catch(e){return normalizeSettings({})}}
 function normalizeSettings(s){
   s=s||{};
@@ -754,7 +768,7 @@ const DEFAULT_PERIODS=[
 function defaultTeacherSchedule(){
   return {
     id:uid(), name:"Mevcut Ders Programı", effectiveDate:"2026-09-15",
-    periods:DEFAULT_PERIODS.map(x=>({...x})),
+    periods:scheduleDefaultPeriods(),
     entries:[
       {id:uid(),day:"Pa",startPeriod:1,endPeriod:2,course:"MAT",className:"9/D"},
       {id:uid(),day:"Pa",startPeriod:5,endPeriod:6,course:"MAT",className:"9/E"},
@@ -777,7 +791,7 @@ function normalizeSchedule(sc){
   sc.id=sc.id||uid();
   sc.name=sc.name||"Ders Programı";
   sc.effectiveDate=sc.effectiveDate||"";
-  sc.periods=Array.isArray(sc.periods)&&sc.periods.length?sc.periods:DEFAULT_PERIODS.map(x=>({...x}));
+  sc.periods=Array.isArray(sc.periods)&&sc.periods.length?sc.periods:scheduleDefaultPeriods();
   sc.periods=sc.periods.map((p,i)=>({no:Number(p.no||i+1),start:p.start||"",end:p.end||""}));
   sc.entries=Array.isArray(sc.entries)?sc.entries:[];
   sc.entries=sc.entries.map(e=>({
@@ -984,13 +998,13 @@ function parseSchedulePdfItems(items){
     if(candidates.length) header.push(candidates.sort((a,b)=>b.y-a.y)[0]);
   }
   header.sort((a,b)=>a.x-b.x);
-  if(header.length<6)return {periods:DEFAULT_PERIODS.map(x=>({...x})),entries:[]};
+  if(header.length<6)return {periods:scheduleDefaultPeriods(),entries:[]};
   const centers=header.map(i=>i.x+i.w/2);
   const headerY=Math.max(...header.map(i=>i.y));
   const dayItems=items.map(i=>({...i,day:dayKeyFromText(i.text)})).filter(i=>i.day&&i.y<headerY);
   const uniqueDays=[];
   for(const d of dayItems.sort((a,b)=>b.y-a.y))if(!uniqueDays.some(x=>x.day===d.day))uniqueDays.push(d);
-  if(uniqueDays.length<3)return {periods:DEFAULT_PERIODS.map(x=>({...x})),entries:[]};
+  if(uniqueDays.length<3)return {periods:scheduleDefaultPeriods(),entries:[]};
 
   const dayRows=uniqueDays.sort((a,b)=>b.y-a.y);
   const entries=[];
@@ -1017,7 +1031,7 @@ function parseSchedulePdfItems(items){
       }
     }
   }
-  return {id:uid(),name:"PDF Ders Programı",effectiveDate:"",periods:DEFAULT_PERIODS.map(x=>({...x})),entries};
+  return {id:uid(),name:"PDF Ders Programı",effectiveDate:"",periods:scheduleDefaultPeriods(),entries};
 }
 function renderScheduleImportPreview(sc){
   const rows=sc.entries.slice().sort((a,b)=>{
@@ -2368,7 +2382,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.2.0",
+    appVersion:"v7.2.1",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -2379,7 +2393,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.2.0",
+    appVersion:"v7.2.1",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings

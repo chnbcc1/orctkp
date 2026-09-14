@@ -1,8 +1,8 @@
 {
-  "name": "Öğrenci Takip Sistemi v7.2",
+  "name": "Öğrenci Takip Sistemi v7.2.1",
   "short_name": "Öğrenci Takip",
-  "description": "Öğrenci takip + öğretmen ders programı + PDF program içe aktarma",
-  "start_url": "./index.html?v=7.2.0",
+  "description": "v7.2.1 PIN giriş ekranı başlangıç hatası düzeltildi; ders programı özellikleri korunur.",
+  "start_url": "./index.html?v=7.2.1",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
