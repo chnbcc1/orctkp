@@ -1,8 +1,8 @@
 {
   "name": "Öğrenci Takip Sistemi",
   "short_name": "Öğrenci Takip",
-  "description": "v7.1.1 Akıllı Uyarılar + Günlük Özet içeren, maksimum gizlilik modunda öğrenci takip sistemi",
-  "start_url": "./index.html?v=7.1.1",
+  "description": "v7.1.2 Akıllı Uyarılar + Günlük Özet, canlı not uyarısı yenileme",
+  "start_url": "./index.html?v=7.1.2",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
