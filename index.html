@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.1.12</title>
+<title>Öğrenci Takip Sistemi v7.1.13</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -500,7 +500,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.1.12</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.1.13</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1756,12 +1756,20 @@ async function textFromRegionOnPage(pageNum,rect){
       // Ad ve soyad ayrı PDF sütunlarındaysa aradaki fiziksel boşluk belirgin biçimde büyüktür.
       // Bu sınırı özel bir işaretle koruyoruz; sonraki Türkçe karakter temizliği bu boşluğu silemez.
       const columnGap=Math.max(12,Math.min(prev.h,h.h)*1.15);
+
+      // Aynı sütun içinde PDF'nin iki ayrı adı yapıştırdığı durumlar için
+      // gerçek karakter aralığını da koru. Büyük sütun boşluğu yine §COL§,
+      // orta büyüklükteki gerçek kelime boşluğu ise §WORD§ olarak işaretlenir.
+      const wordGap=Math.max(4.2,Math.min(prev.h,h.h)*.38);
+
       if(gap>=columnGap) out+=" §COL§ "+h.text;
+      else if(gap>=wordGap && !joinFragment) out+=" §WORD§ "+h.text;
       else out+=(joinFragment?"":" ")+h.text;
       prev=h;
     }
     return cleanPdfTurkishSpacing(out.replace(/\s+/g," ").trim())
       .replace(/\s*§COL§\s*/g," ")
+      .replace(/\s*§WORD§\s*/g," ")
       .replace(/\s+/g," ")
       .trim();
   };
@@ -1990,7 +1998,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.1.12",
+    appVersion:"v7.1.13",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -2001,7 +2009,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.1.12",
+    appVersion:"v7.1.13",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -2057,7 +2065,7 @@ render();
     swReloading=true;
     location.reload();
   });
-  navigator.serviceWorker.register("./sw.js?v=7.1.12",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.1.13",{updateViaCache:"none"}).then(reg=>{
     if(reg.waiting) reg.waiting.postMessage("SKIP_WAITING");
     reg.update().catch(()=>{});
     reg.addEventListener("updatefound",()=>{
