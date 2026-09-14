@@ -1,8 +1,8 @@
 {
   "name": "Öğrenci Takip Sistemi",
   "short_name": "Öğrenci Takip",
-  "description": "v7.1.7 PDF öğrenci numarası satır çapası ile tüm isimleri okuma düzeltmesi",
-  "start_url": "./index.html?v=7.1.7",
+  "description": "v7.1.8 PDF satır bantlarıyla tam öğrenci okuma düzeltmesi",
+  "start_url": "./index.html?v=7.1.8",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
