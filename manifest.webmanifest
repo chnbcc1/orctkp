@@ -1,8 +1,8 @@
 {
-  "name": "Öğrenci Takip Sistemi",
+  "name": "Öğrenci Takip Sistemi v7.2",
   "short_name": "Öğrenci Takip",
-  "description": "v7.1.14 PDF aynı sütunda ayrı text item kelimelerini koruma",
-  "start_url": "./index.html?v=7.1.14",
+  "description": "Öğrenci takip + öğretmen ders programı + PDF program içe aktarma",
+  "start_url": "./index.html?v=7.2.0",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",

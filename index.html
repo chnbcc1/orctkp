@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.1.14</title>
+<title>Öğrenci Takip Sistemi v7.2.0</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -463,6 +463,45 @@ input,select,textarea,button{max-width:100%}
 @media(max-width:900px){.smart-alert-grid{grid-template-columns:1fr 1fr}.smart-alert:last-child{grid-column:1 / -1}}
 @media(max-width:520px){.smart-panel{padding:11px}.smart-alert-grid{grid-template-columns:1fr}.smart-alert:last-child{grid-column:auto}.smart-head{align-items:center}.smart-badge{font-size:10px}.smart-alert{min-height:0}.smart-summary-card b{font-size:17px}}
 
+
+/* ===== v7.2 Ders Programı ===== */
+.schedule-open-btn{width:100%;margin-top:9px;background:#0f766e}
+.schedule-now{border:1px solid #99f6e4;background:#f0fdfa;border-radius:14px;padding:14px;margin-bottom:12px}
+.schedule-now .kicker{font-size:11px;font-weight:800;color:#0f766e;text-transform:uppercase;letter-spacing:.06em}
+.schedule-now .main{font-size:20px;font-weight:900;margin-top:4px}
+.schedule-now .sub{font-size:12px;color:var(--muted);margin-top:4px}
+.schedule-headbar{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:12px}
+.schedule-actions{display:flex;gap:7px;flex-wrap:wrap}
+.schedule-week{display:grid;grid-template-columns:88px repeat(8,minmax(90px,1fr));border:1px solid var(--border);border-radius:12px;overflow:auto;background:#fff}
+.schedule-week .cell{min-height:66px;padding:7px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);font-size:11px}
+.schedule-week .head{background:#f8fafc;font-weight:800;color:#475569;text-align:center;min-height:54px}
+.schedule-week .day{background:#f8fafc;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:13px}
+.schedule-lesson{height:100%;border-radius:9px;padding:7px;background:#eff6ff;border:1px solid #bfdbfe;cursor:pointer}
+.schedule-lesson b{display:block;font-size:12px;color:#1e40af}
+.schedule-lesson span{display:block;font-size:12px;font-weight:900;margin-top:5px}
+.schedule-lesson small{display:block;color:#64748b;margin-top:3px}
+.schedule-empty-cell{color:#cbd5e1;text-align:center;display:flex;align-items:center;justify-content:center;height:100%}
+.schedule-list-mobile{display:none}
+.schedule-mobile-card{background:#fff;border:1px solid var(--border);border-radius:13px;padding:11px;margin-bottom:9px}
+.schedule-mobile-card .row{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.schedule-mobile-card .course{font-weight:900}
+.schedule-mobile-card .class{font-weight:900;color:#1d4ed8}
+.schedule-mobile-card .time{font-size:11px;color:var(--muted);margin-top:4px}
+.schedule-editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.schedule-editor-grid label{font-size:11px;color:var(--muted);font-weight:800}
+.schedule-editor-grid input,.schedule-editor-grid select{width:100%;margin-top:4px}
+.schedule-entry-row{display:grid;grid-template-columns:90px 120px 1fr 1fr auto;gap:7px;align-items:center;padding:8px 0;border-bottom:1px solid #eef2f7}
+.schedule-import-preview{margin-top:12px;border:1px solid #bfdbfe;background:#eff6ff;border-radius:12px;padding:11px}
+.schedule-import-preview table{min-width:560px}
+.schedule-archive-item{padding:9px 0;border-bottom:1px solid #eef2f7}
+@media(max-width:760px){
+  .schedule-week{display:none}
+  .schedule-list-mobile{display:block}
+  .schedule-entry-row{grid-template-columns:1fr 1fr}
+  .schedule-entry-row button{grid-column:1 / -1}
+  .schedule-editor-grid{grid-template-columns:1fr}
+}
+
 </style>
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -500,7 +539,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.1.14</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.2.0</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -521,6 +560,7 @@ input,select,textarea,button{max-width:100%}
 <aside>
 <div class="section-title">Sınıflar</div><div id="classList"></div>
 <button style="width:100%;margin-top:7px" onclick="addClass()">+ Sınıf Ekle</button>
+<button class="schedule-open-btn" onclick="openSchedule()">📅 Ders Programı</button>
 <div class="footer-note">Veriler cihazdaki tarayıcıda saklanır. “Yedek Al” tüm uygulama verilerini kaydeder ve farklı cihaza aktarım için de kullanılabilir.</div>
 </aside>
 
@@ -659,7 +699,17 @@ let undoStack=[], redoStack=[]; let reportSectionState={homework:true,students:t
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
 function load(){try{const x=localStorage.getItem(STORAGE_KEY);if(x)return JSON.parse(x)}catch(e){}return{classes:[],currentClassId:null,currentPeriod:"1"}}
 function loadSettings(){try{return normalizeSettings(JSON.parse(localStorage.getItem(SETTINGS_KEY)||"{}"))}catch(e){return normalizeSettings({})}}
-function normalizeSettings(s){s=s||{};s.profile=s.profile||{};s.profile.name=s.profile.name||"";s.profile.school=s.profile.school||"";s.profile.photo=s.profile.photo||"";return s}
+function normalizeSettings(s){
+  s=s||{};
+  s.profile=s.profile||{};
+  s.profile.name=s.profile.name||"";
+  s.profile.school=s.profile.school||"";
+  s.profile.photo=s.profile.photo||"";
+  s.scheduleArchive=Array.isArray(s.scheduleArchive)?s.scheduleArchive:[];
+  if(!s.schedule) s.schedule=defaultTeacherSchedule();
+  s.schedule=normalizeSchedule(s.schedule);
+  return s
+}
 function save(){state.currentClassId=currentClassId;state.currentPeriod=currentPeriod;localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
 function saveSettings(){localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings))}
 function normalize(s){
@@ -681,6 +731,321 @@ function closeModal(){window._activeStudentModalId=null;const m=el("modal");if(m
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 function hwPeriod(c){return c.homeworks.filter(h=>String(h.period||"1")===currentPeriod)}
 function normName(s){return String(s||"").trim().toLocaleLowerCase("tr").replace(/\s+/g," ")}
+
+
+const SCHEDULE_DAYS=[
+  {key:"Pa",label:"Pazartesi",js:1},
+  {key:"Sa",label:"Salı",js:2},
+  {key:"Ça",label:"Çarşamba",js:3},
+  {key:"Pe",label:"Perşembe",js:4},
+  {key:"Cu",label:"Cuma",js:5}
+];
+const DEFAULT_PERIODS=[
+  {no:1,start:"08:00",end:"08:40"},
+  {no:2,start:"08:50",end:"09:30"},
+  {no:3,start:"09:40",end:"10:20"},
+  {no:4,start:"10:30",end:"11:10"},
+  {no:5,start:"11:20",end:"12:00"},
+  {no:6,start:"13:00",end:"13:40"},
+  {no:7,start:"13:50",end:"14:30"},
+  {no:8,start:"14:40",end:"15:20"}
+];
+
+function defaultTeacherSchedule(){
+  return {
+    id:uid(), name:"Mevcut Ders Programı", effectiveDate:"2026-09-15",
+    periods:DEFAULT_PERIODS.map(x=>({...x})),
+    entries:[
+      {id:uid(),day:"Pa",startPeriod:1,endPeriod:2,course:"MAT",className:"9/D"},
+      {id:uid(),day:"Pa",startPeriod:5,endPeriod:6,course:"MAT",className:"9/E"},
+      {id:uid(),day:"Pa",startPeriod:7,endPeriod:8,course:"MAT",className:"9/F"},
+      {id:uid(),day:"Ça",startPeriod:1,endPeriod:2,course:"MAT",className:"9/F"},
+      {id:uid(),day:"Ça",startPeriod:4,endPeriod:5,course:"MAT",className:"9/E"},
+      {id:uid(),day:"Pe",startPeriod:1,endPeriod:1,course:"HEDEF",className:"12/D"},
+      {id:uid(),day:"Pe",startPeriod:4,endPeriod:5,course:"MAT",className:"9/D"},
+      {id:uid(),day:"Pe",startPeriod:6,endPeriod:6,course:"REHBERLİK",className:"9/D"},
+      {id:uid(),day:"Pe",startPeriod:7,endPeriod:8,course:"MAT",className:"9/F"},
+      {id:uid(),day:"Cu",startPeriod:1,endPeriod:2,course:"T.MAT",className:"12/E"},
+      {id:uid(),day:"Cu",startPeriod:3,endPeriod:4,course:"MAT",className:"9/D"},
+      {id:uid(),day:"Cu",startPeriod:5,endPeriod:6,course:"MAT",className:"9/E"},
+      {id:uid(),day:"Cu",startPeriod:8,endPeriod:8,course:"HEDEF",className:"12/C"}
+    ]
+  };
+}
+function normalizeSchedule(sc){
+  sc=sc||{};
+  sc.id=sc.id||uid();
+  sc.name=sc.name||"Ders Programı";
+  sc.effectiveDate=sc.effectiveDate||"";
+  sc.periods=Array.isArray(sc.periods)&&sc.periods.length?sc.periods:DEFAULT_PERIODS.map(x=>({...x}));
+  sc.periods=sc.periods.map((p,i)=>({no:Number(p.no||i+1),start:p.start||"",end:p.end||""}));
+  sc.entries=Array.isArray(sc.entries)?sc.entries:[];
+  sc.entries=sc.entries.map(e=>({
+    id:e.id||uid(),day:e.day||"Pa",startPeriod:Number(e.startPeriod||1),
+    endPeriod:Number(e.endPeriod||e.startPeriod||1),course:String(e.course||"").trim(),
+    className:String(e.className||"").trim()
+  })).filter(e=>e.course||e.className);
+  return sc;
+}
+function scheduleEntryAt(day,no){
+  const sc=settings.schedule;
+  return sc.entries.find(e=>e.day===day && no>=e.startPeriod && no<=e.endPeriod)||null;
+}
+function periodByNo(no){return settings.schedule.periods.find(p=>Number(p.no)===Number(no))||DEFAULT_PERIODS[Number(no)-1]}
+function timeToMin(t){const m=/^(\d{1,2}):(\d{2})$/.exec(t||"");return m?Number(m[1])*60+Number(m[2]):0}
+function scheduleNowInfo(now=new Date()){
+  const dayDef=SCHEDULE_DAYS.find(d=>d.js===now.getDay());
+  if(!dayDef)return {type:"off",text:"Bugün ders görünmüyor."};
+  const mins=now.getHours()*60+now.getMinutes();
+  const todays=settings.schedule.entries.filter(e=>e.day===dayDef.key).sort((a,b)=>a.startPeriod-b.startPeriod);
+  for(const e of todays){
+    const sp=periodByNo(e.startPeriod), ep=periodByNo(e.endPeriod);
+    const s=timeToMin(sp?.start), en=timeToMin(ep?.end);
+    if(mins>=s && mins<=en)return {type:"now",entry:e,start:sp?.start,end:ep?.end,minutes:Math.max(0,en-mins)};
+    if(mins<s)return {type:"next",entry:e,start:sp?.start,end:ep?.end,minutes:s-mins};
+  }
+  return {type:"done",text:"Bugünkü derslerin tamamlandı."};
+}
+function scheduleNowHTML(){
+  const x=scheduleNowInfo();
+  if(x.type==="now")return `<div class="kicker">Şu anki ders</div><div class="main">${esc(x.entry.course)} · ${esc(x.entry.className)}</div><div class="sub">${esc(x.start)}–${esc(x.end)} · Ders devam ediyor</div>`;
+  if(x.type==="next")return `<div class="kicker">Sıradaki ders</div><div class="main">${esc(x.entry.course)} · ${esc(x.entry.className)}</div><div class="sub">${esc(x.start)}–${esc(x.end)} · ${x.minutes} dk sonra</div>`;
+  return `<div class="kicker">Ders programı</div><div class="main">${esc(x.text||"Bugün ders görünmüyor.")}</div><div class="sub">${esc(settings.schedule.name||"")}</div>`;
+}
+function openSchedule(){
+  const sc=settings.schedule=normalizeSchedule(settings.schedule);
+  el("modalTitle").textContent="Ders Programı";
+  el("modalSubtitle").textContent=(sc.name||"Aktif program")+(sc.effectiveDate?` · ${sc.effectiveDate}`:"");
+  const periodHeads=sc.periods.map(p=>`<div class="cell head"><b>${p.no}</b><br>${esc(p.start)}–${esc(p.end)}</div>`).join("");
+  let desktop=`<div class="schedule-week"><div class="cell head">Gün</div>${periodHeads}`;
+  for(const d of SCHEDULE_DAYS){
+    desktop+=`<div class="cell day">${d.key}</div>`;
+    for(const p of sc.periods){
+      const e=scheduleEntryAt(d.key,p.no);
+      if(e && e.startPeriod===p.no){
+        const span=e.endPeriod-e.startPeriod+1;
+        desktop+=`<div class="cell" style="grid-column:span ${span}"><div class="schedule-lesson" onclick="openScheduleEntryEditor('${e.id}')"><b>${esc(e.course)}</b><span>${esc(e.className)}</span><small>${e.startPeriod}${e.endPeriod>e.startPeriod?"–"+e.endPeriod:""}. ders</small></div></div>`;
+      }else if(!e){
+        desktop+=`<div class="cell"><div class="schedule-empty-cell">—</div></div>`;
+      }
+    }
+  }
+  desktop+=`</div>`;
+  let mobile=`<div class="schedule-list-mobile">`;
+  for(const d of SCHEDULE_DAYS){
+    const rows=sc.entries.filter(e=>e.day===d.key).sort((a,b)=>a.startPeriod-b.startPeriod);
+    mobile+=`<h4 style="margin:14px 0 7px">${d.label}</h4>`;
+    if(!rows.length)mobile+=`<div class="tiny">Ders yok.</div>`;
+    for(const e of rows){
+      const sp=periodByNo(e.startPeriod),ep=periodByNo(e.endPeriod);
+      mobile+=`<div class="schedule-mobile-card" onclick="openScheduleEntryEditor('${e.id}')"><div class="row"><div class="course">${esc(e.course)}</div><div class="class">${esc(e.className)}</div></div><div class="time">${esc(sp?.start)}–${esc(ep?.end)} · ${e.startPeriod}${e.endPeriod>e.startPeriod?"–"+e.endPeriod:""}. ders</div></div>`;
+    }
+  }
+  mobile+=`</div>`;
+  const preview=window._schedulePdfCandidate?renderScheduleImportPreview(window._schedulePdfCandidate):"";
+  el("modalBody").innerHTML=`
+    <div class="schedule-now">${scheduleNowHTML()}</div>
+    <div class="schedule-headbar">
+      <div><b>${esc(sc.name)}</b><div class="tiny">${sc.effectiveDate?`Yürürlük: ${esc(sc.effectiveDate)}`:"Yürürlük tarihi belirtilmedi"}</div></div>
+      <div class="schedule-actions">
+        <button onclick="openScheduleEntryEditor()">+ Ders Ekle</button>
+        <button class="secondary" onclick="openScheduleSettings()">Program Bilgileri</button>
+        <button class="secondary" onclick="document.getElementById('schedulePdfInput').click()">PDF'den Program Al</button>
+        <input id="schedulePdfInput" type="file" accept="application/pdf" style="display:none" onchange="importSchedulePDF(this.files[0])">
+      </div>
+    </div>
+    ${desktop}${mobile}${preview}
+    <div class="footer-note">Program ve değişiklikleri tam yedeğe dahildir. PDF içe aktarma sonucu önce önizlenir; onay vermeden aktif program değiştirilmez.</div>
+  `;
+  el("modal").classList.add("open");
+}
+function openScheduleEntryEditor(id){
+  const sc=settings.schedule;
+  const e=id?sc.entries.find(x=>x.id===id):null;
+  el("modalTitle").textContent=e?"Dersi Düzenle":"Ders Ekle";
+  el("modalSubtitle").textContent="Ders programı";
+  const dayOpts=SCHEDULE_DAYS.map(d=>`<option value="${d.key}" ${(e?.day||"Pa")===d.key?"selected":""}>${d.label}</option>`).join("");
+  const perOpts=sc.periods.map(p=>`<option value="${p.no}">${p.no}. ders (${esc(p.start)}–${esc(p.end)})</option>`).join("");
+  el("modalBody").innerHTML=`
+    <div class="schedule-editor-grid">
+      <label>Gün<select id="seDay">${dayOpts}</select></label>
+      <label>Ders / Kısa Kod<input id="seCourse" value="${esc(e?.course||"MAT")}" placeholder="MAT"></label>
+      <label>Sınıf<input id="seClass" value="${esc(e?.className||"")}" placeholder="9/D"></label>
+      <label>Başlangıç<select id="seStart">${perOpts}</select></label>
+      <label>Bitiş<select id="seEnd">${perOpts}</select></label>
+    </div>
+    <div class="schedule-actions" style="margin-top:14px">
+      <button onclick="saveScheduleEntry('${e?.id||""}')">Kaydet</button>
+      ${e?`<button class="danger" onclick="deleteScheduleEntry('${e.id}')">Dersi Sil</button>`:""}
+      <button class="secondary" onclick="openSchedule()">Geri</button>
+    </div>`;
+  el("seStart").value=String(e?.startPeriod||1);
+  el("seEnd").value=String(e?.endPeriod||e?.startPeriod||1);
+}
+function saveScheduleEntry(id){
+  const day=el("seDay").value,course=el("seCourse").value.trim(),className=el("seClass").value.trim();
+  let startPeriod=Number(el("seStart").value),endPeriod=Number(el("seEnd").value);
+  if(!course||!className)return alert("Ders ve sınıf alanlarını doldurun.");
+  if(endPeriod<startPeriod)[startPeriod,endPeriod]=[endPeriod,startPeriod];
+  const conflict=settings.schedule.entries.find(x=>x.id!==id&&x.day===day&&!(endPeriod<x.startPeriod||startPeriod>x.endPeriod));
+  if(conflict&&!confirm(`${conflict.course} ${conflict.className} ile saat çakışıyor. Yine de kaydedilsin mi?`))return;
+  pushUndo();
+  if(id){
+    const e=settings.schedule.entries.find(x=>x.id===id);
+    Object.assign(e,{day,course,className,startPeriod,endPeriod});
+  }else settings.schedule.entries.push({id:uid(),day,course,className,startPeriod,endPeriod});
+  saveSettings();openSchedule();
+}
+function deleteScheduleEntry(id){
+  if(!confirm("Bu dersi programdan silmek istiyor musunuz?"))return;
+  settings.schedule.entries=settings.schedule.entries.filter(x=>x.id!==id);
+  saveSettings();openSchedule();
+}
+function openScheduleSettings(){
+  const sc=settings.schedule;
+  el("modalTitle").textContent="Program Bilgileri";
+  el("modalSubtitle").textContent="Aktif ders programı";
+  const rows=sc.periods.map(p=>`<div class="schedule-entry-row"><b>${p.no}. ders</b><input id="ps${p.no}" value="${esc(p.start)}" type="time"><input id="pe${p.no}" value="${esc(p.end)}" type="time"><span></span></div>`).join("");
+  el("modalBody").innerHTML=`
+    <div class="schedule-editor-grid">
+      <label>Program adı<input id="scheduleName" value="${esc(sc.name)}"></label>
+      <label>Yürürlük tarihi<input id="scheduleDate" type="date" value="${esc(sc.effectiveDate)}"></label>
+    </div>
+    <h4>Ders Saatleri</h4>${rows}
+    <div class="schedule-actions" style="margin-top:12px">
+      <button onclick="saveScheduleSettings()">Kaydet</button>
+      <button class="secondary" onclick="openScheduleArchive()">Eski Programlar (${settings.scheduleArchive.length})</button>
+      <button class="secondary" onclick="openSchedule()">Geri</button>
+    </div>`;
+}
+function saveScheduleSettings(){
+  settings.schedule.name=el("scheduleName").value.trim()||"Ders Programı";
+  settings.schedule.effectiveDate=el("scheduleDate").value;
+  settings.schedule.periods.forEach(p=>{p.start=el("ps"+p.no).value;p.end=el("pe"+p.no).value});
+  saveSettings();openSchedule();
+}
+function openScheduleArchive(){
+  el("modalTitle").textContent="Eski Ders Programları";
+  el("modalSubtitle").textContent="Arşiv";
+  const a=settings.scheduleArchive||[];
+  el("modalBody").innerHTML=(a.length?a.map((x,i)=>`<div class="schedule-archive-item"><b>${esc(x.name||"Ders Programı")}</b><div class="tiny">${esc(x.effectiveDate||"Tarih yok")} · ${(x.entries||[]).length} ders kaydı</div><button class="secondary" style="margin-top:6px" onclick="restoreScheduleArchive(${i})">Aktif Yap</button></div>`).join(""):`<div class="empty">Henüz eski program yok.</div>`)+`<button class="secondary" style="margin-top:12px" onclick="openSchedule()">Geri</button>`;
+}
+function restoreScheduleArchive(i){
+  const old=settings.scheduleArchive[i];if(!old)return;
+  if(!confirm("Bu eski program aktif program yapılsın mı? Mevcut program arşive taşınacak."))return;
+  const current=JSON.parse(JSON.stringify(settings.schedule));
+  settings.schedule=normalizeSchedule(JSON.parse(JSON.stringify(old)));
+  settings.scheduleArchive.splice(i,1);
+  settings.scheduleArchive.unshift(current);
+  saveSettings();openSchedule();
+}
+function nearestPeriodNo(x,centers){
+  let best=1,dist=Infinity;
+  centers.forEach((c,i)=>{const d=Math.abs(x-c);if(d<dist){dist=d;best=i+1}});
+  return best;
+}
+function dayKeyFromText(s){
+  s=String(s||"").trim();
+  const m={"Pa":"Pa","Pz":"Pa","Sa":"Sa","Ça":"Ça","Ca":"Ça","Pe":"Pe","Cu":"Cu"};
+  return m[s]||null;
+}
+async function importSchedulePDF(file){
+  if(!file)return;
+  try{
+    el("modalSubtitle").textContent="PDF okunuyor…";
+    await ensurePdfLib();
+    const data=await file.arrayBuffer(),pdf=await pdfjsLib.getDocument({data}).promise;
+    let best=null;
+    for(let pageNo=1;pageNo<=Math.min(pdf.numPages,3);pageNo++){
+      const page=await pdf.getPage(pageNo),tc=await page.getTextContent();
+      const items=tc.items.map(it=>{
+        const tx=pdfjsLib.Util.transform(page.getViewport({scale:1}).transform,it.transform);
+        return {text:String(it.str||"").trim(),x:tx[4],y:tx[5],w:Number(it.width||0),h:Math.abs(tx[3])||10};
+      }).filter(x=>x.text);
+      const cand=parseSchedulePdfItems(items);
+      if(cand.entries.length>(best?.entries.length||0))best=cand;
+    }
+    if(!best||best.entries.length<3)throw new Error("Program tablosu güvenilir biçimde algılanamadı.");
+    best.name=file.name.replace(/\.pdf$/i,"");
+    best.effectiveDate=new Date().toISOString().slice(0,10);
+    window._schedulePdfCandidate=best;
+    openSchedule();
+  }catch(e){
+    console.error(e);
+    alert("PDF otomatik okunamadı: "+(e?.message||e)+"\n\nProgramı elle düzenleyebilirsiniz. PDF içe aktarma, metin tabanlı okul programlarında çalışır.");
+    openSchedule();
+  }
+}
+function parseSchedulePdfItems(items){
+  const numItems=items.filter(i=>/^[1-8]$/.test(i.text));
+  let header=[];
+  for(let n=1;n<=8;n++){
+    const candidates=numItems.filter(i=>Number(i.text)===n);
+    if(candidates.length) header.push(candidates.sort((a,b)=>b.y-a.y)[0]);
+  }
+  header.sort((a,b)=>a.x-b.x);
+  if(header.length<6)return {periods:DEFAULT_PERIODS.map(x=>({...x})),entries:[]};
+  const centers=header.map(i=>i.x+i.w/2);
+  const headerY=Math.max(...header.map(i=>i.y));
+  const dayItems=items.map(i=>({...i,day:dayKeyFromText(i.text)})).filter(i=>i.day&&i.y<headerY);
+  const uniqueDays=[];
+  for(const d of dayItems.sort((a,b)=>b.y-a.y))if(!uniqueDays.some(x=>x.day===d.day))uniqueDays.push(d);
+  if(uniqueDays.length<3)return {periods:DEFAULT_PERIODS.map(x=>({...x})),entries:[]};
+
+  const dayRows=uniqueDays.sort((a,b)=>b.y-a.y);
+  const entries=[];
+  for(let di=0;di<dayRows.length;di++){
+    const d=dayRows[di], upper=di===0?(headerY+d.y)/2:(dayRows[di-1].y+d.y)/2;
+    const lower=di===dayRows.length-1?d.y-35:(d.y+dayRows[di+1].y)/2;
+    const row=items.filter(i=>i.y<upper&&i.y>lower&&i.x>centers[0]-45&&!dayKeyFromText(i.text));
+    const classes=row.filter(i=>/^\d{1,2}\s*\/\s*[A-ZÇĞİÖŞÜ]$/iu.test(i.text.replace(/\s+/g,"")));
+    const noise=/^(MATEMATİK|REHBERLİK VE YÖNLENDİRME|TEMEL MATEMATİK|HEDEF TEMELLİ EĞİTİM)$/iu;
+    let courses=row.filter(i=>/^[A-ZÇĞİÖŞÜ][A-ZÇĞİÖŞÜ.\s]{1,18}$/u.test(i.text)&&!noise.test(i.text)&&!classes.includes(i)&&!/^T\.?C\.?$/i.test(i.text));
+    courses=courses.filter(i=>!["ADI SOYADI","SINIF","DERS","TOPLAM"].includes(i.text.toLocaleUpperCase("tr")));
+    courses.sort((a,b)=>a.x-b.x);
+    for(let ci=0;ci<courses.length;ci++){
+      const c=courses[ci],nextX=courses[ci+1]?.x??Infinity;
+      const rightClasses=classes.filter(k=>k.x>=c.x-5&&k.x<nextX).sort((a,b)=>a.x-b.x);
+      const cl=rightClasses[rightClasses.length-1]||classes.filter(k=>k.x>=c.x-5).sort((a,b)=>Math.abs(b.y-c.y)-Math.abs(a.y-c.y))[0];
+      if(!cl)continue;
+      let sp=nearestPeriodNo(c.x+c.w/2,centers),ep=nearestPeriodNo(cl.x+cl.w/2,centers);
+      if(ep<sp)ep=sp;
+      const className=cl.text.replace(/\s+/g,"").toLocaleUpperCase("tr");
+      const course=c.text.trim().replace(/\s+/g," ").toLocaleUpperCase("tr");
+      if(!entries.some(e=>e.day===d.day&&e.startPeriod===sp&&e.className===className)){
+        entries.push({id:uid(),day:d.day,startPeriod:sp,endPeriod:ep,course,className});
+      }
+    }
+  }
+  return {id:uid(),name:"PDF Ders Programı",effectiveDate:"",periods:DEFAULT_PERIODS.map(x=>({...x})),entries};
+}
+function renderScheduleImportPreview(sc){
+  const rows=sc.entries.slice().sort((a,b)=>{
+    const da=SCHEDULE_DAYS.findIndex(d=>d.key===a.day),db=SCHEDULE_DAYS.findIndex(d=>d.key===b.day);
+    return da-db||a.startPeriod-b.startPeriod
+  });
+  return `<div class="schedule-import-preview"><b>PDF Önizlemesi · ${rows.length} ders bloğu bulundu</b>
+    <div class="tiny" style="margin:4px 0 8px">Kontrol edin. Onay verirseniz mevcut program arşive taşınır.</div>
+    <div class="table-wrap"><table><thead><tr><th>Gün</th><th>Ders Saati</th><th>Ders</th><th>Sınıf</th></tr></thead><tbody>
+      ${rows.map(e=>`<tr><td>${esc(e.day)}</td><td>${e.startPeriod}${e.endPeriod>e.startPeriod?"–"+e.endPeriod:""}</td><td>${esc(e.course)}</td><td>${esc(e.className)}</td></tr>`).join("")}
+    </tbody></table></div>
+    <div class="schedule-actions" style="margin-top:9px"><button onclick="acceptSchedulePdf()">Bu Programı Kullan</button><button class="secondary" onclick="window._schedulePdfCandidate=null;openSchedule()">İptal</button></div>
+  </div>`;
+}
+function acceptSchedulePdf(){
+  const cand=window._schedulePdfCandidate;if(!cand)return;
+  const old=JSON.parse(JSON.stringify(settings.schedule));
+  settings.scheduleArchive.unshift(old);
+  settings.schedule=normalizeSchedule(JSON.parse(JSON.stringify(cand)));
+  window._schedulePdfCandidate=null;
+  saveSettings();openSchedule();
+}
+function openClassFromSchedule(className){
+  const target=state.classes.find(c=>normName(c.name)===normName(className));
+  if(!target)return alert(`${className} sınıfı henüz Öğrenci Takip Sistemi'nde oluşturulmamış.`);
+  currentClassId=target.id;save();closeModal();render();
+}
+
 
 function hashPin(s){let h=2166136261>>>0;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(16)}
 function initLock(){if(settings.pinHash){el("setupPinBox").style.display="none";el("loginPinBox").style.display="block";el("lockInfo").textContent="PIN ile giriş yapın."}else{el("setupPinBox").style.display="block";el("loginPinBox").style.display="none";el("lockInfo").textContent="İlk kullanım: cihaz PIN'i oluşturun."}}
@@ -2003,7 +2368,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.1.14",
+    appVersion:"v7.2.0",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -2014,7 +2379,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.1.14",
+    appVersion:"v7.2.0",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
