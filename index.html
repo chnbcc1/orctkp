@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.1.9</title>
+<title>Öğrenci Takip Sistemi v7.1.10</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -500,7 +500,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.1.9</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.1.10</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1827,23 +1827,40 @@ async function textFromRegionOnPage(pageNum,rect){
   return groups.map(g=>buildLine(g.items)).filter(Boolean);
 }
 function parseStudentLines(lines){
-  const out=[]; for(let raw of lines){
-    let s=raw.replace(/[|;]+/g," ").replace(/\s+/g," ").trim(); if(!s)continue;
+  const out=[];
+  const noise=new Set([
+    "ADI","SOYADI","AD","SOYAD","ÖĞRENCİ","OGRENCI","ÖĞRENCİ NO","OGRENCI NO",
+    "NO","NUMARA","NUMARASI","SINIF","SIRA","SIRA NO"
+  ]);
+
+  for(let raw of lines){
+    let s=raw.replace(/[|;]+/g," ").replace(/\s+/g," ").trim();
+    if(!s)continue;
+
     let number="",name=s;
     let m=s.match(/^\s*(\d{1,6})\s*[-.)]?\s+(.+)$/);
     if(m){number=m[1];name=m[2].trim()}
-    name=name.replace(/^\d+\s*/,"").trim();
 
+    name=name.replace(/^\d+\s*/,"").trim();
     if(!/[\p{L}]/u.test(name))continue;
 
-    // PDF satırında öğrenci numarası varsa, ad-soyad PDF tarafından yanlışlıkla
-    // tek parça halinde birleştirilmiş olsa bile öğrenciyi düşürme.
-    // Örn. "86 MANSURÖZCANAN" yine aday olarak gösterilir.
-    // Numarasız ham metinlerde ise başlık/gürültü almamak için en az 2 kelime şartı korunur.
-    if(!number && name.split(/\s+/).length<2)continue;
+    const normalizedHeader=name.toLocaleUpperCase("tr-TR").replace(/\s+/g," ").trim();
+    if(noise.has(normalizedHeader))continue;
+
+    const words=name.split(/\s+/).filter(Boolean);
+
+    // Numaralı seçimde isim tek parça olsa da adayı koru.
+    // Numarasız seçimde de PDF bazen AD + SOYAD sütunlarını tek token halinde verir:
+    // MANSURÖZCANAN, AYŞEÇELİK, YUSUFŞEHZADE gibi.
+    // Bu yüzden makul uzunluktaki yalnız-harf tek token satırları da öğrenci adayı kabul edilir.
+    if(!number && words.length<2){
+      const compact=name.replace(/[^\p{L}'’-]/gu,"");
+      if(compact.length<4 || compact.length>40)continue;
+    }
 
     out.push({number,name});
   }
+
   const seen=new Set();
   return out.filter(x=>{
     const k=(x.number?x.number+"|":"")+normName(x.name);
@@ -1957,7 +1974,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.1.9",
+    appVersion:"v7.1.10",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -1968,7 +1985,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.1.9",
+    appVersion:"v7.1.10",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -2024,7 +2041,7 @@ render();
     swReloading=true;
     location.reload();
   });
-  navigator.serviceWorker.register("./sw.js?v=7.1.9",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.1.10",{updateViaCache:"none"}).then(reg=>{
     if(reg.waiting) reg.waiting.postMessage("SKIP_WAITING");
     reg.update().catch(()=>{});
     reg.addEventListener("updatefound",()=>{
