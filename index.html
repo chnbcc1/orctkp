@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.1.6</title>
+<title>Öğrenci Takip Sistemi v7.1.7</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -500,7 +500,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.1.6</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.1.7</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1726,14 +1726,10 @@ async function textFromRegionOnPage(pageNum,rect){
     const centerInside=cx>=rect.x&&cx<=rect.x+rect.w&&cy>=rect.y&&cy<=rect.y+rect.h;
     if(centerInside||intersects(rr,rect))hits.push({
       text:(it.str||"").trim(),
-      x:rr.x,y:rr.y,w:Math.max(0,rr.w||0),h:Math.max(1,rr.h||0)
+      x:rr.x,y:rr.y,w:Math.max(0,rr.w||0),h:Math.max(1,rr.h||0),
+      cx,cy
     });
   }
-  // Satır toleransını küçük tut: önceki yüksek tolerans komşu öğrenci satırlarını
-  // zaman zaman tek satırda birleştirip bazı öğrencilerin atlanmasına neden oluyordu.
-  const avgH=hits.reduce((s,x)=>s+x.h,0)/(hits.length||1);
-  const tol=Math.max(2.2,Math.min(5,avgH*.34));
-  hits.sort((a,b)=>a.y-b.y||a.x-b.x);
 
   const buildLine=(parts)=>{
     if(!parts.length)return "";
@@ -1747,10 +1743,6 @@ async function textFromRegionOnPage(pageNum,rect){
       const turkish=/[ÇĞİÖŞÜçğıöşü]/u;
       const prevFrag=prev.text.length<=2 && turkish.test(prev.text);
       const curFrag=h.text.length<=2 && turkish.test(h.text);
-      // Yalnızca gerçekten ayrılmış kısa Türkçe glif parçalarını bitiştir.
-      // Normal sütun/ad-soyad parçalarında mutlaka boşluk bırak.
-      // Böylece "Şİ"+"RİN" => "ŞİRİN", "AYTON"+"Ğ" => "AYTONĞ"
-      // ama "MELİKE"+"PEKER" => "MELİKE PEKER" olarak kalır.
       const joinFragment=(prevFrag||curFrag) && gap<=Math.max(tinyGap,4);
       out+=(joinFragment?"":" ")+h.text;
       prev=h;
@@ -1758,27 +1750,66 @@ async function textFromRegionOnPage(pageNum,rect){
     return cleanPdfTurkishSpacing(out.replace(/\s+/g," ").trim());
   };
 
-  // Her satır için sabit bir referans Y kullan. Hareketli ortalama komşu satırlara
-  // sürüklenebildiği için uzun seçimlerde satır kaybına yol açabiliyordu.
+  // Öğrenci numarası sütununu satır çapası olarak kullan.
+  // Aynı satırdaki ad/soyad parçalarının Y konumu birkaç piksel farklı olsa bile
+  // en yakın öğrenci numarasına bağlanır. Böylece uzun seçimlerde isimler düşmez.
+  const nums=hits.filter(h=>/^\d{1,6}$/.test(h.text));
+  if(nums.length>=2){
+    const xClusters=[];
+    for(const n of nums){
+      let g=xClusters.find(g=>Math.abs(g.x-n.x)<=10);
+      if(!g){g={x:n.x,items:[]};xClusters.push(g)}
+      g.items.push(n);
+      g.x=g.items.reduce((s,a)=>s+a.x,0)/g.items.length;
+    }
+    xClusters.sort((a,b)=>b.items.length-a.items.length || b.x-a.x);
+    const anchors=xClusters[0].items.slice().sort((a,b)=>a.cy-b.cy);
+
+    if(anchors.length>=2){
+      const gaps=[];
+      for(let i=1;i<anchors.length;i++){
+        const d=anchors[i].cy-anchors[i-1].cy;
+        if(d>2)gaps.push(d);
+      }
+      gaps.sort((a,b)=>a-b);
+      const rowGap=gaps.length?gaps[Math.floor(gaps.length/2)]:Math.max(12,(hits[0]?.h||10)*1.6);
+      const maxDy=Math.max(5,Math.min(14,rowGap*.46));
+      const groups=anchors.map(a=>({anchor:a,items:[a]}));
+
+      for(const h of hits){
+        if(anchors.includes(h)||!h.text)continue;
+        let best=null,bestD=Infinity;
+        for(const g of groups){
+          const d=Math.abs(h.cy-g.anchor.cy);
+          if(d<bestD){best=g;bestD=d}
+        }
+        if(best && bestD<=maxDy)best.items.push(h);
+      }
+
+      const lines=groups.map(g=>buildLine(g.items)).filter(Boolean);
+      if(lines.length)return lines;
+    }
+  }
+
+  // Numara sütunu seçili değilse genel satır kümeleme yedeği.
+  const avgH=hits.reduce((s,x)=>s+x.h,0)/(hits.length||1);
+  const tol=Math.max(3,Math.min(7,avgH*.52));
+  hits.sort((a,b)=>a.cy-b.cy||a.x-b.x);
   const groups=[];
   for(const h of hits){
     if(!h.text)continue;
     let best=null,bestD=Infinity;
     for(const g of groups){
-      const d=Math.abs(h.y-g.y);
-      if(d<=tol && d<bestD){best=g;bestD=d}
+      const d=Math.abs(h.cy-g.cy);
+      if(d<=tol&&d<bestD){best=g;bestD=d}
     }
     if(best){
       best.items.push(h);
-      // Referansı yalnızca çok hafif güncelle; bir sonraki satıra sürüklenmesini engelle.
-      best.y=(best.y*(best.items.length-1)+h.y)/best.items.length;
-    }else{
-      groups.push({y:h.y,items:[h]});
-    }
+      best.cy=best.items.reduce((s,a)=>s+a.cy,0)/best.items.length;
+    }else groups.push({cy:h.cy,items:[h]});
   }
-  groups.sort((a,b)=>a.y-b.y);
-  const lines=groups.map(g=>buildLine(g.items)).filter(Boolean);
-  return lines;
+  groups.sort((a,b)=>a.cy-b.cy);
+  return groups.map(g=>buildLine(g.items)).filter(Boolean);
 }
 function parseStudentLines(lines){
   const out=[]; for(let raw of lines){
@@ -1897,7 +1928,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.1.6",
+    appVersion:"v7.1.7",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -1908,7 +1939,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.1.6",
+    appVersion:"v7.1.7",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -1964,7 +1995,7 @@ render();
     swReloading=true;
     location.reload();
   });
-  navigator.serviceWorker.register("./sw.js?v=7.1.6",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.1.7",{updateViaCache:"none"}).then(reg=>{
     if(reg.waiting) reg.waiting.postMessage("SKIP_WAITING");
     reg.update().catch(()=>{});
     reg.addEventListener("updatefound",()=>{
