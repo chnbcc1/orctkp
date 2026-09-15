@@ -1,8 +1,8 @@
 {
-  "name": "Öğrenci Takip Sistemi v7.2.7",
+  "name": "Öğrenci Takip Sistemi v7.2.8",
   "short_name": "Öğrenci Takip",
-  "description": "Geniş Ders Programı alanı ve yatay kompakt sınıf seçici.",
-  "start_url": "./index.html?v=7.2.7",
+  "description": "Mobil sınıf seçici yalnızca sınıf adlarını gösteren kompakt yatay şerit.",
+  "start_url": "./index.html?v=7.2.8",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
