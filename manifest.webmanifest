@@ -1,8 +1,8 @@
 {
-  "name": "Öğrenci Takip Sistemi v7.3.2",
+  "name": "Öğrenci Takip Sistemi v7.4.0",
   "short_name": "Öğrenci Takip",
   "description": "Ders programı mobil görünümünde kompakt günlük durum ve ekrana tam oturan gün seçici.",
-  "start_url": "./index.html?v=7.3.2",
+  "start_url": "./index.html?v=7.4.0",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",

@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7-3-2-smart-alerts-grade-refresh-private";
+const CACHE="ogrenci-takip-v7-4-0-smart-alerts-grade-refresh-private";
 const ASSETS=[
   "./",
   "./index.html",
