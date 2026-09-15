@@ -1737,6 +1737,8 @@ button.dutyPrimaryV748{
 <div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="modal-box"><div class="modal-head"><div><strong id="modalTitle"></strong><div class="tiny" id="modalSubtitle"></div></div><button class="secondary" onclick="closeModal()">Kapat</button></div><div class="modal-body" id="modalBody"></div></div></div>
 
 <script>
+window.addEventListener("error",function(ev){ console.error("Uygulama hatası:",ev.error||ev.message); });
+window.addEventListener("unhandledrejection",function(ev){ console.error("Uygulama promise hatası:",ev.reason); });
 
 function switchTab(id){
   document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===id));
@@ -2326,7 +2328,9 @@ setTimeout(updateDutyStatus,0);
  updateConnectionState();
  el("periodSelect").value=currentPeriod;renderClasses();const c=cls();el("noClass").style.display=c?"none":"block";el("classView").style.display=c?"block":"none";if(!c){updateProfileNextLesson();return;}
  el("currentClassTitle").textContent=c.name;el("periodLabel").textContent=(currentPeriod==="1"?"1. Dönem":"2. Dönem")+" görünümü";
- renderStats();renderSmartAlerts();renderStudents();renderHomeworks();renderMatrix();renderGrades();renderTrials();renderReport();updateUndoRedo();updateProfileNextLesson();
+ renderStats();renderSmartAlerts();renderStudents();renderHomeworks();renderMatrix();renderGrades();
+ try{ renderTrials(); }catch(e){ console.error("Deneme modülü çizim hatası",e); const h=el("trialList"); if(h) h.innerHTML='<div class="empty card">Deneme modülü başlatılamadı. Uygulamanın diğer bölümleri kullanılabilir.</div>'; }
+ renderReport();updateUndoRedo();updateProfileNextLesson();
 
 setTimeout(()=>cleanDutyTextV749(document),0);
 }
