@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.5.3.1</title>
+<title>Öğrenci Takip Sistemi v7.5.4</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -1582,7 +1582,11 @@ button.dutyPrimaryV748{
   .dutyActionsHostV749{gap:8px!important}
   .dutyActionsHostV749 .dutyActionV749{font-size:14px!important;line-height:1.2!important}
 }
-</style></head>
+</style>
+<style>
+#modalBody .active-filter{background:#2563eb!important;color:#fff!important;border-color:#2563eb!important}
+</style>
+</head>
 <body>
 
 <div id="lockScreen" class="lock">
@@ -2661,9 +2665,9 @@ function renderSmartAlerts(){
   const a=getSmartAlerts(c), totalIssues=a.categories.reduce((n,x)=>n+x.count,0);
   el("smartBadge").textContent=a.categoryCount;
   el("smartCompactText").textContent=a.categoryCount?`${a.uniqueCount} öğrenci · ${totalIssues} uyarı kaydı`:"Şu anda sorun görünmüyor";
-  const pm=allParentMeetingRows(), uniqueStudents=new Set(pm.map(x=>x.classObj.id+":"+x.meeting.studentId)).size;
+  const pm=allParentMeetingRows().filter(x=>x.classObj.id===c.id), uniqueStudents=new Set(pm.map(x=>x.meeting.studentId)).size;
   if(el("parentMeetingBadge"))el("parentMeetingBadge").textContent=pm.length;
-  if(el("parentMeetingCompactText"))el("parentMeetingCompactText").textContent=pm.length?`${uniqueStudents} öğrenci · ${pm.length} görüşme`:"Henüz görüşme kaydı yok";
+  if(el("parentMeetingCompactText"))el("parentMeetingCompactText").textContent=pm.length?`${uniqueStudents} öğrenci · ${pm.length} görüşme`:`${c.name} · görüşme yok`;
 }
 function openSmartAlertsOverview(){
   const c=cls(); if(!c)return;
@@ -2682,11 +2686,28 @@ function openSmartAlertsOverview(){
       </button>`).join("") : `<div class="smart-all-clear" style="grid-column:1/-1">✓ Bu sınıf ve dönem için şu anda dikkat gerektiren bir durum görünmüyor.</div>`}</div>`;
   el("modal").classList.add("open");
 }
-function openAllParentMeetings(){
-  const rows=allParentMeetingRows();
-  el("modalTitle").textContent="Tüm Veli Görüşmeleri";
-  el("modalSubtitle").textContent=rows.length?`${rows.length} görüşme kaydı · tüm sınıflar`:"Henüz görüşme kaydı yok";
-  el("modalBody").innerHTML=rows.length?`<div style="display:grid;gap:10px">${rows.map(x=>{
+let parentMeetingArchiveFilter="current";
+function parentMeetingArchiveFilterButtons(){
+  const current=cls();
+  const buttons=(state.classes||[]).map(c=>`<button class="secondary ${parentMeetingArchiveFilter===c.id?"active-filter":""}" style="white-space:nowrap;padding:8px 12px" onclick="setParentMeetingArchiveFilter('${c.id}')">${esc(c.name)}</button>`).join("");
+  return `<div style="display:flex;gap:7px;overflow-x:auto;padding:1px 1px 10px;-webkit-overflow-scrolling:touch">
+    ${buttons}
+    <button class="secondary ${parentMeetingArchiveFilter==="all"?"active-filter":""}" style="white-space:nowrap;padding:8px 12px" onclick="setParentMeetingArchiveFilter('all')">Tümü</button>
+  </div>`;
+}
+function setParentMeetingArchiveFilter(v){
+  parentMeetingArchiveFilter=v;
+  renderParentMeetingArchive();
+}
+function renderParentMeetingArchive(){
+  const current=cls();
+  if(!current)return;
+  let rows=allParentMeetingRows();
+  const filterId=parentMeetingArchiveFilter==="current"?current.id:parentMeetingArchiveFilter;
+  if(filterId!=="all")rows=rows.filter(x=>x.classObj.id===filterId);
+  const label=filterId==="all"?"tüm sınıflar":((state.classes||[]).find(c=>c.id===filterId)?.name||current.name);
+  el("modalSubtitle").textContent=rows.length?`${rows.length} görüşme kaydı · ${label}`:`${label} · görüşme kaydı yok`;
+  el("modalBody").innerHTML=parentMeetingArchiveFilterButtons()+(rows.length?`<div style="display:grid;gap:10px">${rows.map(x=>{
     const m=x.meeting,st=x.student,c=x.classObj;
     return `<div class="card all-parent-meeting-card">
       <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
@@ -2697,7 +2718,13 @@ function openAllParentMeetings(){
       ${m.note?`<div class="tiny" style="margin-top:6px;white-space:pre-wrap">${esc(m.note)}</div>`:""}
       ${m.result?`<div style="margin-top:7px"><b>Sonuç / Takip:</b> ${esc(m.result)}</div>`:""}
     </div>`;
-  }).join("")}</div>`:'<div class="empty card">Henüz veli görüşmesi kaydedilmedi.</div>';
+  }).join("")}</div>`:'<div class="empty card">Bu seçimde veli görüşmesi kaydı yok.</div>');
+}
+function openAllParentMeetings(){
+  const current=cls(); if(!current)return;
+  parentMeetingArchiveFilter=current.id;
+  el("modalTitle").textContent="Veli Görüşmeleri";
+  renderParentMeetingArchive();
   el("modal").classList.add("open");
 }
 function openParentMeetingFromArchive(classId,sid){
