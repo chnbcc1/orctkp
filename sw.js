@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7-5-4-compact-alerts-parent-archive";
+const CACHE="ogrenci-takip-v7-6-0-trial-exams";
 const ASSETS=[
   "./",
   "./index.html",

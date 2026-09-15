@@ -1586,6 +1586,10 @@ button.dutyPrimaryV748{
 <style>
 #modalBody .active-filter{background:#2563eb!important;color:#fff!important;border-color:#2563eb!important}
 </style>
+<style id="v760-trials-style">
+.trial-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}.trial-summary-card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:13px}.trial-summary-card span{display:block;font-size:12px;color:#64748b}.trial-summary-card b{display:block;font-size:22px;margin-top:3px}.trial-list{display:grid;gap:10px}.trial-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:14px}.trial-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.trial-card-meta{font-size:12px;color:#64748b;margin-top:4px}.trial-card-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:11px}.trial-mini{background:#f8fafc;border-radius:10px;padding:8px;text-align:center}.trial-mini span{display:block;font-size:10px;color:#64748b}.trial-mini b{font-size:15px}.trial-result-row{display:grid;grid-template-columns:minmax(120px,1.5fr) repeat(3,70px) 80px 82px;gap:6px;align-items:center;padding:8px 0;border-bottom:1px solid #eef2f7}.trial-result-row input{width:100%;min-width:0}.trial-subject-block{border:1px solid #e5e7eb;border-radius:12px;padding:10px;margin:8px 0}.trial-subject-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:7px}.trial-student-card{border:1px solid #e5e7eb;border-radius:13px;padding:11px;margin:8px 0}.trend-up{color:#15803d}.trend-down{color:#b91c1c}.trend-flat{color:#64748b}.trial-import-help{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:10px;font-size:12px;margin-bottom:10px}
+@media(max-width:700px){.trial-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.trial-card-stats{grid-template-columns:repeat(3,1fr)}.trial-result-row{grid-template-columns:1fr 54px 54px 54px 68px;gap:4px;font-size:12px}.trial-result-row .trial-participation{grid-column:1/-1}.trial-result-row input{padding:8px 5px}.trial-subject-grid{grid-template-columns:repeat(3,1fr)}#trials .toolbar{align-items:flex-start}#trials .toolbar-right{width:100%;display:grid;grid-template-columns:1fr 1fr}#trials .toolbar-right button{width:100%}}
+</style>
 </head>
 <body>
 
@@ -1613,7 +1617,7 @@ button.dutyPrimaryV748{
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.5.1</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.0</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1666,6 +1670,7 @@ button.dutyPrimaryV748{
 <div class="tab active" data-tab="students" onclick="switchTab('students')">Öğrenciler</div>
 <div class="tab" data-tab="homeworks" onclick="switchTab('homeworks')">Ödevler</div>
 <div class="tab" data-tab="matrix" onclick="switchTab('matrix')">Ödev Matrisi</div><div class="tab" data-tab="grades" onclick="switchTab('grades')">Notlar</div>
+<div class="tab" data-tab="trials" onclick="switchTab('trials')">Denemeler</div>
 <div class="tab" data-tab="reports" onclick="switchTab('reports')">Rapor</div>
 </div>
 
@@ -1691,6 +1696,12 @@ button.dutyPrimaryV748{
     <div class="toolbar-right"><button class="secondary" onclick="exportGradesCSV()">Notları CSV Aktar</button></div>
   </div>
   <div class="card table-wrap" id="gradesWrap"></div>
+</section>
+
+<section id="trials" class="panel">
+  <div class="toolbar"><div><b>Deneme Sınavları</b><div class="tiny">Katılım, ders netleri ve öğrencinin denemeler arasındaki gelişimini takip edin.</div></div><div class="toolbar-right"><button class="secondary" onclick="openTrialCSVImport()">CSV İçe Aktar</button><button onclick="openNewTrial()">+ Yeni Deneme</button></div></div>
+  <div id="trialSummary" class="trial-summary-grid"></div>
+  <div id="trialList" class="trial-list"></div>
 </section>
 
 <section id="reports" class="panel">
@@ -1810,7 +1821,7 @@ function save(){state.currentClassId=currentClassId;state.currentPeriod=currentP
 function saveSettings(){localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings))}
 function normalize(s){
  if(!s||!Array.isArray(s.classes))s={classes:[]};
- s.classes.forEach(c=>{c.students||=[];c.homeworks||=[];c.checks||={};c.notes||={};c.grades||={};c.parentMeetings=Array.isArray(c.parentMeetings)?c.parentMeetings:[];
+ s.classes.forEach(c=>{c.students||=[];c.homeworks||=[];c.checks||={};c.notes||={};c.grades||={};c.parentMeetings=Array.isArray(c.parentMeetings)?c.parentMeetings:[];c.trials=Array.isArray(c.trials)?c.trials:[];c.trials.forEach(t=>{t.subjects=Array.isArray(t.subjects)&&t.subjects.length?t.subjects:["Türkçe","Matematik","Fen","Sosyal"];t.results=(t.results&&typeof t.results==="object")?t.results:{};t.wrongDivisor=Number(t.wrongDivisor||4)||4;});
    c.students.forEach(st=>{st.number=st.number||""});
    c.homeworks.forEach(h=>{h.given=h.given||"";h.due=h.due||"";h.period=String(h.period||"1");delete h.category});
    Object.keys(c.checks).forEach(sid=>Object.keys(c.checks[sid]||{}).forEach(hid=>{let v=c.checks[sid][hid];if(v===true)v="done";if(v===false||!v)v="missing";c.checks[sid][hid]=v;}));
@@ -2315,7 +2326,7 @@ setTimeout(updateDutyStatus,0);
  updateConnectionState();
  el("periodSelect").value=currentPeriod;renderClasses();const c=cls();el("noClass").style.display=c?"none":"block";el("classView").style.display=c?"block":"none";if(!c){updateProfileNextLesson();return;}
  el("currentClassTitle").textContent=c.name;el("periodLabel").textContent=(currentPeriod==="1"?"1. Dönem":"2. Dönem")+" görünümü";
- renderStats();renderSmartAlerts();renderStudents();renderHomeworks();renderMatrix();renderGrades();renderReport();updateUndoRedo();updateProfileNextLesson();
+ renderStats();renderSmartAlerts();renderStudents();renderHomeworks();renderMatrix();renderGrades();renderTrials();renderReport();updateUndoRedo();updateProfileNextLesson();
 
 setTimeout(()=>cleanDutyTextV749(document),0);
 }
@@ -2835,6 +2846,7 @@ function deleteStudent(id){
   if(confirm(`${s.name} adlı öğrenci silinsin mi?\n\nÖdev durumları, öğretmen notu ve not kayıtları da silinecek. Bu oturumda Geri Al ile geri getirilebilir.`)){
     pushUndo();c.students=c.students.filter(x=>x.id!==id);delete c.checks[id];delete c.notes[id];
     if(c.grades){delete c.grades[id];Object.keys(c.grades).forEach(p=>{if(c.grades[p]&&typeof c.grades[p]==="object")delete c.grades[p][id]})}
+    (c.trials||[]).forEach(t=>{if(t.results)delete t.results[id]});
     save();render();
   }
 }
@@ -2905,6 +2917,7 @@ function openStudent(sid){
    <button onclick="exportStudentJPEG('${sid}')">Öğrenci JPEG</button>
    <button class="secondary" onclick="openMoveStudent('${sid}')">Başka Sınıfa Taşı</button>
    <button class="secondary" onclick="openParentMeetings('${sid}')">👥 Veli Görüşmeleri</button>
+   <button class="secondary" onclick="openStudentTrials('${sid}')">📊 Deneme Geçmişi</button>
  </div>
  <div class="card table-wrap student-detail-desktop"><table><thead><tr><th>Ödev</th><th>Durum</th><th>Hızlı İşlem</th></tr></thead><tbody>${hs.map(h=>`<tr><td><b>${esc(h.name)}</b></td><td>${statusBadge(status(c,sid,h.id),sid,h.id)}</td><td>${statusButtons(sid,h.id)}</td></tr>`).join("")}</tbody></table></div>
  <div class="student-detail-mobile">${hs.length?hs.map(h=>`<div class="student-homework-card"><div class="student-homework-head"><b>${esc(h.name)}</b>${statusBadge(status(c,sid,h.id),sid,h.id)}</div>${statusButtons(sid,h.id)}</div>`).join(""):'<div class="empty card">Bu dönemde ödev yok.</div>'}</div>
@@ -3182,6 +3195,31 @@ function renderReport(){
  if(hwBtn)hwBtn.textContent=reportSectionState.homework?"−":"+"; if(stBtn)stBtn.textContent=reportSectionState.students?"−":"+";
  renderReportStudents();
 };
+
+
+// ===== v7.6 Deneme Sınavları =====
+function trialList(c=cls()){return c&&Array.isArray(c.trials)?c.trials:[]}
+function trialNet(d,y,div=4){d=Number(d)||0;y=Number(y)||0;return Math.round((d-y/(Number(div)||4))*100)/100}
+function trialStudentTotal(t,sid){const r=t?.results?.[sid];if(!r||r.attended===false)return null;let total=0,has=false;(t.subjects||[]).forEach(sub=>{const x=r.subjects?.[sub];if(x){total+=trialNet(x.correct,x.wrong,t.wrongDivisor);has=true}});return has?Math.round(total*100)/100:0}
+function trialStats(t){const c=cls();let attended=0,total=0;for(const st of c.students){const n=trialStudentTotal(t,st.id);if(n!==null){attended++;total+=n}}return {attended,absent:Math.max(0,c.students.length-attended),avg:attended?Math.round(total/attended*100)/100:null}}
+function trialDateTR(v){if(!v)return 'Tarih yok';const d=new Date(v+'T12:00:00');return isNaN(d)?v:d.toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}
+function previousTrialFor(t,sid){const arr=trialList().filter(x=>x.id!==t.id&&String(x.date||'')<String(t.date||'')).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));return arr.find(x=>trialStudentTotal(x,sid)!==null)||null}
+function trialTrend(t,sid){const cur=trialStudentTotal(t,sid),prev=previousTrialFor(t,sid);if(cur===null||!prev)return {text:'—',cls:'trend-flat',diff:null};const pn=trialStudentTotal(prev,sid);if(pn===null)return {text:'—',cls:'trend-flat',diff:null};const d=Math.round((cur-pn)*100)/100;return {text:(d>0?'↑ +':d<0?'↓ ':'→ ')+d.toLocaleString('tr-TR',{maximumFractionDigits:2}),cls:d>0?'trend-up':d<0?'trend-down':'trend-flat',diff:d}}
+function renderTrials(){const host=el('trialList'),sum=el('trialSummary');if(!host||!sum)return;const c=cls();if(!c)return;const arr=[...trialList(c)].sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));const latest=arr[0],st=latest?trialStats(latest):null;sum.innerHTML=`<div class="trial-summary-card"><span>DENEME</span><b>${arr.length}</b></div><div class="trial-summary-card"><span>SON KATILIM</span><b>${st?st.attended+'/'+c.students.length:'-'}</b></div><div class="trial-summary-card"><span>SON ORTALAMA NET</span><b>${st&&st.avg!==null?st.avg.toLocaleString('tr-TR',{maximumFractionDigits:2}):'-'}</b></div><div class="trial-summary-card"><span>SON GİRMEYEN</span><b>${st?st.absent:'-'}</b></div>`;host.innerHTML=arr.length?arr.map(t=>{const x=trialStats(t);return `<div class="trial-card"><div class="trial-card-head"><div><b>${esc(t.name||'Deneme')}</b><div class="trial-card-meta">${esc(trialDateTR(t.date))} · ${(t.subjects||[]).map(esc).join(' · ')}</div></div><button onclick="openTrial('${t.id}')">Sonuçlar</button></div><div class="trial-card-stats"><div class="trial-mini"><span>Katılan</span><b>${x.attended}</b></div><div class="trial-mini"><span>Girmeyen</span><b>${x.absent}</b></div><div class="trial-mini"><span>Ort. Net</span><b>${x.avg===null?'-':x.avg.toLocaleString('tr-TR',{maximumFractionDigits:2})}</b></div></div></div>`}).join(''):'<div class="empty card">Henüz deneme eklenmedi. “+ Yeni Deneme” ile başlayın.</div>'}
+function openNewTrial(){el('modalTitle').textContent='Yeni Deneme';el('modalSubtitle').textContent=cls().name;el('modalBody').innerHTML=`<div class="form-grid"><label>Deneme Adı<input id="trialName" placeholder="Örn. Deneme 1"></label><label>Tarih<input id="trialDate" type="date" value="${new Date().toISOString().slice(0,10)}"></label><label style="grid-column:1/-1">Dersler <small>(virgülle ayırın)</small><input id="trialSubjects" value="Türkçe, Matematik, Fen, Sosyal"></label><label>Yanlış Götürme<input id="trialDiv" type="number" min="1" step="1" value="4"></label></div><div class="tiny" style="margin-top:8px">Varsayılan hesap: Net = Doğru − Yanlış / 4. İsterseniz denemeye göre değiştirebilirsiniz.</div><div class="modal-actions"><button onclick="saveNewTrial()">Denemeyi Oluştur</button><button class="secondary" onclick="closeModal()">Vazgeç</button></div>`;el('modal').classList.add('open')}
+function saveNewTrial(){const name=el('trialName').value.trim(),date=el('trialDate').value,subjects=el('trialSubjects').value.split(',').map(x=>x.trim()).filter(Boolean),div=Number(el('trialDiv').value)||4;if(!name)return alert('Deneme adını girin.');if(!date)return alert('Deneme tarihini seçin.');if(!subjects.length)return alert('En az bir ders girin.');pushUndo();const t={id:uid(),name,date,subjects,wrongDivisor:div,results:{}};cls().students.forEach(st=>t.results[st.id]={attended:true,subjects:{}});cls().trials.push(t);save();render();openTrial(t.id)}
+function openTrial(id){const c=cls(),t=trialList(c).find(x=>x.id===id);if(!t)return;el('modalTitle').textContent=t.name;el('modalSubtitle').textContent=`${c.name} · ${trialDateTR(t.date)}`;el('modalBody').innerHTML=`<div class="trial-card-stats"><div class="trial-mini"><span>Katılan</span><b>${trialStats(t).attended}</b></div><div class="trial-mini"><span>Girmeyen</span><b>${trialStats(t).absent}</b></div><div class="trial-mini"><span>Ort. Net</span><b>${trialStats(t).avg??'-'}</b></div></div><div style="display:grid;gap:8px;margin-top:12px">${c.students.map(st=>trialStudentEditor(t,st)).join('')}</div><div class="modal-actions"><button class="secondary" onclick="exportTrialCSV('${t.id}')">CSV Aktar</button><button class="secondary" onclick="editTrialInfo('${t.id}')">Deneme Bilgileri</button><button class="danger" onclick="deleteTrial('${t.id}')">Denemeyi Sil</button></div>`;el('modal').classList.add('open')}
+function trialStudentEditor(t,st){const r=t.results[st.id]||(t.results[st.id]={attended:true,subjects:{}}),att=r.attended!==false,total=trialStudentTotal(t,st.id),trend=trialTrend(t,st.id);return `<div class="trial-student-card"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>${esc(st.number?st.number+' - ':'')}${esc(st.name)}</b><span><b>${total===null?'Girmedi':total.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net'}</b> <small class="${trend.cls}">${trend.text}</small></span></div><label class="trial-participation" style="display:flex;align-items:center;gap:7px;margin-top:8px"><input type="checkbox" ${att?'checked':''} onchange="setTrialAttendance('${t.id}','${st.id}',this.checked)"> Denemeye katıldı</label>${att?`<div>${(t.subjects||[]).map(sub=>{const x=r.subjects?.[sub]||{};return `<div class="trial-subject-block"><b>${esc(sub)}</b><div class="trial-subject-grid"><label>Doğru<input type="number" min="0" inputmode="numeric" value="${x.correct??''}" onchange="setTrialScore('${t.id}','${st.id}','${esc(sub)}','correct',this.value)"></label><label>Yanlış<input type="number" min="0" inputmode="numeric" value="${x.wrong??''}" onchange="setTrialScore('${t.id}','${st.id}','${esc(sub)}','wrong',this.value)"></label><label>Boş<input type="number" min="0" inputmode="numeric" value="${x.blank??''}" onchange="setTrialScore('${t.id}','${st.id}','${esc(sub)}','blank',this.value)"></label></div></div>`}).join('')}</div>`:''}</div>`}
+function setTrialAttendance(tid,sid,on){const t=trialList().find(x=>x.id===tid);if(!t)return;t.results[sid]=t.results[sid]||{subjects:{}};t.results[sid].attended=!!on;save();render();openTrial(tid)}
+function setTrialScore(tid,sid,sub,key,val){const t=trialList().find(x=>x.id===tid);if(!t)return;t.results[sid]=t.results[sid]||{attended:true,subjects:{}};t.results[sid].subjects=t.results[sid].subjects||{};t.results[sid].subjects[sub]=t.results[sid].subjects[sub]||{};t.results[sid].subjects[sub][key]=val===''?'':Math.max(0,Number(val)||0);save();render()}
+function editTrialInfo(id){const t=trialList().find(x=>x.id===id);if(!t)return;el('modalTitle').textContent='Deneme Bilgileri';el('modalSubtitle').textContent=t.name;el('modalBody').innerHTML=`<div class="form-grid"><label>Deneme Adı<input id="trialEditName" value="${esc(t.name)}"></label><label>Tarih<input id="trialEditDate" type="date" value="${esc(t.date)}"></label><label style="grid-column:1/-1">Dersler<input id="trialEditSubjects" value="${esc((t.subjects||[]).join(', '))}"></label><label>Yanlış Götürme<input id="trialEditDiv" type="number" min="1" value="${t.wrongDivisor||4}"></label></div><div class="tiny" style="margin-top:8px">Ders adını değiştirmek mevcut o derse ait girilmiş sonuçları yeni ada otomatik taşımaz.</div><div class="modal-actions"><button onclick="saveTrialInfo('${id}')">Kaydet</button><button class="secondary" onclick="openTrial('${id}')">Vazgeç</button></div>`}
+function saveTrialInfo(id){const t=trialList().find(x=>x.id===id);if(!t)return;t.name=el('trialEditName').value.trim()||t.name;t.date=el('trialEditDate').value||t.date;t.subjects=el('trialEditSubjects').value.split(',').map(x=>x.trim()).filter(Boolean);t.wrongDivisor=Number(el('trialEditDiv').value)||4;save();render();openTrial(id)}
+function deleteTrial(id){const t=trialList().find(x=>x.id===id);if(!t||!confirm(`${t.name} silinsin mi? Tüm öğrenci sonuçları da silinecek.`))return;pushUndo();cls().trials=trialList().filter(x=>x.id!==id);save();closeModal();render()}
+function openStudentTrials(sid){const c=cls(),st=c.students.find(x=>x.id===sid);if(!st)return;const arr=[...trialList(c)].sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')));el('modalTitle').textContent='Deneme Geçmişi';el('modalSubtitle').textContent=`${st.number?st.number+' - ':''}${st.name}`;el('modalBody').innerHTML=arr.length?`<div style="display:grid;gap:8px">${arr.map(t=>{const n=trialStudentTotal(t,sid),tr=trialTrend(t,sid);return `<div class="card" style="padding:12px"><div style="display:flex;justify-content:space-between;gap:8px"><div><b>${esc(t.name)}</b><div class="tiny">${esc(trialDateTR(t.date))}</div></div><div style="text-align:right"><b>${n===null?'Girmedi':n.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net'}</b><div class="tiny ${tr.cls}">${tr.text}</div></div></div>${n!==null?`<div class="tiny" style="margin-top:7px">${(t.subjects||[]).map(sub=>`${esc(sub)}: ${trialNet(t.results[sid]?.subjects?.[sub]?.correct,t.results[sid]?.subjects?.[sub]?.wrong,t.wrongDivisor).toLocaleString('tr-TR',{maximumFractionDigits:2})}`).join(' · ')}</div>`:''}</div>`}).join('')}</div>`:'<div class="empty card">Bu sınıfta henüz deneme kaydı yok.</div>';el('modal').classList.add('open')}
+function exportTrialCSV(id){const c=cls(),t=trialList(c).find(x=>x.id===id);if(!t)return;const head=['No','Öğrenci','Katıldı',...t.subjects.flatMap(x=>[x+' Doğru',x+' Yanlış',x+' Boş',x+' Net']),'Toplam Net'];const rows=[head];c.students.forEach(st=>{const r=t.results[st.id],att=r?.attended!==false,n=trialStudentTotal(t,st.id),row=[st.number,st.name,att?'Evet':'Hayır'];t.subjects.forEach(sub=>{const x=r?.subjects?.[sub]||{};row.push(x.correct??'',x.wrong??'',x.blank??'',att?trialNet(x.correct,x.wrong,t.wrongDivisor):'')});row.push(n===null?'':n);rows.push(row)});downloadBlob('\uFEFF'+rows.map(r=>r.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(';')).join('\n'),`${safe(c.name)}_${safe(t.name)}.csv`,'text/csv;charset=utf-8')}
+function openTrialCSVImport(){el('modalTitle').textContent='Deneme CSV İçe Aktar';el('modalSubtitle').textContent=cls().name;el('modalBody').innerHTML=`<div class="trial-import-help"><b>Kolay aktarım:</b> Önce bir denemeyi oluşturup “CSV Aktar” ile şablon alın. Excel’de doldurup CSV olarak kaydedin ve buradan seçin. Öğrenci eşleştirmesinde önce numara, sonra ad kullanılır.</div><label>Hedef Deneme<select id="trialImportTarget">${trialList().map(t=>`<option value="${t.id}">${esc(t.name)} · ${esc(t.date)}</option>`).join('')}</select></label><label style="margin-top:10px">CSV Dosyası<input id="trialCSVFile" type="file" accept=".csv,text/csv"></label><div class="modal-actions"><button onclick="importTrialCSV()">CSV'yi İçe Aktar</button><button class="secondary" onclick="closeModal()">Vazgeç</button></div>`;el('modal').classList.add('open')}
+function parseCSVLine(line,sep){let a=[],cur='',q=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(q&&line[i+1]==='"'){cur+='"';i++}else q=!q}else if(ch===sep&&!q){a.push(cur);cur=''}else cur+=ch}a.push(cur);return a}
+function importTrialCSV(){const tid=el('trialImportTarget')?.value,f=el('trialCSVFile')?.files?.[0],t=trialList().find(x=>x.id===tid);if(!t)return alert('Önce bir deneme oluşturun.');if(!f)return alert('CSV dosyasını seçin.');const rd=new FileReader();rd.onload=()=>{try{const text=String(rd.result||'').replace(/^\uFEFF/,'');const lines=text.split(/\r?\n/).filter(x=>x.trim());if(lines.length<2)throw new Error('CSV içinde sonuç satırı yok.');const sep=(lines[0].match(/;/g)||[]).length>=(lines[0].match(/,/g)||[]).length?';':',';const h=parseCSVLine(lines[0],sep).map(x=>x.trim());let matched=0;for(const line of lines.slice(1)){const v=parseCSVLine(line,sep),no=String(v[0]||'').trim(),name=String(v[1]||'').trim(),att=String(v[2]||'').trim().toLocaleLowerCase('tr');const st=cls().students.find(s=>(no&&String(s.number)===no)||(!no&&normName(s.name)===normName(name)))||cls().students.find(s=>normName(s.name)===normName(name));if(!st)continue;const r=t.results[st.id]=t.results[st.id]||{subjects:{}};r.attended=!['hayır','hayir','no','0','girmedi'].includes(att);r.subjects=r.subjects||{};let col=3;t.subjects.forEach(sub=>{r.subjects[sub]=r.subjects[sub]||{};r.subjects[sub].correct=v[col]===''?'':Number(String(v[col]).replace(',','.'))||0;r.subjects[sub].wrong=v[col+1]===''?'':Number(String(v[col+1]).replace(',','.'))||0;r.subjects[sub].blank=v[col+2]===''?'':Number(String(v[col+2]).replace(',','.'))||0;col+=4});matched++}save();render();alert(`${matched} öğrenci sonucu eşleştirilip aktarıldı.`);openTrial(t.id)}catch(e){alert('CSV okunamadı: '+(e.message||e))}};rd.readAsText(f,'utf-8')}
 
 const PDF_LIB_URL = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js";
 const PDF_WORKER_URL = "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";
@@ -3786,7 +3824,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.5.1",
+    appVersion:"v7.6.0",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -3797,7 +3835,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.5.1",
+    appVersion:"v7.6.0",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
