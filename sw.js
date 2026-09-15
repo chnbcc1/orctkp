@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7-6-4-trial-penalty-date-fix";
+const CACHE="ogrenci-takip-v7-6-9-clean-trial-form";
 const ASSETS=[
   "./",
   "./index.html",

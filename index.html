@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.8</title>
+<title>Öğrenci Takip Sistemi v7.6.9</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -632,162 +632,6 @@ input,select,textarea,button{max-width:100%}
    display:block!important;text-align:left!important;padding:0!important;
  }
 }
-
-/* v7.6.8 — iPhone native date input containment */
-@media (max-width: 700px){
-  #trialModal .trial-date-input,
-  #trialModal input[type="date"]{
-    display:block !important;
-    box-sizing:border-box !important;
-    width:100% !important;
-    min-width:0 !important;
-    max-width:100% !important;
-    margin:0 !important;
-    padding-left:14px !important;
-    padding-right:14px !important;
-    overflow:hidden !important;
-    -webkit-appearance:none;
-    appearance:none;
-  }
-  #trialModal input[type="date"]::-webkit-date-and-time-value{
-    text-align:left !important;
-    min-width:0 !important;
-    margin:0 !important;
-  }
-  #trialModal input[type="date"]::-webkit-calendar-picker-indicator{
-    margin:0 !important;
-    padding:6px !important;
-  }
-}
-
-
-/* v7.6.8 — iPhone tarih alanı: native date input sadece tıklama katmanı,
-   görünen kutu diğer form alanlarıyla birebir aynı ölçüdedir. */
-#trialModal .trial-date-shell{
-  position:relative !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:space-between !important;
-  box-sizing:border-box !important;
-  width:100% !important;
-  min-width:0 !important;
-  max-width:100% !important;
-  height:58px !important;
-  margin:0 !important;
-  padding:0 16px !important;
-  border:1px solid #d7deea !important;
-  border-radius:12px !important;
-  background:#fff !important;
-  overflow:hidden !important;
-}
-#trialModal .trial-date-shell #trialDateDisplay{
-  min-width:0 !important;
-  font:inherit !important;
-  color:#111827 !important;
-  white-space:nowrap !important;
-}
-#trialModal .trial-date-icon{
-  flex:0 0 auto !important;
-  margin-left:12px !important;
-  font-size:20px !important;
-  line-height:1 !important;
-}
-#trialModal .trial-date-native{
-  position:absolute !important;
-  inset:0 !important;
-  display:block !important;
-  width:100% !important;
-  height:100% !important;
-  min-width:0 !important;
-  max-width:none !important;
-  margin:0 !important;
-  padding:0 !important;
-  border:0 !important;
-  opacity:0 !important;
-  cursor:pointer !important;
-  z-index:2 !important;
-  -webkit-appearance:none !important;
-  appearance:none !important;
-}
-@media (max-width:700px){
-  #trialModal .trial-date-shell{
-    width:100% !important;
-    max-width:100% !important;
-  }
-}
-
-
-/* v7.6.8 — Tek tarih kutusu, diğer form kutularıyla aynı ebat */
-#trialModal #trialDateShell.trial-date-shell{
-  position:relative !important;
-  display:flex !important;
-  align-items:center !important;
-  justify-content:space-between !important;
-  box-sizing:border-box !important;
-  width:100% !important;
-  min-width:0 !important;
-  max-width:100% !important;
-  height:58px !important;
-  min-height:58px !important;
-  margin:0 !important;
-  padding:0 16px !important;
-  border:1px solid #d7deea !important;
-  border-radius:12px !important;
-  background:#fff !important;
-  overflow:hidden !important;
-}
-#trialModal #trialDateDisplay.trial-date-display{
-  display:block !important;
-  flex:1 1 auto !important;
-  min-width:0 !important;
-  margin:0 !important;
-  padding:0 !important;
-  color:#111827 !important;
-  font:inherit !important;
-  line-height:1.2 !important;
-  white-space:nowrap !important;
-  overflow:hidden !important;
-  text-overflow:ellipsis !important;
-}
-#trialModal #trialDateShell .trial-date-icon{
-  display:block !important;
-  flex:0 0 auto !important;
-  width:24px !important;
-  margin:0 0 0 12px !important;
-  padding:0 !important;
-  color:#111827 !important;
-  font-size:0 !important;
-}
-#trialModal #trialDateShell .trial-date-icon::before{
-  content:"📅";
-  font-size:20px !important;
-  line-height:1 !important;
-}
-#trialModal #trialDateShell #trialDate.trial-date-native{
-  position:absolute !important;
-  inset:0 !important;
-  z-index:5 !important;
-  display:block !important;
-  box-sizing:border-box !important;
-  width:100% !important;
-  height:100% !important;
-  min-width:0 !important;
-  max-width:100% !important;
-  margin:0 !important;
-  padding:0 !important;
-  border:0 !important;
-  border-radius:12px !important;
-  opacity:0 !important;
-  background:transparent !important;
-  color:transparent !important;
-  -webkit-appearance:none !important;
-  appearance:none !important;
-}
-#trialModal #trialDateShell #trialDate::-webkit-date-and-time-value,
-#trialModal #trialDateShell #trialDate::-webkit-calendar-picker-indicator{
-  opacity:0 !important;
-}
-
 </style>
 
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
@@ -1746,15 +1590,25 @@ button.dutyPrimaryV748{
 .trial-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}.trial-summary-card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:13px}.trial-summary-card span{display:block;font-size:12px;color:#64748b}.trial-summary-card b{display:block;font-size:22px;margin-top:3px}.trial-list{display:grid;gap:10px}.trial-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:14px}.trial-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.trial-card-meta{font-size:12px;color:#64748b;margin-top:4px}.trial-card-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:11px}.trial-mini{background:#f8fafc;border-radius:10px;padding:8px;text-align:center}.trial-mini span{display:block;font-size:10px;color:#64748b}.trial-mini b{font-size:15px}.trial-result-row{display:grid;grid-template-columns:minmax(120px,1.5fr) repeat(3,70px) 80px 82px;gap:6px;align-items:center;padding:8px 0;border-bottom:1px solid #eef2f7}.trial-result-row input{width:100%;min-width:0}.trial-subject-block{border:1px solid #e5e7eb;border-radius:12px;padding:10px;margin:8px 0}.trial-subject-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:7px}.trial-student-card{border:1px solid #e5e7eb;border-radius:13px;padding:11px;margin:8px 0}.trend-up{color:#15803d}.trend-down{color:#b91c1c}.trend-flat{color:#64748b}.trial-import-help{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:10px;font-size:12px;margin-bottom:10px}
 @media(max-width:700px){#modalBody .form-grid{grid-template-columns:1fr!important}#modalBody .form-grid>label{grid-column:1/-1!important;width:100%;min-width:0}#modalBody .form-grid>label input,#modalBody .form-grid>label select,#modalBody .form-grid>label textarea{width:100%!important;max-width:100%;box-sizing:border-box}#modalBody .modal-actions{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}#modalBody .modal-actions button{min-width:0} .trial-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.trial-card-stats{grid-template-columns:repeat(3,1fr)}.trial-result-row{grid-template-columns:1fr 54px 54px 54px 68px;gap:4px;font-size:12px}.trial-result-row .trial-participation{grid-column:1/-1}.trial-result-row input{padding:8px 5px}.trial-subject-grid{grid-template-columns:repeat(3,1fr)}#trials .toolbar{align-items:flex-start}#trials .toolbar-right{width:100%;display:grid;grid-template-columns:1fr 1fr}#trials .toolbar-right button{width:100%}}
 
-/* v7.6.8 iPhone tarih + isteğe bağlı yanlış götürme */
-#modalBody input[type="date"]{width:100%;max-width:100%;box-sizing:border-box;text-align:left!important;direction:ltr!important}
-#modalBody input[type="date"]::-webkit-date-and-time-value{text-align:left!important;margin:0!important}
+/* isteğe bağlı yanlış götürme */
 .trial-penalty-box{grid-column:1/-1;border:1px solid #bfdbfe;background:#eff6ff;border-radius:14px;padding:12px}
 .trial-penalty-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
 .trial-switch{display:flex;align-items:center;gap:8px;font-weight:700}
 .trial-switch input{width:22px!important;height:22px;margin:0}
 .trial-penalty-options{margin-top:10px}
 .trial-penalty-options select{width:100%}
+
+/* v7.6.9 — Deneme formu temiz yeniden kurulum */
+.trial-form-clean{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.trial-form-clean .trial-field{display:grid;gap:6px;min-width:0}
+.trial-form-clean .trial-field.full,.trial-form-clean .trial-penalty-box{grid-column:1/-1}
+.trial-form-clean .trial-field>span{font-weight:500}
+.trial-form-clean .trial-field input,.trial-form-clean .trial-field select{display:block;width:100%;min-width:0;height:44px;box-sizing:border-box;margin:0}
+.trial-form-clean .trial-date-button{display:flex;align-items:center;justify-content:space-between;width:100%;height:44px;padding:9px 12px;background:#fff;color:var(--text);border:1px solid var(--border);border-radius:9px;font-weight:400;text-align:left}
+.trial-form-clean .trial-date-button .cal{font-size:18px;line-height:1}
+.trial-date-picker-wrap{position:fixed;left:-10000px;top:-10000px;width:1px;height:1px;overflow:hidden}
+.trial-date-picker-wrap input{width:1px!important;height:1px!important;opacity:0!important}
+@media(max-width:700px){.trial-form-clean{grid-template-columns:1fr}.trial-form-clean .trial-field.full,.trial-form-clean .trial-penalty-box{grid-column:1}.trial-form-clean .trial-date-button{height:48px}}
 </style>
 </head>
 <body>
@@ -1783,7 +1637,7 @@ button.dutyPrimaryV748{
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.8</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.9</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -3376,13 +3230,24 @@ function trialDateTR(v){if(!v)return 'Tarih yok';const d=new Date(v+'T12:00:00')
 function previousTrialFor(t,sid){const arr=trialList().filter(x=>x.id!==t.id&&String(x.date||'')<String(t.date||'')).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));return arr.find(x=>trialStudentTotal(x,sid)!==null)||null}
 function trialTrend(t,sid){const cur=trialStudentTotal(t,sid),prev=previousTrialFor(t,sid);if(cur===null||!prev)return {text:'—',cls:'trend-flat',diff:null};const pn=trialStudentTotal(prev,sid);if(pn===null)return {text:'—',cls:'trend-flat',diff:null};const d=Math.round((cur-pn)*100)/100;return {text:(d>0?'↑ +':d<0?'↓ ':'→ ')+d.toLocaleString('tr-TR',{maximumFractionDigits:2}),cls:d>0?'trend-up':d<0?'trend-down':'trend-flat',diff:d}}
 function renderTrials(){const host=el('trialList'),sum=el('trialSummary');if(!host||!sum)return;const c=cls();if(!c)return;const arr=[...trialList(c)].sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));const latest=arr[0],st=latest?trialStats(latest):null;sum.innerHTML=`<div class="trial-summary-card"><span>DENEME</span><b>${arr.length}</b></div><div class="trial-summary-card"><span>SON KATILIM</span><b>${st?st.attended+'/'+c.students.length:'-'}</b></div><div class="trial-summary-card"><span>SON ORTALAMA NET</span><b>${st&&st.avg!==null?st.avg.toLocaleString('tr-TR',{maximumFractionDigits:2}):'-'}</b></div><div class="trial-summary-card"><span>SON GİRMEYEN</span><b>${st?st.absent:'-'}</b></div>`;host.innerHTML=arr.length?arr.map(t=>{const x=trialStats(t);return `<div class="trial-card"><div class="trial-card-head"><div><b>${esc(t.name||'Deneme')}</b><div class="trial-card-meta">${esc(trialDateTR(t.date))} · ${(t.subjects||[]).map(esc).join(' · ')}</div></div><button onclick="openTrial('${t.id}')">Sonuçlar</button></div><div class="trial-card-stats"><div class="trial-mini"><span>Katılan</span><b>${x.attended}</b></div><div class="trial-mini"><span>Girmeyen</span><b>${x.absent}</b></div><div class="trial-mini"><span>Ort. Net</span><b>${x.avg===null?'-':x.avg.toLocaleString('tr-TR',{maximumFractionDigits:2})}</b></div></div></div>`}).join(''):'<div class="empty card">Henüz deneme eklenmedi. “+ Yeni Deneme” ile başlayın.</div>'}
-function openNewTrial(){el('modalTitle').textContent='Yeni Deneme';el('modalSubtitle').textContent=cls().name;el('modalBody').innerHTML=`<div class="form-grid"><label>Deneme Adı<input id="trialName" placeholder="Örn. Deneme 1"></label><label>Tarih<div class="trial-date-shell" id="trialDateShell">
-  <span id="trialDateDisplay" class="trial-date-display"></span>
-  <span class="trial-date-icon" aria-hidden="true">▣</span>
-  <input id="trialDate" class="trial-date-native" type="date" value="${new Date().toISOString().slice(0,10)}" aria-label="Tarih" aria-label="Tarih">
-</div></label><label style="grid-column:1/-1">Dersler <small>(virgülle ayırın)</small><input id="trialSubjects" value="Türkçe, Matematik, Fen, Sosyal"></label><div class="trial-penalty-box"><div class="trial-penalty-head"><div><b>Yanlış Götürme</b><div class="tiny">Yanlış cevaplar doğruyu götürsün mü?</div></div><label class="trial-switch"><input id="trialPenalty" type="checkbox" checked onchange="toggleTrialPenaltyOptions()"><span id="trialPenaltyText">Evet</span></label></div><div id="trialPenaltyOptions" class="trial-penalty-options"><label>Götürme Oranı<select id="trialDiv"><option value="2">2 (2 yanlış = 1 doğru)</option><option value="3">3 (3 yanlış = 1 doğru)</option><option value="4" selected>4 (4 yanlış = 1 doğru)</option><option value="5">5 (5 yanlış = 1 doğru)</option></select></label><div class="tiny" style="margin-top:7px">Net hesabı: Net = Doğru − Yanlış / <span id="trialDivText">4</span></div></div></div></div><div class="tiny" style="margin-top:8px">Yanlış götürme kapalıysa net yalnızca doğru sayısı üzerinden hesaplanır (Net = Doğru).</div><div class="modal-actions"><button onclick="saveNewTrial()">Denemeyi Oluştur</button><button class="secondary" onclick="closeModal()">Vazgeç</button></div>`;el('trialDiv')?.addEventListener('change',()=>{if(el('trialDivText'))el('trialDivText').textContent=el('trialDiv').value});el('modal').classList.add('open')}
-function toggleTrialPenaltyOptions(){const on=!!el('trialPenalty')?.checked;if(el('trialPenaltyText'))el('trialPenaltyText').textContent=on?'Evet':'Hayır';if(el('trialPenaltyOptions'))el('trialPenaltyOptions').style.display=on?'block':'none'}
-function saveNewTrial(){const name=el('trialName').value.trim(),date=el('trialDate').value,subjects=el('trialSubjects').value.split(',').map(x=>x.trim()).filter(Boolean),penalty=!!el('trialPenalty')?.checked,div=Number(el('trialDiv')?.value)||4;if(!name)return alert('Deneme adını girin.');if(!date)return alert('Deneme tarihini seçin.');if(!subjects.length)return alert('En az bir ders girin.');pushUndo();const t={id:uid(),name,date,subjects,wrongPenalty:penalty,wrongDivisor:div,results:{}};cls().students.forEach(st=>t.results[st.id]={attended:true,subjects:{}});cls().trials.push(t);save();render();openTrial(t.id)}
+function trialTodayISO(){const d=new Date(),y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`}
+function trialDateShortTR(v){if(!v)return 'Tarih seçin';const p=String(v).split('-');if(p.length!==3)return v;const ay=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];return `${Number(p[2])} ${ay[Number(p[1])-1]||p[1]} ${p[0]}`}
+function syncNewTrialDate(){const v=el('trialDateValue')?.value||'';if(el('trialDateText'))el('trialDateText').textContent=trialDateShortTR(v)}
+function chooseNewTrialDate(){const i=el('trialDateValue');if(!i)return;try{if(typeof i.showPicker==='function'){i.showPicker();return}}catch(e){}i.click()}
+function openNewTrial(){
+  const c=cls();if(!c)return;
+  el('modalTitle').textContent='Yeni Deneme';el('modalSubtitle').textContent=c.name;
+  const today=trialTodayISO();
+  el('modalBody').innerHTML=`<div class="trial-form-clean">
+    <label class="trial-field full"><span>Deneme Adı</span><input id="trialName" placeholder="Örn. Deneme 1" autocomplete="off"></label>
+    <div class="trial-field full"><span>Tarih</span><button type="button" class="trial-date-button" onclick="chooseNewTrialDate()"><span id="trialDateText">${trialDateShortTR(today)}</span><span class="cal" aria-hidden="true">📅</span></button><div class="trial-date-picker-wrap"><input id="trialDateValue" type="date" value="${today}" onchange="syncNewTrialDate()"></div></div>
+    <label class="trial-field full"><span>Dersler <small>(virgülle ayırın)</small></span><input id="trialSubjects" value="Türkçe, Matematik, Fen, Sosyal"></label>
+    <div class="trial-penalty-box"><div class="trial-penalty-head"><div><b>Yanlış Götürme</b><div class="tiny">Yanlış cevaplar doğruyu götürsün mü?</div></div><label class="trial-switch"><input id="trialPenalty" type="checkbox" checked onchange="toggleTrialPenaltyOptions()"><span id="trialPenaltyText">Evet</span></label></div><div id="trialPenaltyOptions" class="trial-penalty-options"><label>Götürme Oranı<select id="trialDiv"><option value="2">2 (2 yanlış = 1 doğru)</option><option value="3">3 (3 yanlış = 1 doğru)</option><option value="4" selected>4 (4 yanlış = 1 doğru)</option><option value="5">5 (5 yanlış = 1 doğru)</option></select></label><div class="tiny" style="margin-top:7px">Net hesabı: Net = Doğru − Yanlış / <span id="trialDivText">4</span></div></div></div>
+  </div><div class="tiny" style="margin-top:8px">Yanlış götürme kapalıysa net yalnızca doğru sayısı üzerinden hesaplanır (Net = Doğru).</div><div class="modal-actions"><button onclick="saveNewTrial()">Denemeyi Oluştur</button><button class="secondary" onclick="closeModal()">Vazgeç</button></div>`;
+  el('trialDiv')?.addEventListener('change',()=>{if(el('trialDivText'))el('trialDivText').textContent=el('trialDiv').value});
+  el('modal').classList.add('open');
+}
+function saveNewTrial(){const name=el('trialName').value.trim(),date=el('trialDateValue').value,subjects=el('trialSubjects').value.split(',').map(x=>x.trim()).filter(Boolean),penalty=!!el('trialPenalty')?.checked,div=Number(el('trialDiv')?.value)||4;if(!name)return alert('Deneme adını girin.');if(!date)return alert('Deneme tarihini seçin.');if(!subjects.length)return alert('En az bir ders girin.');pushUndo();const t={id:uid(),name,date,subjects,wrongPenalty:penalty,wrongDivisor:div,results:{}};cls().students.forEach(st=>t.results[st.id]={attended:true,subjects:{}});cls().trials.push(t);save();render();openTrial(t.id)}
 function openTrial(id){const c=cls(),t=trialList(c).find(x=>x.id===id);if(!t)return;el('modalTitle').textContent=t.name;el('modalSubtitle').textContent=`${c.name} · ${trialDateTR(t.date)}`;el('modalBody').innerHTML=`<div class="trial-card-stats"><div class="trial-mini"><span>Katılan</span><b>${trialStats(t).attended}</b></div><div class="trial-mini"><span>Girmeyen</span><b>${trialStats(t).absent}</b></div><div class="trial-mini"><span>Ort. Net</span><b>${trialStats(t).avg??'-'}</b></div></div><div style="display:grid;gap:8px;margin-top:12px">${c.students.map(st=>trialStudentEditor(t,st)).join('')}</div><div class="modal-actions"><button class="secondary" onclick="exportTrialCSV('${t.id}')">CSV Aktar</button><button class="secondary" onclick="editTrialInfo('${t.id}')">Deneme Bilgileri</button><button class="danger" onclick="deleteTrial('${t.id}')">Denemeyi Sil</button></div>`;el('modal').classList.add('open')}
 function trialStudentEditor(t,st){const r=t.results[st.id]||(t.results[st.id]={attended:true,subjects:{}}),att=r.attended!==false,total=trialStudentTotal(t,st.id),trend=trialTrend(t,st.id);return `<div class="trial-student-card"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>${esc(st.number?st.number+' - ':'')}${esc(st.name)}</b><span><b>${total===null?'Girmedi':total.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net'}</b> <small class="${trend.cls}">${trend.text}</small></span></div><label class="trial-participation" style="display:flex;align-items:center;gap:7px;margin-top:8px"><input type="checkbox" ${att?'checked':''} onchange="setTrialAttendance('${t.id}','${st.id}',this.checked)"> Denemeye katıldı</label>${att?`<div>${(t.subjects||[]).map(sub=>{const x=r.subjects?.[sub]||{};return `<div class="trial-subject-block"><b>${esc(sub)}</b><div class="trial-subject-grid"><label>Doğru<input type="number" min="0" inputmode="numeric" value="${x.correct??''}" onchange="setTrialScore('${t.id}','${st.id}','${esc(sub)}','correct',this.value)"></label><label>Yanlış<input type="number" min="0" inputmode="numeric" value="${x.wrong??''}" onchange="setTrialScore('${t.id}','${st.id}','${esc(sub)}','wrong',this.value)"></label><label>Boş<input type="number" min="0" inputmode="numeric" value="${x.blank??''}" onchange="setTrialScore('${t.id}','${st.id}','${esc(sub)}','blank',this.value)"></label></div></div>`}).join('')}</div>`:''}</div>`}
 function setTrialAttendance(tid,sid,on){const t=trialList().find(x=>x.id===tid);if(!t)return;t.results[sid]=t.results[sid]||{subjects:{}};t.results[sid].attended=!!on;save();render();openTrial(tid)}
@@ -3391,7 +3256,7 @@ function editTrialInfo(id){const t=trialList().find(x=>x.id===id);if(!t)return;e
 function toggleTrialEditPenaltyOptions(){const on=!!el('trialEditPenalty')?.checked;if(el('trialEditPenaltyText'))el('trialEditPenaltyText').textContent=on?'Evet':'Hayır';if(el('trialEditPenaltyOptions'))el('trialEditPenaltyOptions').style.display=on?'block':'none'}
 function saveTrialInfo(id){const t=trialList().find(x=>x.id===id);if(!t)return;t.name=el('trialEditName').value.trim()||t.name;t.date=el('trialEditDate').value||t.date;t.subjects=el('trialEditSubjects').value.split(',').map(x=>x.trim()).filter(Boolean);t.wrongPenalty=!!el('trialEditPenalty')?.checked;t.wrongDivisor=Number(el('trialEditDiv')?.value)||4;save();render();openTrial(id)}
 function deleteTrial(id){const t=trialList().find(x=>x.id===id);if(!t||!confirm(`${t.name} silinsin mi? Tüm öğrenci sonuçları da silinecek.`))return;pushUndo();cls().trials=trialList().filter(x=>x.id!==id);save();closeModal();render()}
-function openStudentTrials(sid){const c=cls(),st=c.students.find(x=>x.id===sid);if(!st)return;const arr=[...trialList(c)].sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')));el('modalTitle').textContent='Deneme Geçmişi';el('modalSubtitle').textContent=`${st.number?st.number+' - ':''}${st.name}`;el('modalBody').innerHTML=arr.length?`<div style="display:grid;gap:8px">${arr.map(t=>{const n=trialStudentTotal(t,sid),tr=trialTrend(t,sid);return `<div class="card" style="padding:12px"><div style="display:flex;justify-content:space-between;gap:8px"><div><b>${esc(t.name)}</b><div class="tiny">${esc(trialDateTR(t.date))}</div></div><div style="text-align:right"><b>${n===null?'Girmedi':n.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net'}</b><div class="tiny ${tr.cls}">${tr.text}</div></div></div>${n!==null?`<div class="tiny" style="margin-top:7px">${(t.subjects||[]).map(sub=>`${esc(sub)}: ${trialNet(t.results[sid]?.subjects?.[sub]?.correct,t.results[sid]?.subjects?.[sub]?.wrong,t.wrongDivisor).toLocaleString('tr-TR',{maximumFractionDigits:2})}`).join(' · ')}</div>`:''}</div>`}).join('')}</div>`:'<div class="empty card">Bu sınıfta henüz deneme kaydı yok.</div>';el('modal').classList.add('open')}
+function openStudentTrials(sid){const c=cls(),st=c.students.find(x=>x.id===sid);if(!st)return;const arr=[...trialList(c)].sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')));el('modalTitle').textContent='Deneme Geçmişi';el('modalSubtitle').textContent=`${st.number?st.number+' - ':''}${st.name}`;el('modalBody').innerHTML=arr.length?`<div style="display:grid;gap:8px">${arr.map(t=>{const n=trialStudentTotal(t,sid),tr=trialTrend(t,sid);return `<div class="card" style="padding:12px"><div style="display:flex;justify-content:space-between;gap:8px"><div><b>${esc(t.name)}</b><div class="tiny">${esc(trialDateTR(t.date))}</div></div><div style="text-align:right"><b>${n===null?'Girmedi':n.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net'}</b><div class="tiny ${tr.cls}">${tr.text}</div></div></div>${n!==null?`<div class="tiny" style="margin-top:7px">${(t.subjects||[]).map(sub=>`${esc(sub)}: ${trialNet(t.results[sid]?.subjects?.[sub]?.correct,t.results[sid]?.subjects?.[sub]?.wrong,t.wrongDivisor,t.wrongPenalty!==false).toLocaleString('tr-TR',{maximumFractionDigits:2})}`).join(' · ')}</div>`:''}</div>`}).join('')}</div>`:'<div class="empty card">Bu sınıfta henüz deneme kaydı yok.</div>';el('modal').classList.add('open')}
 function exportTrialCSV(id){const c=cls(),t=trialList(c).find(x=>x.id===id);if(!t)return;const head=['No','Öğrenci','Katıldı',...t.subjects.flatMap(x=>[x+' Doğru',x+' Yanlış',x+' Boş',x+' Net']),'Toplam Net'];const rows=[head];c.students.forEach(st=>{const r=t.results[st.id],att=r?.attended!==false,n=trialStudentTotal(t,st.id),row=[st.number,st.name,att?'Evet':'Hayır'];t.subjects.forEach(sub=>{const x=r?.subjects?.[sub]||{};row.push(x.correct??'',x.wrong??'',x.blank??'',att?trialNet(x.correct,x.wrong,t.wrongDivisor,t.wrongPenalty!==false):'')});row.push(n===null?'':n);rows.push(row)});downloadBlob('\uFEFF'+rows.map(r=>r.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(';')).join('\n'),`${safe(c.name)}_${safe(t.name)}.csv`,'text/csv;charset=utf-8')}
 function openTrialCSVImport(){el('modalTitle').textContent='Deneme CSV İçe Aktar';el('modalSubtitle').textContent=cls().name;el('modalBody').innerHTML=`<div class="trial-import-help"><b>Kolay aktarım:</b> Önce bir denemeyi oluşturup “CSV Aktar” ile şablon alın. Excel’de doldurup CSV olarak kaydedin ve buradan seçin. Öğrenci eşleştirmesinde önce numara, sonra ad kullanılır.</div><label>Hedef Deneme<select id="trialImportTarget">${trialList().map(t=>`<option value="${t.id}">${esc(t.name)} · ${esc(t.date)}</option>`).join('')}</select></label><label style="margin-top:10px">CSV Dosyası<input id="trialCSVFile" type="file" accept=".csv,text/csv"></label><div class="modal-actions"><button onclick="importTrialCSV()">CSV'yi İçe Aktar</button><button class="secondary" onclick="closeModal()">Vazgeç</button></div>`;el('modal').classList.add('open')}
 function parseCSVLine(line,sep){let a=[],cur='',q=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(q&&line[i+1]==='"'){cur+='"';i++}else q=!q}else if(ch===sep&&!q){a.push(cur);cur=''}else cur+=ch}a.push(cur);return a}
@@ -4000,7 +3865,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.8",
+    appVersion:"v7.6.9",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4011,7 +3876,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.8",
+    appVersion:"v7.6.9",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4294,38 +4159,6 @@ render();
 
 setInterval(updateDutyStatus,60000);
 </script>
-
-
-
-
-<script>
-(function(){
-  function formatTrialDate(v){
-    if(!v) return "";
-    var p=v.split("-");
-    if(p.length!==3) return v;
-    var months=["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"];
-    var mi=parseInt(p[1],10)-1;
-    return parseInt(p[2],10)+" "+(months[mi]||p[1])+" "+p[0];
-  }
-  function syncTrialDateDisplay(){
-    var input=document.getElementById("trialDate");
-    var out=document.getElementById("trialDateDisplay");
-    if(!input||!out) return;
-    out.textContent=formatTrialDate(input.value) || "Tarih seçin";
-  }
-  document.addEventListener("change",function(e){
-    if(e.target && e.target.id==="trialDate") syncTrialDateDisplay();
-  });
-  document.addEventListener("click",function(e){
-    var b=e.target && e.target.closest ? e.target.closest("#newTrialBtn") : null;
-    if(b) setTimeout(syncTrialDateDisplay,30);
-  });
-  document.addEventListener("DOMContentLoaded",syncTrialDateDisplay);
-  window.syncTrialDateDisplay=syncTrialDateDisplay;
-})();
-</script>
-
 </body>
 </html><style id="v7412-lock-fullscreen-fix">
 /* v7.5.1: iPhone/PWA lock screen must fully cover app content */
