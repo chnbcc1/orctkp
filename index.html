@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.10</title>
+<title>Öğrenci Takip Sistemi v7.6.11</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -632,6 +632,7 @@ input,select,textarea,button{max-width:100%}
    display:block!important;text-align:left!important;padding:0!important;
  }
 }
+\n/* v7.6.11 — iPhone deneme sonuç ekranı yatay taşma düzeltmesi */\n@media(max-width:700px){\n  html,body{max-width:100%;overflow-x:hidden!important}\n  #modal,#modal .modal-card,#modalBody{max-width:100%!important;overflow-x:hidden!important}\n  #modalBody *{box-sizing:border-box}\n  #modalBody .trial-card-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important;width:100%;gap:6px}\n  #modalBody .trial-mini{min-width:0!important;padding:10px 4px!important;text-align:center}\n  #modalBody .trial-mini span{font-size:12px!important;white-space:normal}\n  #modalBody .trial-student-card{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important;padding:10px!important}\n  #modalBody .trial-student-card>div:first-child{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:6px!important}\n  #modalBody .trial-student-card>div:first-child>b{min-width:0!important;overflow-wrap:anywhere}\n  #modalBody .trial-subject-block{width:100%!important;max-width:100%!important;min-width:0!important;padding:10px!important;overflow:hidden!important}\n  #modalBody .trial-subject-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;width:100%!important;max-width:100%!important;min-width:0!important}\n  #modalBody .trial-subject-grid label{display:grid!important;gap:4px!important;min-width:0!important;font-size:13px!important}\n  #modalBody .trial-subject-grid input{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:42px!important;padding:7px 5px!important;margin:0!important;font-size:16px!important}\n  #modalBody .trial-participation{min-width:0!important}\n}\n
 </style>
 
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
@@ -1598,7 +1599,7 @@ button.dutyPrimaryV748{
 .trial-penalty-options{margin-top:10px}
 .trial-penalty-options select{width:100%}
 
-/* v7.6.10 — Deneme formu temiz yeniden kurulum */
+/* v7.6.11 — Deneme formu temiz yeniden kurulum */
 .trial-form-clean{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .trial-form-clean .trial-field{display:grid;gap:6px;min-width:0}
 .trial-form-clean .trial-field.full,.trial-form-clean .trial-penalty-box{grid-column:1/-1}
@@ -1639,7 +1640,7 @@ button.dutyPrimaryV748{
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.10</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.11</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -3869,7 +3870,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.10",
+    appVersion:"v7.6.11",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -3880,7 +3881,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.10",
+    appVersion:"v7.6.11",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
