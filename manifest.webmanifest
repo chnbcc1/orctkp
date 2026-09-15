@@ -1,8 +1,8 @@
 {
-  "name": "Öğrenci Takip Sistemi v7.4.10",
+  "name": "Öğrenci Takip Sistemi v7.5.1",
   "short_name": "Öğrenci Takip",
-  "description": "Nöbet ana işlem düğmeleri ve ana kart özet metni düzeltmesi.",
-  "start_url": "./index.html?v=7.4.9",
+  "description": "Veli görüşmesi formu iPhone ve mobil ekran yerleşimi iyileştirmesi.",
+  "start_url": "./index.html?v=7.5.1",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
