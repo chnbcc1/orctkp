@@ -1,8 +1,8 @@
 {
-  "name": "Öğrenci Takip Sistemi v7.2.4",
+  "name": "Öğrenci Takip Sistemi v7.2.5",
   "short_name": "Öğrenci Takip",
-  "description": "v7.2.4 Kilit ve Yedek kontrolleri kompaktlaştırıldı.",
-  "start_url": "./index.html?v=7.2.4",
+  "description": "Tek satır mobil araç çubuğu ve genişletilmiş Ders Programı kartı.",
+  "start_url": "./index.html?v=7.2.5",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
