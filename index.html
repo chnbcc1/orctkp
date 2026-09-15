@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.2</title>
+<title>Öğrenci Takip Sistemi v7.6.3</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -1588,7 +1588,7 @@ button.dutyPrimaryV748{
 </style>
 <style id="v760-trials-style">
 .trial-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}.trial-summary-card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:13px}.trial-summary-card span{display:block;font-size:12px;color:#64748b}.trial-summary-card b{display:block;font-size:22px;margin-top:3px}.trial-list{display:grid;gap:10px}.trial-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:14px}.trial-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.trial-card-meta{font-size:12px;color:#64748b;margin-top:4px}.trial-card-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:11px}.trial-mini{background:#f8fafc;border-radius:10px;padding:8px;text-align:center}.trial-mini span{display:block;font-size:10px;color:#64748b}.trial-mini b{font-size:15px}.trial-result-row{display:grid;grid-template-columns:minmax(120px,1.5fr) repeat(3,70px) 80px 82px;gap:6px;align-items:center;padding:8px 0;border-bottom:1px solid #eef2f7}.trial-result-row input{width:100%;min-width:0}.trial-subject-block{border:1px solid #e5e7eb;border-radius:12px;padding:10px;margin:8px 0}.trial-subject-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:7px}.trial-student-card{border:1px solid #e5e7eb;border-radius:13px;padding:11px;margin:8px 0}.trend-up{color:#15803d}.trend-down{color:#b91c1c}.trend-flat{color:#64748b}.trial-import-help{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:10px;font-size:12px;margin-bottom:10px}
-@media(max-width:700px){.trial-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.trial-card-stats{grid-template-columns:repeat(3,1fr)}.trial-result-row{grid-template-columns:1fr 54px 54px 54px 68px;gap:4px;font-size:12px}.trial-result-row .trial-participation{grid-column:1/-1}.trial-result-row input{padding:8px 5px}.trial-subject-grid{grid-template-columns:repeat(3,1fr)}#trials .toolbar{align-items:flex-start}#trials .toolbar-right{width:100%;display:grid;grid-template-columns:1fr 1fr}#trials .toolbar-right button{width:100%}}
+@media(max-width:700px){#modalBody .form-grid{grid-template-columns:1fr!important}#modalBody .form-grid>label{grid-column:1/-1!important;width:100%;min-width:0}#modalBody .form-grid>label input,#modalBody .form-grid>label select,#modalBody .form-grid>label textarea{width:100%!important;max-width:100%;box-sizing:border-box}#modalBody .modal-actions{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}#modalBody .modal-actions button{min-width:0} .trial-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.trial-card-stats{grid-template-columns:repeat(3,1fr)}.trial-result-row{grid-template-columns:1fr 54px 54px 54px 68px;gap:4px;font-size:12px}.trial-result-row .trial-participation{grid-column:1/-1}.trial-result-row input{padding:8px 5px}.trial-subject-grid{grid-template-columns:repeat(3,1fr)}#trials .toolbar{align-items:flex-start}#trials .toolbar-right{width:100%;display:grid;grid-template-columns:1fr 1fr}#trials .toolbar-right button{width:100%}}
 </style>
 </head>
 <body>
@@ -1617,7 +1617,7 @@ button.dutyPrimaryV748{
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.2</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.3</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -3828,7 +3828,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.2",
+    appVersion:"v7.6.3",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -3839,7 +3839,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.2",
+    appVersion:"v7.6.3",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings

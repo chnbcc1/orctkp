@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7-6-2-version-sync";
+const CACHE="ogrenci-takip-v7-6-3-iphone-trial-form";
 const ASSETS=[
   "./",
   "./index.html",
