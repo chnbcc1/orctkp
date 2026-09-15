@@ -1,8 +1,8 @@
 {
-  "name": "Öğrenci Takip Sistemi v7.2.6",
+  "name": "Öğrenci Takip Sistemi v7.2.7",
   "short_name": "Öğrenci Takip",
-  "description": "Tek satır mobil kontroller, sade yerel mod ışığı ve geniş profil/ders programı alanı.",
-  "start_url": "./index.html?v=7.2.6",
+  "description": "Geniş Ders Programı alanı ve yatay kompakt sınıf seçici.",
+  "start_url": "./index.html?v=7.2.7",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
