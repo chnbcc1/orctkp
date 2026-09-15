@@ -464,6 +464,16 @@ input,select,textarea,button{max-width:100%}
 @media(max-width:520px){.smart-panel{padding:11px}.smart-alert-grid{grid-template-columns:1fr}.smart-alert:last-child{grid-column:auto}.smart-head{align-items:center}.smart-badge{font-size:10px}.smart-alert{min-height:0}.smart-summary-card b{font-size:17px}}
 
 
+/* ===== v7.5.3 Kompakt Akıllı Uyarılar + Genel Veli Görüşmeleri ===== */
+.overview-shortcuts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.overview-shortcut{appearance:none;background:#fff;color:var(--text);border:1px solid var(--border);border-radius:14px;padding:12px 13px;display:flex;align-items:center;gap:10px;text-align:left;box-shadow:none;min-width:0}
+.overview-shortcut:hover{border-color:#93c5fd}.overview-shortcut:active{transform:scale(.99)}
+.overview-shortcut-icon{font-size:21px;flex:0 0 auto}.overview-shortcut-text{display:flex;flex-direction:column;min-width:0;flex:1}.overview-shortcut-text b{font-size:13px}.overview-shortcut-text small{font-size:10px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.overview-count{min-width:30px;height:30px;padding:0 8px;border-radius:999px;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex:0 0 auto}
+.smart-overview-head{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.all-parent-meeting-card{padding:13px}.all-parent-meeting-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}.all-parent-meeting-chip{font-size:10px;background:#f1f5f9;color:#475569;border-radius:999px;padding:4px 7px}
+@media(max-width:520px){.overview-shortcuts{gap:8px}.overview-shortcut{padding:10px 9px;gap:7px}.overview-shortcut-icon{font-size:18px}.overview-shortcut-text b{font-size:12px}.overview-shortcut-text small{font-size:9px}.overview-count{min-width:27px;height:27px;padding:0 6px}.smart-overview-head{grid-template-columns:1fr 1fr}}
+
 /* ===== v7.2 Ders Programı ===== */
 .schedule-open-btn{width:100%;margin-top:9px;background:#0f766e}
 .schedule-now{border:1px solid #99f6e4;background:#f0fdfa;border-radius:14px;padding:14px;margin-bottom:12px}
@@ -1635,13 +1645,17 @@ button.dutyPrimaryV748{
 <div class="stat"><span>Öğrenci</span><b id="statStudents">0</b></div><div class="stat"><span>Dönem Ödevi</span><b id="statHomeworks">0</b></div><div class="stat"><span>Tamamlanma</span><b id="statRate">%0</b></div><div class="stat stat-clickable" role="button" tabindex="0" onclick="openMissingStudents()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMissingStudents()}"><span>Eksik</span><b id="statMissing">0</b><small>Listeyi göster</small></div>
 </div>
 
-<div id="smartPanel" class="smart-panel">
-  <div class="smart-head">
-    <div><div class="smart-title">Akıllı Uyarılar · Günlük Özet</div><div id="smartSubtitle" class="smart-subtitle"></div></div>
-    <div id="smartBadge" class="smart-badge">0 uyarı</div>
-  </div>
-  <div id="smartSummary" class="smart-summary"></div>
-  <div id="smartAlerts" class="smart-alert-grid"></div>
+<div class="overview-shortcuts">
+  <button id="smartPanel" class="overview-shortcut" onclick="openSmartAlertsOverview()">
+    <span class="overview-shortcut-icon">⚠️</span>
+    <span class="overview-shortcut-text"><b>Akıllı Uyarılar</b><small id="smartCompactText">Uyarılar hesaplanıyor…</small></span>
+    <span id="smartBadge" class="overview-count">0</span>
+  </button>
+  <button class="overview-shortcut" onclick="openAllParentMeetings()">
+    <span class="overview-shortcut-icon">👥</span>
+    <span class="overview-shortcut-text"><b>Veli Görüşmeleri</b><small id="parentMeetingCompactText">Tüm görüşme geçmişi</small></span>
+    <span id="parentMeetingBadge" class="overview-count">0</span>
+  </button>
 </div>
 
 <div class="tabs">
@@ -2631,19 +2645,64 @@ function getSmartAlerts(c){
   ];
   return {hs,missingRows,streakRows,lowCompletionRows,missingGradeRows,lowGradeRows,uniqueCount:uniqueIds.size,categories,categoryCount:categories.filter(x=>x.count>0).length};
 }
+function allParentMeetingRows(){
+  const rows=[];
+  (state.classes||[]).forEach(c=>{
+    const meetings=Array.isArray(c.parentMeetings)?c.parentMeetings:[];
+    meetings.forEach(m=>{
+      const st=(c.students||[]).find(x=>x.id===m.studentId);
+      rows.push({classObj:c,meeting:m,student:st||{id:m.studentId,name:"Silinmiş öğrenci",number:""}});
+    });
+  });
+  return rows.sort((a,b)=>String(b.meeting.date||"").localeCompare(String(a.meeting.date||""))||String(a.student.name).localeCompare(String(b.student.name),"tr"));
+}
 function renderSmartAlerts(){
   const c=cls(),wrap=el("smartPanel"); if(!c||!wrap)return;
   const a=getSmartAlerts(c), totalIssues=a.categories.reduce((n,x)=>n+x.count,0);
-  el("smartSubtitle").textContent=`${smartDateLabel()} · ${c.name} · ${currentPeriod}. Dönem`;
-  el("smartBadge").textContent=a.categoryCount?`${a.categoryCount} uyarı türü`:"Sorun görünmüyor";
-  el("smartSummary").innerHTML=`
-    <div class="smart-summary-card"><span>DİKKAT GEREKTİREN ÖĞRENCİ</span><b>${a.uniqueCount}</b></div>
-    <div class="smart-summary-card"><span>UYARI KAYDI</span><b>${totalIssues}</b></div>`;
-  el("smartAlerts").innerHTML=a.categoryCount ? a.categories.map(x=>`
-    <button class="smart-alert ${x.tone}" onclick="openSmartAlert('${x.type}')" ${x.count?"":'disabled style="opacity:.55;cursor:default"'}>
-      <span class="smart-alert-top"><strong>${x.title}</strong><span class="count">${x.count}</span></span>
-      <small>${x.detail}</small>
-    </button>`).join("") : `<div class="smart-all-clear" style="grid-column:1/-1">✓ Bu sınıf ve dönem için şu anda dikkat gerektiren bir durum görünmüyor.</div>`;
+  el("smartBadge").textContent=a.categoryCount;
+  el("smartCompactText").textContent=a.categoryCount?`${a.uniqueCount} öğrenci · ${totalIssues} uyarı kaydı`:"Şu anda sorun görünmüyor";
+  const pm=allParentMeetingRows(), uniqueStudents=new Set(pm.map(x=>x.classObj.id+":"+x.meeting.studentId)).size;
+  if(el("parentMeetingBadge"))el("parentMeetingBadge").textContent=pm.length;
+  if(el("parentMeetingCompactText"))el("parentMeetingCompactText").textContent=pm.length?`${uniqueStudents} öğrenci · ${pm.length} görüşme`:"Henüz görüşme kaydı yok";
+}
+function openSmartAlertsOverview(){
+  const c=cls(); if(!c)return;
+  const a=getSmartAlerts(c), totalIssues=a.categories.reduce((n,x)=>n+x.count,0);
+  el("modalTitle").textContent="Akıllı Uyarılar";
+  el("modalSubtitle").textContent=`${smartDateLabel()} · ${c.name} · ${currentPeriod}. Dönem`;
+  el("modalBody").innerHTML=`
+    <div class="smart-overview-head">
+      <div class="smart-summary-card"><span>DİKKAT GEREKTİREN ÖĞRENCİ</span><b>${a.uniqueCount}</b></div>
+      <div class="smart-summary-card"><span>UYARI KAYDI</span><b>${totalIssues}</b></div>
+    </div>
+    <div class="smart-alert-grid">${a.categoryCount ? a.categories.map(x=>`
+      <button class="smart-alert ${x.tone}" onclick="openSmartAlert('${x.type}')" ${x.count?"":'disabled style="opacity:.55;cursor:default"'}>
+        <span class="smart-alert-top"><strong>${x.title}</strong><span class="count">${x.count}</span></span>
+        <small>${x.detail}</small>
+      </button>`).join("") : `<div class="smart-all-clear" style="grid-column:1/-1">✓ Bu sınıf ve dönem için şu anda dikkat gerektiren bir durum görünmüyor.</div>`}</div>`;
+  el("modal").classList.add("open");
+}
+function openAllParentMeetings(){
+  const rows=allParentMeetingRows();
+  el("modalTitle").textContent="Tüm Veli Görüşmeleri";
+  el("modalSubtitle").textContent=rows.length?`${rows.length} görüşme kaydı · tüm sınıflar`:"Henüz görüşme kaydı yok";
+  el("modalBody").innerHTML=rows.length?`<div style="display:grid;gap:10px">${rows.map(x=>{
+    const m=x.meeting,st=x.student,c=x.classObj;
+    return `<div class="card all-parent-meeting-card">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div><b>${esc(parentMeetingDateTR(m.date))}</b><div class="all-parent-meeting-meta"><span class="all-parent-meeting-chip">${esc(c.name)}</span><span class="all-parent-meeting-chip">${esc(st.number?st.number+" - ":"")}${esc(st.name)}</span><span class="all-parent-meeting-chip">${esc(m.person||"Veli")}</span></div></div>
+        <button class="secondary" style="padding:7px 10px" onclick="openParentMeetingFromArchive('${c.id}','${m.studentId}')">Aç</button>
+      </div>
+      ${m.subject?`<div style="margin-top:9px"><b>Konu:</b> ${esc(m.subject)}</div>`:""}
+      ${m.note?`<div class="tiny" style="margin-top:6px;white-space:pre-wrap">${esc(m.note)}</div>`:""}
+      ${m.result?`<div style="margin-top:7px"><b>Sonuç / Takip:</b> ${esc(m.result)}</div>`:""}
+    </div>`;
+  }).join("")}</div>`:'<div class="empty card">Henüz veli görüşmesi kaydedilmedi.</div>';
+  el("modal").classList.add("open");
+}
+function openParentMeetingFromArchive(classId,sid){
+  if(!state.classes.some(c=>c.id===classId))return;
+  currentClassId=classId; save(); render(); openParentMeetings(sid);
 }
 function smartStudentButton(c,s,extra=""){
   return `<div class="card" style="padding:11px;display:flex;align-items:center;justify-content:space-between;gap:10px">

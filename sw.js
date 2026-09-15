@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7-5-1-parent-meeting-mobile-form";
+const CACHE="ogrenci-takip-v7-5-3-compact-alerts-parent-archive";
 const ASSETS=[
   "./",
   "./index.html",
