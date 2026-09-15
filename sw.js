@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7-6-1-startup-hotfix";
+const CACHE="ogrenci-takip-v7-6-2-version-sync";
 const ASSETS=[
   "./",
   "./index.html",
