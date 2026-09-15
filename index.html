@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.14</title>
+<title>Öğrenci Takip Sistemi v7.6.15</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -633,7 +633,7 @@ input,select,textarea,button{max-width:100%}
  }
 }
 
-/* v7.6.14 — CLEAN BASE v7.6.14: iPhone D/Y/B strict 3-column grid */
+/* v7.6.15 — CLEAN BASE v7.6.15: iPhone D/Y/B strict 3-column grid */
 @media (max-width:700px){
   #modalBody .trial-student-card{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;overflow:hidden!important;}
   #modalBody .trial-subject-block{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;overflow:hidden!important;padding:10px!important;}
@@ -644,7 +644,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v7.6.14 Deneme canlı net ve iPhone odak görünümü */
+/* v7.6.15 Deneme canlı net ve iPhone odak görünümü */
 #modalBody .trial-score-input:focus{outline:none!important;box-shadow:none!important;border-color:#d7dee8!important;-webkit-tap-highlight-color:transparent!important;}
 #modalBody .trial-subject-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px;}
 #modalBody .trial-subject-net{font-weight:800;font-size:14px;white-space:nowrap;color:#334155;}
@@ -1614,7 +1614,7 @@ button.dutyPrimaryV748{
 .trial-penalty-options{margin-top:10px}
 .trial-penalty-options select{width:100%}
 
-/* v7.6.14 — Deneme formu temiz yeniden kurulum */
+/* v7.6.15 — Deneme formu temiz yeniden kurulum */
 .trial-form-clean{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .trial-form-clean .trial-field{display:grid;gap:6px;min-width:0}
 .trial-form-clean .trial-field.full,.trial-form-clean .trial-penalty-box{grid-column:1/-1}
@@ -1655,7 +1655,7 @@ button.dutyPrimaryV748{
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.14</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.15</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -3243,7 +3243,8 @@ function renderReport(){
 function trialList(c=cls()){return c&&Array.isArray(c.trials)?c.trials:[]}
 function trialNet(d,y,div=4,penalty=true){d=Number(d)||0;y=Number(y)||0;return Math.round((penalty?(d-y/(Number(div)||4)):d)*100)/100}
 function trialStudentTotal(t,sid){const r=t?.results?.[sid];if(!r||r.attended===false)return null;let total=0,has=false;(t.subjects||[]).forEach(sub=>{const x=r.subjects?.[sub];if(x){total+=trialNet(x.correct,x.wrong,t.wrongDivisor,t.wrongPenalty!==false);has=true}});return has?Math.round(total*100)/100:0}
-function trialStats(t){const c=cls();let attended=0,total=0;for(const st of c.students){const n=trialStudentTotal(t,st.id);if(n!==null){attended++;total+=n}}return {attended,absent:Math.max(0,c.students.length-attended),avg:attended?Math.round(total/attended*100)/100:null}}
+function trialHasEnteredScore(t,sid){const r=t?.results?.[sid];if(!r||r.attended===false)return false;return (t.subjects||[]).some(sub=>{const x=r.subjects?.[sub];if(!x)return false;return ['correct','wrong','blank'].some(k=>x[k]!==undefined&&x[k]!==null&&String(x[k]).trim()!=='')})}
+function trialStats(t){const c=cls();let attended=0,scored=0,total=0;for(const st of c.students){const n=trialStudentTotal(t,st.id);if(n!==null)attended++;if(n!==null&&trialHasEnteredScore(t,st.id)){scored++;total+=n}}return {attended,absent:Math.max(0,c.students.length-attended),scored,avg:scored?Math.round(total/scored*100)/100:null}}
 function trialDateTR(v){if(!v)return 'Tarih yok';const d=new Date(v+'T12:00:00');return isNaN(d)?v:d.toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'})}
 function previousTrialFor(t,sid){const arr=trialList().filter(x=>x.id!==t.id&&String(x.date||'')<String(t.date||'')).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));return arr.find(x=>trialStudentTotal(x,sid)!==null)||null}
 function trialTrend(t,sid){const cur=trialStudentTotal(t,sid),prev=previousTrialFor(t,sid);if(cur===null||!prev)return {text:'—',cls:'trend-flat',diff:null};const pn=trialStudentTotal(prev,sid);if(pn===null)return {text:'—',cls:'trend-flat',diff:null};const d=Math.round((cur-pn)*100)/100;return {text:(d>0?'↑ +':d<0?'↓ ':'→ ')+d.toLocaleString('tr-TR',{maximumFractionDigits:2}),cls:d>0?'trend-up':d<0?'trend-down':'trend-flat',diff:d}}
@@ -3886,7 +3887,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.14",
+    appVersion:"v7.6.15",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -3897,7 +3898,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.14",
+    appVersion:"v7.6.15",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
