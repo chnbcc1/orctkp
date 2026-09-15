@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.9</title>
+<title>Öğrenci Takip Sistemi v7.6.10</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -1598,7 +1598,7 @@ button.dutyPrimaryV748{
 .trial-penalty-options{margin-top:10px}
 .trial-penalty-options select{width:100%}
 
-/* v7.6.9 — Deneme formu temiz yeniden kurulum */
+/* v7.6.10 — Deneme formu temiz yeniden kurulum */
 .trial-form-clean{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .trial-form-clean .trial-field{display:grid;gap:6px;min-width:0}
 .trial-form-clean .trial-field.full,.trial-form-clean .trial-penalty-box{grid-column:1/-1}
@@ -1606,8 +1606,10 @@ button.dutyPrimaryV748{
 .trial-form-clean .trial-field input,.trial-form-clean .trial-field select{display:block;width:100%;min-width:0;height:44px;box-sizing:border-box;margin:0}
 .trial-form-clean .trial-date-button{display:flex;align-items:center;justify-content:space-between;width:100%;height:44px;padding:9px 12px;background:#fff;color:var(--text);border:1px solid var(--border);border-radius:9px;font-weight:400;text-align:left}
 .trial-form-clean .trial-date-button .cal{font-size:18px;line-height:1}
-.trial-date-picker-wrap{position:fixed;left:-10000px;top:-10000px;width:1px;height:1px;overflow:hidden}
-.trial-date-picker-wrap input{width:1px!important;height:1px!important;opacity:0!important}
+ .trial-field{position:relative}
+.trial-date-picker-wrap{position:absolute;left:0;right:0;bottom:0;height:44px;z-index:4;overflow:hidden;border-radius:9px}
+.trial-date-picker-wrap input{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-width:100%!important;max-width:100%!important;margin:0!important;padding:0!important;border:0!important;opacity:0.001!important;background:transparent!important;color:transparent!important;-webkit-appearance:none!important;appearance:none!important}
+@media(max-width:700px){.trial-date-picker-wrap{height:48px}}
 @media(max-width:700px){.trial-form-clean{grid-template-columns:1fr}.trial-form-clean .trial-field.full,.trial-form-clean .trial-penalty-box{grid-column:1}.trial-form-clean .trial-date-button{height:48px}}
 </style>
 </head>
@@ -1637,7 +1639,7 @@ button.dutyPrimaryV748{
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.9</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.10</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -3240,13 +3242,15 @@ function openNewTrial(){
   const today=trialTodayISO();
   el('modalBody').innerHTML=`<div class="trial-form-clean">
     <label class="trial-field full"><span>Deneme Adı</span><input id="trialName" placeholder="Örn. Deneme 1" autocomplete="off"></label>
-    <div class="trial-field full"><span>Tarih</span><button type="button" class="trial-date-button" onclick="chooseNewTrialDate()"><span id="trialDateText">${trialDateShortTR(today)}</span><span class="cal" aria-hidden="true">📅</span></button><div class="trial-date-picker-wrap"><input id="trialDateValue" type="date" value="${today}" onchange="syncNewTrialDate()"></div></div>
+    <div class="trial-field full"><span>Tarih</span><button type="button" class="trial-date-button" tabindex="-1" aria-hidden="true"><span id="trialDateText">${trialDateShortTR(today)}</span><span class="cal" aria-hidden="true">📅</span></button><div class="trial-date-picker-wrap"><input id="trialDateValue" type="date" value="${today}" onchange="syncNewTrialDate()"></div></div>
     <label class="trial-field full"><span>Dersler <small>(virgülle ayırın)</small></span><input id="trialSubjects" value="Türkçe, Matematik, Fen, Sosyal"></label>
     <div class="trial-penalty-box"><div class="trial-penalty-head"><div><b>Yanlış Götürme</b><div class="tiny">Yanlış cevaplar doğruyu götürsün mü?</div></div><label class="trial-switch"><input id="trialPenalty" type="checkbox" checked onchange="toggleTrialPenaltyOptions()"><span id="trialPenaltyText">Evet</span></label></div><div id="trialPenaltyOptions" class="trial-penalty-options"><label>Götürme Oranı<select id="trialDiv"><option value="2">2 (2 yanlış = 1 doğru)</option><option value="3">3 (3 yanlış = 1 doğru)</option><option value="4" selected>4 (4 yanlış = 1 doğru)</option><option value="5">5 (5 yanlış = 1 doğru)</option></select></label><div class="tiny" style="margin-top:7px">Net hesabı: Net = Doğru − Yanlış / <span id="trialDivText">4</span></div></div></div>
   </div><div class="tiny" style="margin-top:8px">Yanlış götürme kapalıysa net yalnızca doğru sayısı üzerinden hesaplanır (Net = Doğru).</div><div class="modal-actions"><button onclick="saveNewTrial()">Denemeyi Oluştur</button><button class="secondary" onclick="closeModal()">Vazgeç</button></div>`;
   el('trialDiv')?.addEventListener('change',()=>{if(el('trialDivText'))el('trialDivText').textContent=el('trialDiv').value});
   el('modal').classList.add('open');
+  toggleTrialPenaltyOptions();
 }
+function toggleTrialPenaltyOptions(){const on=!!el('trialPenalty')?.checked;const txt=el('trialPenaltyText'),box=el('trialPenaltyOptions'),sel=el('trialDiv');if(txt)txt.textContent=on?'Evet':'Hayır';if(box){box.style.display=on?'block':'none';box.setAttribute('aria-hidden',on?'false':'true')}if(sel)sel.disabled=!on}
 function saveNewTrial(){const name=el('trialName').value.trim(),date=el('trialDateValue').value,subjects=el('trialSubjects').value.split(',').map(x=>x.trim()).filter(Boolean),penalty=!!el('trialPenalty')?.checked,div=Number(el('trialDiv')?.value)||4;if(!name)return alert('Deneme adını girin.');if(!date)return alert('Deneme tarihini seçin.');if(!subjects.length)return alert('En az bir ders girin.');pushUndo();const t={id:uid(),name,date,subjects,wrongPenalty:penalty,wrongDivisor:div,results:{}};cls().students.forEach(st=>t.results[st.id]={attended:true,subjects:{}});cls().trials.push(t);save();render();openTrial(t.id)}
 function openTrial(id){const c=cls(),t=trialList(c).find(x=>x.id===id);if(!t)return;el('modalTitle').textContent=t.name;el('modalSubtitle').textContent=`${c.name} · ${trialDateTR(t.date)}`;el('modalBody').innerHTML=`<div class="trial-card-stats"><div class="trial-mini"><span>Katılan</span><b>${trialStats(t).attended}</b></div><div class="trial-mini"><span>Girmeyen</span><b>${trialStats(t).absent}</b></div><div class="trial-mini"><span>Ort. Net</span><b>${trialStats(t).avg??'-'}</b></div></div><div style="display:grid;gap:8px;margin-top:12px">${c.students.map(st=>trialStudentEditor(t,st)).join('')}</div><div class="modal-actions"><button class="secondary" onclick="exportTrialCSV('${t.id}')">CSV Aktar</button><button class="secondary" onclick="editTrialInfo('${t.id}')">Deneme Bilgileri</button><button class="danger" onclick="deleteTrial('${t.id}')">Denemeyi Sil</button></div>`;el('modal').classList.add('open')}
 function trialStudentEditor(t,st){const r=t.results[st.id]||(t.results[st.id]={attended:true,subjects:{}}),att=r.attended!==false,total=trialStudentTotal(t,st.id),trend=trialTrend(t,st.id);return `<div class="trial-student-card"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>${esc(st.number?st.number+' - ':'')}${esc(st.name)}</b><span><b>${total===null?'Girmedi':total.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net'}</b> <small class="${trend.cls}">${trend.text}</small></span></div><label class="trial-participation" style="display:flex;align-items:center;gap:7px;margin-top:8px"><input type="checkbox" ${att?'checked':''} onchange="setTrialAttendance('${t.id}','${st.id}',this.checked)"> Denemeye katıldı</label>${att?`<div>${(t.subjects||[]).map(sub=>{const x=r.subjects?.[sub]||{};return `<div class="trial-subject-block"><b>${esc(sub)}</b><div class="trial-subject-grid"><label>Doğru<input type="number" min="0" inputmode="numeric" value="${x.correct??''}" onchange="setTrialScore('${t.id}','${st.id}','${esc(sub)}','correct',this.value)"></label><label>Yanlış<input type="number" min="0" inputmode="numeric" value="${x.wrong??''}" onchange="setTrialScore('${t.id}','${st.id}','${esc(sub)}','wrong',this.value)"></label><label>Boş<input type="number" min="0" inputmode="numeric" value="${x.blank??''}" onchange="setTrialScore('${t.id}','${st.id}','${esc(sub)}','blank',this.value)"></label></div></div>`}).join('')}</div>`:''}</div>`}
@@ -3865,7 +3869,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.9",
+    appVersion:"v7.6.10",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -3876,7 +3880,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.9",
+    appVersion:"v7.6.10",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
