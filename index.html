@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.11</title>
+<title>Öğrenci Takip Sistemi v7.6.12</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -632,7 +632,51 @@ input,select,textarea,button{max-width:100%}
    display:block!important;text-align:left!important;padding:0!important;
  }
 }
-\n/* v7.6.11 — iPhone deneme sonuç ekranı yatay taşma düzeltmesi */\n@media(max-width:700px){\n  html,body{max-width:100%;overflow-x:hidden!important}\n  #modal,#modal .modal-card,#modalBody{max-width:100%!important;overflow-x:hidden!important}\n  #modalBody *{box-sizing:border-box}\n  #modalBody .trial-card-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important;width:100%;gap:6px}\n  #modalBody .trial-mini{min-width:0!important;padding:10px 4px!important;text-align:center}\n  #modalBody .trial-mini span{font-size:12px!important;white-space:normal}\n  #modalBody .trial-student-card{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important;padding:10px!important}\n  #modalBody .trial-student-card>div:first-child{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:6px!important}\n  #modalBody .trial-student-card>div:first-child>b{min-width:0!important;overflow-wrap:anywhere}\n  #modalBody .trial-subject-block{width:100%!important;max-width:100%!important;min-width:0!important;padding:10px!important;overflow:hidden!important}\n  #modalBody .trial-subject-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;width:100%!important;max-width:100%!important;min-width:0!important}\n  #modalBody .trial-subject-grid label{display:grid!important;gap:4px!important;min-width:0!important;font-size:13px!important}\n  #modalBody .trial-subject-grid input{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:42px!important;padding:7px 5px!important;margin:0!important;font-size:16px!important}\n  #modalBody .trial-participation{min-width:0!important}\n}\n
+\n/* v7.6.12 — iPhone deneme sonuç ekranı yatay taşma düzeltmesi */\n@media(max-width:700px){\n  html,body{max-width:100%;overflow-x:hidden!important}\n  #modal,#modal .modal-card,#modalBody{max-width:100%!important;overflow-x:hidden!important}\n  #modalBody *{box-sizing:border-box}\n  #modalBody .trial-card-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important;width:100%;gap:6px}\n  #modalBody .trial-mini{min-width:0!important;padding:10px 4px!important;text-align:center}\n  #modalBody .trial-mini span{font-size:12px!important;white-space:normal}\n  #modalBody .trial-student-card{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important;padding:10px!important}\n  #modalBody .trial-student-card>div:first-child{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:6px!important}\n  #modalBody .trial-student-card>div:first-child>b{min-width:0!important;overflow-wrap:anywhere}\n  #modalBody .trial-subject-block{width:100%!important;max-width:100%!important;min-width:0!important;padding:10px!important;overflow:hidden!important}\n  #modalBody .trial-subject-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;width:100%!important;max-width:100%!important;min-width:0!important}\n  #modalBody .trial-subject-grid label{display:grid!important;gap:4px!important;min-width:0!important;font-size:13px!important}\n  #modalBody .trial-subject-grid input{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:42px!important;padding:7px 5px!important;margin:0!important;font-size:16px!important}\n  #modalBody .trial-participation{min-width:0!important}\n}\n
+
+/* v7.6.12 — iPhone deneme sonuç kartı: D/Y/B üçlüsü yapısal mobil düzen */
+@media(max-width:700px){
+  #modalBody .trial-student-card{padding:12px!important;overflow:hidden!important}
+  #modalBody .trial-subject-block{padding:10px 8px!important;margin:8px 0!important;overflow:hidden!important}
+  #modalBody .trial-subject-grid{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    column-gap:5px!important;
+    row-gap:0!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+  }
+  #modalBody .trial-score-field{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:4px!important;
+    min-width:0!important;
+    width:auto!important;
+    margin:0!important;
+    font-size:12px!important;
+    line-height:1.2!important;
+  }
+  #modalBody .trial-score-field>span{
+    display:block!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+  #modalBody .trial-score-field input{
+    display:block!important;
+    box-sizing:border-box!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:40px!important;
+    margin:0!important;
+    padding:6px 4px!important;
+    font-size:16px!important;
+    text-align:center!important;
+  }
+}
+
 </style>
 
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
@@ -1599,7 +1643,7 @@ button.dutyPrimaryV748{
 .trial-penalty-options{margin-top:10px}
 .trial-penalty-options select{width:100%}
 
-/* v7.6.11 — Deneme formu temiz yeniden kurulum */
+/* v7.6.12 — Deneme formu temiz yeniden kurulum */
 .trial-form-clean{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .trial-form-clean .trial-field{display:grid;gap:6px;min-width:0}
 .trial-form-clean .trial-field.full,.trial-form-clean .trial-penalty-box{grid-column:1/-1}
@@ -1640,7 +1684,7 @@ button.dutyPrimaryV748{
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.11</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.12</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -3254,7 +3298,7 @@ function openNewTrial(){
 function toggleTrialPenaltyOptions(){const on=!!el('trialPenalty')?.checked;const txt=el('trialPenaltyText'),box=el('trialPenaltyOptions'),sel=el('trialDiv');if(txt)txt.textContent=on?'Evet':'Hayır';if(box){box.style.display=on?'block':'none';box.setAttribute('aria-hidden',on?'false':'true')}if(sel)sel.disabled=!on}
 function saveNewTrial(){const name=el('trialName').value.trim(),date=el('trialDateValue').value,subjects=el('trialSubjects').value.split(',').map(x=>x.trim()).filter(Boolean),penalty=!!el('trialPenalty')?.checked,div=Number(el('trialDiv')?.value)||4;if(!name)return alert('Deneme adını girin.');if(!date)return alert('Deneme tarihini seçin.');if(!subjects.length)return alert('En az bir ders girin.');pushUndo();const t={id:uid(),name,date,subjects,wrongPenalty:penalty,wrongDivisor:div,results:{}};cls().students.forEach(st=>t.results[st.id]={attended:true,subjects:{}});cls().trials.push(t);save();render();openTrial(t.id)}
 function openTrial(id){const c=cls(),t=trialList(c).find(x=>x.id===id);if(!t)return;el('modalTitle').textContent=t.name;el('modalSubtitle').textContent=`${c.name} · ${trialDateTR(t.date)}`;el('modalBody').innerHTML=`<div class="trial-card-stats"><div class="trial-mini"><span>Katılan</span><b>${trialStats(t).attended}</b></div><div class="trial-mini"><span>Girmeyen</span><b>${trialStats(t).absent}</b></div><div class="trial-mini"><span>Ort. Net</span><b>${trialStats(t).avg??'-'}</b></div></div><div style="display:grid;gap:8px;margin-top:12px">${c.students.map(st=>trialStudentEditor(t,st)).join('')}</div><div class="modal-actions"><button class="secondary" onclick="exportTrialCSV('${t.id}')">CSV Aktar</button><button class="secondary" onclick="editTrialInfo('${t.id}')">Deneme Bilgileri</button><button class="danger" onclick="deleteTrial('${t.id}')">Denemeyi Sil</button></div>`;el('modal').classList.add('open')}
-function trialStudentEditor(t,st){const r=t.results[st.id]||(t.results[st.id]={attended:true,subjects:{}}),att=r.attended!==false,total=trialStudentTotal(t,st.id),trend=trialTrend(t,st.id);return `<div class="trial-student-card"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>${esc(st.number?st.number+' - ':'')}${esc(st.name)}</b><span><b>${total===null?'Girmedi':total.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net'}</b> <small class="${trend.cls}">${trend.text}</small></span></div><label class="trial-participation" style="display:flex;align-items:center;gap:7px;margin-top:8px"><input type="checkbox" ${att?'checked':''} onchange="setTrialAttendance('${t.id}','${st.id}',this.checked)"> Denemeye katıldı</label>${att?`<div>${(t.subjects||[]).map(sub=>{const x=r.subjects?.[sub]||{};return `<div class="trial-subject-block"><b>${esc(sub)}</b><div class="trial-subject-grid"><label>Doğru<input type="number" min="0" inputmode="numeric" value="${x.correct??''}" onchange="setTrialScore('${t.id}','${st.id}','${esc(sub)}','correct',this.value)"></label><label>Yanlış<input type="number" min="0" inputmode="numeric" value="${x.wrong??''}" onchange="setTrialScore('${t.id}','${st.id}','${esc(sub)}','wrong',this.value)"></label><label>Boş<input type="number" min="0" inputmode="numeric" value="${x.blank??''}" onchange="setTrialScore('${t.id}','${st.id}','${esc(sub)}','blank',this.value)"></label></div></div>`}).join('')}</div>`:''}</div>`}
+function trialStudentEditor(t,st){const r=t.results[st.id]||(t.results[st.id]={attended:true,subjects:{}}),att=r.attended!==false,total=trialStudentTotal(t,st.id),trend=trialTrend(t,st.id);return `<div class="trial-student-card"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>${esc(st.number?st.number+' - ':'')}${esc(st.name)}</b><span><b>${total===null?'Girmedi':total.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net'}</b> <small class="${trend.cls}">${trend.text}</small></span></div><label class="trial-participation" style="display:flex;align-items:center;gap:7px;margin-top:8px"><input type="checkbox" ${att?'checked':''} onchange="setTrialAttendance('${t.id}','${st.id}',this.checked)"> Denemeye katıldı</label>${att?`<div>${(t.subjects||[]).map(sub=>{const x=r.subjects?.[sub]||{};return `<div class="trial-subject-block"><b>${esc(sub)}</b><div class="trial-subject-grid"><label class="trial-score-field"><span>Doğru</span><input type="number" min="0" inputmode="numeric" value="${x.correct??''}" onchange="setTrialScore('${t.id}','${st.id}','${esc(sub)}','correct',this.value)"></label><label class="trial-score-field"><span>Yanlış</span><input type="number" min="0" inputmode="numeric" value="${x.wrong??''}" onchange="setTrialScore('${t.id}','${st.id}','${esc(sub)}','wrong',this.value)"></label><label class="trial-score-field"><span>Boş</span><input type="number" min="0" inputmode="numeric" value="${x.blank??''}" onchange="setTrialScore('${t.id}','${st.id}','${esc(sub)}','blank',this.value)"></label></div></div>`}).join('')}</div>`:''}</div>`}
 function setTrialAttendance(tid,sid,on){const t=trialList().find(x=>x.id===tid);if(!t)return;t.results[sid]=t.results[sid]||{subjects:{}};t.results[sid].attended=!!on;save();render();openTrial(tid)}
 function setTrialScore(tid,sid,sub,key,val){const t=trialList().find(x=>x.id===tid);if(!t)return;t.results[sid]=t.results[sid]||{attended:true,subjects:{}};t.results[sid].subjects=t.results[sid].subjects||{};t.results[sid].subjects[sub]=t.results[sid].subjects[sub]||{};t.results[sid].subjects[sub][key]=val===''?'':Math.max(0,Number(val)||0);save();render()}
 function editTrialInfo(id){const t=trialList().find(x=>x.id===id);if(!t)return;el('modalTitle').textContent='Deneme Bilgileri';el('modalSubtitle').textContent=t.name;const on=t.wrongPenalty!==false;el('modalBody').innerHTML=`<div class="form-grid"><label>Deneme Adı<input id="trialEditName" value="${esc(t.name)}"></label><label>Tarih<input id="trialEditDate" type="date" value="${esc(t.date)}"></label><label style="grid-column:1/-1">Dersler<input id="trialEditSubjects" value="${esc((t.subjects||[]).join(', '))}"></label><div class="trial-penalty-box"><div class="trial-penalty-head"><div><b>Yanlış Götürme</b><div class="tiny">Yanlış cevaplar doğruyu götürsün mü?</div></div><label class="trial-switch"><input id="trialEditPenalty" type="checkbox" ${on?'checked':''} onchange="toggleTrialEditPenaltyOptions()"><span id="trialEditPenaltyText">${on?'Evet':'Hayır'}</span></label></div><div id="trialEditPenaltyOptions" class="trial-penalty-options" style="display:${on?'block':'none'}"><label>Götürme Oranı<select id="trialEditDiv">${[2,3,4,5].map(n=>`<option value="${n}" ${Number(t.wrongDivisor||4)===n?'selected':''}>${n} (${n} yanlış = 1 doğru)</option>`).join('')}</select></label></div></div></div><div class="tiny" style="margin-top:8px">Ders adını değiştirmek mevcut o derse ait girilmiş sonuçları yeni ada otomatik taşımaz.</div><div class="modal-actions"><button onclick="saveTrialInfo('${id}')">Kaydet</button><button class="secondary" onclick="openTrial('${id}')">Vazgeç</button></div>`}
@@ -3870,7 +3914,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.11",
+    appVersion:"v7.6.12",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -3881,7 +3925,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.11",
+    appVersion:"v7.6.12",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
