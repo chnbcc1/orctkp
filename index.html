@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.2.8</title>
+<title>Öğrenci Takip Sistemi v7.2.9</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -503,7 +503,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 .profileScheduleBtn{margin-left:auto;display:flex;align-items:center;gap:7px;max-width:48%;padding:8px 10px;border:1px solid #99f6e4;border-radius:12px;background:#f0fdfa;color:#0f766e;text-align:left;box-shadow:none}.profileScheduleBtn .psIcon{font-size:18px}.profileScheduleBtn .psText{display:flex;flex-direction:column;min-width:0}.profileScheduleBtn b{font-size:11px;white-space:nowrap}.profileScheduleBtn small{font-size:9.5px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:145px}@media(max-width:700px){.profile-chip .profile-lines{display:flex!important;max-width:42%!important}.profileScheduleBtn{max-width:48%;margin-left:auto;padding:7px 8px}.profileScheduleBtn small{max-width:128px}}
-/* ===== v7.2.8 Kompakt üst kontrol alanı ===== */
+/* ===== v7.2.9 Kompakt üst kontrol alanı ===== */
 .compactIconBtn{
   min-width:52px!important;width:52px!important;height:46px!important;
   padding:0!important;font-size:22px!important;border-radius:12px!important;
@@ -526,7 +526,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* ===== v7.2.8 Kilit + Yedek kompakt ===== */
+/* ===== v7.2.9 Kilit + Yedek kompakt ===== */
 .compactActionBtn{
   min-height:40px!important;
   padding:6px 8px!important;
@@ -548,7 +548,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* ===== v7.2.8 Tek satır araç çubuğu + geniş ders programı ===== */
+/* ===== v7.2.9 Tek satır araç çubuğu + geniş ders programı ===== */
 .profile-chip{width:100%!important}
 .profileScheduleBtn{
   flex:1 1 auto!important;
@@ -607,7 +607,7 @@ input,select,textarea,button{max-width:100%}
 
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; worker-src 'self' blob: https://cdn.jsdelivr.net; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
 <style>
-/* ===== v7.2.8 FINAL MOBILE HEADER OVERRIDE ===== */
+/* ===== v7.2.9 FINAL MOBILE HEADER OVERRIDE ===== */
 @media(max-width:700px){
   #headerControls.header-controls{
     display:grid!important;
@@ -729,7 +729,7 @@ input,select,textarea,button{max-width:100%}
 }
 </style>
 <style>
-/* ===== v7.2.8 MOBILE PROFILE + COMPACT CLASS STRIP ===== */
+/* ===== v7.2.9 MOBILE PROFILE + COMPACT CLASS STRIP ===== */
 @media(max-width:700px){
   /* Give profile name only the width it needs; schedule consumes every remaining pixel */
   #headerControls #profileChip.profile-chip{
@@ -843,7 +843,7 @@ input,select,textarea,button{max-width:100%}
 }
 </style>
 <style>
-/* ===== v7.2.8 MOBILE CLASS STRIP HOTFIX ONLY ===== */
+/* ===== v7.2.9 MOBILE CLASS STRIP HOTFIX ONLY ===== */
 @media(max-width:700px){
   #mobileClassStrip{
     display:flex!important;
@@ -935,6 +935,63 @@ input,select,textarea,button{max-width:100%}
   }
 }
 </style>
+<style>
+/* ===== v7.2.9 INDEPENDENT MOBILE CLASS NAV ===== */
+@media(max-width:700px){
+  #mobileClassStrip{display:none!important}
+  #mobileClassNav{
+    display:flex!important;
+    align-items:center!important;
+    gap:7px!important;
+    width:100%!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    padding:2px 1px 5px!important;
+    margin:0!important;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  #mobileClassNav::-webkit-scrollbar{display:none!important}
+  #mobileClassNav .mClassChip,
+  #mobileClassNav .mClassAdd{
+    flex:0 0 auto!important;
+    height:40px!important;
+    min-height:40px!important;
+    border-radius:12px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    margin:0!important;
+  }
+  #mobileClassNav .mClassChip{
+    min-width:68px!important;
+    padding:0 14px!important;
+    border:1px solid #d6dde8!important;
+    background:#fff!important;
+    color:#172033!important;
+    font-size:14px!important;
+    font-weight:800!important;
+  }
+  #mobileClassNav .mClassChip.active{
+    border:2px solid #60a5fa!important;
+    background:#eff6ff!important;
+    color:#1d4ed8!important;
+  }
+  #mobileClassNav .mClassAdd{
+    width:42px!important;
+    min-width:42px!important;
+    padding:0!important;
+    border:0!important;
+    background:#2458dc!important;
+    color:white!important;
+    font-size:22px!important;
+    font-weight:800!important;
+  }
+}
+@media(min-width:701px){
+  #mobileClassNav{display:none!important}
+}
+</style>
 </head>
 <body>
 
@@ -962,7 +1019,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.2.8</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.2.9</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2811,7 +2868,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.2.8",
+    appVersion:"v7.2.9",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -2822,7 +2879,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.2.8",
+    appVersion:"v7.2.9",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -2946,6 +3003,70 @@ render();
     run();
   });
   setTimeout(refreshMobileClassLabels,50);
+})();
+</script>
+<script>
+(function(){
+  function classNameFromItem(item){
+    const candidates=[...item.querySelectorAll("strong,b")];
+    for(const el of candidates){
+      const t=(el.textContent||"").trim();
+      if(t && !/öğrenci|ödev/i.test(t)) return t;
+    }
+    const text=(item.textContent||"").trim();
+    const m=text.match(/\b\d{1,2}\s*\/\s*[A-Za-zÇĞİÖŞÜçğıöşü]\b/);
+    return m ? m[0].replace(/\s+/g,"") : "";
+  }
+  function ensureMobileClassNav(){
+    const realList=document.getElementById("classList");
+    const addBtn=document.querySelector(".add-class-btn");
+    if(!realList) return;
+
+    let nav=document.getElementById("mobileClassNav");
+    if(!nav){
+      nav=document.createElement("div");
+      nav.id="mobileClassNav";
+      const strip=document.getElementById("mobileClassStrip");
+      const anchor=strip || realList;
+      const parent=anchor.parentNode;
+      parent.insertBefore(nav,anchor);
+    }
+
+    nav.innerHTML="";
+    const items=[...realList.querySelectorAll(".class-item")];
+    items.forEach((item,idx)=>{
+      const name=classNameFromItem(item);
+      if(!name) return;
+      const chip=document.createElement("button");
+      chip.type="button";
+      chip.className="mClassChip"+(item.classList.contains("active")?" active":"");
+      chip.textContent=name;
+      chip.onclick=()=>{ item.click(); setTimeout(ensureMobileClassNav,0); };
+      nav.appendChild(chip);
+    });
+
+    const plus=document.createElement("button");
+    plus.type="button";
+    plus.className="mClassAdd";
+    plus.textContent="+";
+    plus.title="Sınıf Ekle";
+    plus.setAttribute("aria-label","Sınıf Ekle");
+    plus.onclick=()=>{ if(addBtn) addBtn.click(); };
+    nav.appendChild(plus);
+  }
+
+  window.refreshMobileClassNav=ensureMobileClassNav;
+  window.addEventListener("DOMContentLoaded",()=>setTimeout(ensureMobileClassNav,0));
+  document.addEventListener("click",()=>setTimeout(ensureMobileClassNav,0));
+  const startObs=()=>{
+    const list=document.getElementById("classList");
+    if(!list) return;
+    new MutationObserver(()=>setTimeout(ensureMobileClassNav,0))
+      .observe(list,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:["class"]});
+    ensureMobileClassNav();
+  };
+  window.addEventListener("DOMContentLoaded",startObs);
+  setTimeout(startObs,100);
 })();
 </script>
 </body>
