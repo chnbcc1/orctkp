@@ -1,8 +1,8 @@
 {
-  "name": "Öğrenci Takip Sistemi v7.2.11",
+  "name": "Öğrenci Takip Sistemi v7.2.12",
   "short_name": "Öğrenci Takip",
-  "description": "Mobil sınıf seçici doğrudan ana renderClasses fonksiyonuna bağlandı.",
-  "start_url": "./index.html?v=7.2.11",
+  "description": "Sabit HTML alanına doğrudan çizilen mobil yatay sınıf seçici.",
+  "start_url": "./index.html?v=7.2.12",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
