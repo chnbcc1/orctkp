@@ -1,8 +1,8 @@
 {
-  "name": "Öğrenci Takip Sistemi v7.2.9",
+  "name": "Öğrenci Takip Sistemi v7.2.10",
   "short_name": "Öğrenci Takip",
-  "description": "Bağımsız mobil yatay sınıf seçici.",
-  "start_url": "./index.html?v=7.2.9",
+  "description": "Sınıf verisinden oluşturulan mobil yatay sınıf seçici.",
+  "start_url": "./index.html?v=7.2.10",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
