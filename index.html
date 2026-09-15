@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.3.0</title>
+<title>Öğrenci Takip Sistemi v7.3.1</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -503,7 +503,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 .profileScheduleBtn{margin-left:auto;display:flex;align-items:center;gap:7px;max-width:48%;padding:8px 10px;border:1px solid #99f6e4;border-radius:12px;background:#f0fdfa;color:#0f766e;text-align:left;box-shadow:none}.profileScheduleBtn .psIcon{font-size:18px}.profileScheduleBtn .psText{display:flex;flex-direction:column;min-width:0}.profileScheduleBtn b{font-size:11px;white-space:nowrap}.profileScheduleBtn small{font-size:9.5px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:145px}@media(max-width:700px){.profile-chip .profile-lines{display:flex!important;max-width:42%!important}.profileScheduleBtn{max-width:48%;margin-left:auto;padding:7px 8px}.profileScheduleBtn small{max-width:128px}}
-/* ===== v7.3.0 Kompakt üst kontrol alanı ===== */
+/* ===== v7.3.1 Kompakt üst kontrol alanı ===== */
 .compactIconBtn{
   min-width:52px!important;width:52px!important;height:46px!important;
   padding:0!important;font-size:22px!important;border-radius:12px!important;
@@ -526,7 +526,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* ===== v7.3.0 Kilit + Yedek kompakt ===== */
+/* ===== v7.3.1 Kilit + Yedek kompakt ===== */
 .compactActionBtn{
   min-height:40px!important;
   padding:6px 8px!important;
@@ -548,7 +548,7 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* ===== v7.3.0 Tek satır araç çubuğu + geniş ders programı ===== */
+/* ===== v7.3.1 Tek satır araç çubuğu + geniş ders programı ===== */
 .profile-chip{width:100%!important}
 .profileScheduleBtn{
   flex:1 1 auto!important;
@@ -607,7 +607,7 @@ input,select,textarea,button{max-width:100%}
 
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; worker-src 'self' blob: https://cdn.jsdelivr.net; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
 <style>
-/* ===== v7.3.0 FINAL MOBILE HEADER OVERRIDE ===== */
+/* ===== v7.3.1 FINAL MOBILE HEADER OVERRIDE ===== */
 @media(max-width:700px){
   #headerControls.header-controls{
     display:grid!important;
@@ -729,7 +729,7 @@ input,select,textarea,button{max-width:100%}
 }
 </style>
 <style>
-/* ===== v7.3.0 MOBILE PROFILE + COMPACT CLASS STRIP ===== */
+/* ===== v7.3.1 MOBILE PROFILE + COMPACT CLASS STRIP ===== */
 @media(max-width:700px){
   /* Give profile name only the width it needs; schedule consumes every remaining pixel */
   #headerControls #profileChip.profile-chip{
@@ -843,7 +843,7 @@ input,select,textarea,button{max-width:100%}
 }
 </style>
 <style>
-/* ===== v7.3.0 MOBILE CLASS STRIP HOTFIX ONLY ===== */
+/* ===== v7.3.1 MOBILE CLASS STRIP HOTFIX ONLY ===== */
 @media(max-width:700px){
   #mobileClassStrip{
     display:flex!important;
@@ -936,7 +936,7 @@ input,select,textarea,button{max-width:100%}
 }
 </style>
 <style>
-/* ===== v7.3.0 INDEPENDENT MOBILE CLASS NAV ===== */
+/* ===== v7.3.1 INDEPENDENT MOBILE CLASS NAV ===== */
 @media(max-width:700px){
   #mobileClassStrip{display:none!important}
   #mobileClassNav{
@@ -1093,13 +1093,38 @@ input,select,textarea,button{max-width:100%}
 @media(min-width:701px){#mobileClassNavFixed{display:none!important}}
 </style>
 <style>
-/* ===== v7.3.0 DERS PROGRAMI GÜNLÜK DURUM ===== */
+/* ===== v7.3.1 DERS PROGRAMI GÜNLÜK DURUM ===== */
 .schedule-now-card{display:flex;align-items:center;gap:10px;padding:10px 12px;margin:0 0 12px;border:1px solid #e2e8f0;border-radius:13px;background:#f8fafc}
 .schedule-now-card.active{background:#eff6ff;border-color:#bfdbfe}
 .schedule-now-card.quiet{justify-content:space-between}
 .schedule-now-card>div{display:flex;flex-direction:column;gap:3px;min-width:0}
 .schedule-now-card b{font-size:13px}
 .schedule-now-card small,.schedule-now-card span{font-size:11px;color:#64748b}
+</style>
+<style>
+/* ===== v7.3.1 DERS PROGRAMI MOBİL GÖRÜNÜM ===== */
+.schedule-day-tabs{display:none}
+.schedule-mobile-view{display:none}
+@media(max-width:700px){
+  .schedule-week{display:none!important}
+  .schedule-mobile-view{display:block}
+  .schedule-now.compact-now{margin-bottom:8px}
+  .schedule-now.compact-now .schedule-now-card{min-height:0;padding:8px 11px;margin-bottom:8px;border-radius:11px}
+  .schedule-headbar.compact-headbar{display:block;margin-bottom:10px}
+  .schedule-program-meta{margin-bottom:8px}
+  .schedule-actions.compact-actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;width:100%}
+  .schedule-actions.compact-actions button{min-width:0!important;width:100%;padding:9px 5px!important;font-size:11px!important;line-height:1.15;white-space:normal;border-radius:10px}
+  .schedule-day-tabs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .schedule-day-tabs::-webkit-scrollbar{display:none}
+  .schedule-day-tab{flex:0 0 auto;min-width:45px;height:38px;padding:0 9px!important;border-radius:10px!important;background:#fff!important;color:#334155!important;border:1px solid #dbe2ea!important;font-size:12px!important;font-weight:800}
+  .schedule-day-tab.all{min-width:86px}
+  .schedule-day-tab.active{background:#2563eb!important;color:#fff!important;border-color:#2563eb!important}
+  .schedule-day-section h4{margin:5px 0 7px!important;font-size:17px}
+  .schedule-no-lessons{padding:13px;border:1px dashed #d5dde8;border-radius:12px;color:#64748b;background:#f8fafc;font-size:13px}
+  .schedule-mobile-card.compact{padding:11px 13px!important;margin:0 0 8px!important;border-radius:13px!important}
+  .schedule-mobile-card.compact .course,.schedule-mobile-card.compact .class{font-size:16px!important;font-weight:800}
+  .schedule-mobile-card.compact .time{margin-top:3px!important;font-size:12px!important}
+}
 </style>
 </head>
 <body>
@@ -1128,7 +1153,7 @@ input,select,textarea,button{max-width:100%}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.3.0</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.3.1</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1428,10 +1453,27 @@ function scheduleNowHTML(){
   if(info.type==="now")return `<div class="schedule-now-card active"><div><b>Şimdi · ${cls} ${course?`· ${course}`:""}</b><small>${esc(p.start||"")}–${esc(p.end||"")} · ${info.minutesLeft} dk kaldı</small></div></div>`;
   return `<div class="schedule-now-card active"><div><b>Sıradaki · ${cls} ${course?`· ${course}`:""}</b><small>${esc(p.start||"")} · ${formatScheduleCountdown(info.minutesUntil||0)}</small></div></div>`;
 }
+
+let scheduleMobileViewDay=null;
+function defaultScheduleViewDay(){
+  const d=SCHEDULE_DAYS.find(x=>x.js===new Date().getDay());
+  return d?d.key:"ALL";
+}
+function setScheduleMobileDay(day){
+  scheduleMobileViewDay=day;
+  openSchedule();
+}
+function scheduleMobileTabsHTML(){
+  const active=scheduleMobileViewDay||defaultScheduleViewDay();
+  const tabs=SCHEDULE_DAYS.map(d=>`<button class="schedule-day-tab ${active===d.key?"active":""}" onclick="setScheduleMobileDay('${d.key}')">${d.key}</button>`).join("");
+  return `<div class="schedule-day-tabs">${tabs}<button class="schedule-day-tab all ${active==="ALL"?"active":""}" onclick="setScheduleMobileDay('ALL')">Tüm Hafta</button></div>`;
+}
 function openSchedule(){
   const sc=settings.schedule=normalizeSchedule(settings.schedule);
+  if(!scheduleMobileViewDay)scheduleMobileViewDay=defaultScheduleViewDay();
   el("modalTitle").textContent="Ders Programı";
   el("modalSubtitle").textContent=(sc.name||"Aktif program")+(sc.effectiveDate?` · ${sc.effectiveDate}`:"");
+
   const periodHeads=sc.periods.map(p=>`<div class="cell head"><b>${p.no}</b><br>${esc(p.start)}–${esc(p.end)}</div>`).join("");
   let desktop=`<div class="schedule-week"><div class="cell head">Gün</div>${periodHeads}`;
   for(const d of SCHEDULE_DAYS){
@@ -1447,26 +1489,33 @@ function openSchedule(){
     }
   }
   desktop+=`</div>`;
-  let mobile=`<div class="schedule-list-mobile">`;
-  for(const d of SCHEDULE_DAYS){
+
+  const shownDays=scheduleMobileViewDay==="ALL"?SCHEDULE_DAYS:SCHEDULE_DAYS.filter(d=>d.key===scheduleMobileViewDay);
+  let mobile=`<div class="schedule-mobile-view">${scheduleMobileTabsHTML()}<div class="schedule-list-mobile">`;
+  for(const d of shownDays){
     const rows=sc.entries.filter(e=>e.day===d.key).sort((a,b)=>a.startPeriod-b.startPeriod);
-    mobile+=`<h4 style="margin:14px 0 7px">${d.label}</h4>`;
-    if(!rows.length)mobile+=`<div class="tiny">Ders yok.</div>`;
+    mobile+=`<div class="schedule-day-section"><h4>${d.label}</h4>`;
+    if(!rows.length)mobile+=`<div class="schedule-no-lessons">Ders yok.</div>`;
     for(const e of rows){
       const sp=periodByNo(e.startPeriod),ep=periodByNo(e.endPeriod);
-      mobile+=`<div class="schedule-mobile-card" onclick="openScheduleEntryEditor('${e.id}')"><div class="row"><div class="course">${esc(e.course)}</div><div class="class">${esc(e.className)}</div></div><div class="time">${esc(sp?.start)}–${esc(ep?.end)} · ${e.startPeriod}${e.endPeriod>e.startPeriod?"–"+e.endPeriod:""}. ders</div></div>`;
+      mobile+=`<div class="schedule-mobile-card compact" onclick="openScheduleEntryEditor('${e.id}')">
+        <div class="row"><div class="course">${esc(e.course)}</div><div class="class">${esc(e.className)}</div></div>
+        <div class="time">${esc(sp?.start)}–${esc(ep?.end)} · ${e.startPeriod}${e.endPeriod>e.startPeriod?"–"+e.endPeriod:""}. ders</div>
+      </div>`;
     }
+    mobile+=`</div>`;
   }
-  mobile+=`</div>`;
+  mobile+=`</div></div>`;
+
   const preview=window._schedulePdfCandidate?renderScheduleImportPreview(window._schedulePdfCandidate):"";
   el("modalBody").innerHTML=`
-    <div class="schedule-now">${scheduleNowHTML()}</div>
-    <div class="schedule-headbar">
-      <div><b>${esc(sc.name)}</b><div class="tiny">${sc.effectiveDate?`Yürürlük: ${esc(sc.effectiveDate)}`:"Yürürlük tarihi belirtilmedi"}</div></div>
-      <div class="schedule-actions">
+    <div class="schedule-now compact-now">${scheduleNowHTML()}</div>
+    <div class="schedule-headbar compact-headbar">
+      <div class="schedule-program-meta"><b>${esc(sc.name)}</b><div class="tiny">${sc.effectiveDate?`Yürürlük: ${esc(sc.effectiveDate)}`:"Yürürlük tarihi belirtilmedi"}</div></div>
+      <div class="schedule-actions compact-actions">
         <button onclick="openScheduleEntryEditor()">+ Ders Ekle</button>
         <button class="secondary" onclick="openScheduleSettings()">Program Bilgileri</button>
-        <button class="secondary" onclick="document.getElementById('schedulePdfInput').click()">PDF'den Program Al</button>
+        <button class="secondary" onclick="document.getElementById('schedulePdfInput').click()">PDF'den Al</button>
         <input id="schedulePdfInput" type="file" accept="application/pdf" style="display:none" onchange="importSchedulePDF(this.files[0])">
       </div>
     </div>
@@ -3015,7 +3064,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.3.0",
+    appVersion:"v7.3.1",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -3026,7 +3075,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.3.0",
+    appVersion:"v7.3.1",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -3217,7 +3266,7 @@ render();
 })();
 </script>
 <script>
-/* ===== v7.3.0 DATA-DRIVEN MOBILE CLASS NAV ===== */
+/* ===== v7.3.1 DATA-DRIVEN MOBILE CLASS NAV ===== */
 (function(){
   function getClasses(){
     try{
