@@ -1,8 +1,8 @@
 {
-  "name": "Öğrenci Takip Sistemi v7.5.1",
+  "name": "Öğrenci Takip Sistemi v7.5.2",
   "short_name": "Öğrenci Takip",
   "description": "Veli görüşmesi formu iPhone ve mobil ekran yerleşimi iyileştirmesi.",
-  "start_url": "./index.html?v=7.5.1",
+  "start_url": "./index.html?v=7.5.2",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",

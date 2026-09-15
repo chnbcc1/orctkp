@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.5.1</title>
+<title>Öğrenci Takip Sistemi v7.5.2</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -608,6 +608,19 @@ input,select,textarea,button{max-width:100%}
  .parent-meeting-form input{min-height:52px}
  .parent-meeting-form textarea.note{min-height:108px}
  .parent-meeting-form .pm-actions>button{width:100%;min-width:0}
+ /* v7.5.2: iPhone tarih alanını diğer form alanlarıyla aynı sol hizaya al */
+ .parent-meeting-form #pmDate{
+   width:100%!important;max-width:100%!important;min-width:0!important;
+   box-sizing:border-box!important;text-align:left!important;
+   padding-left:14px!important;padding-right:14px!important;
+   -webkit-appearance:none!important;appearance:none!important;
+ }
+ .parent-meeting-form #pmDate::-webkit-date-and-time-value{
+   text-align:left!important;margin:0!important;min-height:1.2em!important;
+ }
+ .parent-meeting-form #pmDate::-webkit-datetime-edit{
+   display:block!important;text-align:left!important;padding:0!important;
+ }
 }
 </style>
 
