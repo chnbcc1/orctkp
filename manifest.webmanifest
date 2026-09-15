@@ -1,8 +1,8 @@
 {
-  "name": "Öğrenci Takip Sistemi v7.4.3",
+  "name": "Öğrenci Takip Sistemi v7.4.4",
   "short_name": "Öğrenci Takip",
-  "description": "Aylık okul nöbetleri ve her hafta bir gün geriye gelen otomatik pansiyon nöbet döngüsü.",
-  "start_url": "./index.html?v=7.4.3",
+  "description": "Pansiyon nöbeti mobil ekran taşma ve hizalama düzeltmeleri.",
+  "start_url": "./index.html?v=7.4.4",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
