@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.34</title>
+<title>Öğrenci Takip Sistemi v7.6.35</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -473,7 +473,7 @@ input,select,textarea,button{max-width:100%}
 .smart-overview-head{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
 .all-parent-meeting-card{padding:13px}.all-parent-meeting-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}.all-parent-meeting-chip{font-size:10px;background:#f1f5f9;color:#475569;border-radius:999px;padding:4px 7px}
 
-/* ===== v7.6.34 Günlük Öğretmen Paneli ===== */
+/* ===== v7.6.35 Günlük Öğretmen Paneli ===== */
 .today-shortcut{grid-column:1/-1;background:#f8fbff;border-color:#bfdbfe}
 .today-panel-grid{display:grid;gap:10px}
 .today-card{border:1px solid var(--border);border-radius:16px;padding:13px;background:#fff;color:var(--text)}
@@ -721,6 +721,27 @@ body.modal-page-locked{overflow:hidden!important;overscroll-behavior:none;touch-
 #modal{overscroll-behavior:contain}
 #modal .modal-box{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
 @media(max-width:600px){.modal-head{gap:8px}.modal-nav-actions{gap:6px}.modal-nav-actions button{padding:10px 12px}}
+
+/* ===== v7.6.35 Kompakt Sınıf Özeti ===== */
+.compact-class-summary{margin-bottom:14px;padding:14px 16px;background:linear-gradient(180deg,#fbfcff,#f7f9fd);border:1px solid var(--border);border-radius:16px}
+.compact-class-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.compact-class-head h1{margin:0;font-size:24px}.compact-class-head .tiny{margin-top:2px}
+.compact-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
+.compact-stat{min-width:0;border:1px solid #e1e7f0;background:#fff;border-radius:11px;padding:9px 11px;text-align:left;color:var(--text)}
+.compact-stat span{display:block;color:var(--muted);font-size:10px;font-weight:750;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.compact-stat b{display:block;margin-top:2px;font-size:19px;line-height:1.15}
+button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#fecaca;background:#fff8f8}.compact-missing span,.compact-missing b{color:#991b1b}
+.compact-progress{height:6px;background:#e5eaf2;border-radius:999px;overflow:hidden;margin-top:9px}.compact-progress i{display:block;height:100%;width:0;background:#22c55e;border-radius:999px;transition:width .2s ease}
+@media(max-width:700px){
+ .compact-class-summary{padding:12px;margin-bottom:10px}
+ .compact-class-head{display:block;text-align:center}.compact-class-head h1{font-size:25px}
+ .compact-class-head .class-top-actions{justify-content:center;margin-top:9px;flex-wrap:nowrap}
+ .compact-class-head .class-top-actions button{min-height:38px!important;padding:7px 9px!important;font-size:11px!important;white-space:nowrap}
+ .compact-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-top:10px}
+ .compact-stat{padding:8px 5px;text-align:center;border-radius:10px}
+ .compact-stat span{font-size:8.5px}.compact-stat b{font-size:17px}
+}
+@media(max-width:390px){.compact-stat span{font-size:8px}.compact-stat b{font-size:16px}.compact-class-head .class-top-actions button{padding:6px 7px!important;font-size:10px!important}}
 </style>
 
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
@@ -1744,7 +1765,7 @@ button.dutyPrimaryV748{
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.34</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.35</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1775,9 +1796,15 @@ button.dutyPrimaryV748{
 <main>
 <div id="noClass" class="empty card"><h2>Henüz sınıf yok</h2><p>Yukarıdaki + Sınıf Ekle düğmesinden ilk sınıfınızı oluşturun.</p></div>
 <div id="classView" style="display:none">
-<div class="top-title"><div><h1 id="currentClassTitle"></h1><div class="tiny" id="periodLabel"></div></div><div class="class-top-actions"><button class="secondary seating-plan-btn" onclick="openSeatingPlan()">🪑 Oturma Planı</button><button class="secondary class-settings-btn" onclick="openClassSettings()">Sınıf Ayarları</button></div></div>
-<div class="grid" style="margin-top:14px">
-<div class="stat"><span>Öğrenci</span><b id="statStudents">0</b></div><div class="stat"><span>Dönem Ödevi</span><b id="statHomeworks">0</b></div><div class="stat"><span>Tamamlanma</span><b id="statRate">%0</b></div><div class="stat stat-clickable" role="button" tabindex="0" onclick="openMissingStudents()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openMissingStudents()}"><span>Eksik</span><b id="statMissing">0</b><small>Listeyi göster</small></div>
+<div class="compact-class-summary">
+  <div class="compact-class-head"><div><h1 id="currentClassTitle"></h1><div class="tiny" id="periodLabel"></div></div><div class="class-top-actions"><button class="secondary seating-plan-btn" onclick="openSeatingPlan()">🪑 Oturma Planı</button><button class="secondary class-settings-btn" onclick="openClassSettings()">⚙️ Sınıf Ayarları</button></div></div>
+  <div class="compact-stats">
+    <div class="compact-stat"><span>👤 Öğrenci</span><b id="statStudents">0</b></div>
+    <div class="compact-stat"><span>📚 Ödev</span><b id="statHomeworks">0</b></div>
+    <div class="compact-stat"><span>✓ Tamamlanma</span><b id="statRate">%0</b></div>
+    <button class="compact-stat compact-missing" onclick="openMissingStudents()"><span>⚠ Eksik</span><b id="statMissing">0</b></button>
+  </div>
+  <div class="compact-progress" aria-label="Ödev tamamlanma oranı"><i id="classCompletionBar"></i></div>
 </div>
 
 <div class="overview-shortcuts">
@@ -1980,7 +2007,7 @@ function modalRefreshSnapshot(x){
     const title=String(x.title||""); const sub=String(x.subtitle||"");
     if(title==="Günlük Öğretmen Paneli"){openDailyTeacherPanel();return true}
     if(title==="Akıllı Uyarılar"){openSmartAlertsOverview();return true}
-    // v7.6.34 — Akıllı uyarı alt listeleri ve ana eksik ödev listesi geri dönüşte canlı hesaplanır.
+    // v7.6.35 — Akıllı uyarı alt listeleri ve ana eksik ödev listesi geri dönüşte canlı hesaplanır.
     if(title==="Eksik Ödevi Olan Öğrenciler"){openMissingStudents();return true}
     const smartAlertTitleMap={
       "Bugün Kontrol Edilecek Ödevler":"dueToday",
@@ -2021,7 +2048,7 @@ function lockModalPage(){if(modalPageLocked)return;modalPageScrollY=window.scrol
 function unlockModalPage(){if(!modalPageLocked)return;document.body.classList.remove("modal-page-locked");document.body.style.position="";document.body.style.top="";document.body.style.left="";document.body.style.right="";document.body.style.width="";modalPageLocked=false;window.scrollTo(0,modalPageScrollY)}
 function closeModal(){window._activeStudentModalId=null;modalHistory=[];modalUpdateBackButton();const m=el("modal");if(m)m.classList.remove("open");unlockModalPage()}
 
-// v7.6.34 — Canlı yenilenen modal geri geçmişi + iPhone arka plan kaydırma kilidi
+// v7.6.35 — Canlı yenilenen modal geri geçmişi + iPhone arka plan kaydırma kilidi
 document.addEventListener("click",function(e){
   const m=el("modal"); if(!m)return;
   const t=e.target.closest("button,a,[onclick]");
@@ -3194,7 +3221,7 @@ function openSmartAlert(type){
   el("modal").classList.add("open");
 }
 
-function renderStats(){const c=cls(),hs=hwPeriod(c);let points=0,den=0,missing=0;c.students.forEach(s=>hs.forEach(h=>{const v=status(c,s.id,h.id);if(v!=="excused"){den++;if(v==="done")points++;else if(v==="partial")points+=.5;if(v==="missing")missing++}}));el("statStudents").textContent=c.students.length;el("statHomeworks").textContent=hs.length;el("statRate").textContent="%"+(den?Math.round(points*100/den):0);el("statMissing").textContent=missing}
+function renderStats(){const c=cls(),hs=hwPeriod(c);let points=0,den=0,missing=0;c.students.forEach(s=>hs.forEach(h=>{const v=status(c,s.id,h.id);if(v!=="excused"){den++;if(v==="done")points++;else if(v==="partial")points+=.5;if(v==="missing")missing++}}));const rate=den?Math.round(points*100/den):0;el("statStudents").textContent=c.students.length;el("statHomeworks").textContent=hs.length;el("statRate").textContent="%"+rate;el("statMissing").textContent=missing;const bar=el("classCompletionBar");if(bar)bar.style.width=rate+"%"}
 function openMissingStudents(){
   const c=cls(); if(!c)return;
   const hs=hwPeriod(c);
@@ -4399,7 +4426,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.34",
+    appVersion:"v7.6.35",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4410,7 +4437,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.34",
+    appVersion:"v7.6.35",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
