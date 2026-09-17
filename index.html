@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.35</title>
+<title>Öğrenci Takip Sistemi v7.6.36</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -473,7 +473,7 @@ input,select,textarea,button{max-width:100%}
 .smart-overview-head{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
 .all-parent-meeting-card{padding:13px}.all-parent-meeting-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}.all-parent-meeting-chip{font-size:10px;background:#f1f5f9;color:#475569;border-radius:999px;padding:4px 7px}
 
-/* ===== v7.6.35 Günlük Öğretmen Paneli ===== */
+/* ===== v7.6.36 Günlük Öğretmen Paneli ===== */
 .today-shortcut{grid-column:1/-1;background:#f8fbff;border-color:#bfdbfe}
 .today-panel-grid{display:grid;gap:10px}
 .today-card{border:1px solid var(--border);border-radius:16px;padding:13px;background:#fff;color:var(--text)}
@@ -722,7 +722,7 @@ body.modal-page-locked{overflow:hidden!important;overscroll-behavior:none;touch-
 #modal .modal-box{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
 @media(max-width:600px){.modal-head{gap:8px}.modal-nav-actions{gap:6px}.modal-nav-actions button{padding:10px 12px}}
 
-/* ===== v7.6.35 Kompakt Sınıf Özeti ===== */
+/* ===== v7.6.36 Kompakt Sınıf Özeti ===== */
 .compact-class-summary{margin-bottom:14px;padding:14px 16px;background:linear-gradient(180deg,#fbfcff,#f7f9fd);border:1px solid var(--border);border-radius:16px}
 .compact-class-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .compact-class-head h1{margin:0;font-size:24px}.compact-class-head .tiny{margin-top:2px}
@@ -742,6 +742,16 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
  .compact-stat span{font-size:8.5px}.compact-stat b{font-size:17px}
 }
 @media(max-width:390px){.compact-stat span{font-size:8px}.compact-stat b{font-size:16px}.compact-class-head .class-top-actions button{padding:6px 7px!important;font-size:10px!important}}
+
+/* ===== v7.6.36 Sınıf Kontrol Merkezi + Canlı Bugün ===== */
+.class-module-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:12px}
+.class-module-btn{min-width:0;min-height:66px;border:1px solid #dce4ef;background:#fff;color:var(--text);border-radius:12px;padding:8px 5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:none}
+.class-module-btn span{font-size:18px;line-height:1}.class-module-btn b{font-size:10px}.class-module-btn em{font-style:normal;font-size:12px;font-weight:800;color:#1d4ed8}
+.compact-stats.status-only{grid-template-columns:1fr 1fr;margin-top:8px}.compact-stats.status-only .compact-stat{text-align:center}
+.tabs{display:none!important}.panel{display:none!important}.panel.active{display:block!important;margin-top:12px}
+#matrix{display:none!important}
+@media(max-width:520px){.class-module-grid{gap:5px}.class-module-btn{min-height:61px;padding:7px 3px}.class-module-btn span{font-size:17px}.class-module-btn b{font-size:9px}.compact-stats.status-only{gap:6px}}
+
 </style>
 
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
@@ -1765,7 +1775,7 @@ button.dutyPrimaryV748{
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.35</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.36</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1774,9 +1784,9 @@ button.dutyPrimaryV748{
     <b id="headerTeacherName">Öğretmen Profili</b>
     <span id="headerSchoolName">Profil bilgisi ekleyin</span>
   </div>
-  <button class="profileScheduleBtn" onclick="event.stopPropagation();openQuickLesson()" aria-label="Hızlı Ders">
+  <button class="profileScheduleBtn" onclick="event.stopPropagation();openDailyTeacherPanel()" aria-label="Bugün">
     <span class="psIcon">📅</span>
-    <span class="psText"><b>Hızlı Ders</b><small id="profileNextLesson">Dersi hazırla</small></span>
+    <span class="psText"><b>Bugün</b><small id="profileNextLesson">Günün özeti hazırlanıyor…</small></span>
   </button><button class="profileDutyBtn" onclick="event.stopPropagation();openDutySchedule()" aria-label="Nöbet Programı"><span class="pdIcon">🛡️</span><span class="pdText"><b>Nöbet</b><small id="profileDutyStatus">Bugün nöbet yok</small></span></button>
 </div>
 <select id="periodSelect" class="mobile-period" onchange="changePeriod(this.value)"><option value="1">1. Dönem</option><option value="2">2. Dönem</option></select>
@@ -1797,10 +1807,15 @@ button.dutyPrimaryV748{
 <div id="noClass" class="empty card"><h2>Henüz sınıf yok</h2><p>Yukarıdaki + Sınıf Ekle düğmesinden ilk sınıfınızı oluşturun.</p></div>
 <div id="classView" style="display:none">
 <div class="compact-class-summary">
-  <div class="compact-class-head"><div><h1 id="currentClassTitle"></h1><div class="tiny" id="periodLabel"></div></div><div class="class-top-actions"><button class="secondary seating-plan-btn" onclick="openSeatingPlan()">🪑 Oturma Planı</button><button class="secondary class-settings-btn" onclick="openClassSettings()">⚙️ Sınıf Ayarları</button></div></div>
-  <div class="compact-stats">
-    <div class="compact-stat"><span>👤 Öğrenci</span><b id="statStudents">0</b></div>
-    <div class="compact-stat"><span>📚 Ödev</span><b id="statHomeworks">0</b></div>
+  <div class="compact-class-head"><div><h1 id="currentClassTitle"></h1><div class="tiny" id="periodLabel" style="display:none"></div></div><div class="class-top-actions"><button class="secondary seating-plan-btn" onclick="openSeatingPlan()">🪑 Oturma Planı</button><button class="secondary class-settings-btn" onclick="openClassSettings()">⚙️ Sınıf Ayarları</button></div></div>
+  <div class="class-module-grid" aria-label="Sınıf modülleri">
+    <button class="class-module-btn" onclick="openClassModule('students')"><span>👥</span><b>Öğrenciler</b><em id="statStudents">0</em></button>
+    <button class="class-module-btn" onclick="openClassModule('homeworks')"><span>📚</span><b>Ödevler</b><em id="statHomeworks">0</em></button>
+    <button class="class-module-btn" onclick="openClassModule('grades')"><span>📝</span><b>Notlar</b></button>
+    <button class="class-module-btn" onclick="openClassModule('trials')"><span>📊</span><b>Denemeler</b></button>
+    <button class="class-module-btn" onclick="openClassModule('reports')"><span>📄</span><b>Rapor</b></button>
+  </div>
+  <div class="compact-stats status-only">
     <div class="compact-stat"><span>✓ Tamamlanma</span><b id="statRate">%0</b></div>
     <button class="compact-stat compact-missing" onclick="openMissingStudents()"><span>⚠ Eksik</span><b id="statMissing">0</b></button>
   </div>
@@ -1808,11 +1823,6 @@ button.dutyPrimaryV748{
 </div>
 
 <div class="overview-shortcuts">
-  <button id="todayPanel" class="overview-shortcut today-shortcut" onclick="openDailyTeacherPanel()">
-    <span class="overview-shortcut-icon">📅</span>
-    <span class="overview-shortcut-text"><b>Bugün</b><small id="todayCompactText">Günün özeti hazırlanıyor…</small></span>
-    <span id="todayBadge" class="overview-count">0</span>
-  </button>
   <button id="smartPanel" class="overview-shortcut" onclick="openSmartAlertsOverview()">
     <span class="overview-shortcut-icon">⚠️</span>
     <span class="overview-shortcut-text"><b>Akıllı Uyarılar</b><small id="smartCompactText">Uyarılar hesaplanıyor…</small></span>
@@ -1823,14 +1833,6 @@ button.dutyPrimaryV748{
     <span class="overview-shortcut-text"><b>Veli Görüşmeleri</b><small id="parentMeetingCompactText">Tüm görüşme geçmişi</small></span>
     <span id="parentMeetingBadge" class="overview-count">0</span>
   </button>
-</div>
-
-<div class="tabs">
-<div class="tab active" data-tab="students" onclick="switchTab('students')">Öğrenciler</div>
-<div class="tab" data-tab="homeworks" onclick="switchTab('homeworks')">Ödevler</div>
-<div class="tab" data-tab="matrix" onclick="switchTab('matrix')">Ödev Matrisi</div><div class="tab" data-tab="grades" onclick="switchTab('grades')">Notlar</div>
-<div class="tab" data-tab="trials" onclick="switchTab('trials')">Denemeler</div>
-<div class="tab" data-tab="reports" onclick="switchTab('reports')">Rapor</div>
 </div>
 
 <section id="students" class="panel active">
@@ -1902,6 +1904,11 @@ window.addEventListener("unhandledrejection",function(ev){ console.error("Uygula
 function switchTab(id){
   document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===id));
   document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("active",x.id===id));
+}
+function openClassModule(id){
+  if(id==="matrix")return;
+  switchTab(id);
+  const p=el(id); if(p) requestAnimationFrame(()=>p.scrollIntoView({behavior:"smooth",block:"start"}));
 }
 
 async function tryLocalImageOCR(file){
@@ -2007,7 +2014,7 @@ function modalRefreshSnapshot(x){
     const title=String(x.title||""); const sub=String(x.subtitle||"");
     if(title==="Günlük Öğretmen Paneli"){openDailyTeacherPanel();return true}
     if(title==="Akıllı Uyarılar"){openSmartAlertsOverview();return true}
-    // v7.6.35 — Akıllı uyarı alt listeleri ve ana eksik ödev listesi geri dönüşte canlı hesaplanır.
+    // v7.6.36 — Akıllı uyarı alt listeleri ve ana eksik ödev listesi geri dönüşte canlı hesaplanır.
     if(title==="Eksik Ödevi Olan Öğrenciler"){openMissingStudents();return true}
     const smartAlertTitleMap={
       "Bugün Kontrol Edilecek Ödevler":"dueToday",
@@ -2048,7 +2055,7 @@ function lockModalPage(){if(modalPageLocked)return;modalPageScrollY=window.scrol
 function unlockModalPage(){if(!modalPageLocked)return;document.body.classList.remove("modal-page-locked");document.body.style.position="";document.body.style.top="";document.body.style.left="";document.body.style.right="";document.body.style.width="";modalPageLocked=false;window.scrollTo(0,modalPageScrollY)}
 function closeModal(){window._activeStudentModalId=null;modalHistory=[];modalUpdateBackButton();const m=el("modal");if(m)m.classList.remove("open");unlockModalPage()}
 
-// v7.6.35 — Canlı yenilenen modal geri geçmişi + iPhone arka plan kaydırma kilidi
+// v7.6.36 — Canlı yenilenen modal geri geçmişi + iPhone arka plan kaydırma kilidi
 document.addEventListener("click",function(e){
   const m=el("modal"); if(!m)return;
   const t=e.target.closest("button,a,[onclick]");
@@ -2575,7 +2582,7 @@ setTimeout(updateDutyStatus,0);
  renderProfileHeader();
  updateConnectionState();
  el("periodSelect").value=currentPeriod;renderClasses();const c=cls();el("noClass").style.display=c?"none":"block";el("classView").style.display=c?"block":"none";if(!c){updateProfileNextLesson();return;}
- el("currentClassTitle").textContent=c.name;el("periodLabel").textContent=(currentPeriod==="1"?"1. Dönem":"2. Dönem")+" görünümü";
+ el("currentClassTitle").textContent=c.name;el("periodLabel").textContent="";
  renderStats();renderSmartAlerts();renderStudents();renderHomeworks();renderMatrix();renderGrades();
  try{ renderTrials(); }catch(e){ console.error("Deneme modülü çizim hatası",e); const h=el("trialList"); if(h) h.innerHTML='<div class="empty card">Deneme modülü başlatılamadı. Uygulamanın diğer bölümleri kullanılabilir.</div>'; }
  renderReport();updateUndoRedo();updateProfileNextLesson();
@@ -3098,7 +3105,7 @@ function openDailyClassAlerts(cid){const c=state.classes.find(x=>x.id===cid);if(
 function openDailyTeacherPanel(){
   const q=quickLessonContext(new Date()),x=q.info,e=q.e,p=x.period||{},d=dutyInfo(),hw=dailyHomeworkRows(),alerts=dailyImportantAlerts();
   let lessonText=x.type==="now"?`${esc(e.className||"")} ${e.course?"· "+esc(e.course):""} · ${esc(p.start||"")}–${esc(p.end||"")} · ${x.minutesLeft} dk kaldı`:x.type==="next"?`${esc(e.className||"")} ${e.course?"· "+esc(e.course):""} · ${esc(p.start||"")} · ${formatScheduleCountdown(x.minutesUntil||0)}`:esc(x.text||"Bugün ders görünmüyor.");
-  const lessonActions=(x.type==="now"||x.type==="next")?`<div class="today-actions"><button onclick="openQuickLesson()">Hızlı Dersi Aç</button><button class="secondary" onclick="openSchedule()">Ders Programı</button></div>`:`<div class="today-actions"><button class="secondary" onclick="openSchedule()">Ders Programı</button></div>`;
+  const lessonActions=(x.type==="now"||x.type==="next")?`<div class="today-actions"><button onclick="openQuickLesson()">Ders / Ödev Kontrolü</button><button class="secondary" onclick="openSchedule()">Ders Programı</button></div>`:`<div class="today-actions"><button class="secondary" onclick="openSchedule()">Ders Programı</button></div>`;
   const due=hw.todayRows.length?hw.todayRows.map(r=>`<div class="today-homework-row"><div><b>${esc(r.classObj.name)} · ${esc(r.homework.name)}</b><small>Kontrol / son teslim günü bugün</small></div><button onclick="openQuickHomework('${r.classObj.id}','${r.homework.id}')">Kontrol</button></div>`).join(""):`<p>Bugün kontrol edilecek ödev yok.</p>`;
   const upcoming=hw.upcomingRows.length?hw.upcomingRows.map(r=>`<div class="today-homework-row"><div><b>${esc(r.classObj.name)} · ${esc(r.homework.name)}</b><small>${r.days===1?"Yarın":r.days+" gün sonra"} · ${esc(r.homework.due)}</small></div><button class="secondary" onclick="openQuickHomework('${r.classObj.id}','${r.homework.id}')">Aç</button></div>`).join(""):`<p>Önümüzdeki 3 gün için yaklaşan ödev yok.</p>`;
   const alertHTML=alerts.length?alerts.map(r=>`<div class="today-homework-row"><div><b>${esc(r.classObj.name)}</b><small>${r.students} öğrenci · ${r.count} önemli uyarı</small></div><button class="secondary" onclick="openDailyClassAlerts('${r.classObj.id}')">İncele</button></div>`).join(""):`<p>Önemli öğrenci uyarısı görünmüyor.</p>`;
@@ -4426,7 +4433,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.35",
+    appVersion:"v7.6.36",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4437,7 +4444,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.35",
+    appVersion:"v7.6.36",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
