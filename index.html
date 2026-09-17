@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.26</title>
+<title>Öğrenci Takip Sistemi v7.6.27</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -474,13 +474,15 @@ input,select,textarea,button{max-width:100%}
 .all-parent-meeting-card{padding:13px}.all-parent-meeting-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}.all-parent-meeting-chip{font-size:10px;background:#f1f5f9;color:#475569;border-radius:999px;padding:4px 7px}
 @media(max-width:520px){.overview-shortcuts{gap:8px}.overview-shortcut{padding:10px 9px;gap:7px}.overview-shortcut-icon{font-size:18px}.overview-shortcut-text b{font-size:12px}.overview-shortcut-text small{font-size:9px}.overview-count{min-width:27px;height:27px;padding:0 6px}.smart-overview-head{grid-template-columns:1fr 1fr}}
 
-/* ===== v7.6.26 Öğrenci Panosu ===== */
+/* ===== v7.6.27 Öğrenci Panosu ===== */
 .student-dashboard-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}
 .student-dashboard-card{border:1px solid var(--border);background:#f8fafc;border-radius:12px;padding:10px;min-width:0}
 .student-dashboard-card span{display:block;font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase}.student-dashboard-card b{display:block;font-size:17px;margin-top:3px}.student-dashboard-card small{display:block;font-size:9px;color:var(--muted);margin-top:3px}
 .student-dashboard-alerts{border:1px solid #fed7aa;background:#fff7ed;border-radius:12px;padding:10px;margin:9px 0}.student-dashboard-alerts b{font-size:12px}.student-dashboard-alerts ul{margin:6px 0 0;padding-left:18px}.student-dashboard-alerts li{font-size:11px;line-height:1.35;margin:3px 0}
 @media(max-width:520px){.student-dashboard-grid{grid-template-columns:1fr 1fr}.student-dashboard-card b{font-size:16px}}
 
+/* ===== v7.6.27 Hızlı Ders ===== */
+.quick-lesson-hero{border:1px solid #bfdbfe;background:#eff6ff;border-radius:15px;padding:14px;margin-bottom:12px}.quick-lesson-hero .ql-kicker{font-size:11px;font-weight:900;color:#1d4ed8;text-transform:uppercase;letter-spacing:.05em}.quick-lesson-hero .ql-title{font-size:21px;font-weight:900;margin-top:4px}.quick-lesson-hero .ql-sub{font-size:12px;color:#64748b;margin-top:4px}.quick-lesson-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px}.quick-homework{border:1px solid #fed7aa;background:#fff7ed;border-radius:14px;padding:12px;margin:8px 0}.quick-homework b{display:block}.quick-homework small{display:block;color:#7c2d12;margin-top:4px}.quick-homework button{width:100%;margin-top:9px}.quick-upcoming{border:1px solid #e2e8f0;border-radius:14px;padding:12px;margin-top:12px}.quick-upcoming-row{padding:8px 0;border-top:1px solid #eef2f7}.quick-upcoming-row:first-child{border-top:0}@media(max-width:520px){.quick-lesson-actions{grid-template-columns:1fr}}
 /* ===== v7.2 Ders Programı ===== */
 .schedule-open-btn{width:100%;margin-top:9px;background:#0f766e}
 .schedule-now{border:1px solid #99f6e4;background:#f0fdfa;border-radius:14px;padding:14px;margin-bottom:12px}
@@ -640,7 +642,7 @@ input,select,textarea,button{max-width:100%}
  }
 }
 
-/* v7.6.26 — CLEAN BASE v7.6.26: iPhone D/Y/B strict 3-column grid */
+/* v7.6.27 — CLEAN BASE v7.6.27: iPhone D/Y/B strict 3-column grid */
 @media (max-width:700px){
   #modalBody .trial-student-card{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;overflow:hidden!important;}
   #modalBody .trial-subject-block{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;overflow:hidden!important;padding:10px!important;}
@@ -651,12 +653,12 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v7.6.26 Deneme canlı net ve iPhone odak görünümü */
+/* v7.6.27 Deneme canlı net ve iPhone odak görünümü */
 #modalBody .trial-score-input:focus{outline:none!important;box-shadow:none!important;border-color:#d7dee8!important;-webkit-tap-highlight-color:transparent!important;}
 #modalBody .trial-subject-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px;}
 #modalBody .trial-subject-net{font-weight:800;font-size:14px;white-space:nowrap;color:#334155;}
 
-/* v7.6.26 — Öğrenci deneme gelişim özeti ve grafik */
+/* v7.6.27 — Öğrenci deneme gelişim özeti ve grafik */
 .trial-history-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px}
 .trial-history-stat{background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:10px;text-align:center;min-width:0}
 .trial-history-stat span{display:block;font-size:10px;color:#64748b}.trial-history-stat b{display:block;margin-top:3px;font-size:17px;white-space:nowrap}
@@ -667,14 +669,14 @@ input,select,textarea,button{max-width:100%}
 @media(max-width:520px){.trial-history-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.trial-history-stat{padding:8px 4px}.trial-history-stat b{font-size:15px}.trial-chart-head{align-items:flex-start;flex-direction:column}.trial-chart-head select{width:100%;max-width:none}}
 
 
-/* v7.6.26 — Sınıf deneme analizi */
+/* v7.6.27 — Sınıf deneme analizi */
 .class-trial-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:10px}
 .class-trial-stat{background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:10px;text-align:center;min-width:0}.class-trial-stat span{display:block;font-size:10px;color:#64748b}.class-trial-stat b{display:block;margin-top:3px;font-size:16px;white-space:nowrap}
 .class-trial-subjects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.class-trial-subject{border:1px solid #e5e7eb;border-radius:12px;padding:10px;background:#fff;display:flex;justify-content:space-between;gap:8px;align-items:center}.class-trial-subject span{color:#475569;font-size:12px}.class-trial-subject b{white-space:nowrap}
 .class-trial-section{border:1px solid #e5e7eb;border-radius:14px;padding:10px;background:#fff;margin-bottom:10px}.class-trial-section-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}.class-trial-section-title select{width:auto;max-width:52%;padding:7px 9px}
 @media(max-width:520px){.class-trial-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.class-trial-subjects{grid-template-columns:1fr}.class-trial-section-title{align-items:flex-start;flex-direction:column}.class-trial-section-title select{width:100%;max-width:none}}
 
-/* ===== v7.6.26 Otomatik yerleştirme ve cinsiyet kontrollü karıştırma ===== */
+/* ===== v7.6.27 Otomatik yerleştirme ve cinsiyet kontrollü karıştırma ===== */
 .seating-auto-panel{display:grid;grid-template-columns:1fr minmax(180px,1.35fr) 1fr;gap:8px;align-items:end;margin:10px 0 5px}
 .seating-auto-panel label{min-width:0;font-size:12px;color:#475569}.seating-auto-panel select,.seating-auto-panel button{width:100%;box-sizing:border-box}
 .seating-rule-note{margin:0 0 9px;color:#64748b}.seating-gender-list{display:grid;gap:8px;margin-top:10px}.seating-gender-list label{display:grid;grid-template-columns:minmax(0,1fr) 140px;gap:8px;align-items:center;border:1px solid #e2e8f0;border-radius:10px;padding:8px}.seating-gender-list select{width:100%;box-sizing:border-box}.seating-gender-actions{display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-top:12px}
@@ -1645,7 +1647,7 @@ button.dutyPrimaryV748{
 .trial-penalty-options{margin-top:10px}
 .trial-penalty-options select{width:100%}
 
-/* v7.6.26 — Deneme formu temiz yeniden kurulum */
+/* v7.6.27 — Deneme formu temiz yeniden kurulum */
 .trial-form-clean{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .trial-form-clean .trial-field{display:grid;gap:6px;min-width:0}
 .trial-form-clean .trial-field.full,.trial-form-clean .trial-penalty-box{grid-column:1/-1}
@@ -1660,7 +1662,7 @@ button.dutyPrimaryV748{
 @media(max-width:700px){.trial-form-clean{grid-template-columns:1fr}.trial-form-clean .trial-field.full,.trial-form-clean .trial-penalty-box{grid-column:1}.trial-form-clean .trial-date-button{height:48px}}
 </style>
 <style>
-/* ===== v7.6.26 Bakım sürümü: iPhone zaman alanları + 3x2 sekmeler ===== */
+/* ===== v7.6.27 Bakım sürümü: iPhone zaman alanları + 3x2 sekmeler ===== */
 .schedule-time-field{display:grid;gap:4px;min-width:0}.schedule-time-field small{font-size:10px;color:#64748b;font-weight:800}.schedule-time-field input{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
 .dutyEditGrid,.dutyEditGrid .timePair,.dutyEditGrid .timePair>label{min-width:0!important;max-width:100%!important;box-sizing:border-box!important}.dutyEditGrid .timePair{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:10px!important;width:100%!important}.dutyEditGrid .timePair input[type="time"]{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;text-align:center!important}
 @media(max-width:760px){
@@ -1702,7 +1704,7 @@ button.dutyPrimaryV748{
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.26</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.27</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1711,9 +1713,9 @@ button.dutyPrimaryV748{
     <b id="headerTeacherName">Öğretmen Profili</b>
     <span id="headerSchoolName">Profil bilgisi ekleyin</span>
   </div>
-  <button class="profileScheduleBtn" onclick="event.stopPropagation();openSchedule()" aria-label="Ders Programı">
+  <button class="profileScheduleBtn" onclick="event.stopPropagation();openQuickLesson()" aria-label="Hızlı Ders">
     <span class="psIcon">📅</span>
-    <span class="psText"><b>Ders Programı</b><small id="profileNextLesson">Programı aç</small></span>
+    <span class="psText"><b>Hızlı Ders</b><small id="profileNextLesson">Dersi hazırla</small></span>
   </button><button class="profileDutyBtn" onclick="event.stopPropagation();openDutySchedule()" aria-label="Nöbet Programı"><span class="pdIcon">🛡️</span><span class="pdText"><b>Nöbet</b><small id="profileDutyStatus">Bugün nöbet yok</small></span></button>
 </div>
 <select id="periodSelect" class="mobile-period" onchange="changePeriod(this.value)"><option value="1">1. Dönem</option><option value="2">2. Dönem</option></select>
@@ -1992,7 +1994,15 @@ function scheduleNowInfo(now=new Date()){
   return {type:"done",text:"Bugünkü derslerin tamamlandı."};
 }
 function formatScheduleCountdown(mins){mins=Math.max(0,Number(mins)||0);if(mins<60)return `${mins} dk sonra`;const hh=Math.floor(mins/60),mm=mins%60;return mm?`${hh} sa ${mm} dk sonra`:`${hh} sa sonra`;}
-function updateProfileNextLesson(){const node=el("profileNextLesson");if(!node||!settings?.schedule)return;const x=scheduleNowInfo();const e=x.entry||x.lesson||{};if(x.type==="now")node.textContent=`Şimdi: ${e.className||""}${e.course?" · "+e.course:""}`;else if(x.type==="next")node.textContent=`${e.className||"Sıradaki ders"}${x.start?" · "+x.start:""} · ${formatScheduleCountdown(x.minutesUntil??x.minutes??0)}`;else node.textContent=x.text||"Programı aç";}
+function classByScheduleName(className){return state.classes.find(c=>normName(c.name)===normName(className))||null}
+function homeworkDueOn(c,date){return c?(c.homeworks||[]).filter(h=>String(h.period||"1")===String(currentPeriod)&&h.due===date):[]}
+function quickLessonContext(now=new Date()){const info=scheduleNowInfo(now), e=info.entry||info.lesson||{}, c=classByScheduleName(e.className||"");return {info,e,c,today:localISODate(now)}}
+function updateProfileNextLesson(){const node=el("profileNextLesson");if(!node||!settings?.schedule)return;const q=quickLessonContext(),x=q.info,e=q.e,due=q.c?homeworkDueOn(q.c,q.today):[];const hw=due.length?` · 📚 ${due.length} ödev`:"";if(x.type==="now")node.textContent=`Şimdi: ${e.className||""}${e.course?" · "+e.course:""}${hw}`;else if(x.type==="next")node.textContent=`${e.className||"Sıradaki ders"}${x.start?" · "+x.start:""} · ${formatScheduleCountdown(x.minutesUntil??x.minutes??0)}${hw}`;else node.textContent=x.text||"Dersi hazırla";}
+function quickUpcomingHomeworkHTML(c,today){if(!c)return "";const base=new Date(today+"T12:00:00"), rows=(c.homeworks||[]).filter(h=>String(h.period||"1")===String(currentPeriod)&&h.due&&h.due>today).map(h=>({h,days:Math.round((new Date(h.due+"T12:00:00")-base)/86400000)})).filter(x=>x.days<=3).sort((a,b)=>a.h.due.localeCompare(b.h.due));if(!rows.length)return "";return `<div class="quick-upcoming"><b>Yaklaşan ödev teslimleri</b>${rows.map(x=>`<div class="quick-upcoming-row"><b>${esc(x.h.name)}</b><small>${x.days===1?"Yarın":x.days+" gün sonra"} · ${esc(x.h.due)}</small></div>`).join("")}</div>`}
+function openQuickLesson(){const q=quickLessonContext(new Date()),x=q.info,e=q.e,c=q.c;el("modalTitle").textContent="Hızlı Ders";el("modalSubtitle").textContent="Ders programı · ödev kontrolü";if(x.type!=="now"&&x.type!=="next"){el("modalBody").innerHTML=`<div class="empty">${esc(x.text||"Şu anda hazırlanacak ders görünmüyor.")}</div><div class="modal-actions"><button onclick="openSchedule()">Ders Programını Aç</button></div>`;el("modal").classList.add("open");return;}const mode=x.type==="now"?"ŞU ANKİ DERS":"SIRADAKİ DERS",p=x.period||{},due=c?homeworkDueOn(c,q.today):[];const dueHTML=due.length?`<div><b>📚 Bugün kontrol edilecek ${due.length} ödev var</b>${due.map(h=>`<div class="quick-homework"><b>${esc(h.name)}</b><small>Son teslim / kontrol günü: bugün</small><button onclick="openQuickHomework('${c.id}','${h.id}')">Ödev Kontrolünü Aç</button></div>`).join("")}</div>`:`<div class="card" style="margin-top:10px"><b>✓ Bugün kontrol edilecek ödev yok</b><div class="tiny">Bu sınıfta son teslim tarihi bugün olan ödev bulunmuyor.</div></div>`;el("modalBody").innerHTML=`<div class="quick-lesson-hero"><div class="ql-kicker">${mode}</div><div class="ql-title">${esc(e.className||"")} ${e.course?"· "+esc(e.course):""}</div><div class="ql-sub">${esc(p.start||"")}–${esc(p.end||"")}${x.type==="now"?` · ${x.minutesLeft} dk kaldı`:` · ${formatScheduleCountdown(x.minutesUntil||0)}`}</div></div>${c?`<div class="quick-lesson-actions"><button onclick="openQuickClass('${c.id}')">Sınıfı Aç</button><button class="secondary" onclick="openSchedule()">Ders Programı</button></div>${dueHTML}${quickUpcomingHomeworkHTML(c,q.today)}`:`<div class="card"><b>${esc(e.className||"Bu sınıf")} uygulamada kayıtlı değil.</b><div class="tiny">Hızlı ödev kontrolü için sınıfı Öğrenci Takip Sistemi'ne ekleyin.</div></div><div class="modal-actions"><button class="secondary" onclick="openSchedule()">Ders Programı</button></div>`}`;el("modal").classList.add("open");}
+function openQuickClass(cid){const c=state.classes.find(x=>x.id===cid);if(!c)return;currentClassId=c.id;save();closeModal();render();}
+function openQuickHomework(cid,hid){const c=state.classes.find(x=>x.id===cid);if(!c)return;currentClassId=c.id;save();render();openHomework(hid);}
+
 function scheduleNowHTML(){
   const info=scheduleNowInfo(new Date());
   if(info.type==="off")return `<div class="schedule-now-card quiet"><b>Bugün</b><span>Ders görünmüyor.</span></div>`;
@@ -4222,7 +4232,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.26",
+    appVersion:"v7.6.27",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4233,7 +4243,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.26",
+    appVersion:"v7.6.27",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4541,7 +4551,7 @@ window.addEventListener("focus",()=>{try{updateProfileNextLesson()}catch(e){};tr
 #lockScreen .lockbox{max-height:calc(100dvh - 40px);overflow:auto;-webkit-overflow-scrolling:touch}
 html.app-locked,body.app-locked{overflow:hidden!important;height:100%!important;touch-action:none!important}
 
-/* ===== v7.6.26 Sınıf Oturma Planı ===== */
+/* ===== v7.6.27 Sınıf Oturma Planı ===== */
 .class-top-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
 .seating-config{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px}
 .seating-config label{min-width:0}
