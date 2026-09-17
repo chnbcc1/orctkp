@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7-6-26-student-dashboard";
+const CACHE="ogrenci-takip-v7-6-29-readable-alerts";
 const ASSETS=[
   "./",
   "./index.html",
