@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7-6-29-readable-alerts";
+const CACHE="ogrenci-takip-v7-6-30-modal-nav-lock";
 const ASSETS=[
   "./",
   "./index.html",
