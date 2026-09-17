@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.31</title>
+<title>Öğrenci Takip Sistemi v7.6.32</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -1734,7 +1734,7 @@ button.dutyPrimaryV748{
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.31</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.32</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1936,8 +1936,8 @@ function normalizeSettings(s){
   s.schedule=normalizeSchedule(s.schedule);
   return s
 }
-function save(){state.currentClassId=currentClassId;state.currentPeriod=currentPeriod;localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
-function saveSettings(){localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings))}
+function save(){state.currentClassId=currentClassId;state.currentPeriod=currentPeriod;localStorage.setItem(STORAGE_KEY,JSON.stringify(state));modalDataRevision++}
+function saveSettings(){localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));modalDataRevision++}
 function normalize(s){
  if(!s||!Array.isArray(s.classes))s={classes:[]};
  s.classes.forEach(c=>{c.students||=[];c.students.forEach(st=>{st.gender=["female","male"].includes(st.gender)?st.gender:""});c.homeworks||=[];c.checks||={};c.notes||={};c.grades||={};c.parentMeetings=Array.isArray(c.parentMeetings)?c.parentMeetings:[];c.trials=Array.isArray(c.trials)?c.trials:[];c.seatingPlan=normalizeSeatingPlan(c.seatingPlan);c.trials.forEach(t=>{t.subjects=Array.isArray(t.subjects)&&t.subjects.length?t.subjects:["Türkçe","Matematik","Fen","Sosyal"];t.results=(t.results&&typeof t.results==="object")?t.results:{};t.wrongDivisor=Number(t.wrongDivisor||4)||4;t.wrongPenalty=(t.wrongPenalty!==false);});
@@ -1953,16 +1953,46 @@ function undo(){if(!undoStack.length)return;redoStack.push(JSON.stringify(state)
 function redo(){if(!redoStack.length)return;undoStack.push(JSON.stringify(state));state=normalize(JSON.parse(redoStack.pop()));currentClassId=state.currentClassId||(state.classes[0]?.id??null);currentPeriod=state.currentPeriod||"1";save();render();updateUndoRedo()}
 function cls(){return state.classes.find(c=>c.id===currentClassId)||null}
 function el(id){return document.getElementById(id)}
-let modalHistory=[]; let modalPageScrollY=0; let modalPageLocked=false;
+let modalHistory=[]; let modalPageScrollY=0; let modalPageLocked=false; let modalDataRevision=0;
 function modalUpdateBackButton(){const b=el("modalBackBtn");if(b)b.style.display=modalHistory.length?"inline-flex":"none"}
-function modalSnapshot(){const box=document.querySelector("#modal .modal-box");return {title:el("modalTitle")?.textContent||"",subtitle:el("modalSubtitle")?.textContent||"",body:el("modalBody")?.innerHTML||"",scrollTop:box?.scrollTop||0,activeStudentId:window._activeStudentModalId||null}}
+function modalSnapshot(){const box=document.querySelector("#modal .modal-box");return {title:el("modalTitle")?.textContent||"",subtitle:el("modalSubtitle")?.textContent||"",body:el("modalBody")?.innerHTML||"",scrollTop:box?.scrollTop||0,activeStudentId:window._activeStudentModalId||null,revision:modalDataRevision,classId:currentClassId,period:currentPeriod}}
 function modalPushCurrent(){if(!el("modal")?.classList.contains("open"))return;modalHistory.push(modalSnapshot());if(modalHistory.length>20)modalHistory.shift();modalUpdateBackButton()}
-function modalGoBack(){if(!modalHistory.length)return;const x=modalHistory.pop();el("modalTitle").textContent=x.title;el("modalSubtitle").textContent=x.subtitle;el("modalBody").innerHTML=x.body;window._activeStudentModalId=x.activeStudentId||null;el("modal").classList.add("open");modalUpdateBackButton();requestAnimationFrame(()=>{const box=document.querySelector("#modal .modal-box");if(box)box.scrollTop=x.scrollTop||0})}
+function findStudentIdFromSnapshot(x){const c=state.classes.find(z=>z.id===(x.classId||currentClassId));if(!c)return null;const sub=String(x.subtitle||"").trim();const byActive=x.activeStudentId&&c.students.find(st=>st.id===x.activeStudentId);if(byActive)return byActive.id;const st=c.students.find(st=>sub===`${st.number?st.number+" - ":""}${st.name}`||sub===st.name);return st?.id||null}
+function modalRefreshSnapshot(x){
+  try{
+    if(x.classId&&state.classes.some(c=>c.id===x.classId))currentClassId=x.classId;
+    if(x.period)currentPeriod=x.period;
+    const title=String(x.title||""); const sub=String(x.subtitle||"");
+    if(title==="Akıllı Uyarılar"){openSmartAlertsOverview();return true}
+    if(title==="Veli Görüşmeleri"){
+      const sid=findStudentIdFromSnapshot(x);
+      if(sid&& !/görüşme kaydı/i.test(sub)){openParentMeetings(sid);return true}
+      parentMeetingArchiveFilter=x.classId||"current";el("modalTitle").textContent="Veli Görüşmeleri";renderParentMeetingArchive();el("modal").classList.add("open");return true
+    }
+    if(title==="Nöbet Programı"){openDutySchedule();return true}
+    if(title==="Okul Nöbeti"){openSchoolCalendar();return true}
+    if(title==="Pansiyon Nöbeti"){openBoardingSettings();return true}
+    if(title==="Nöbet Programı Bilgileri"){openDutySettings();return true}
+    if(title==="Hızlı Ders"){openQuickLesson();return true}
+    if(title==="Ders Programı"){openSchedule();return true}
+    if(title==="Program Bilgileri"){openScheduleSettings();return true}
+    if(title==="Eski Programlar"){openScheduleArchive();return true}
+    if(title==="Sınıf Oturma Planı"){openSeatingPlan();return true}
+    if(title==="Cinsiyetleri Düzenle"){openSeatingGenderEditor();return true}
+    if(title==="Sınıf Deneme Analizi"){openClassTrialAnalysis();return true}
+    if(title==="Deneme Katılım Takibi"){openTrialAttendanceTracking();return true}
+    if(title==="Deneme Raporları"){openTrialReportCenter();return true}
+    const sid=findStudentIdFromSnapshot(x);
+    if(sid&&x.activeStudentId){openStudent(sid);return true}
+  }catch(err){console.warn("Modal canlı geri yenileme:",err)}
+  return false
+}
+function modalGoBack(){if(!modalHistory.length)return;const x=modalHistory.pop();const needsRefresh=x.revision!==modalDataRevision;let refreshed=false;if(needsRefresh)refreshed=modalRefreshSnapshot(x);if(!refreshed){el("modalTitle").textContent=x.title;el("modalSubtitle").textContent=x.subtitle;el("modalBody").innerHTML=x.body;window._activeStudentModalId=x.activeStudentId||null;el("modal").classList.add("open")}modalUpdateBackButton();requestAnimationFrame(()=>{const box=document.querySelector("#modal .modal-box");if(box)box.scrollTop=x.scrollTop||0})}
 function lockModalPage(){if(modalPageLocked)return;modalPageScrollY=window.scrollY||document.documentElement.scrollTop||0;document.body.style.position="fixed";document.body.style.top=`-${modalPageScrollY}px`;document.body.style.left="0";document.body.style.right="0";document.body.style.width="100%";document.body.classList.add("modal-page-locked");modalPageLocked=true}
 function unlockModalPage(){if(!modalPageLocked)return;document.body.classList.remove("modal-page-locked");document.body.style.position="";document.body.style.top="";document.body.style.left="";document.body.style.right="";document.body.style.width="";modalPageLocked=false;window.scrollTo(0,modalPageScrollY)}
 function closeModal(){window._activeStudentModalId=null;modalHistory=[];modalUpdateBackButton();const m=el("modal");if(m)m.classList.remove("open");unlockModalPage()}
 
-// v7.6.31 — Modal geri geçmişi ve iPhone arka plan kaydırma kilidi
+// v7.6.32 — Canlı yenilenen modal geri geçmişi + iPhone arka plan kaydırma kilidi
 document.addEventListener("click",function(e){
   const m=el("modal"); if(!m)return;
   const t=e.target.closest("button,a,[onclick]");
@@ -4299,7 +4329,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.31",
+    appVersion:"v7.6.32",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4310,7 +4340,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.31",
+    appVersion:"v7.6.32",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
