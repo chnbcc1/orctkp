@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7.6.33-live-back-nav";
+const CACHE="ogrenci-takip-v7.6.34-daily-teacher-panel";
 const ASSETS=[
   "./",
   "./index.html",
