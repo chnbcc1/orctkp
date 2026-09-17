@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7-6-22-seating-shuffle";
+const CACHE="ogrenci-takip-v7-6-25-seating-question-ui";
 const ASSETS=[
   "./",
   "./index.html",
