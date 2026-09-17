@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.36</title>
+<title>Öğrenci Takip Sistemi v7.6.37</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -473,7 +473,7 @@ input,select,textarea,button{max-width:100%}
 .smart-overview-head{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
 .all-parent-meeting-card{padding:13px}.all-parent-meeting-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}.all-parent-meeting-chip{font-size:10px;background:#f1f5f9;color:#475569;border-radius:999px;padding:4px 7px}
 
-/* ===== v7.6.36 Günlük Öğretmen Paneli ===== */
+/* ===== v7.6.37 Günlük Öğretmen Paneli ===== */
 .today-shortcut{grid-column:1/-1;background:#f8fbff;border-color:#bfdbfe}
 .today-panel-grid{display:grid;gap:10px}
 .today-card{border:1px solid var(--border);border-radius:16px;padding:13px;background:#fff;color:var(--text)}
@@ -722,7 +722,7 @@ body.modal-page-locked{overflow:hidden!important;overscroll-behavior:none;touch-
 #modal .modal-box{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
 @media(max-width:600px){.modal-head{gap:8px}.modal-nav-actions{gap:6px}.modal-nav-actions button{padding:10px 12px}}
 
-/* ===== v7.6.36 Kompakt Sınıf Özeti ===== */
+/* ===== v7.6.37 Kompakt Sınıf Özeti ===== */
 .compact-class-summary{margin-bottom:14px;padding:14px 16px;background:linear-gradient(180deg,#fbfcff,#f7f9fd);border:1px solid var(--border);border-radius:16px}
 .compact-class-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .compact-class-head h1{margin:0;font-size:24px}.compact-class-head .tiny{margin-top:2px}
@@ -743,7 +743,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 }
 @media(max-width:390px){.compact-stat span{font-size:8px}.compact-stat b{font-size:16px}.compact-class-head .class-top-actions button{padding:6px 7px!important;font-size:10px!important}}
 
-/* ===== v7.6.36 Sınıf Kontrol Merkezi + Canlı Bugün ===== */
+/* ===== v7.6.37 Sınıf Kontrol Merkezi + Canlı Bugün ===== */
 .class-module-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:12px}
 .class-module-btn{min-width:0;min-height:66px;border:1px solid #dce4ef;background:#fff;color:var(--text);border-radius:12px;padding:8px 5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:none}
 .class-module-btn span{font-size:18px;line-height:1}.class-module-btn b{font-size:10px}.class-module-btn em{font-style:normal;font-size:12px;font-weight:800;color:#1d4ed8}
@@ -1748,6 +1748,19 @@ button.dutyPrimaryV748{
   .dutyEditGrid{width:100%!important;overflow:hidden!important}.dutyEditGrid .timePair{gap:8px!important}.dutyEditGrid .timePair>label{overflow:hidden!important}.dutyEditGrid .timePair input[type="time"]{height:50px!important;padding:8px 5px!important;font-size:16px!important;-webkit-appearance:none;appearance:none}
 }
 </style>
+<style id="v7637-class-module-css">
+/* v7.6.37 — Ana sayfa yalnızca kontrol merkezi; çalışma modülleri bağımsız ekranda açılır. */
+#classView > .panel{display:none!important}
+.class-module-overlay{display:none;position:fixed;inset:0;z-index:8500;background:#f6f8fc;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:max(12px,env(safe-area-inset-top)) 12px max(18px,env(safe-area-inset-bottom));box-sizing:border-box}
+.class-module-overlay.open{display:block}
+.class-module-shell{width:min(1050px,100%);margin:0 auto}
+.class-module-head{position:sticky;top:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(246,248,252,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:8px 2px 12px;margin-bottom:8px;border-bottom:1px solid #dce3ed}
+.class-module-head strong{font-size:22px;color:#172033}.class-module-head .tiny{margin-top:2px}
+.class-module-body>.panel{display:block!important}
+.class-module-body .panel{padding-bottom:24px}
+body.class-module-page-open{overflow:hidden}
+@media(max-width:600px){.class-module-overlay{padding-left:10px;padding-right:10px}.class-module-head strong{font-size:20px}.class-module-head button{padding:9px 12px}.class-module-body .toolbar{margin-top:4px}}
+</style>
 </head>
 <body>
 
@@ -1775,7 +1788,7 @@ button.dutyPrimaryV748{
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.36</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.37</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1895,6 +1908,16 @@ button.dutyPrimaryV748{
 </main>
 </div>
 
+<div id="classModuleOverlay" class="class-module-overlay" aria-hidden="false">
+  <div class="class-module-shell">
+    <div class="class-module-head">
+      <div><strong id="classModuleTitle">Sınıf Modülü</strong><div class="tiny" id="classModuleSubtitle"></div></div>
+      <button class="secondary" onclick="closeClassModule()">← Geri</button>
+    </div>
+    <div id="classModuleBody" class="class-module-body"></div>
+  </div>
+</div>
+
 <div id="modal" class="modal" onclick="if(event.target===this)closeModal()"><div class="modal-box"><div class="modal-head"><div><strong id="modalTitle"></strong><div class="tiny" id="modalSubtitle"></div></div><div class="modal-nav-actions"><button id="modalBackBtn" class="secondary" onclick="modalGoBack()" style="display:none">← Geri</button><button class="secondary" onclick="closeModal()">Kapat</button></div></div><div class="modal-body" id="modalBody"></div></div></div>
 
 <script>
@@ -1905,11 +1928,40 @@ function switchTab(id){
   document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===id));
   document.querySelectorAll(".panel").forEach(x=>x.classList.toggle("active",x.id===id));
 }
+let activeClassModule=null;
+const classModuleTitles={students:"👥 Öğrenciler",homeworks:"📚 Ödevler",grades:"📝 Notlar",trials:"📊 Denemeler",reports:"📄 Rapor"};
 function openClassModule(id){
-  if(id==="matrix")return;
-  switchTab(id);
-  const p=el(id); if(p) requestAnimationFrame(()=>p.scrollIntoView({behavior:"smooth",block:"start"}));
+  if(id==="matrix"||!classModuleTitles[id])return;
+  const panel=el(id), overlay=el("classModuleOverlay"), body=el("classModuleBody");
+  if(!panel||!overlay||!body)return;
+  if(activeClassModule&&activeClassModule!==id) closeClassModule(false);
+  activeClassModule=id;
+  el("classModuleTitle").textContent=classModuleTitles[id];
+  const c=cls(); el("classModuleSubtitle").textContent=(c?c.name:"Sınıf")+" · "+currentPeriod+". Dönem";
+  panel.classList.add("active","class-module-active-panel");
+  body.appendChild(panel);
+  overlay.classList.add("open");
+  document.body.classList.add("class-module-page-open");
+  overlay.scrollTop=0;
+  if(id==="students")renderStudents();
+  else if(id==="homeworks")renderHomeworks();
+  else if(id==="grades")renderGrades();
+  else if(id==="trials")renderTrials();
+  else if(id==="reports")renderReport();
 }
+function closeClassModule(scrollBack=true){
+  const overlay=el("classModuleOverlay"), body=el("classModuleBody"), host=el("classView");
+  if(activeClassModule){
+    const panel=el(activeClassModule);
+    if(panel&&host){panel.classList.remove("class-module-active-panel");host.appendChild(panel)}
+  }
+  activeClassModule=null;
+  if(body)body.innerHTML="";
+  if(overlay)overlay.classList.remove("open");
+  document.body.classList.remove("class-module-page-open");
+  if(scrollBack)requestAnimationFrame(()=>el("currentClassTitle")?.scrollIntoView({block:"start"}));
+}
+
 
 async function tryLocalImageOCR(file){
   if(!("TextDetector" in window)) throw new Error("Bu tarayıcı yerel OCR TextDetector özelliğini desteklemiyor.");
@@ -2014,7 +2066,7 @@ function modalRefreshSnapshot(x){
     const title=String(x.title||""); const sub=String(x.subtitle||"");
     if(title==="Günlük Öğretmen Paneli"){openDailyTeacherPanel();return true}
     if(title==="Akıllı Uyarılar"){openSmartAlertsOverview();return true}
-    // v7.6.36 — Akıllı uyarı alt listeleri ve ana eksik ödev listesi geri dönüşte canlı hesaplanır.
+    // v7.6.37 — Akıllı uyarı alt listeleri ve ana eksik ödev listesi geri dönüşte canlı hesaplanır.
     if(title==="Eksik Ödevi Olan Öğrenciler"){openMissingStudents();return true}
     const smartAlertTitleMap={
       "Bugün Kontrol Edilecek Ödevler":"dueToday",
@@ -2055,7 +2107,7 @@ function lockModalPage(){if(modalPageLocked)return;modalPageScrollY=window.scrol
 function unlockModalPage(){if(!modalPageLocked)return;document.body.classList.remove("modal-page-locked");document.body.style.position="";document.body.style.top="";document.body.style.left="";document.body.style.right="";document.body.style.width="";modalPageLocked=false;window.scrollTo(0,modalPageScrollY)}
 function closeModal(){window._activeStudentModalId=null;modalHistory=[];modalUpdateBackButton();const m=el("modal");if(m)m.classList.remove("open");unlockModalPage()}
 
-// v7.6.36 — Canlı yenilenen modal geri geçmişi + iPhone arka plan kaydırma kilidi
+// v7.6.37 — Canlı yenilenen modal geri geçmişi + iPhone arka plan kaydırma kilidi
 document.addEventListener("click",function(e){
   const m=el("modal"); if(!m)return;
   const t=e.target.closest("button,a,[onclick]");
@@ -4433,7 +4485,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.36",
+    appVersion:"v7.6.37",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4444,7 +4496,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.36",
+    appVersion:"v7.6.37",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
