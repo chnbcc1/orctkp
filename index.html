@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.32</title>
+<title>Öğrenci Takip Sistemi v7.6.33</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -1734,7 +1734,7 @@ button.dutyPrimaryV748{
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.32</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.33</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1964,6 +1964,19 @@ function modalRefreshSnapshot(x){
     if(x.period)currentPeriod=x.period;
     const title=String(x.title||""); const sub=String(x.subtitle||"");
     if(title==="Akıllı Uyarılar"){openSmartAlertsOverview();return true}
+    // v7.6.33 — Akıllı uyarı alt listeleri ve ana eksik ödev listesi geri dönüşte canlı hesaplanır.
+    if(title==="Eksik Ödevi Olan Öğrenciler"){openMissingStudents();return true}
+    const smartAlertTitleMap={
+      "Bugün Kontrol Edilecek Ödevler":"dueToday",
+      "Yaklaşan Ödev Teslimleri":"upcomingDue",
+      "Üst Üste 3 Ödevi Eksik Olanlar":"streak",
+      "Düşük Ödev Tamamlama":"lowCompletion",
+      "Eksik Not Girişi":"missingGrade",
+      "Not Ortalaması 50 Altında":"lowGrade",
+      "Denemelere Düzenli Katılmayanlar":"trialAbsence",
+      "Deneme Netinde Belirgin Düşüş":"trialDecline"
+    };
+    if(smartAlertTitleMap[title]){openSmartAlert(smartAlertTitleMap[title]);return true}
     if(title==="Veli Görüşmeleri"){
       const sid=findStudentIdFromSnapshot(x);
       if(sid&& !/görüşme kaydı/i.test(sub)){openParentMeetings(sid);return true}
@@ -1992,7 +2005,7 @@ function lockModalPage(){if(modalPageLocked)return;modalPageScrollY=window.scrol
 function unlockModalPage(){if(!modalPageLocked)return;document.body.classList.remove("modal-page-locked");document.body.style.position="";document.body.style.top="";document.body.style.left="";document.body.style.right="";document.body.style.width="";modalPageLocked=false;window.scrollTo(0,modalPageScrollY)}
 function closeModal(){window._activeStudentModalId=null;modalHistory=[];modalUpdateBackButton();const m=el("modal");if(m)m.classList.remove("open");unlockModalPage()}
 
-// v7.6.32 — Canlı yenilenen modal geri geçmişi + iPhone arka plan kaydırma kilidi
+// v7.6.33 — Canlı yenilenen modal geri geçmişi + iPhone arka plan kaydırma kilidi
 document.addEventListener("click",function(e){
   const m=el("modal"); if(!m)return;
   const t=e.target.closest("button,a,[onclick]");
@@ -2003,6 +2016,16 @@ document.addEventListener("click",function(e){
   if(/closeModal\s*\(/.test(oc))return;
   // Mevcut karttan başka bir kart/ayrıntı açılıyorsa önceki görünümü sakla.
   if(/(?:open|show)[A-ZÇĞİÖŞÜa-zçğıöşü0-9_]*\s*\(/.test(oc) && !/(vazgeç|dön)/i.test(txt)) modalPushCurrent();
+  // Kaydet/Sil gibi işlemler formdan bir önceki listeyi doğrudan yeniden açabilir.
+  // İşlem bittikten sonra geçmişin tepesinde aynı ekran kaldıysa onu kaldır; böylece Geri tek basışta gerçek üst ekrana döner.
+  if(/(?:save|delete|remove|update)[A-ZÇĞİÖŞÜa-zçğıöşü0-9_]*\s*\(/i.test(oc)){
+    setTimeout(()=>{
+      if(!modalHistory.length||!el("modal")?.classList.contains("open"))return;
+      const top=modalHistory[modalHistory.length-1];
+      const curTitle=el("modalTitle")?.textContent||"",curSub=el("modalSubtitle")?.textContent||"";
+      if(top.title===curTitle&&top.subtitle===curSub){modalHistory.pop();modalUpdateBackButton()}
+    },0);
+  }
 },true);
 const modalObserver=new MutationObserver(()=>{const m=el("modal");if(!m)return;if(m.classList.contains("open")){lockModalPage();modalUpdateBackButton()}else unlockModalPage()});
 window.addEventListener("DOMContentLoaded",()=>{const m=el("modal");if(m)modalObserver.observe(m,{attributes:true,attributeFilter:["class"]})});
@@ -4329,7 +4352,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.32",
+    appVersion:"v7.6.33",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4340,7 +4363,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.32",
+    appVersion:"v7.6.33",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
