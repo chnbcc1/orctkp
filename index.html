@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.16</title>
+<title>Öğrenci Takip Sistemi v7.6.17</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -633,7 +633,7 @@ input,select,textarea,button{max-width:100%}
  }
 }
 
-/* v7.6.16 — CLEAN BASE v7.6.16: iPhone D/Y/B strict 3-column grid */
+/* v7.6.17 — CLEAN BASE v7.6.17: iPhone D/Y/B strict 3-column grid */
 @media (max-width:700px){
   #modalBody .trial-student-card{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;overflow:hidden!important;}
   #modalBody .trial-subject-block{width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;overflow:hidden!important;padding:10px!important;}
@@ -644,10 +644,21 @@ input,select,textarea,button{max-width:100%}
 }
 
 
-/* v7.6.16 Deneme canlı net ve iPhone odak görünümü */
+/* v7.6.17 Deneme canlı net ve iPhone odak görünümü */
 #modalBody .trial-score-input:focus{outline:none!important;box-shadow:none!important;border-color:#d7dee8!important;-webkit-tap-highlight-color:transparent!important;}
 #modalBody .trial-subject-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:2px;}
 #modalBody .trial-subject-net{font-weight:800;font-size:14px;white-space:nowrap;color:#334155;}
+
+/* v7.6.17 — Öğrenci deneme gelişim özeti ve grafik */
+.trial-history-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.trial-history-stat{background:#f8fafc;border:1px solid #e5e7eb;border-radius:12px;padding:10px;text-align:center;min-width:0}
+.trial-history-stat span{display:block;font-size:10px;color:#64748b}.trial-history-stat b{display:block;margin-top:3px;font-size:17px;white-space:nowrap}
+.trial-chart-card{border:1px solid #e5e7eb;border-radius:14px;padding:10px;background:#fff;margin-bottom:10px}
+.trial-chart-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}.trial-chart-head select{width:auto;max-width:48%;padding:7px 9px}
+.trial-chart-wrap{width:100%;overflow:hidden}.trial-chart-wrap svg{display:block;width:100%;height:auto}.trial-chart-empty{padding:22px 8px;text-align:center;color:#64748b;font-size:12px}
+.trial-history-item{border:1px solid #e5e7eb;border-radius:12px;padding:11px;background:#fff}.trial-history-subjects{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}.trial-history-chip{font-size:11px;background:#f1f5f9;border-radius:999px;padding:4px 7px;color:#334155}
+@media(max-width:520px){.trial-history-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.trial-history-stat{padding:8px 4px}.trial-history-stat b{font-size:15px}.trial-chart-head{align-items:flex-start;flex-direction:column}.trial-chart-head select{width:100%;max-width:none}}
+
 </style>
 
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
@@ -1614,7 +1625,7 @@ button.dutyPrimaryV748{
 .trial-penalty-options{margin-top:10px}
 .trial-penalty-options select{width:100%}
 
-/* v7.6.16 — Deneme formu temiz yeniden kurulum */
+/* v7.6.17 — Deneme formu temiz yeniden kurulum */
 .trial-form-clean{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .trial-form-clean .trial-field{display:grid;gap:6px;min-width:0}
 .trial-form-clean .trial-field.full,.trial-form-clean .trial-penalty-box{grid-column:1/-1}
@@ -1629,7 +1640,7 @@ button.dutyPrimaryV748{
 @media(max-width:700px){.trial-form-clean{grid-template-columns:1fr}.trial-form-clean .trial-field.full,.trial-form-clean .trial-penalty-box{grid-column:1}.trial-form-clean .trial-date-button{height:48px}}
 </style>
 <style>
-/* ===== v7.6.16 Bakım sürümü: iPhone zaman alanları + 3x2 sekmeler ===== */
+/* ===== v7.6.17 Bakım sürümü: iPhone zaman alanları + 3x2 sekmeler ===== */
 .schedule-time-field{display:grid;gap:4px;min-width:0}.schedule-time-field small{font-size:10px;color:#64748b;font-weight:800}.schedule-time-field input{width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
 .dutyEditGrid,.dutyEditGrid .timePair,.dutyEditGrid .timePair>label{min-width:0!important;max-width:100%!important;box-sizing:border-box!important}.dutyEditGrid .timePair{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:10px!important;width:100%!important}.dutyEditGrid .timePair input[type="time"]{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important;text-align:center!important}
 @media(max-width:760px){
@@ -1671,7 +1682,7 @@ button.dutyPrimaryV748{
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.16</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.17</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -3299,7 +3310,36 @@ function editTrialInfo(id){const t=trialList().find(x=>x.id===id);if(!t)return;e
 function toggleTrialEditPenaltyOptions(){const on=!!el('trialEditPenalty')?.checked;if(el('trialEditPenaltyText'))el('trialEditPenaltyText').textContent=on?'Evet':'Hayır';if(el('trialEditPenaltyOptions'))el('trialEditPenaltyOptions').style.display=on?'block':'none'}
 function saveTrialInfo(id){const t=trialList().find(x=>x.id===id);if(!t)return;t.name=el('trialEditName').value.trim()||t.name;t.date=el('trialEditDate').value||t.date;t.subjects=el('trialEditSubjects').value.split(',').map(x=>x.trim()).filter(Boolean);t.wrongPenalty=!!el('trialEditPenalty')?.checked;t.wrongDivisor=Number(el('trialEditDiv')?.value)||4;save();render();openTrial(id)}
 function deleteTrial(id){const t=trialList().find(x=>x.id===id);if(!t||!confirm(`${t.name} silinsin mi? Tüm öğrenci sonuçları da silinecek.`))return;pushUndo();cls().trials=trialList().filter(x=>x.id!==id);save();closeModal();render()}
-function openStudentTrials(sid){const c=cls(),st=c.students.find(x=>x.id===sid);if(!st)return;const arr=[...trialList(c)].sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')));el('modalTitle').textContent='Deneme Geçmişi';el('modalSubtitle').textContent=`${st.number?st.number+' - ':''}${st.name}`;el('modalBody').innerHTML=arr.length?`<div style="display:grid;gap:8px">${arr.map(t=>{const n=trialStudentTotal(t,sid),tr=trialTrend(t,sid);return `<div class="card" style="padding:12px"><div style="display:flex;justify-content:space-between;gap:8px"><div><b>${esc(t.name)}</b><div class="tiny">${esc(trialDateTR(t.date))}</div></div><div style="text-align:right"><b>${n===null?'Girmedi':n.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net'}</b><div class="tiny ${tr.cls}">${tr.text}</div></div></div>${n!==null?`<div class="tiny" style="margin-top:7px">${(t.subjects||[]).map(sub=>`${esc(sub)}: ${trialNet(t.results[sid]?.subjects?.[sub]?.correct,t.results[sid]?.subjects?.[sub]?.wrong,t.wrongDivisor,t.wrongPenalty!==false).toLocaleString('tr-TR',{maximumFractionDigits:2})}`).join(' · ')}</div>`:''}</div>`}).join('')}</div>`:'<div class="empty card">Bu sınıfta henüz deneme kaydı yok.</div>';el('modal').classList.add('open')}
+function trialHistoryValue(t,sid,metric){
+ if(metric==='total')return trialHasEnteredScore(t,sid)?trialStudentTotal(t,sid):null;
+ const r=t?.results?.[sid];if(!r||r.attended===false)return null;const x=r.subjects?.[metric];
+ if(!x||!['correct','wrong','blank'].some(k=>x[k]!==undefined&&x[k]!==null&&String(x[k]).trim()!==''))return null;
+ return trialNet(x.correct,x.wrong,t.wrongDivisor,t.wrongPenalty!==false)
+}
+function trialHistorySVG(sid,metric='total'){
+ const arr=[...trialList()].sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')));
+ const pts=arr.map(t=>({t,v:trialHistoryValue(t,sid,metric)})).filter(x=>x.v!==null&&Number.isFinite(x.v));
+ if(pts.length<2)return '<div class="trial-chart-empty">Grafik için en az iki denemede sonuç bulunmalı.</div>';
+ const W=640,H=220,L=42,R=18,T=18,B=42,vals=pts.map(x=>x.v),mn=Math.min(0,...vals),mx=Math.max(...vals),span=(mx-mn)||1;
+ const x=i=>L+(W-L-R)*(pts.length===1?0.5:i/(pts.length-1)), y=v=>T+(H-T-B)*(1-(v-mn)/span);
+ const poly=pts.map((p,i)=>`${x(i)},${y(p.v)}`).join(' ');let g='';
+ for(let i=0;i<4;i++){const yy=T+(H-T-B)*i/3,val=mx-(mx-mn)*i/3;g+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="#e5e7eb" stroke-width="1"/><text x="${L-6}" y="${yy+4}" text-anchor="end" font-size="10" fill="#64748b">${val.toLocaleString('tr-TR',{maximumFractionDigits:1})}</text>`}
+ const dots=pts.map((p,i)=>`<circle cx="${x(i)}" cy="${y(p.v)}" r="4" fill="currentColor"/><text x="${x(i)}" y="${Math.max(12,y(p.v)-8)}" text-anchor="middle" font-size="10" fill="#334155">${p.v.toLocaleString('tr-TR',{maximumFractionDigits:2})}</text><text x="${x(i)}" y="${H-16}" text-anchor="middle" font-size="9" fill="#64748b">${esc((p.t.name||'Deneme').slice(0,10))}</text>`).join('');
+ return `<div class="trial-chart-wrap"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Deneme gelişim grafiği" style="color:#2563eb">${g}<polyline points="${poly}" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${dots}</svg></div>`
+}
+function updateTrialHistoryChart(sid){const metric=el('trialHistoryMetric')?.value||'total',host=el('trialHistoryChart');if(host)host.innerHTML=trialHistorySVG(sid,metric)}
+function openStudentTrials(sid){
+ const c=cls(),st=c.students.find(x=>x.id===sid);if(!st)return;const arr=[...trialList(c)].sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')));
+ const scored=arr.map(t=>({t,n:trialHistoryValue(t,sid,'total')})).filter(x=>x.n!==null),vals=scored.map(x=>x.n),last=vals.length?vals[vals.length-1]:null,best=vals.length?Math.max(...vals):null,avg=vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length*100)/100:null;
+ let diff=null;if(vals.length>=2)diff=Math.round((vals[vals.length-1]-vals[vals.length-2])*100)/100;
+ const subjects=[...new Set(arr.flatMap(t=>t.subjects||[]))];
+ el('modalTitle').textContent='Deneme Geçmişi';el('modalSubtitle').textContent=`${st.number?st.number+' - ':''}${st.name}`;
+ if(!arr.length){el('modalBody').innerHTML='<div class="empty card">Bu sınıfta henüz deneme kaydı yok.</div>';el('modal').classList.add('open');return}
+ el('modalBody').innerHTML=`<div class="trial-history-summary"><div class="trial-history-stat"><span>SON NET</span><b>${last===null?'-':last.toLocaleString('tr-TR',{maximumFractionDigits:2})}</b></div><div class="trial-history-stat"><span>EN YÜKSEK</span><b>${best===null?'-':best.toLocaleString('tr-TR',{maximumFractionDigits:2})}</b></div><div class="trial-history-stat"><span>ORTALAMA</span><b>${avg===null?'-':avg.toLocaleString('tr-TR',{maximumFractionDigits:2})}</b></div></div>
+ <div class="trial-chart-card"><div class="trial-chart-head"><div><b>Gelişim Grafiği</b><div class="tiny">${diff===null?'Karşılaştırma için en az iki sonuç gerekir.':`Son denemeye göre <span class="${diff>0?'trend-up':diff<0?'trend-down':'trend-flat'}">${diff>0?'↑ +':diff<0?'↓ ':'→ '}${diff.toLocaleString('tr-TR',{maximumFractionDigits:2})} net</span>`}</div></div><select id="trialHistoryMetric" onchange="updateTrialHistoryChart('${sid}')"><option value="total">Toplam Net</option>${subjects.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('')}</select></div><div id="trialHistoryChart">${trialHistorySVG(sid,'total')}</div></div>
+ <div style="display:grid;gap:8px">${[...arr].reverse().map(t=>{const n=trialHistoryValue(t,sid,'total'),tr=trialTrend(t,sid);return `<div class="trial-history-item"><div style="display:flex;justify-content:space-between;gap:8px"><div><b>${esc(t.name)}</b><div class="tiny">${esc(trialDateTR(t.date))}</div></div><div style="text-align:right"><b>${n===null?(t.results?.[sid]?.attended===false?'Girmedi':'Sonuç yok'):n.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net'}</b><div class="tiny ${tr.cls}">${n===null?'—':tr.text}</div></div></div>${n!==null?`<div class="trial-history-subjects">${(t.subjects||[]).map(sub=>{const v=trialHistoryValue(t,sid,sub);return `<span class="trial-history-chip">${esc(sub)}: ${v===null?'-':v.toLocaleString('tr-TR',{maximumFractionDigits:2})}</span>`}).join('')}</div>`:''}</div>`}).join('')}</div>`;
+ el('modal').classList.add('open')
+}
 function exportTrialCSV(id){const c=cls(),t=trialList(c).find(x=>x.id===id);if(!t)return;const head=['No','Öğrenci','Katıldı',...t.subjects.flatMap(x=>[x+' Doğru',x+' Yanlış',x+' Boş',x+' Net']),'Toplam Net'];const rows=[head];c.students.forEach(st=>{const r=t.results[st.id],att=r?.attended!==false,n=trialStudentTotal(t,st.id),row=[st.number,st.name,att?'Evet':'Hayır'];t.subjects.forEach(sub=>{const x=r?.subjects?.[sub]||{};row.push(x.correct??'',x.wrong??'',x.blank??'',att?trialNet(x.correct,x.wrong,t.wrongDivisor,t.wrongPenalty!==false):'')});row.push(n===null?'':n);rows.push(row)});downloadBlob('\uFEFF'+rows.map(r=>r.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(';')).join('\n'),`${safe(c.name)}_${safe(t.name)}.csv`,'text/csv;charset=utf-8')}
 function openTrialCSVImport(){el('modalTitle').textContent='Deneme CSV İçe Aktar';el('modalSubtitle').textContent=cls().name;el('modalBody').innerHTML=`<div class="trial-import-help"><b>Kolay aktarım:</b> Önce bir denemeyi oluşturup “CSV Aktar” ile şablon alın. Excel’de doldurup CSV olarak kaydedin ve buradan seçin. Öğrenci eşleştirmesinde önce numara, sonra ad kullanılır.</div><label>Hedef Deneme<select id="trialImportTarget">${trialList().map(t=>`<option value="${t.id}">${esc(t.name)} · ${esc(t.date)}</option>`).join('')}</select></label><label style="margin-top:10px">CSV Dosyası<input id="trialCSVFile" type="file" accept=".csv,text/csv"></label><div class="modal-actions"><button onclick="importTrialCSV()">CSV'yi İçe Aktar</button><button class="secondary" onclick="closeModal()">Vazgeç</button></div>`;el('modal').classList.add('open')}
 function parseCSVLine(line,sep){let a=[],cur='',q=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(q&&line[i+1]==='"'){cur+='"';i++}else q=!q}else if(ch===sep&&!q){a.push(cur);cur=''}else cur+=ch}a.push(cur);return a}
@@ -3908,7 +3948,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.16",
+    appVersion:"v7.6.17",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -3919,7 +3959,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.16",
+    appVersion:"v7.6.17",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -3975,7 +4015,7 @@ render();
     swReloading=true;
     location.reload();
   });
-  navigator.serviceWorker.register("./sw.js?v=7.6.16",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.6.17",{updateViaCache:"none"}).then(reg=>{
     if(reg.waiting) reg.waiting.postMessage("SKIP_WAITING");
     reg.update().catch(()=>{});
     reg.addEventListener("updatefound",()=>{
