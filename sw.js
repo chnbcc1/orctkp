@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7-6-30-modal-nav-lock";
+const CACHE="ogrenci-takip-v7.6.31-modal-nav-lock";
 const ASSETS=[
   "./",
   "./index.html",
