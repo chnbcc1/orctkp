@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7.6.46-class-annual-plan";
+const CACHE="ogrenci-takip-v7.6.47-student-delete-parent-cleanup-live-class";
 const ASSETS=[
   "./",
   "./index.html",
