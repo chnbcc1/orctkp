@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7.6.43-compact-class-summary";
+const CACHE="ogrenci-takip-v7.6.44-alert-history-fix";
 const ASSETS=[
   "./",
   "./index.html",
