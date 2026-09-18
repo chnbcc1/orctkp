@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.44</title>
+<title>Öğrenci Takip Sistemi v7.6.45</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -473,7 +473,7 @@ input,select,textarea,button{max-width:100%}
 .smart-overview-head{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
 .all-parent-meeting-card{padding:13px}.all-parent-meeting-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}.all-parent-meeting-chip{font-size:10px;background:#f1f5f9;color:#475569;border-radius:999px;padding:4px 7px}
 
-/* ===== v7.6.44 Günlük Öğretmen Paneli ===== */
+/* ===== v7.6.45 Günlük Öğretmen Paneli ===== */
 .today-shortcut{grid-column:1/-1;background:#f8fbff;border-color:#bfdbfe}
 .today-panel-grid{display:grid;gap:10px}
 .today-card{border:1px solid var(--border);border-radius:16px;padding:13px;background:#fff;color:var(--text)}
@@ -722,7 +722,7 @@ body.modal-page-locked{overflow:hidden!important;overscroll-behavior:none;touch-
 #modal .modal-box{overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
 @media(max-width:600px){.modal-head{gap:8px}.modal-nav-actions{gap:6px}.modal-nav-actions button{padding:10px 12px}}
 
-/* ===== v7.6.44 Kompakt Sınıf Özeti ===== */
+/* ===== v7.6.45 Kompakt Sınıf Özeti ===== */
 .compact-class-summary{margin-bottom:14px;padding:14px 16px;background:linear-gradient(180deg,#fbfcff,#f7f9fd);border:1px solid var(--border);border-radius:16px}
 .compact-class-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .compact-class-head h1{margin:0;font-size:24px}.compact-class-head .tiny{margin-top:2px}
@@ -743,7 +743,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 }
 @media(max-width:390px){.compact-stat span{font-size:8px}.compact-stat b{font-size:16px}.compact-class-head .class-top-actions button{padding:6px 7px!important;font-size:10px!important}}
 
-/* ===== v7.6.44 Sınıf Kontrol Merkezi + Canlı Bugün ===== */
+/* ===== v7.6.45 Sınıf Kontrol Merkezi + Canlı Bugün ===== */
 .class-module-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:12px}
 .class-module-btn{min-width:0;min-height:66px;border:1px solid #dce4ef;background:#fff;color:var(--text);border-radius:12px;padding:8px 5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;box-shadow:none}
 .class-module-btn span{font-size:18px;line-height:1}.class-module-btn b{font-size:10px}.class-module-btn em{font-style:normal;font-size:12px;font-weight:800;color:#1d4ed8}
@@ -753,14 +753,16 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 @media(max-width:520px){.class-module-grid{gap:5px}.class-module-btn{min-height:61px;padding:7px 3px}.class-module-btn span{font-size:17px}.class-module-btn b{font-size:9px}.compact-stats.status-only{gap:6px}}
 
 
-/* ===== v7.6.44 Bugün okunabilirlik ayarı ===== */
+/* ===== v7.6.45 Bugün okunabilirlik ayarı ===== */
 .profileScheduleBtn #profileNextLesson{display:block;margin-top:5px;line-height:1.45}
 .profileScheduleBtn b,.profileScheduleBtn strong{line-height:1.3}
 .today-homework-row small{line-height:1.5;margin-top:5px}
 .today-homework-row b{line-height:1.4}
 @media(max-width:520px){.profileScheduleBtn #profileNextLesson{margin-top:6px;line-height:1.5}.today-card{padding:14px}.today-card p{margin-top:10px;line-height:1.65}.today-actions{margin-top:12px}}
 
-/* ===== v7.6.44 Ders Ayrıntısı dikey boşluk ===== */
+/* ===== v7.6.45 Yıllık Planlar ===== */
+.annual-source{margin-top:8px;font-size:12px;font-weight:700;color:#52606d}.annual-source.auto{color:#176b45}.annual-plan-row{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:8px}.annual-plan-row select{flex:1}.annual-import-grid{display:grid;gap:10px}.annual-week-meta{font-size:12px;color:#667085;margin-top:5px}
+/* ===== v7.6.45 Ders Ayrıntısı dikey boşluk ===== */
 .weekly-editor{margin-bottom:16px!important;}
 .weekly-editor + .modal-actions{margin-top:0!important;}
 
@@ -1761,7 +1763,7 @@ button.dutyPrimaryV748{
 }
 </style>
 <style id="v7638-class-module-css">
-/* v7.6.44 — Ana sayfa yalnızca kontrol merkezi; çalışma modülleri bağımsız ekranda açılır. */
+/* v7.6.45 — Ana sayfa yalnızca kontrol merkezi; çalışma modülleri bağımsız ekranda açılır. */
 #classView > .panel{display:none!important}
 .class-module-overlay{display:none;position:fixed;inset:0;z-index:8500;background:#f6f8fc;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:max(12px,env(safe-area-inset-top)) 12px max(18px,env(safe-area-inset-bottom));box-sizing:border-box}
 .class-module-overlay.open{display:block}
@@ -1771,14 +1773,14 @@ button.dutyPrimaryV748{
 .class-module-body>.panel{display:block!important}
 .class-module-body .panel{padding-bottom:24px}
 body.class-module-page-open{overflow:hidden}
-/* v7.6.44: bağımsız modül içinden açılan ayrıntı modalı her zaman modülün üstünde */
+/* v7.6.45: bağımsız modül içinden açılan ayrıntı modalı her zaman modülün üstünde */
 body.class-module-page-open #modal{z-index:9200!important}
 @media(max-width:700px){.layout{min-height:0!important}}
 @media(max-width:600px){.class-module-overlay{padding-left:10px;padding-right:10px}.class-module-head strong{font-size:20px}.class-module-head button{padding:9px 12px}.class-module-body .toolbar{margin-top:4px}}
 </style>
 
 <style id="v7640-spacing-fixes">
-/* v7.6.44 — Profil ve nöbet başlık/alt bilgi okunabilirliği */
+/* v7.6.45 — Profil ve nöbet başlık/alt bilgi okunabilirliği */
 #profileChip .profile-lines{line-height:1.25!important;}
 #profileChip .profile-lines span{display:block!important;margin-top:5px!important;line-height:1.35!important;}
 #profileChip .profileDutyBtn .pdText{line-height:1.2!important;}
@@ -1818,7 +1820,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </div>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.44</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.45</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2065,6 +2067,9 @@ function normalizeSettings(s){
   s.scheduleArchive=Array.isArray(s.scheduleArchive)?s.scheduleArchive:[];
   if(!s.schedule) s.schedule=defaultTeacherSchedule();
   s.schedule=normalizeSchedule(s.schedule);
+  s.annualPlans=Array.isArray(s.annualPlans)?s.annualPlans:[];
+  s.annualPlanMappings=s.annualPlanMappings||{};
+  s.weeklyOutcomes=s.weeklyOutcomes||{};
   return s
 }
 function save(){state.currentClassId=currentClassId;state.currentPeriod=currentPeriod;localStorage.setItem(STORAGE_KEY,JSON.stringify(state));modalDataRevision++}
@@ -2096,7 +2101,7 @@ function modalRefreshSnapshot(x){
     const title=String(x.title||""); const sub=String(x.subtitle||"");
     if(title==="Günlük Öğretmen Paneli"){openDailyTeacherPanel();return true}
     if(title==="Akıllı Uyarılar"){openSmartAlertsOverview();return true}
-    // v7.6.44 — Akıllı uyarı alt listeleri ve ana eksik ödev listesi geri dönüşte canlı hesaplanır.
+    // v7.6.45 — Akıllı uyarı alt listeleri ve ana eksik ödev listesi geri dönüşte canlı hesaplanır.
     if(title==="Eksik Ödevi Olan Öğrenciler"){openMissingStudents();return true}
     const smartAlertTitleMap={
       "Bugün Kontrol Edilecek Ödevler":"dueToday",
@@ -2137,7 +2142,7 @@ function lockModalPage(){if(modalPageLocked)return;modalPageScrollY=window.scrol
 function unlockModalPage(){if(!modalPageLocked)return;document.body.classList.remove("modal-page-locked");document.body.style.position="";document.body.style.top="";document.body.style.left="";document.body.style.right="";document.body.style.width="";modalPageLocked=false;window.scrollTo(0,modalPageScrollY)}
 function closeModal(){window._activeStudentModalId=null;modalHistory=[];modalUpdateBackButton();const m=el("modal");if(m)m.classList.remove("open");unlockModalPage()}
 
-// v7.6.44 — Canlı yenilenen modal geri geçmişi + iPhone arka plan kaydırma kilidi
+// v7.6.45 — Canlı yenilenen modal geri geçmişi + iPhone arka plan kaydırma kilidi
 document.addEventListener("click",function(e){
   const m=el("modal"); if(!m)return;
   const t=e.target.closest("button,a,[onclick]");
@@ -2247,9 +2252,58 @@ function weekRangeLabel(d=new Date()){
   return `${a} – ${b}`;
 }
 function weeklyOutcomeKey(className,course,d=new Date()){return `${normName(className||"")}|${normName(course||"")}|${weekStartISO(d)}`}
-function weeklyOutcomeGet(className,course,d=new Date()){
-  settings.weeklyOutcomes=settings.weeklyOutcomes||{}; return settings.weeklyOutcomes[weeklyOutcomeKey(className,course,d)]||{topic:"",outcome:"",note:""};
+function annualMapKey(className,course){return `${normName(className||"")}|${normName(course||"")}`}
+function annualPlanForLesson(className,course){
+  const id=settings.annualPlanMappings?.[annualMapKey(className,course)];
+  if(id)return (settings.annualPlans||[]).find(p=>p.id===id)||null;
+  const grade=String(className||"").match(/(\d{1,2})/)?.[1];
+  return grade?(settings.annualPlans||[]).find(p=>String(p.grade)===grade)||null:null;
 }
+function annualWeekForDate(plan,d=new Date()){
+  if(!plan)return null;const iso=localISODate(d);
+  return (plan.weeks||[]).find(w=>w.start&&w.end&&iso>=w.start&&iso<=w.end)||null;
+}
+function weeklyOutcomeGet(className,course,d=new Date()){
+  settings.weeklyOutcomes=settings.weeklyOutcomes||{};
+  const manual=settings.weeklyOutcomes[weeklyOutcomeKey(className,course,d)];
+  if(manual&&((manual.topic||"").trim()||(manual.outcome||"").trim()||(manual.note||"").trim()))return {...manual,source:"manual"};
+  const plan=annualPlanForLesson(className,course), aw=annualWeekForDate(plan,d);
+  if(aw)return {topic:aw.topic||"",outcome:aw.outcome||"",note:"",unit:aw.unit||"",source:"annual",planName:plan.name||"Yıllık Plan",weekLabel:aw.label||""};
+  return {topic:"",outcome:"",note:"",source:"none"};
+}
+
+function trMonthNo(name){const m={ocak:1,şubat:2,subat:2,mart:3,nisan:4,mayıs:5,mayis:5,haziran:6,temmuz:7,ağustos:8,agustos:8,eylül:9,eylul:9,ekim:10,kasım:11,kasim:11,aralık:12,aralik:12};return m[String(name||"").toLocaleLowerCase("tr-TR")]||0}
+function isoYMD(y,m,d){return `${y}-${String(m).padStart(2,"0")}-${String(d).padStart(2,"0")}`}
+function parseAnnualWeekLabel(txt){
+  txt=String(txt||"").replace(/\s+/g," ").trim();const wm=txt.match(/(\d+)\.\s*Hafta/i), year=2026;
+  const r=txt.match(/(\d{1,2})(?:\s+([A-Za-zÇĞİÖŞÜçğıöşü]+))?\s*[-–]\s*(\d{1,2})\s+([A-Za-zÇĞİÖŞÜçğıöşü]+)/i);if(!r)return null;
+  const d1=+r[1],d2=+r[3],m2=trMonthNo(r[4]);let m1=r[2]?trMonthNo(r[2]):m2;if(!m1||!m2)return null;
+  let y1=year,y2=year;if(m2<9)y2=2027;if(m1<9)y1=2027;
+  return {weekNo:wm?+wm[1]:0,start:isoYMD(y1,m1,d1),end:isoYMD(y2,m2,d2),label:txt};
+}
+async function readXlsxSheets(file){
+ const entries=await unzipEntries(await file.arrayBuffer()),decoder=new TextDecoder(),shared=entries["xl/sharedStrings.xml"]?parseShared(decoder.decode(entries["xl/sharedStrings.xml"])):[];
+ let names=[];try{const wb=new DOMParser().parseFromString(decoder.decode(entries["xl/workbook.xml"]),"application/xml");names=[...wb.querySelectorAll("sheet")].map((x,i)=>x.getAttribute("name")||`Sayfa ${i+1}`)}catch(e){}
+ const files=Object.keys(entries).filter(k=>/^xl\/worksheets\/sheet\d+\.xml$/.test(k)).sort((a,b)=>(+a.match(/sheet(\d+)/)[1])-(+b.match(/sheet(\d+)/)[1]));
+ return files.map((fn,i)=>{const doc=new DOMParser().parseFromString(decoder.decode(entries[fn]),"application/xml"),rows=[];doc.querySelectorAll("row").forEach(r=>{const row=[];r.querySelectorAll("c").forEach(c=>{const ref=c.getAttribute("r")||"A1",col=colIndex(ref.match(/[A-Z]+/i)[0]),type=c.getAttribute("t"),v=c.querySelector("v")?.textContent||"";row[col]=type==="s"?(shared[Number(v)]||""):v});rows.push(row.map(x=>x??""))});return {name:names[i]||`Sayfa ${i+1}`,rows}});
+}
+function parseAnnualSheet(sheet){
+ const rows=sheet.rows||[];let header=-1;for(let i=0;i<Math.min(rows.length,8);i++){if(rows[i].some(x=>/HAFTA/i.test(String(x)))&&rows[i].some(x=>/KONU/i.test(String(x)))){header=i;break}}if(header<0)return null;
+ const h=rows[header].map(x=>String(x||"").replace(/\s+/g," ").trim()),find=(re)=>h.findIndex(x=>re.test(x));
+ const wi=find(/HAFTA/i),ui=find(/ÜNİTE|UNIT/i),ti=find(/^KONU|KONU \(/i),oi=find(/ÖĞRENME ÇIKTILARI|KAZANIM$/i);if(wi<0||ti<0||oi<0)return null;
+ const grade=sheet.name.match(/(\d{1,2})\.?\s*SINIF/i)?.[1]||"";let current=null,weeks=[];
+ for(let i=header+1;i<rows.length;i++){const r=rows[i],weekText=String(r[wi]||"").trim();if(weekText){const pr=parseAnnualWeekLabel(weekText);if(pr){current={...pr,unit:"",topics:[],outcomes:[]};weeks.push(current)}}if(!current)continue;const unit=String(r[ui]||"").trim(),topic=String(r[ti]||"").trim(),out=String(r[oi]||"").trim();if(unit&&!current.unit)current.unit=unit;if(topic&&!current.topics.includes(topic))current.topics.push(topic);if(out&&!current.outcomes.includes(out))current.outcomes.push(out);
+ }
+ weeks=weeks.map(w=>({...w,topic:w.topics.join(" • "),outcome:w.outcomes.join("\n\n")}));return {id:uid(),name:sheet.name,grade,weeks};
+}
+function openAnnualPlans(){
+ el("modalTitle").textContent="Yıllık Planlar";el("modalSubtitle").textContent="XLSX içe aktar · sınıf/ders eşleştirme";const plans=settings.annualPlans||[],q=quickLessonContext(new Date()),e=q.e||{},key=annualMapKey(e.className,e.course),mapped=settings.annualPlanMappings?.[key]||"";
+ el("modalBody").innerHTML=`<div class="notice">Yıllık plan XLSX dosyası yalnızca cihazınızda okunur. Hafta, konu ve kazanım/öğrenme çıktısı yerel olarak saklanır.</div><div class="annual-import-grid"><input id="annualFile" type="file" accept=".xlsx"><button onclick="importAnnualPlans()">XLSX Yıllık Planı İçe Aktar</button></div>${plans.length?`<div class="card"><b>İçe Aktarılan Planlar</b>${plans.map(p=>`<div class="annual-plan-row"><span>${esc(p.name)} <small>(${(p.weeks||[]).length} hafta)</small></span><button class="danger" onclick="deleteAnnualPlan('${p.id}')">Sil</button></div>`).join("")}</div>`:`<div class="empty">Henüz yıllık plan içe aktarılmadı.</div>`}${e.className?`<div class="card"><b>${esc(e.className)} · ${esc(e.course||"")} için plan</b><select id="annualMapping"><option value="">Otomatik (sınıf seviyesine göre)</option>${plans.map(p=>`<option value="${p.id}" ${mapped===p.id?"selected":""}>${esc(p.name)}</option>`).join("")}</select><button style="margin-top:10px" onclick="saveAnnualMapping('${esc(e.className||"")}','${esc(e.course||"")}')">Eşleştirmeyi Kaydet</button></div>`:""}`;el("modal").classList.add("open");modalUpdateBackButton();
+}
+async function importAnnualPlans(){const f=el("annualFile")?.files?.[0];if(!f)return alert("XLSX dosyası seçin.");try{const sheets=await readXlsxSheets(f),parsed=sheets.map(parseAnnualSheet).filter(Boolean);if(!parsed.length)return alert("Hafta, konu ve kazanım sütunları bulunan plan sayfası bulunamadı.");const byName=new Map((settings.annualPlans||[]).map(p=>[p.name,p]));parsed.forEach(p=>byName.set(p.name,p));settings.annualPlans=[...byName.values()];saveSettings();modalMarkDataChanged();openAnnualPlans();alert(`${parsed.length} yıllık plan içe aktarıldı.`)}catch(err){console.error(err);alert("Yıllık plan okunamadı: "+err.message)}}
+function saveAnnualMapping(className,course){settings.annualPlanMappings=settings.annualPlanMappings||{};const v=el("annualMapping")?.value||"";if(v)settings.annualPlanMappings[annualMapKey(className,course)]=v;else delete settings.annualPlanMappings[annualMapKey(className,course)];saveSettings();modalMarkDataChanged();openLessonDetail(true)}
+function deleteAnnualPlan(id){if(!confirm("Bu yıllık plan silinsin mi?"))return;settings.annualPlans=(settings.annualPlans||[]).filter(p=>p.id!==id);Object.keys(settings.annualPlanMappings||{}).forEach(k=>{if(settings.annualPlanMappings[k]===id)delete settings.annualPlanMappings[k]});saveSettings();openAnnualPlans()}
+
 function saveWeeklyOutcome(className,course){
   settings.weeklyOutcomes=settings.weeklyOutcomes||{};
   settings.weeklyOutcomes[weeklyOutcomeKey(className,course,new Date())]={topic:el("weeklyTopic")?.value.trim()||"",outcome:el("weeklyOutcome")?.value.trim()||"",note:el("weeklyNote")?.value.trim()||""};
@@ -2262,11 +2316,11 @@ function openLessonDetail(replaceOnly=false){
   const w=weeklyOutcomeGet(e.className,e.course,new Date());
   el("modalTitle").textContent="Ders Ayrıntısı"; el("modalSubtitle").textContent=`${e.className||""}${e.course?" · "+e.course:""} · ${weekRangeLabel(new Date())}`;
   el("modalBody").innerHTML=`<div class="quick-lesson-hero"><div class="ql-kicker">${x.type==="now"?"ŞU ANKİ DERS":"SIRADAKİ DERS"}</div><div class="ql-title">${esc(e.className||"")} ${e.course?"· "+esc(e.course):""}</div><div class="ql-sub">${esc(p.start||"")}–${esc(p.end||"")}${x.type==="now"?` · ${x.minutesLeft} dk kaldı`:` · ${formatScheduleCountdown(x.minutesUntil||0)}`}</div></div>
-  <div class="card weekly-outcome-card"><b>📅 Bu Haftanın Konusu</b><div class="weekly-value">${w.topic?esc(w.topic):"Henüz girilmedi."}</div></div>
+  <div class="card weekly-outcome-card"><b>📅 Bu Haftanın Konusu</b><div class="weekly-value">${w.topic?esc(w.topic):"Henüz girilmedi."}</div>${w.source==="annual"?`<div class="annual-source auto">📘 ${esc(w.planName)} · otomatik${w.weekLabel?` · ${esc(w.weekLabel)}`:""}</div>`:w.source==="manual"?`<div class="annual-source">✏️ Öğretmen tarafından düzenlendi</div>`:""}</div>
   <div class="card weekly-outcome-card"><b>🎯 Haftalık Kazanım / Öğrenme Çıktısı</b><div class="weekly-value">${w.outcome?esc(w.outcome):"Henüz girilmedi."}</div></div>
   ${w.note?`<div class="card weekly-outcome-card"><b>🗒️ Kısa Ders Notu</b><div class="weekly-value">${esc(w.note)}</div></div>`:""}
   <details class="card weekly-editor"><summary><b>✏️ Haftalık bilgiyi düzenle</b></summary><label>Bu haftanın konusu</label><input id="weeklyTopic" value="${esc(w.topic)}" placeholder="Örn. Üslü ifadeler"><label>Kazanım / öğrenme çıktısı</label><textarea id="weeklyOutcome" rows="4" placeholder="Bu hafta için kazanım veya öğrenme çıktısını yazın">${esc(w.outcome)}</textarea><label>Kısa ders notu (isteğe bağlı)</label><textarea id="weeklyNote" rows="3" placeholder="Ders için kısa hatırlatma">${esc(w.note)}</textarea><button onclick="saveWeeklyOutcome('${esc(e.className||"")}','${esc(e.course||"")}')">Kaydet</button></details>
-  <div class="modal-actions"><button class="secondary" onclick="openSchedule()">Ders Programı</button></div>`;
+  <div class="modal-actions"><button class="secondary" onclick="openAnnualPlans()">Yıllık Planlar</button><button class="secondary" onclick="openSchedule()">Ders Programı</button></div>`;
   el("modal").classList.add("open"); modalUpdateBackButton();
 }
 function openTodayHomeworkControl(){
@@ -2274,7 +2328,7 @@ function openTodayHomeworkControl(){
   if(x.type!=="now"&&x.type!=="next"){alert(x.text||"Şu anda hazırlanacak ders görünmüyor.");return;}
   if(!c){alert(`${e.className||"Bu sınıf"} uygulamada kayıtlı değil.`);return;}
   const due=homeworkDueOn(c,q.today); if(!due.length){alert("Bugün kontrol edilecek ödev yok.");return;}
-  // v7.6.44 — Yalnızca gerçekten başka bir ekrana geçilecekse Günlük Panel geçmişe alınır.
+  // v7.6.45 — Yalnızca gerçekten başka bir ekrana geçilecekse Günlük Panel geçmişe alınır.
   // Bilgi/uyarı mesajları modal geçmişini değiştirmez.
   modalPushCurrent();
   if(due.length===1){openQuickHomework(c.id,due[0].id);return;}
@@ -4560,7 +4614,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.44",
+    appVersion:"v7.6.45",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4571,7 +4625,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.44",
+    appVersion:"v7.6.45",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
