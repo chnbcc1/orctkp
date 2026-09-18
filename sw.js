@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7.6.45-annual-plans";
+const CACHE="ogrenci-takip-v7.6.46-class-annual-plan";
 const ASSETS=[
   "./",
   "./index.html",
