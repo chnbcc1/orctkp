@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.54</title>
+<title>Öğrenci Takip Sistemi v7.6.55</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -766,8 +766,8 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 
 /* ===== v7.6.47 Yıllık Planlar ===== */
 .annual-source{margin-top:8px;font-size:12px;font-weight:700;color:#52606d}.annual-source.auto{color:#176b45}.annual-plan-row{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:8px}.annual-plan-row select{flex:1}.annual-import-grid{display:grid;gap:10px}.annual-week-meta{font-size:12px;color:#667085;margin-top:5px}
-/* ===== v7.6.50 Haftalık gezinme + Derste Nerede Kaldım ===== */
-.week-nav{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0 12px}.week-nav button{padding:10px 6px;font-size:13px}.week-nav .current{font-weight:900}.progress-card{margin-top:12px}.progress-status{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.progress-status button{padding:9px 5px;font-size:12px}.progress-status button.active{outline:2px solid #2563eb;background:#eff6ff}.progress-note{margin-top:10px}.progress-note textarea{width:100%;box-sizing:border-box}.previous-progress{margin-top:10px;padding:10px 12px;border-radius:10px;background:#f8fafc;line-height:1.5}.previous-progress b{display:block;margin-bottom:4px}.progress-meta{font-size:12px;color:#667085;margin-top:6px}
+/* ===== v7.6.55 Haftalık gezinme + Derste Nerede Kaldım 2.0 ===== */
+.week-nav{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0 12px}.week-nav button{padding:10px 6px;font-size:13px}.week-nav .current{font-weight:900}.progress-card{margin-top:12px}.progress-status{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.progress-status button{padding:9px 5px;font-size:12px}.progress-status button.active{outline:2px solid #2563eb;background:#eff6ff}.progress-note{margin-top:10px}.progress-note textarea{width:100%;box-sizing:border-box}.previous-progress{margin-top:10px;padding:10px 12px;border-radius:10px;background:#f8fafc;line-height:1.5}.previous-progress b{display:block;margin-bottom:4px}.progress-meta{font-size:12px;color:#667085;margin-top:6px}.daily-prev{margin:10px 0 12px;background:#f4f8ff;border:1px solid #dbeafe}
 /* ===== v7.6.47 Ders Ayrıntısı dikey boşluk ===== */
 .weekly-editor{margin-bottom:16px!important;}
 .weekly-editor + .modal-actions{margin-top:0!important;}
@@ -1883,7 +1883,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.54</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.55</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2384,12 +2384,37 @@ function deleteAnnualPlan(id){if(!confirm("Bu yıllık plan silinsin mi?"))retur
 let lessonDetailDate=null;
 function lessonDateShift(days){const d=lessonDetailDate?new Date(lessonDetailDate):new Date();d.setDate(d.getDate()+days);lessonDetailDate=d;openLessonDetail(true)}
 function lessonDateToday(){lessonDetailDate=new Date();openLessonDetail(true)}
-function progressKey(className,course,d){return `${normName(className||"")}|${normName(course||"")}|${weekStartISO(d)}`}
-function progressGet(className,course,d){settings.lessonProgress=settings.lessonProgress||{};return settings.lessonProgress[progressKey(className,course,d)]||null}
-function previousProgressGet(className,course,d){settings.lessonProgress=settings.lessonProgress||{};const cur=weekStartISO(d),prefix=`${normName(className||"")}|${normName(course||"")}|`;return Object.entries(settings.lessonProgress).filter(([k,v])=>k.startsWith(prefix)&&k.slice(prefix.length)<cur&&v&&(v.note||v.status)).sort((a,b)=>b[0].localeCompare(a[0]))[0]?.[1]||null}
+// v7.6.55 — İlerleme artık haftalık değil, ders/tarih bazlı tutulur.
+// Böylece aynı yıllık planı kullanan sınıflar ve aynı haftadaki birden çok ders birbirinden bağımsızdır.
+function progressKey(className,course,d){return `${normName(className||"")}|${normName(course||"")}|${localISODate(d||new Date())}`}
+function progressPrefix(className,course){return `${normName(className||"")}|${normName(course||"")}|`}
+function progressGet(className,course,d){
+  settings.lessonProgress=settings.lessonProgress||{};
+  const direct=settings.lessonProgress[progressKey(className,course,d)];
+  if(direct)return direct;
+  // Eski v7.6.50–54 haftalık kayıtlarını salt-okunur uyumluluk için göster.
+  const legacyKey=`${progressPrefix(className,course)}${weekStartISO(d||new Date())}`;
+  const legacy=settings.lessonProgress[legacyKey];
+  return legacy?{...legacy,legacy:true}:null;
+}
+function previousProgressGet(className,course,d){
+  settings.lessonProgress=settings.lessonProgress||{};
+  const cur=localISODate(d||new Date()),prefix=progressPrefix(className,course);
+  const rows=Object.entries(settings.lessonProgress).filter(([k,v])=>{
+    if(!k.startsWith(prefix)||!v||!(v.note||v.status))return false;
+    const tail=k.slice(prefix.length);
+    return /^\d{4}-\d{2}-\d{2}$/.test(tail)&&tail<cur;
+  }).sort((a,b)=>b[0].localeCompare(a[0]));
+  if(rows.length)return {...rows[0][1],date:rows[0][0].slice(prefix.length)};
+  // Eski haftalık kayıt varsa, yeni kayıt oluşana kadar hatırlatmayı kaybetme.
+  const legacy=Object.entries(settings.lessonProgress).filter(([k,v])=>k.startsWith(prefix)&&k.slice(prefix.length)<weekStartISO(d||new Date())&&v&&(v.note||v.status)).sort((a,b)=>b[0].localeCompare(a[0]))[0];
+  return legacy?{...legacy[1],date:legacy[0].slice(prefix.length),legacy:true}:null;
+}
+function progressDateLabel(v){if(!v?.date)return v?.weekLabel||"";try{return new Date(v.date+"T12:00:00").toLocaleDateString("tr-TR",{day:"numeric",month:"long",weekday:"long"})}catch(e){return v.date}}
+function lessonPreviousProgressHTML(className,course,d=new Date(),compact=false){const prev=previousProgressGet(className,course,d);if(!prev)return "";const body=prev.note||progressStatusLabel(prev.status),meta=progressDateLabel(prev);return compact?`<div class="previous-progress daily-prev"><b>↩ Geçen derste</b>${esc(body)}${meta?`<div class="progress-meta">${esc(meta)}</div>`:""}</div>`:`<div class="previous-progress"><b>↩ Önceki dersten</b>${esc(body)}${meta?`<div class="progress-meta">${esc(meta)}</div>`:""}</div>`}
 function progressStatusLabel(v){return v==="done"?"✓ İşlendi":v==="partial"?"◐ Kısmen işlendi":v==="carry"?"→ Sonraki derse kaldı":""}
 function setProgressStatus(v){document.querySelectorAll('.progress-status button').forEach(b=>b.classList.toggle('active',b.dataset.status===v));const h=el('lessonProgressStatus');if(h)h.value=v}
-function saveLessonProgress(className,course){const d=lessonDetailDate||new Date();settings.lessonProgress=settings.lessonProgress||{};settings.lessonProgress[progressKey(className,course,d)]={status:el('lessonProgressStatus')?.value||'',note:el('lessonProgressNote')?.value.trim()||'',updatedAt:new Date().toISOString(),weekLabel:weekRangeLabel(d)};saveSettings();modalMarkDataChanged();openLessonDetail(true)}
+function saveLessonProgress(className,course){const d=lessonDetailDate||new Date();settings.lessonProgress=settings.lessonProgress||{};settings.lessonProgress[progressKey(className,course,d)]={status:el('lessonProgressStatus')?.value||'',note:el('lessonProgressNote')?.value.trim()||'',updatedAt:new Date().toISOString(),date:localISODate(d),weekLabel:weekRangeLabel(d)};saveSettings();modalMarkDataChanged();openLessonDetail(true)}
 function saveWeeklyOutcome(className,course){
   const d=lessonDetailDate||new Date();settings.weeklyOutcomes=settings.weeklyOutcomes||{};
   settings.weeklyOutcomes[weeklyOutcomeKey(className,course,d)]={topic:el("weeklyTopic")?.value.trim()||"",outcome:el("weeklyOutcome")?.value.trim()||"",note:el("weeklyNote")?.value.trim()||""};
@@ -2403,8 +2428,8 @@ function openLessonDetail(replaceOnly=false){
   const isThisWeek=weekStartISO(d)===weekStartISO(new Date());
   el("modalTitle").textContent="Ders Ayrıntısı"; el("modalSubtitle").textContent=`${e.className||""}${e.course?" · "+e.course:""} · ${weekRangeLabel(d)}`;
   el("modalBody").innerHTML=`<div class="quick-lesson-hero"><div class="ql-kicker">${x.type==="now"?"ŞU ANKİ DERS":"SIRADAKİ DERS"}</div><div class="ql-title">${esc(e.className||"")} ${e.course?"· "+esc(e.course):""}</div><div class="ql-sub">${esc(p.start||"")}–${esc(p.end||"")}${x.type==="now"?` · ${x.minutesLeft} dk kaldı`:` · ${formatScheduleCountdown(x.minutesUntil||0)}`}</div></div>
-  <div class="week-nav"><button class="secondary" onclick="lessonDateShift(-7)">‹ Önceki</button><button class="${isThisWeek?'current secondary':'secondary'}" onclick="lessonDateToday()">Bu Hafta</button><button class="secondary" onclick="lessonDateShift(7)">Sonraki ›</button></div>
-  ${prev&&isThisWeek?`<div class="previous-progress"><b>↩ Önceki dersten / haftadan</b>${prev.note?esc(prev.note):esc(progressStatusLabel(prev.status))}${prev.weekLabel?`<div class="progress-meta">${esc(prev.weekLabel)}</div>`:""}</div>`:""}
+  <div class="week-nav"><button class="secondary" onclick="lessonDateShift(-7)">‹ Önceki Hafta</button><button class="${isThisWeek?'current secondary':'secondary'}" onclick="lessonDateToday()">Bu Hafta</button><button class="secondary" onclick="lessonDateShift(7)">Sonraki Hafta ›</button></div>
+  ${prev?lessonPreviousProgressHTML(e.className,e.course,d):""}
   <div class="card weekly-outcome-card"><b>📅 Bu Haftanın Konusu</b><div class="weekly-value">${w.topic?esc(w.topic):"Henüz girilmedi."}</div>${w.source==="annual"?`<div class="annual-source auto">📘 ${esc(w.planName)} · otomatik${w.weekLabel?` · ${esc(w.weekLabel)}`:""}</div>`:w.source==="manual"?`<div class="annual-source">✏️ Öğretmen tarafından düzenlendi</div>`:""}</div>
   <div class="card weekly-outcome-card"><b>🎯 Haftalık Kazanım / Öğrenme Çıktısı</b><div class="weekly-value">${w.outcome?esc(w.outcome):"Henüz girilmedi."}</div></div>
   ${w.note?`<div class="card weekly-outcome-card"><b>🗒️ Kısa Ders Notu</b><div class="weekly-value">${esc(w.note)}</div></div>`:""}
@@ -3408,7 +3433,7 @@ function openDailyTeacherPanel(){
   const upcoming=hw.upcomingRows.length?hw.upcomingRows.map(r=>`<div class="today-homework-row"><div><b>${esc(r.classObj.name)} · ${esc(r.homework.name)}</b><small>${r.days===1?"Yarın":r.days+" gün sonra"} · ${esc(r.homework.due)}</small></div><button class="secondary" onclick="openQuickHomework('${r.classObj.id}','${r.homework.id}')">Aç</button></div>`).join(""):`<p>Önümüzdeki 3 gün için yaklaşan ödev yok.</p>`;
   const alertHTML=alerts.length?alerts.map(r=>`<div class="today-homework-row"><div><b>${esc(r.classObj.name)}</b><small>${r.students} öğrenci · ${r.count} önemli uyarı</small></div><button class="secondary" onclick="openDailyClassAlerts('${r.classObj.id}')">İncele</button></div>`).join(""):`<p>Önemli öğrenci uyarısı görünmüyor.</p>`;
   el("modalTitle").textContent="Günlük Öğretmen Paneli";el("modalSubtitle").textContent=`${smartDateLabel()} · ${currentPeriod}. Dönem`;
-  el("modalBody").innerHTML=`<div class="today-panel-grid"><section class="today-card lesson"><div class="today-card-head"><strong>📘 Şu an / Sıradaki Ders</strong><span class="today-badge">${x.type==="now"?"Şimdi":x.type==="next"?"Sıradaki":"✓"}</span></div><p>${lessonText}</p>${lessonActions}</section><section class="today-card duty"><div class="today-card-head"><strong>🛡️ Bugünkü Nöbet</strong><span class="today-badge">${d.type==="now"?"Aktif":d.type==="next"?"Bugün":"✓"}</span></div><p>${esc(d.text)}</p><div class="today-actions"><button class="secondary" onclick="openDutySchedule()">Nöbet Programı</button></div></section><section class="today-card homework"><div class="today-card-head"><strong>📚 Bugün Kontrol Edilecek Ödevler</strong><span class="today-badge">${hw.todayRows.length}</span></div>${due}</section><section class="today-card homework"><div class="today-card-head"><strong>🗓️ Yaklaşan Ödevler</strong><span class="today-badge">${hw.upcomingRows.length}</span></div>${upcoming}</section><section class="today-card alerts"><div class="today-card-head"><strong>⚠️ Önemli Öğrenci Uyarıları</strong><span class="today-badge">${alerts.reduce((n,r)=>n+r.count,0)}</span></div>${alertHTML}</section></div>`;
+  el("modalBody").innerHTML=`<div class="today-panel-grid"><section class="today-card lesson"><div class="today-card-head"><strong>📘 Şu an / Sıradaki Ders</strong><span class="today-badge">${x.type==="now"?"Şimdi":x.type==="next"?"Sıradaki":"✓"}</span></div><p>${lessonText}</p>${(x.type==="now"||x.type==="next")?lessonPreviousProgressHTML(e.className,e.course,new Date(),true):""}${lessonActions}</section><section class="today-card duty"><div class="today-card-head"><strong>🛡️ Bugünkü Nöbet</strong><span class="today-badge">${d.type==="now"?"Aktif":d.type==="next"?"Bugün":"✓"}</span></div><p>${esc(d.text)}</p><div class="today-actions"><button class="secondary" onclick="openDutySchedule()">Nöbet Programı</button></div></section><section class="today-card homework"><div class="today-card-head"><strong>📚 Bugün Kontrol Edilecek Ödevler</strong><span class="today-badge">${hw.todayRows.length}</span></div>${due}</section><section class="today-card homework"><div class="today-card-head"><strong>🗓️ Yaklaşan Ödevler</strong><span class="today-badge">${hw.upcomingRows.length}</span></div>${upcoming}</section><section class="today-card alerts"><div class="today-card-head"><strong>⚠️ Önemli Öğrenci Uyarıları</strong><span class="today-badge">${alerts.reduce((n,r)=>n+r.count,0)}</span></div>${alertHTML}</section></div>`;
   el("modal").classList.add("open");
 }
 function renderSmartAlerts(){
@@ -4733,7 +4758,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.54",
+    appVersion:"v7.6.55",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4744,7 +4769,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.54",
+    appVersion:"v7.6.55",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4769,7 +4794,7 @@ function importTransferBackup(ev){
         kind="eski normal yedek";
       }else throw new Error("Bilinmeyen yedek biçimi");
 
-      // v7.6.54 — Geri yüklemeyi çalışan uygulama değişkenlerinden tamamen ayır.
+      // v7.6.55 — Geri yüklemeyi çalışan uygulama değişkenlerinden tamamen ayır.
       // Önce yalnız yerel kopyalarda doğrula/normalize et, sonra localStorage'a atomik olarak yaz.
       // Böylece `settings` değişkeninin başlatılma sırası geri yüklemeyi etkileyemez.
       const restoredState=normalize(incomingState);

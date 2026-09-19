@@ -456,9 +456,9 @@ v7.6.1: Deneme modülü başlangıç güvenliği ve PWA cache hotfix.
 v7.6.22: Oturma planına Otomatik Yerleştir, Karıştır, isteğe bağlı aynı-cinsiyet sıra kuralı ve cinsiyet bilgisi düzenleme eklendi. Cinsiyet isimden tahmin edilmez.
 
 
-v7.6.54
-- Uygulamada görünen sürüm numarası tüm ana noktalarda v7.6.54 olarak eşitlendi.
-- Service Worker kayıt URL ve cache sürümü v7.6.54 yapıldı.
+v7.6.55
+- Uygulamada görünen sürüm numarası tüm ana noktalarda v7.6.55 olarak eşitlendi.
+- Service Worker kayıt URL ve cache sürümü v7.6.55 yapıldı.
 - Yeni Service Worker beklemeye geçtiğinde uygulama içinde “Yeni sürüm hazır / Güncelle” bildirimi gösterilir.
 - Güncelle düğmesi yeni workerı devralır ve uygulamayı bir kez yeniler.
 - Eski cacheler aktivasyonda temizlenir. localStorage verileri silinmez.
