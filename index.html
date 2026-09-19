@@ -4733,7 +4733,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.50",
+    appVersion:"v7.6.52",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4744,7 +4744,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.50",
+    appVersion:"v7.6.52",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4772,19 +4772,34 @@ function importTransferBackup(ev){
       settings=normalizeSettings(incomingSettings||{});
       currentClassId=state.currentClassId||state.classes[0]?.id||null;
       currentPeriod=state.currentPeriod||"1";
-      save();
-      saveSettings();
-      initLock();
-      render();
+
+      // v7.6.52 — Yedek doğrulama/kaydetme ile ekran yenilemeyi ayır.
+      // Böylece geçerli bir yedek başarıyla kaydedildikten sonra oluşabilecek
+      // bir arayüz hatası yanlışlıkla "geçersiz yedek" olarak gösterilmez.
+      try{
+        save();
+        saveSettings();
+      }catch(storageError){
+        console.error("Yedek yerel depolamaya kaydedilemedi:",storageError);
+        throw new Error("Yedek okundu ancak bu cihazın yerel depolamasına kaydedilemedi: "+(storageError?.message||storageError));
+      }
+
+      try{
+        initLock();
+        render();
+      }catch(uiError){
+        console.error("Yedek yüklendi; ekran yenilenirken hata oluştu:",uiError);
+        // Veri artık kaydedildi. Yeniden açıldığında normal yükleme akışı kullanılır.
+      }
 
       if(kind==="eski normal yedek"){
         alert("Eski tip normal yedek başarıyla yüklendi. Bu eski dosyada öğretmen/profil ayarları bulunmadığı için mevcut cihazdaki ayarlar korundu.");
       }else{
-        alert("Tam yedek başarıyla yüklendi. Sınıflar, öğrenciler, ödevler, notlar, öğretmen bilgileri, profil fotoğrafı ve uygulama ayarları aktarıldı.");
+        alert("Tam yedek başarıyla yüklendi. Bu cihaz artık yedekteki PIN ve ayarları kullanır. Uygulama ekranı hemen yenilenmezse dosyayı/sayfayı bir kez kapatıp yeniden açın.");
       }
     }catch(e){
       console.error(e);
-      alert("Yedek dosyası okunamadı veya bu uygulamaya ait geçerli bir yedek değil.");
+      alert("Yedek yüklenemedi: "+(e?.message||"Bilinmeyen hata"));
     }
   };
   r.readAsText(f);ev.target.value="";
