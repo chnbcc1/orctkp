@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.55</title>
+<title>Öğrenci Takip Sistemi v7.6.56</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -766,7 +766,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 
 /* ===== v7.6.47 Yıllık Planlar ===== */
 .annual-source{margin-top:8px;font-size:12px;font-weight:700;color:#52606d}.annual-source.auto{color:#176b45}.annual-plan-row{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:8px}.annual-plan-row select{flex:1}.annual-import-grid{display:grid;gap:10px}.annual-week-meta{font-size:12px;color:#667085;margin-top:5px}
-/* ===== v7.6.55 Haftalık gezinme + Derste Nerede Kaldım 2.0 ===== */
+/* ===== v7.6.56 Haftalık gezinme + Derste Nerede Kaldım 2.0 ===== */
 .week-nav{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0 12px}.week-nav button{padding:10px 6px;font-size:13px}.week-nav .current{font-weight:900}.progress-card{margin-top:12px}.progress-status{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.progress-status button{padding:9px 5px;font-size:12px}.progress-status button.active{outline:2px solid #2563eb;background:#eff6ff}.progress-note{margin-top:10px}.progress-note textarea{width:100%;box-sizing:border-box}.previous-progress{margin-top:10px;padding:10px 12px;border-radius:10px;background:#f8fafc;line-height:1.5}.previous-progress b{display:block;margin-bottom:4px}.progress-meta{font-size:12px;color:#667085;margin-top:6px}.daily-prev{margin:10px 0 12px;background:#f4f8ff;border:1px solid #dbeafe}
 /* ===== v7.6.47 Ders Ayrıntısı dikey boşluk ===== */
 .weekly-editor{margin-bottom:16px!important;}
@@ -1883,7 +1883,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.55</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.56</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2384,7 +2384,7 @@ function deleteAnnualPlan(id){if(!confirm("Bu yıllık plan silinsin mi?"))retur
 let lessonDetailDate=null;
 function lessonDateShift(days){const d=lessonDetailDate?new Date(lessonDetailDate):new Date();d.setDate(d.getDate()+days);lessonDetailDate=d;openLessonDetail(true)}
 function lessonDateToday(){lessonDetailDate=new Date();openLessonDetail(true)}
-// v7.6.55 — İlerleme artık haftalık değil, ders/tarih bazlı tutulur.
+// v7.6.56 — İlerleme artık haftalık değil, ders/tarih bazlı tutulur.
 // Böylece aynı yıllık planı kullanan sınıflar ve aynı haftadaki birden çok ders birbirinden bağımsızdır.
 function progressKey(className,course,d){return `${normName(className||"")}|${normName(course||"")}|${localISODate(d||new Date())}`}
 function progressPrefix(className,course){return `${normName(className||"")}|${normName(course||"")}|`}
@@ -4758,7 +4758,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.55",
+    appVersion:"v7.6.56",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4769,7 +4769,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.55",
+    appVersion:"v7.6.56",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4794,7 +4794,7 @@ function importTransferBackup(ev){
         kind="eski normal yedek";
       }else throw new Error("Bilinmeyen yedek biçimi");
 
-      // v7.6.55 — Geri yüklemeyi çalışan uygulama değişkenlerinden tamamen ayır.
+      // v7.6.56 — Geri yüklemeyi çalışan uygulama değişkenlerinden tamamen ayır.
       // Önce yalnız yerel kopyalarda doğrula/normalize et, sonra localStorage'a atomik olarak yaz.
       // Böylece `settings` değişkeninin başlatılma sırası geri yüklemeyi etkileyemez.
       const restoredState=normalize(incomingState);
@@ -4829,28 +4829,11 @@ function downloadBlob(content,name,type){const a=document.createElement("a");a.h
 render();
 </script>
 <script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
-  let swReloading=false;
-  function showUpdate(reg){
-    let box=document.getElementById("pwaUpdateBox");
-    if(!box){
-      box=document.createElement("div"); box.id="pwaUpdateBox";
-      box.style.cssText="position:fixed;left:12px;right:12px;bottom:16px;z-index:999999;background:#172033;color:#fff;border-radius:16px;padding:14px 16px;box-shadow:0 8px 30px #0005;display:flex;gap:12px;align-items:center;justify-content:space-between;font:600 14px system-ui";
-      box.innerHTML='<span>Yeni sürüm hazır.</span><button id="pwaUpdateBtn" style="border:0;border-radius:12px;padding:10px 16px;background:#2563eb;color:#fff;font-weight:800">Güncelle</button>';
-      document.body.appendChild(box);
-    }
-    document.getElementById("pwaUpdateBtn").onclick=()=>{ if(reg.waiting) reg.waiting.postMessage("SKIP_WAITING"); };
-  }
-  navigator.serviceWorker.addEventListener("controllerchange",()=>{
-    if(swReloading)return; swReloading=true; location.reload();
-  });
-  navigator.serviceWorker.register("./sw.js?v=7.6.53",{updateViaCache:"none"}).then(reg=>{
-    if(reg.waiting) showUpdate(reg);
+  // v7.6.56 — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
+  // ve aktif oturum güncelleme nedeniyle yeniden yüklenmez.
+  navigator.serviceWorker.register("./sw.js?v=7.6.56",{updateViaCache:"none"}).then(reg=>{
     reg.update().catch(()=>{});
-    reg.addEventListener("updatefound",()=>{
-      const nw=reg.installing; if(!nw)return;
-      nw.addEventListener("statechange",()=>{ if(nw.state==="installed" && reg.waiting) showUpdate(reg); });
-    });
-    setInterval(()=>reg.update().catch(()=>{}), 60*60*1000);
+    setInterval(()=>reg.update().catch(()=>{}),60*60*1000);
   }).catch(()=>{});
 }</script><script>
 (function(){

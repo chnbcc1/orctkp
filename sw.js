@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7.6.55";
+const CACHE="ogrenci-takip-v7.6.56";
 const ASSETS=[
   "./",
   "./index.html",
@@ -13,6 +13,7 @@ self.addEventListener("install",event=>{
   event.waitUntil(
     caches.open(CACHE)
       .then(cache=>cache.addAll(ASSETS))
+      .then(()=>self.skipWaiting())
   );
 });
 
