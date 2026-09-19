@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.57</title>
+<title>Öğrenci Takip Sistemi v7.6.58</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -766,9 +766,9 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 
 /* ===== v7.6.47 Yıllık Planlar ===== */
 .annual-source{margin-top:8px;font-size:12px;font-weight:700;color:#52606d}.annual-source.auto{color:#176b45}.annual-plan-row{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:8px}.annual-plan-row select{flex:1}.annual-import-grid{display:grid;gap:10px}.annual-week-meta{font-size:12px;color:#667085;margin-top:5px}
-/* ===== v7.6.57 Haftalık gezinme + Derste Nerede Kaldım 2.0 ===== */
+/* ===== v7.6.58 Haftalık gezinme + Derste Nerede Kaldım 2.0 ===== */
 .week-nav{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0 12px}.week-nav button{padding:10px 6px;font-size:13px}.week-nav .current{font-weight:900}.progress-card{margin-top:12px}.progress-status{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.progress-status button{padding:9px 5px;font-size:12px}.progress-status button.active{outline:2px solid #2563eb;background:#eff6ff}.progress-note{margin-top:10px}.progress-note textarea{width:100%;box-sizing:border-box}.previous-progress{margin-top:10px;padding:10px 12px;border-radius:10px;background:#f8fafc;line-height:1.5}.previous-progress b{display:block;margin-bottom:4px}.progress-meta{font-size:12px;color:#667085;margin-top:6px}.daily-prev{margin:10px 0 12px;background:#f4f8ff;border:1px solid #dbeafe}
-/* ===== v7.6.57 Sınıf Ders Bilgisi ===== */
+/* ===== v7.6.58 Sınıf Ders Bilgisi ===== */
 .class-top-actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%;max-width:590px}
 .class-top-actions button{min-width:0}
 .class-lesson-latest{margin:10px 0 12px;padding:12px 14px;border:1px solid #dbeafe;background:#f4f8ff;border-radius:12px;line-height:1.5}
@@ -1889,7 +1889,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.57</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.58</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2343,8 +2343,12 @@ function annualPlanForLesson(className,course){
   return grade?(settings.annualPlans||[]).find(p=>String(p.grade)===grade)||null:null;
 }
 function annualWeekForDate(plan,d=new Date()){
-  if(!plan)return null;const iso=localISODate(d);
-  return (plan.weeks||[]).find(w=>w.start&&w.end&&iso>=w.start&&iso<=w.end)||null;
+  if(!plan)return null;
+  // v7.6.58 — Yıllık plan satırları genellikle Pzt-Cuma aralığı taşır.
+  // Ders Bilgisi hafta sonu açıldığında da aynı öğretim haftasını bulmak için
+  // seçili tarihin kendisi yerine haftanın Pazartesi gününü esas al.
+  const weekStart=weekStartISO(d);
+  return (plan.weeks||[]).find(w=>w.start&&w.end&&weekStart>=w.start&&weekStart<=w.end)||null;
 }
 function weeklyOutcomeGet(className,course,d=new Date()){
   settings.weeklyOutcomes=settings.weeklyOutcomes||{};
@@ -2408,7 +2412,7 @@ function openClassLessonInfo(){
 let lessonDetailDate=null;
 function lessonDateShift(days){const d=lessonDetailDate?new Date(lessonDetailDate):new Date();d.setDate(d.getDate()+days);lessonDetailDate=d;openLessonDetail(true)}
 function lessonDateToday(){lessonDetailDate=new Date();openLessonDetail(true)}
-// v7.6.57 — İlerleme artık haftalık değil, ders/tarih bazlı tutulur.
+// v7.6.58 — İlerleme artık haftalık değil, ders/tarih bazlı tutulur.
 // Böylece aynı yıllık planı kullanan sınıflar ve aynı haftadaki birden çok ders birbirinden bağımsızdır.
 function progressKey(className,course,d){return `${normName(className||"")}|${normName(course||"")}|${localISODate(d||new Date())}`}
 function progressPrefix(className,course){return `${normName(className||"")}|${normName(course||"")}|`}
@@ -4785,7 +4789,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.57",
+    appVersion:"v7.6.58",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4796,7 +4800,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.57",
+    appVersion:"v7.6.58",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4821,7 +4825,7 @@ function importTransferBackup(ev){
         kind="eski normal yedek";
       }else throw new Error("Bilinmeyen yedek biçimi");
 
-      // v7.6.57 — Geri yüklemeyi çalışan uygulama değişkenlerinden tamamen ayır.
+      // v7.6.58 — Geri yüklemeyi çalışan uygulama değişkenlerinden tamamen ayır.
       // Önce yalnız yerel kopyalarda doğrula/normalize et, sonra localStorage'a atomik olarak yaz.
       // Böylece `settings` değişkeninin başlatılma sırası geri yüklemeyi etkileyemez.
       const restoredState=normalize(incomingState);
@@ -4856,7 +4860,7 @@ function downloadBlob(content,name,type){const a=document.createElement("a");a.h
 render();
 </script>
 <script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
-  // v7.6.57 — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
+  // v7.6.58 — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
   // ve aktif oturum güncelleme nedeniyle yeniden yüklenmez.
   navigator.serviceWorker.register("./sw.js?v=7.6.56",{updateViaCache:"none"}).then(reg=>{
     reg.update().catch(()=>{});
