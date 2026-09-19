@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.53</title>
+<title>Öğrenci Takip Sistemi v7.6.54</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -1883,7 +1883,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.53</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.54</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4733,7 +4733,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.52",
+    appVersion:"v7.6.54",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4744,7 +4744,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.52",
+    appVersion:"v7.6.54",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4764,44 +4764,39 @@ function importTransferBackup(ev){
         kind=d.backupType==="ogrenci-takip-tam-yedek"?"tam yedek":"cihaz aktarım";
       }else if(d&&Array.isArray(d.classes)){
         incomingState=d;
-        incomingSettings=settings;
+        // Eski normal yedek ayar içermediği için cihazdaki mevcut ayarları koru.
+        try{incomingSettings=JSON.parse(localStorage.getItem(SETTINGS_KEY)||"{}")||{}}catch(_){incomingSettings={}}
         kind="eski normal yedek";
       }else throw new Error("Bilinmeyen yedek biçimi");
 
-      state=normalize(incomingState);
-      settings=normalizeSettings(incomingSettings||{});
-      currentClassId=state.currentClassId||state.classes[0]?.id||null;
-      currentPeriod=state.currentPeriod||"1";
+      // v7.6.54 — Geri yüklemeyi çalışan uygulama değişkenlerinden tamamen ayır.
+      // Önce yalnız yerel kopyalarda doğrula/normalize et, sonra localStorage'a atomik olarak yaz.
+      // Böylece `settings` değişkeninin başlatılma sırası geri yüklemeyi etkileyemez.
+      const restoredState=normalize(incomingState);
+      const restoredSettings=normalizeSettings(incomingSettings||{});
+      const restoredClassId=restoredState.currentClassId||restoredState.classes[0]?.id||null;
+      restoredState.currentClassId=restoredClassId;
+      restoredState.currentPeriod=restoredState.currentPeriod||"1";
 
-      // v7.6.52 — Yedek doğrulama/kaydetme ile ekran yenilemeyi ayır.
-      // Böylece geçerli bir yedek başarıyla kaydedildikten sonra oluşabilecek
-      // bir arayüz hatası yanlışlıkla "geçersiz yedek" olarak gösterilmez.
       try{
-        save();
-        saveSettings();
+        localStorage.setItem(STORAGE_KEY,JSON.stringify(restoredState));
+        localStorage.setItem(SETTINGS_KEY,JSON.stringify(restoredSettings));
       }catch(storageError){
         console.error("Yedek yerel depolamaya kaydedilemedi:",storageError);
         throw new Error("Yedek okundu ancak bu cihazın yerel depolamasına kaydedilemedi: "+(storageError?.message||storageError));
       }
 
-      try{
-        initLock();
-        render();
-      }catch(uiError){
-        console.error("Yedek yüklendi; ekran yenilenirken hata oluştu:",uiError);
-        // Veri artık kaydedildi. Yeniden açıldığında normal yükleme akışı kullanılır.
-      }
-
-      if(kind==="eski normal yedek"){
-        alert("Eski tip normal yedek başarıyla yüklendi. Bu eski dosyada öğretmen/profil ayarları bulunmadığı için mevcut cihazdaki ayarlar korundu.");
-      }else{
-        alert("Tam yedek başarıyla yüklendi. Bu cihaz artık yedekteki PIN ve ayarları kullanır. Uygulama ekranı hemen yenilenmezse dosyayı/sayfayı bir kez kapatıp yeniden açın.");
-      }
+      const msg=kind==="eski normal yedek"
+        ? "Eski tip normal yedek başarıyla yüklendi. Bu dosyada öğretmen/profil ayarları bulunmadığı için mevcut cihazdaki ayarlar korundu. Uygulama şimdi yeniden açılacak."
+        : "Tam yedek başarıyla yüklendi. Bu cihaz artık yedekteki PIN, ayarlar ve verileri kullanacak. Uygulama şimdi yeniden açılacak.";
+      alert(msg);
+      location.reload();
     }catch(e){
       console.error(e);
       alert("Yedek yüklenemedi: "+(e?.message||"Bilinmeyen hata"));
     }
   };
+  r.onerror=()=>alert("Yedek dosyası okunamadı.");
   r.readAsText(f);ev.target.value="";
 }
 function downloadBlob(content,name,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
