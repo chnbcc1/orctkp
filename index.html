@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.56</title>
+<title>Öğrenci Takip Sistemi v7.6.57</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -766,8 +766,14 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 
 /* ===== v7.6.47 Yıllık Planlar ===== */
 .annual-source{margin-top:8px;font-size:12px;font-weight:700;color:#52606d}.annual-source.auto{color:#176b45}.annual-plan-row{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:8px}.annual-plan-row select{flex:1}.annual-import-grid{display:grid;gap:10px}.annual-week-meta{font-size:12px;color:#667085;margin-top:5px}
-/* ===== v7.6.56 Haftalık gezinme + Derste Nerede Kaldım 2.0 ===== */
+/* ===== v7.6.57 Haftalık gezinme + Derste Nerede Kaldım 2.0 ===== */
 .week-nav{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0 12px}.week-nav button{padding:10px 6px;font-size:13px}.week-nav .current{font-weight:900}.progress-card{margin-top:12px}.progress-status{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.progress-status button{padding:9px 5px;font-size:12px}.progress-status button.active{outline:2px solid #2563eb;background:#eff6ff}.progress-note{margin-top:10px}.progress-note textarea{width:100%;box-sizing:border-box}.previous-progress{margin-top:10px;padding:10px 12px;border-radius:10px;background:#f8fafc;line-height:1.5}.previous-progress b{display:block;margin-bottom:4px}.progress-meta{font-size:12px;color:#667085;margin-top:6px}.daily-prev{margin:10px 0 12px;background:#f4f8ff;border:1px solid #dbeafe}
+/* ===== v7.6.57 Sınıf Ders Bilgisi ===== */
+.class-top-actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%;max-width:590px}
+.class-top-actions button{min-width:0}
+.class-lesson-latest{margin:10px 0 12px;padding:12px 14px;border:1px solid #dbeafe;background:#f4f8ff;border-radius:12px;line-height:1.5}
+.class-lesson-latest b{display:block;margin-bottom:4px}
+@media(max-width:700px){.compact-class-head .class-top-actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;max-width:none}.compact-class-head .class-top-actions button{white-space:normal!important;line-height:1.15;min-height:48px!important}}
 /* ===== v7.6.47 Ders Ayrıntısı dikey boşluk ===== */
 .weekly-editor{margin-bottom:16px!important;}
 .weekly-editor + .modal-actions{margin-top:0!important;}
@@ -1883,7 +1889,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.56</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.57</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1915,7 +1921,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 <div id="noClass" class="empty card"><h2>Henüz sınıf yok</h2><p>Yukarıdaki + Sınıf Ekle düğmesinden ilk sınıfınızı oluşturun.</p></div>
 <div id="classView" style="display:none">
 <div class="compact-class-summary">
-  <div class="compact-class-head"><div><h1 id="currentClassTitle"></h1><div class="tiny" id="periodLabel" style="display:none"></div></div><div class="class-top-actions"><button class="secondary seating-plan-btn" onclick="openSeatingPlan()">🪑 Oturma Planı</button><button class="secondary class-settings-btn" onclick="openClassSettings()">⚙️ Sınıf Ayarları</button></div></div>
+  <div class="compact-class-head"><div><h1 id="currentClassTitle"></h1><div class="tiny" id="periodLabel" style="display:none"></div></div><div class="class-top-actions"><button class="secondary seating-plan-btn" onclick="openSeatingPlan()">🪑 Oturma Planı</button><button class="secondary class-lesson-btn" onclick="openClassLessonInfo()">📖 Ders Bilgisi</button><button class="secondary class-settings-btn" onclick="openClassSettings()">⚙️ Sınıf Ayarları</button></div></div>
   <div class="class-module-grid" aria-label="Sınıf modülleri">
     <button class="class-module-btn" onclick="openClassModule('students')"><span>👥</span><b>Öğrenciler</b><em id="statStudents">0</em></button>
     <button class="class-module-btn" onclick="openClassModule('homeworks')"><span>📚</span><b>Ödevler</b><em id="statHomeworks">0</em></button>
@@ -2205,7 +2211,7 @@ function modalRefreshSnapshot(x){
 function modalGoBack(){if(!modalHistory.length)return;const x=modalHistory.pop();const needsRefresh=x.revision!==modalDataRevision;let refreshed=false;if(needsRefresh)refreshed=modalRefreshSnapshot(x);if(!refreshed){el("modalTitle").textContent=x.title;el("modalSubtitle").textContent=x.subtitle;el("modalBody").innerHTML=x.body;window._activeStudentModalId=x.activeStudentId||null;el("modal").classList.add("open")}modalUpdateBackButton();requestAnimationFrame(()=>{const box=document.querySelector("#modal .modal-box");if(box)box.scrollTop=x.scrollTop||0})}
 function lockModalPage(){if(modalPageLocked)return;modalPageScrollY=window.scrollY||document.documentElement.scrollTop||0;document.body.style.position="fixed";document.body.style.top=`-${modalPageScrollY}px`;document.body.style.left="0";document.body.style.right="0";document.body.style.width="100%";document.body.classList.add("modal-page-locked");modalPageLocked=true}
 function unlockModalPage(){if(!modalPageLocked)return;document.body.classList.remove("modal-page-locked");document.body.style.position="";document.body.style.top="";document.body.style.left="";document.body.style.right="";document.body.style.width="";modalPageLocked=false;window.scrollTo(0,modalPageScrollY)}
-function closeModal(){window._activeStudentModalId=null;modalHistory=[];modalUpdateBackButton();const m=el("modal");if(m)m.classList.remove("open");unlockModalPage()}
+function closeModal(){window._activeStudentModalId=null;lessonDetailClassContext=null;lessonDetailDate=null;modalHistory=[];modalUpdateBackButton();const m=el("modal");if(m)m.classList.remove("open");unlockModalPage()}
 
 // v7.6.47 — Canlı yenilenen modal geri geçmişi + iPhone arka plan kaydırma kilidi
 document.addEventListener("click",function(e){
@@ -2381,10 +2387,28 @@ async function importAnnualPlans(){const f=el("annualFile")?.files?.[0];if(!f)re
 function saveAnnualMapping(className,course){settings.annualPlanMappings=settings.annualPlanMappings||{};const v=el("annualMapping")?.value||"";if(v)settings.annualPlanMappings[annualMapKey(className,course)]=v;else delete settings.annualPlanMappings[annualMapKey(className,course)];saveSettings();modalMarkDataChanged();openLessonDetail(true)}
 function deleteAnnualPlan(id){if(!confirm("Bu yıllık plan silinsin mi?"))return;settings.annualPlans=(settings.annualPlans||[]).filter(p=>p.id!==id);Object.keys(settings.annualPlanMappings||{}).forEach(k=>{if(settings.annualPlanMappings[k]===id)delete settings.annualPlanMappings[k]});saveSettings();openAnnualPlans()}
 
+let lessonDetailClassContext=null;
+function classLessonCourse(className){
+  const rows=(settings.schedule?.entries||[]).filter(e=>normName(e.className)===normName(className)&&e.course);
+  if(!rows.length)return "MAT";
+  const counts={}; rows.forEach(e=>counts[e.course]=(counts[e.course]||0)+1);
+  return Object.keys(counts).sort((a,b)=>counts[b]-counts[a])[0]||rows[0].course||"MAT";
+}
+function latestProgressGet(className,course){
+  settings.lessonProgress=settings.lessonProgress||{};const prefix=progressPrefix(className,course);
+  const rows=Object.entries(settings.lessonProgress).filter(([k,v])=>k.startsWith(prefix)&&v&&(v.note||v.status)).sort((a,b)=>{
+    const ad=a[1]?.updatedAt||a[0],bd=b[1]?.updatedAt||b[0];return String(bd).localeCompare(String(ad));
+  });
+  if(!rows.length)return null;const [k,v]=rows[0],tail=k.slice(prefix.length);
+  return {...v,date:v.date||(/^\d{4}-\d{2}-\d{2}$/.test(tail)?tail:""),legacy:!/^\d{4}-\d{2}-\d{2}$/.test(tail)};
+}
+function openClassLessonInfo(){
+  const c=cls();if(!c)return;lessonDetailClassContext={className:c.name,course:classLessonCourse(c.name)};lessonDetailDate=new Date();openLessonDetail(true);
+}
 let lessonDetailDate=null;
 function lessonDateShift(days){const d=lessonDetailDate?new Date(lessonDetailDate):new Date();d.setDate(d.getDate()+days);lessonDetailDate=d;openLessonDetail(true)}
 function lessonDateToday(){lessonDetailDate=new Date();openLessonDetail(true)}
-// v7.6.56 — İlerleme artık haftalık değil, ders/tarih bazlı tutulur.
+// v7.6.57 — İlerleme artık haftalık değil, ders/tarih bazlı tutulur.
 // Böylece aynı yıllık planı kullanan sınıflar ve aynı haftadaki birden çok ders birbirinden bağımsızdır.
 function progressKey(className,course,d){return `${normName(className||"")}|${normName(course||"")}|${localISODate(d||new Date())}`}
 function progressPrefix(className,course){return `${normName(className||"")}|${normName(course||"")}|`}
@@ -2421,13 +2445,16 @@ function saveWeeklyOutcome(className,course){
   save(); modalMarkDataChanged(); openLessonDetail(true);
 }
 function openLessonDetail(replaceOnly=false){
-  const q=quickLessonContext(new Date()),x=q.info,e=q.e,p=x.period||{};
-  if(x.type!=="now"&&x.type!=="next"){alert(x.text||"Şu anda hazırlanacak ders görünmüyor.");return;}
+  if(!replaceOnly)lessonDetailClassContext=null;
+  const q=quickLessonContext(new Date()),x=q.info,p=x.period||{};
+  const fromClass=!!lessonDetailClassContext;
+  const e=fromClass?lessonDetailClassContext:q.e;
+  if(!fromClass&&x.type!=="now"&&x.type!=="next"){alert(x.text||"Şu anda hazırlanacak ders görünmüyor.");return;}
   if(!lessonDetailDate)lessonDetailDate=new Date();
-  const d=new Date(lessonDetailDate),w=weeklyOutcomeGet(e.className,e.course,d),pr=progressGet(e.className,e.course,d),prev=previousProgressGet(e.className,e.course,d);
+  const d=new Date(lessonDetailDate),w=weeklyOutcomeGet(e.className,e.course,d),pr=progressGet(e.className,e.course,d),prev=previousProgressGet(e.className,e.course,d),latest=fromClass?latestProgressGet(e.className,e.course):null;
   const isThisWeek=weekStartISO(d)===weekStartISO(new Date());
-  el("modalTitle").textContent="Ders Ayrıntısı"; el("modalSubtitle").textContent=`${e.className||""}${e.course?" · "+e.course:""} · ${weekRangeLabel(d)}`;
-  el("modalBody").innerHTML=`<div class="quick-lesson-hero"><div class="ql-kicker">${x.type==="now"?"ŞU ANKİ DERS":"SIRADAKİ DERS"}</div><div class="ql-title">${esc(e.className||"")} ${e.course?"· "+esc(e.course):""}</div><div class="ql-sub">${esc(p.start||"")}–${esc(p.end||"")}${x.type==="now"?` · ${x.minutesLeft} dk kaldı`:` · ${formatScheduleCountdown(x.minutesUntil||0)}`}</div></div>
+  el("modalTitle").textContent=fromClass?"Ders Bilgisi":"Ders Ayrıntısı"; el("modalSubtitle").textContent=`${e.className||""}${e.course?" · "+e.course:""} · ${weekRangeLabel(d)}`;
+  el("modalBody").innerHTML=`<div class="quick-lesson-hero"><div class="ql-kicker">${fromClass?"SINIF DERS BİLGİSİ":(x.type==="now"?"ŞU ANKİ DERS":"SIRADAKİ DERS")}</div><div class="ql-title">${esc(e.className||"")} ${e.course?"· "+esc(e.course):""}</div><div class="ql-sub">${fromClass?"İstediğin zaman ders ilerlemesini ve yıllık planı görüntüle":`${esc(p.start||"")}–${esc(p.end||"")}${x.type==="now"?` · ${x.minutesLeft} dk kaldı`:` · ${formatScheduleCountdown(x.minutesUntil||0)}`}`}</div></div>${fromClass&&latest?`<div class="class-lesson-latest"><b>📍 Son ders kaydı</b>${esc(latest.note||progressStatusLabel(latest.status))}${progressDateLabel(latest)?`<div class="progress-meta">${esc(progressDateLabel(latest))}</div>`:""}</div>`:""}
   <div class="week-nav"><button class="secondary" onclick="lessonDateShift(-7)">‹ Önceki Hafta</button><button class="${isThisWeek?'current secondary':'secondary'}" onclick="lessonDateToday()">Bu Hafta</button><button class="secondary" onclick="lessonDateShift(7)">Sonraki Hafta ›</button></div>
   ${prev?lessonPreviousProgressHTML(e.className,e.course,d):""}
   <div class="card weekly-outcome-card"><b>📅 Bu Haftanın Konusu</b><div class="weekly-value">${w.topic?esc(w.topic):"Henüz girilmedi."}</div>${w.source==="annual"?`<div class="annual-source auto">📘 ${esc(w.planName)} · otomatik${w.weekLabel?` · ${esc(w.weekLabel)}`:""}</div>`:w.source==="manual"?`<div class="annual-source">✏️ Öğretmen tarafından düzenlendi</div>`:""}</div>
@@ -4758,7 +4785,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.56",
+    appVersion:"v7.6.57",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4769,7 +4796,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.56",
+    appVersion:"v7.6.57",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4794,7 +4821,7 @@ function importTransferBackup(ev){
         kind="eski normal yedek";
       }else throw new Error("Bilinmeyen yedek biçimi");
 
-      // v7.6.56 — Geri yüklemeyi çalışan uygulama değişkenlerinden tamamen ayır.
+      // v7.6.57 — Geri yüklemeyi çalışan uygulama değişkenlerinden tamamen ayır.
       // Önce yalnız yerel kopyalarda doğrula/normalize et, sonra localStorage'a atomik olarak yaz.
       // Böylece `settings` değişkeninin başlatılma sırası geri yüklemeyi etkileyemez.
       const restoredState=normalize(incomingState);
@@ -4829,7 +4856,7 @@ function downloadBlob(content,name,type){const a=document.createElement("a");a.h
 render();
 </script>
 <script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
-  // v7.6.56 — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
+  // v7.6.57 — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
   // ve aktif oturum güncelleme nedeniyle yeniden yüklenmez.
   navigator.serviceWorker.register("./sw.js?v=7.6.56",{updateViaCache:"none"}).then(reg=>{
     reg.update().catch(()=>{});

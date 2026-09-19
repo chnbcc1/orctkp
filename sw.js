@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7.6.56";
+const CACHE="ogrenci-takip-v7.6.57";
 const ASSETS=[
   "./",
   "./index.html",
