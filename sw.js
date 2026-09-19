@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7.6.49-desktop-pin-fix";
+const CACHE="ogrenci-takip-v7.6.53";
 const ASSETS=[
   "./",
   "./index.html",
@@ -13,7 +13,6 @@ self.addEventListener("install",event=>{
   event.waitUntil(
     caches.open(CACHE)
       .then(cache=>cache.addAll(ASSETS))
-      .then(()=>self.skipWaiting())
   );
 });
 
