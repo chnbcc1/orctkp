@@ -1,5 +1,5 @@
 
-const CACHE="ogrenci-takip-v7.6.48-week-nav-lesson-progress";
+const CACHE="ogrenci-takip-v7.6.49-desktop-pin-fix";
 const ASSETS=[
   "./",
   "./index.html",
