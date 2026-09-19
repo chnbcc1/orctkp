@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.49</title>
+<title>Öğrenci Takip Sistemi v7.6.50</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -766,7 +766,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 
 /* ===== v7.6.47 Yıllık Planlar ===== */
 .annual-source{margin-top:8px;font-size:12px;font-weight:700;color:#52606d}.annual-source.auto{color:#176b45}.annual-plan-row{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:8px}.annual-plan-row select{flex:1}.annual-import-grid{display:grid;gap:10px}.annual-week-meta{font-size:12px;color:#667085;margin-top:5px}
-/* ===== v7.6.49 Haftalık gezinme + Derste Nerede Kaldım ===== */
+/* ===== v7.6.50 Haftalık gezinme + Derste Nerede Kaldım ===== */
 .week-nav{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0 12px}.week-nav button{padding:10px 6px;font-size:13px}.week-nav .current{font-weight:900}.progress-card{margin-top:12px}.progress-status{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.progress-status button{padding:9px 5px;font-size:12px}.progress-status button.active{outline:2px solid #2563eb;background:#eff6ff}.progress-note{margin-top:10px}.progress-note textarea{width:100%;box-sizing:border-box}.previous-progress{margin-top:10px;padding:10px 12px;border-radius:10px;background:#f8fafc;line-height:1.5}.previous-progress b{display:block;margin-bottom:4px}.progress-meta{font-size:12px;color:#667085;margin-top:6px}
 /* ===== v7.6.47 Ders Ayrıntısı dikey boşluk ===== */
 .weekly-editor{margin-bottom:16px!important;}
@@ -1813,11 +1813,11 @@ body.class-module-page-open #modal{z-index:9200!important}
       <p>Bu cihaz için 4-8 haneli bir PIN belirleyin.</p>
       <input id="newPin" type="password" inputmode="numeric" maxlength="8" placeholder="Yeni PIN">
       <input id="newPin2" type="password" inputmode="numeric" maxlength="8" placeholder="PIN tekrar">
-      <button style="width:100%" onclick="setupPin()">PIN Oluştur</button>
+      <button style="width:100%" id="pinCreateBtn" type="button" onclick="return window.__pinBootSetup ? window.__pinBootSetup() : false">PIN Oluştur</button>
     </div>
     <div id="loginPinBox" style="display:none">
       <input id="loginPin" type="password" inputmode="numeric" maxlength="8" placeholder="PIN">
-      <button style="width:100%" onclick="unlockApp()">Giriş Yap</button>
+      <button style="width:100%" id="pinLoginBtn" type="button" onclick="return window.__pinBootUnlock ? window.__pinBootUnlock() : false">Giriş Yap</button>
       <div style="margin-top:12px;border-top:1px solid #e5e7eb;padding-top:12px">
         <label class="btn secondary" style="display:block;text-align:center;cursor:pointer">Başka cihaz yedeğini yükle
           <input type="file" accept=".json" hidden onchange="importTransferBackup(event)">
@@ -1829,7 +1829,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </div>
 
 <script id="v7649-pin-boot-guard">
-/* v7.6.49 — Masaüstü PIN açılış koruması.
+/* v7.6.51 — Masaüstü + Android PIN doğrudan buton düzeltmesi.
    Ana uygulama betiğinde daha sonra bir hata oluşsa bile PIN kutusunu ilk anda görünür yapar. */
 (function(){
   const SETTINGS_KEY_BOOT="odevTakipV5Settings";
@@ -1847,31 +1847,43 @@ body.class-module-page-open #modal{z-index:9200!important}
     else{setup.style.display="block";login.style.display="none";if(info)info.textContent="İlk kullanım: cihaz PIN'i oluşturun."}
   }
   // Ana betik yüklenemese bile masaüstünde kilit ekranı çalışabilsin.
-  window.unlockApp=function(){
+  function unlockPinBoot(){
     const st=readSettingsBoot(), input=byId("loginPin");
-    if(!st.pinHash){showPinBoot();return}
-    if(pinHashBoot(input&&input.value)!==st.pinHash){alert("PIN yanlış.");return}
+    if(!st.pinHash){showPinBoot();return false}
+    if(pinHashBoot(input&&input.value)!==st.pinHash){alert("PIN yanlış.");return false}
     const screen=byId("lockScreen");if(screen){screen.classList.add("hidden");screen.style.display="none"}
     if(input)input.value="";
     document.documentElement.classList.remove("app-locked");document.body.classList.remove("app-locked");
+    try{if(window.settings&&typeof window.settings==="object")window.settings.pinHash=st.pinHash}catch(e){}
     try{if(typeof window.render==="function")window.render()}catch(e){}
-  };
-  window.setupPin=function(){
+    return false;
+  }
+  function setupPinBoot(){
     const a=(byId("newPin")||{}).value||"", b=(byId("newPin2")||{}).value||"";
-    if(!/^\d{4,8}$/.test(a)){alert("PIN 4-8 rakam olmalı.");return}
-    if(a!==b){alert("PIN'ler aynı değil.");return}
-    const st=readSettingsBoot();st.pinHash=pinHashBoot(a);if(!writeSettingsBoot(st)){alert("PIN bu tarayıcıda kaydedilemedi.");return}
+    if(!/^\d{4,8}$/.test(a)){alert("PIN 4-8 rakam olmalı.");return false}
+    if(a!==b){alert("PIN'ler aynı değil.");return false}
+    const st=readSettingsBoot();st.pinHash=pinHashBoot(a);
+    if(!writeSettingsBoot(st)){alert("PIN bu tarayıcıda kaydedilemedi.");return false}
+    try{if(typeof settings!=="undefined"&&settings)settings.pinHash=st.pinHash}catch(e){}
     const screen=byId("lockScreen");if(screen){screen.classList.add("hidden");screen.style.display="none"}
     document.documentElement.classList.remove("app-locked");document.body.classList.remove("app-locked");
     try{if(typeof window.render==="function")window.render()}catch(e){}
-  };
-  showPinBoot();
-  document.addEventListener("DOMContentLoaded",showPinBoot,{once:true});
+    return false;
+  }
+  window.__pinBootSetup=setupPinBoot;
+  window.__pinBootUnlock=unlockPinBoot;
+  function bindPinKeys(){
+    const a=byId("newPin"), b=byId("newPin2"), login=byId("loginPin");
+    [a,b].forEach(x=>{if(x&&!x.dataset.pinKeyBound){x.dataset.pinKeyBound="1";x.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();setupPinBoot()}})}});
+    if(login&&!login.dataset.pinKeyBound){login.dataset.pinKeyBound="1";login.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();unlockPinBoot()}})}
+  }
+  showPinBoot();bindPinKeys();
+  document.addEventListener("DOMContentLoaded",function(){showPinBoot();bindPinKeys()},{once:true});
 })();
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.49</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.51</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4721,7 +4733,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.49",
+    appVersion:"v7.6.50",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4732,7 +4744,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.49",
+    appVersion:"v7.6.50",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
