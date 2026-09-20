@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.65</title>
+<title>Öğrenci Takip Sistemi v7.6.66</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -1833,8 +1833,11 @@ body.class-module-page-open #modal{z-index:9200!important}
   .class-section-head .section-title{margin:0!important}
   .mobile-fixed-add-class{display:inline-flex!important;align-items:center;justify-content:center;flex:0 0 auto;padding:8px 12px!important;min-height:36px!important;border-radius:11px!important;background:#2458dc!important;color:#fff!important;border:0!important;font-size:12px!important;font-weight:800!important}
   .mobile-class-nav-wrap{display:block!important;position:relative;width:100%;min-width:0}
-  #mobileClassNavFixed{padding-right:28px!important}
-  .mobile-class-scroll-hint{position:absolute;right:0;top:2px;bottom:6px;width:28px;display:flex;align-items:center;justify-content:flex-end;padding-right:3px;pointer-events:none;font-size:27px;font-weight:900;color:#64748b;background:linear-gradient(90deg,rgba(255,255,255,0),#fff 58%)}
+  #mobileClassNavFixed{padding-left:28px!important;padding-right:28px!important}
+  .mobile-class-scroll-hint{position:absolute;top:2px;bottom:6px;width:28px;display:none;align-items:center;pointer-events:none;font-size:27px;font-weight:900;color:#64748b;z-index:2}
+  .mobile-class-scroll-hint.show{display:flex}
+  .mobile-class-scroll-hint.left{left:0;justify-content:flex-start;padding-left:3px;background:linear-gradient(270deg,rgba(255,255,255,0),#fff 58%)}
+  .mobile-class-scroll-hint.right{right:0;justify-content:flex-end;padding-right:3px;background:linear-gradient(90deg,rgba(255,255,255,0),#fff 58%)}
   #mobileClassNavFixed .mobileClassAdd{display:none!important}
   .trial-top-actions{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
   .trial-top-actions .trial-info-full{grid-column:1/-1!important}
@@ -1945,7 +1948,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 <div class="layout">
 <aside>
 <div class="class-section-head"><div class="section-title">Sınıflar</div><button type="button" class="mobile-fixed-add-class" onclick="addClass()" aria-label="Sınıf Ekle">＋ Sınıf Ekle</button></div>
-<div class="mobile-class-nav-wrap"><div id="mobileClassNavFixed" aria-label="Sınıf seçici"></div><span class="mobile-class-scroll-hint" aria-hidden="true">›</span></div><div id="classList"></div>
+<div class="mobile-class-nav-wrap"><span id="mobileClassHintLeft" class="mobile-class-scroll-hint left" aria-hidden="true">‹</span><div id="mobileClassNavFixed" aria-label="Sınıf seçici"></div><span id="mobileClassHintRight" class="mobile-class-scroll-hint right" aria-hidden="true">›</span></div><div id="classList"></div>
 <button style="width:100%;margin-top:7px" onclick="addClass()" class="add-class-btn">+ Sınıf Ekle</button>
 <div class="footer-note">Veriler cihazdaki tarayıcıda saklanır. “Yedek Al” tüm uygulama verilerini kaydeder ve farklı cihaza aktarım için de kullanılabilir.</div>
 </aside>
@@ -3133,7 +3136,24 @@ function renderClasses(){
       mobileList.appendChild(b);
     }
   });
+  if(mobileList){
+    requestAnimationFrame(()=>{
+      const active=mobileList.querySelector('.mobileClassChip.active');
+      if(active) active.scrollIntoView({behavior:'auto',block:'nearest',inline:'nearest'});
+      updateMobileClassScrollHints();
+    });
+  }
 
+}
+function updateMobileClassScrollHints(){
+  const nav=el("mobileClassNavFixed");
+  const left=el("mobileClassHintLeft");
+  const right=el("mobileClassHintRight");
+  if(!nav||!left||!right)return;
+  const max=Math.max(0,nav.scrollWidth-nav.clientWidth);
+  const x=Math.max(0,nav.scrollLeft);
+  left.classList.toggle("show",max>2&&x>3);
+  right.classList.toggle("show",max>2&&x<max-3);
 }
 function changePeriod(v){currentPeriod=String(v);save();render()}
 
@@ -5253,6 +5273,13 @@ function addClass(){
   document.addEventListener("click",()=>setTimeout(renderDataMobileClassNav,30));
   
 })();
+
+window.addEventListener("DOMContentLoaded",()=>{
+  const nav=el("mobileClassNavFixed");
+  if(nav) nav.addEventListener("scroll",updateMobileClassScrollHints,{passive:true});
+  updateMobileClassScrollHints();
+});
+window.addEventListener("resize",updateMobileClassScrollHints);
 
 setInterval(updateDutyStatus,30000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){try{updateProfileNextLesson()}catch(e){};try{updateDutyStatus()}catch(e){}}});
