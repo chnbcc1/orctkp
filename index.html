@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.69</title>
+<title>Öğrenci Takip Sistemi v7.6.70</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -1823,7 +1823,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </style>
 
 <style id="v766-ui-polish">
-/* v7.6.69: deneme üst işlemleri ve dinamik mobil sınıf gezinme alanı */
+/* v7.6.70: deneme üst işlemleri ve dinamik mobil sınıf gezinme alanı */
 .trial-top-actions{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important}
 .trial-top-actions .trial-info-full{grid-column:1/-1!important;width:100%!important}
 .class-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -1933,7 +1933,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.69</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.70</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2221,15 +2221,49 @@ function openSchoolYearArchive(){
 }
 function saveActiveSchoolYearLabel(){const v=(el("activeSchoolYearLabel")?.value||"").trim();if(!/^\d{4}\s*[-/]\s*\d{4}$/.test(v))return alert("Eğitim yılını 2026-2027 biçiminde girin.");settings.currentSchoolYear=v.replace(/\s/g,"").replace("/","-");saveSettings();openSchoolYearArchive()}
 function nextSchoolYearLabel(v){const m=String(v||"").match(/(\d{4})\D+(\d{4})/);if(!m)return defaultSchoolYearLabel();return `${Number(m[1])+1}-${Number(m[2])+1}`}
+let pendingSchoolYearArchive=null;
 function archiveAndStartNewSchoolYear(){
   const label=(el("activeSchoolYearLabel")?.value||settings.currentSchoolYear||defaultSchoolYearLabel()).trim().replace(/\s/g,"").replace("/","-");
   if(!/^\d{4}-\d{4}$/.test(label))return alert("Önce eğitim yılını 2026-2027 biçiminde düzeltin.");
-  const next=prompt("Yeni eğitim yılı:",nextSchoolYearLabel(label));if(next===null)return;const n=next.trim().replace(/\s/g,"").replace("/","-");if(!/^\d{4}-\d{4}$/.test(n))return alert("Yeni eğitim yılını 2027-2028 biçiminde girin.");
-  if(!confirm(`${label} eğitim yılı arşivlenecek ve aktif sınıf verileri temizlenerek ${n} yılı başlatılacak. Devam edilsin mi?`))return;
+  const next=prompt("Yeni eğitim yılı:",nextSchoolYearLabel(label));
+  if(next===null)return;
+  const n=next.trim().replace(/\s/g,"").replace("/","-");
+  if(!/^\d{4}-\d{4}$/.test(n))return alert("Yeni eğitim yılını 2027-2028 biçiminde girin.");
+  pendingSchoolYearArchive={label,next:n};
+  modalPushCurrent();
+  el("modalTitle").textContent="Arşivleme Onayı";
+  el("modalSubtitle").textContent=`${label} → ${n}`;
+  el("modalBody").innerHTML=`
+    <div class="card" style="padding:14px;border:1px solid #f0c36a;background:#fffaf0">
+      <h3 style="margin:0 0 8px">${esc(label)} eğitim yılı arşivlenecek</h3>
+      <div style="line-height:1.5">Bu işlem mevcut eğitim yılı verilerini arşive taşıyacak ve <b>${esc(n)}</b> eğitim yılını boş bir çalışma alanı olarak başlatacaktır.</div>
+    </div>
+    <div class="card" style="padding:14px;margin-top:12px">
+      <b>Arşivlenecek veriler</b>
+      <div class="tiny" style="margin-top:7px;line-height:1.65">Sınıflar ve öğrenciler · ödevler ve kontroller · notlar · denemeler · veli görüşmeleri · oturma planları ve eğitim yılına bağlı diğer sınıf verileri</div>
+    </div>
+    <div class="card" style="padding:14px;margin-top:12px">
+      <b>Korunacak veriler</b>
+      <div class="tiny" style="margin-top:7px;line-height:1.65">Öğretmen profili · PIN · uygulama/öğretmen ayarları</div>
+    </div>
+    <div class="card" style="padding:14px;margin-top:12px;border:1px solid #cfe0ff;background:#f6f9ff">
+      <b>Yeni aktif eğitim yılı: ${esc(n)}</b>
+      <div class="tiny" style="margin-top:6px">İşlemden önce güncel bir cihaz yedeği almış olmanız önerilir.</div>
+    </div>
+    <div class="form-row" style="margin-top:14px">
+      <button class="secondary" onclick="cancelSchoolYearArchiveConfirm()">Vazgeç</button>
+      <button onclick="confirmSchoolYearArchive()">Arşivle ve ${esc(n)}'e Geç</button>
+    </div>`;
+}
+function cancelSchoolYearArchiveConfirm(){pendingSchoolYearArchive=null;modalBack()}
+function confirmSchoolYearArchive(){
+  const p=pendingSchoolYearArchive;if(!p)return openSchoolYearArchive();
+  const {label,next:n}=p;pendingSchoolYearArchive=null;
   createSchoolYearArchive(label,"yıl sonu");
   state={classes:[],currentClassId:null,currentPeriod:"1"};currentClassId=null;currentPeriod="1";
   settings.currentSchoolYear=n;settings.annualPlanMappings={};settings.weeklyOutcomes={};settings.smartAlertLifecycle={};settings.smartAlertLifecycleInitialized={};
-  save();saveSettings();undoStack=[];redoStack=[];render();openSchoolYearArchive();alert(`${label} arşivlendi. ${n} eğitim yılı başlatıldı.`)
+  save();saveSettings();undoStack=[];redoStack=[];modalHistory=[];render();openSchoolYearArchive();
+  alert(`${label} başarıyla arşivlendi. Aktif eğitim yılı: ${n}`)
 }
 function exportSchoolYearArchive(i){const a=loadSchoolYearArchives(),x=a[i];if(!x)return;downloadBlob(JSON.stringify({backupType:"ogrenci-takip-egitim-yili-arsivi",version:1,archive:x},null,2),`ogrenci_takip_${safe(x.label||"egitim_yili")}_arsiv.json`,"application/json")}
 function restoreSchoolYearArchive(i){
@@ -5057,7 +5091,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.69",
+    appVersion:"v7.6.70",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5069,7 +5103,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.69",
+    appVersion:"v7.6.70",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
