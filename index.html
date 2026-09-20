@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.66</title>
+<title>Öğrenci Takip Sistemi v7.6.67</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -1823,7 +1823,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </style>
 
 <style id="v766-ui-polish">
-/* v7.6.66: deneme üst işlemleri ve mobil sınıf seçici kullanılabilirlik düzenlemesi */
+/* v7.6.67: deneme üst işlemleri ve mobil sınıf seçici kullanılabilirlik düzenlemesi */
 .trial-top-actions{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important}
 .trial-top-actions .trial-info-full{grid-column:1/-1!important;width:100%!important}
 .class-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -1842,6 +1842,16 @@ body.class-module-page-open #modal{z-index:9200!important}
   .trial-top-actions{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
   .trial-top-actions .trial-info-full{grid-column:1/-1!important}
 }
+</style>
+<style id="v767-class-navigation">
+@media(max-width:700px){
+.mobile-class-nav-wrap{display:grid!important;grid-template-columns:38px minmax(0,1fr) 38px!important;align-items:center!important;gap:6px!important;width:100%!important;min-width:0!important}
+#mobileClassNavFixed{grid-column:2!important;grid-row:1!important;min-width:0!important;width:100%!important;padding:2px 1px 6px!important}
+.mobile-class-nav-arrow{display:flex!important;align-items:center!important;justify-content:center!important;width:36px!important;height:40px!important;min-width:36px!important;padding:0!important;margin:0!important;border:1px solid #93c5fd!important;border-radius:12px!important;background:#dbeafe!important;color:#1d4ed8!important;font-size:30px!important;font-weight:800!important;line-height:1!important;box-shadow:0 1px 3px rgba(30,64,175,.16)!important;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .15s ease}
+.mobile-class-nav-arrow.show{opacity:1!important;visibility:visible!important;pointer-events:auto!important}
+.mobile-class-nav-arrow.prev{grid-column:1!important;grid-row:1!important}.mobile-class-nav-arrow.next{grid-column:3!important;grid-row:1!important}
+}
+@media(min-width:701px){.mobile-class-nav-arrow{display:none!important}}
 </style>
 </head>
 <body>
@@ -1924,7 +1934,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.66</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.67</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1948,7 +1958,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 <div class="layout">
 <aside>
 <div class="class-section-head"><div class="section-title">Sınıflar</div><button type="button" class="mobile-fixed-add-class" onclick="addClass()" aria-label="Sınıf Ekle">＋ Sınıf Ekle</button></div>
-<div class="mobile-class-nav-wrap"><div id="mobileClassNavFixed" aria-label="Sınıf seçici"></div></div><div id="classList"></div>
+<div class="mobile-class-nav-wrap"><button type="button" id="mobileClassPrev" class="mobile-class-nav-arrow prev" aria-label="Önceki sınıfları göster" onclick="scrollMobileClasses(-1)">‹</button><div id="mobileClassNavFixed" aria-label="Sınıf seçici"></div><button type="button" id="mobileClassNext" class="mobile-class-nav-arrow next" aria-label="Sonraki sınıfları göster" onclick="scrollMobileClasses(1)">›</button></div><div id="classList"></div>
 <button style="width:100%;margin-top:7px" onclick="addClass()" class="add-class-btn">+ Sınıf Ekle</button>
 <div class="footer-note">Veriler cihazdaki tarayıcıda saklanır. “Yedek Al” tüm uygulama verilerini kaydeder ve farklı cihaza aktarım için de kullanılabilir.</div>
 </aside>
@@ -3145,7 +3155,23 @@ function renderClasses(){
   }
 
 }
-function updateMobileClassScrollHints(){ /* v7.6.66 final: doğal yatay kaydırma; ok ipuçları kaldırıldı */ }
+function updateMobileClassScrollHints(){
+  const nav=el("mobileClassNavFixed"), prev=el("mobileClassPrev"), next=el("mobileClassNext");
+  if(!nav||!prev||!next) return;
+  const max=Math.max(0,nav.scrollWidth-nav.clientWidth);
+  const overflow=max>3;
+  prev.classList.toggle("show",overflow && nav.scrollLeft>3);
+  next.classList.toggle("show",overflow && nav.scrollLeft<max-3);
+}
+function scrollMobileClasses(direction){
+  const nav=el("mobileClassNavFixed");
+  if(!nav) return;
+  const chip=nav.querySelector(".mobileClassChip");
+  const step=(chip?chip.getBoundingClientRect().width:80)+7;
+  nav.scrollBy({left:direction*step,behavior:"smooth"});
+  setTimeout(updateMobileClassScrollHints,350);
+}
+
 function changePeriod(v){currentPeriod=String(v);save();render()}
 
 function normalizeSeatingPlan(p){
@@ -5049,7 +5075,7 @@ render();
 <script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
   // v7.6.64-JPEG — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
   // ve aktif oturum güncelleme nedeniyle yeniden yüklenmez.
-  navigator.serviceWorker.register("./sw.js?v=7.6.56",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.6.67",{updateViaCache:"none"}).then(reg=>{
     reg.update().catch(()=>{});
     setInterval(()=>reg.update().catch(()=>{}),60*60*1000);
   }).catch(()=>{});
