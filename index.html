@@ -1833,8 +1833,8 @@ body.class-module-page-open #modal{z-index:9200!important}
   .class-section-head .section-title{margin:0!important}
   .mobile-fixed-add-class{display:inline-flex!important;align-items:center;justify-content:center;flex:0 0 auto;padding:8px 12px!important;min-height:36px!important;border-radius:11px!important;background:#2458dc!important;color:#fff!important;border:0!important;font-size:12px!important;font-weight:800!important}
   .mobile-class-nav-wrap{display:block!important;position:relative;width:100%;min-width:0}
-  #mobileClassNavFixed{padding-left:28px!important;padding-right:28px!important}
-  .mobile-class-scroll-hint{position:absolute;top:2px;bottom:6px;width:28px;display:none;align-items:center;pointer-events:none;font-size:27px;font-weight:900;color:#64748b;z-index:2}
+  #mobileClassNavFixed{padding-left:1px!important;padding-right:1px!important}
+  .mobile-class-scroll-hint{display:none!important}
   .mobile-class-scroll-hint.show{display:flex}
   .mobile-class-scroll-hint.left{left:0;justify-content:flex-start;padding-left:3px;background:linear-gradient(270deg,rgba(255,255,255,0),#fff 58%)}
   .mobile-class-scroll-hint.right{right:0;justify-content:flex-end;padding-right:3px;background:linear-gradient(90deg,rgba(255,255,255,0),#fff 58%)}
@@ -1948,7 +1948,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 <div class="layout">
 <aside>
 <div class="class-section-head"><div class="section-title">Sınıflar</div><button type="button" class="mobile-fixed-add-class" onclick="addClass()" aria-label="Sınıf Ekle">＋ Sınıf Ekle</button></div>
-<div class="mobile-class-nav-wrap"><span id="mobileClassHintLeft" class="mobile-class-scroll-hint left" aria-hidden="true">‹</span><div id="mobileClassNavFixed" aria-label="Sınıf seçici"></div><span id="mobileClassHintRight" class="mobile-class-scroll-hint right" aria-hidden="true">›</span></div><div id="classList"></div>
+<div class="mobile-class-nav-wrap"><div id="mobileClassNavFixed" aria-label="Sınıf seçici"></div></div><div id="classList"></div>
 <button style="width:100%;margin-top:7px" onclick="addClass()" class="add-class-btn">+ Sınıf Ekle</button>
 <div class="footer-note">Veriler cihazdaki tarayıcıda saklanır. “Yedek Al” tüm uygulama verilerini kaydeder ve farklı cihaza aktarım için de kullanılabilir.</div>
 </aside>
@@ -3145,16 +3145,7 @@ function renderClasses(){
   }
 
 }
-function updateMobileClassScrollHints(){
-  const nav=el("mobileClassNavFixed");
-  const left=el("mobileClassHintLeft");
-  const right=el("mobileClassHintRight");
-  if(!nav||!left||!right)return;
-  const max=Math.max(0,nav.scrollWidth-nav.clientWidth);
-  const x=Math.max(0,nav.scrollLeft);
-  left.classList.toggle("show",max>2&&x>3);
-  right.classList.toggle("show",max>2&&x<max-3);
-}
+function updateMobileClassScrollHints(){ /* v7.6.66 final: doğal yatay kaydırma; ok ipuçları kaldırıldı */ }
 function changePeriod(v){currentPeriod=String(v);save();render()}
 
 function normalizeSeatingPlan(p){
