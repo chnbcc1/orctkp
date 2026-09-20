@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.78</title>
+<title>Öğrenci Takip Sistemi v7.6.80</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -795,7 +795,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 /* ===== v7.6.47 Sınıf bazlı yıllık plan ===== */
 .class-annual-card{margin-top:16px}.class-annual-card label{display:block;font-weight:700}.class-annual-card select,.class-annual-card input[type=file]{width:100%;margin-top:7px}.class-annual-import{margin-top:16px;padding-top:14px;border-top:1px solid #e2e8f0;display:grid;gap:10px}
 
-/* v7.6.78 - Sınıf nöbeti mobil görünüm */
+/* v7.6.80 - Sınıf nöbeti mobil görünüm */
 .duty-mobile-list{display:none}
 .duty-mobile-card{border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:9px;background:#fff}
 .duty-mobile-date{font-weight:900;font-size:15px;margin-bottom:8px;color:#0f172a}
@@ -809,7 +809,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
  .duty-mobile-list{display:block}
 }
 
-/* v7.6.78 - Nöbetçi değiştir mobil formu */
+/* v7.6.80 - Nöbetçi değiştir mobil formu */
 .duty-swap-form{display:flex;flex-direction:column;gap:14px}
 .duty-swap-field{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:6px!important;width:100%!important;min-width:0!important;margin:0!important}
 .duty-swap-field>span{display:block;font-weight:700;line-height:1.3}
@@ -1846,7 +1846,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </style>
 
 <style id="v766-ui-polish">
-/* v7.6.78: deneme üst işlemleri ve dinamik mobil sınıf gezinme alanı */
+/* v7.6.80: deneme üst işlemleri ve dinamik mobil sınıf gezinme alanı */
 .trial-top-actions{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important}
 .trial-top-actions .trial-info-full{grid-column:1/-1!important;width:100%!important}
 .class-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -1956,7 +1956,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.78</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.80</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2314,10 +2314,12 @@ function pushUndo(){undoStack.push(JSON.stringify(state));if(undoStack.length>30
 function updateUndoRedo(){document.getElementById("undoBtn").disabled=!undoStack.length;document.getElementById("redoBtn").disabled=!redoStack.length}
 function normalizeClassDuty(d){
  d=(d&&typeof d==="object")?d:{};
- d.startDate=d.startDate||new Date().toISOString().slice(0,10);
- d.assignments=(d.assignments&&typeof d.assignments==="object")?d.assignments:{};
- d.holidays=Array.isArray(d.holidays)?d.holidays:[];
- d.studentArchive=(d.studentArchive&&typeof d.studentArchive==='object')?d.studentArchive:{};
+ const startDate=d.startDate||new Date().toISOString().slice(0,10);
+ const holidays=Array.isArray(d.holidays)?d.holidays:[];
+ const studentArchive=(d.studentArchive&&typeof d.studentArchive==='object')?d.studentArchive:{};
+ // v2: Eski deneme sürümlerindeki yeniden-hesaplanan atamalar bilinçli olarak taşınmaz.
+ if(d.schema!==2)return {schema:2,startDate,assignments:{},holidays,studentArchive};
+ d.startDate=startDate;d.assignments=(d.assignments&&typeof d.assignments==='object')?d.assignments:{};d.holidays=holidays;d.studentArchive=studentArchive;
  return d;
 }
 function undo(){if(!undoStack.length)return;redoStack.push(JSON.stringify(state));state=normalize(JSON.parse(undoStack.pop()));currentClassId=state.currentClassId||(state.classes[0]?.id??null);currentPeriod=state.currentPeriod||"1";save();render();updateUndoRedo()}
@@ -2325,7 +2327,7 @@ function redo(){if(!redoStack.length)return;undoStack.push(JSON.stringify(state)
 function cls(){return state.classes.find(c=>c.id===currentClassId)||null}
 function el(id){return document.getElementById(id)}
 let modalHistory=[]; let modalPageScrollY=0; let modalPageLocked=false; let modalDataRevision=0;
-function modalUpdateBackButton(){const b=el("modalBackBtn");if(b)b.style.display=modalHistory.length?"inline-flex":"none"}
+function modalUpdateBackButton(){const b=el("modalBackBtn");if(b)b.style.display=(modalHistory.length||el("modalTitle")?.textContent==="Sınıf Nöbeti")?"inline-flex":"none"}
 function modalSnapshot(){const box=document.querySelector("#modal .modal-box");return {title:el("modalTitle")?.textContent||"",subtitle:el("modalSubtitle")?.textContent||"",body:el("modalBody")?.innerHTML||"",scrollTop:box?.scrollTop||0,activeStudentId:window._activeStudentModalId||null,revision:modalDataRevision,classId:currentClassId,period:currentPeriod}}
 function modalPushCurrent(){if(!el("modal")?.classList.contains("open"))return;modalHistory.push(modalSnapshot());if(modalHistory.length>20)modalHistory.shift();modalUpdateBackButton()}
 function findStudentIdFromSnapshot(x){const c=state.classes.find(z=>z.id===(x.classId||currentClassId));if(!c)return null;const sub=String(x.subtitle||"").trim();const byActive=x.activeStudentId&&c.students.find(st=>st.id===x.activeStudentId);if(byActive)return byActive.id;const st=c.students.find(st=>sub===`${st.number?st.number+" - ":""}${st.name}`||sub===st.name);return st?.id||null}
@@ -5093,63 +5095,32 @@ function commitPDFRegionStudents(){
   });
   refreshFutureClassDuty(c);save();render();closeModal();alert(`${n} öğrenci eklendi${withGender?` · ${withGender} öğrencinin cinsiyet bilgisi PDF'den alındı`:""}.`);
 }
-/* ===== v7.6.78 Sınıf Nöbetçi Öğrenci Sistemi ===== */
+/* ===== v7.6.80 Sınıf Nöbetçi Öğrenci Sistemi — Baştan Kurulum ===== */
 function dutyToday(){return new Date().toISOString().slice(0,10)}
 function dutyDateObj(iso){const [y,m,d]=iso.split('-').map(Number);return new Date(y,m-1,d,12)}
 function dutyISO(dt){return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`}
 function dutyIsSchoolDay(c,iso){const d=dutyDateObj(iso),w=d.getDay(),x=normalizeClassDuty(c.classDuty);return w!==0&&w!==6&&!x.holidays.includes(iso)}
-function dutyStudentLabel(c,id){const s=c.students.find(x=>x.id===id);if(s)return `${s.number?s.number+' - ':''}${s.name}`;return normalizeClassDuty(c.classDuty).studentArchive[id]||'—'}
+function dutyStudentLabel(c,id){const s=c.students.find(x=>String(x.id)===String(id));if(s)return `${s.number?s.number+' - ':''}${s.name}`;return normalizeClassDuty(c.classDuty).studentArchive[id]||'—'}
 function archiveDutyStudent(c,s){if(!c||!s)return;c.classDuty=normalizeClassDuty(c.classDuty);c.classDuty.studentArchive[s.id]=`${s.number?s.number+' - ':''}${s.name}`}
 function dutySortedStudents(c){return [...c.students].sort((a,b)=>{const na=Number(a.number),nb=Number(b.number);if(Number.isFinite(na)&&Number.isFinite(nb)&&na!==nb)return na-nb;return a.name.localeCompare(b.name,'tr')})}
-function dutyLastAssignedIds(c,before){const a=normalizeClassDuty(c.classDuty).assignments;return Object.keys(a).filter(d=>d<before).sort().flatMap(d=>a[d]||[])}
-function dutyNextPair(c,date){const students=dutySortedStudents(c);if(!students.length)return [];
- const ids=students.map(s=>s.id),used=dutyLastAssignedIds(c,date).filter(id=>ids.includes(id));let start=0;
- if(used.length){const last=used[used.length-1],i=ids.indexOf(last);start=i<0?0:(i+1)%ids.length}
- const out=[];for(let k=0;k<Math.min(2,ids.length);k++)out.push(ids[(start+k)%ids.length]);return out;
-}
-function ensureDutyThrough(c,endIso){c.classDuty=normalizeClassDuty(c.classDuty);let dt=dutyDateObj(c.classDuty.startDate),end=dutyDateObj(endIso),guard=0;
- while(dt<=end&&guard++<1500){const iso=dutyISO(dt);if(dutyIsSchoolDay(c,iso)&&!c.classDuty.assignments[iso])c.classDuty.assignments[iso]=dutyNextPair(c,iso);dt.setDate(dt.getDate()+1)}
-}
-function refreshFutureClassDuty(c){if(!c)return;c.classDuty=normalizeClassDuty(c.classDuty);const today=dutyToday();Object.keys(c.classDuty.assignments).forEach(d=>{if(d>=today)delete c.classDuty.assignments[d]});}
+function dutyActiveIds(c){return dutySortedStudents(c).map(s=>String(s.id))}
+function dutyLastActiveAssigned(c,before){const active=new Set(dutyActiveIds(c)),a=normalizeClassDuty(c.classDuty).assignments;const dates=Object.keys(a).filter(d=>d<before).sort().reverse();for(const d of dates){const pair=(a[d]||[]).map(String);for(let i=pair.length-1;i>=0;i--)if(active.has(pair[i]))return pair[i]}return null}
+function dutyNextPair(c,date){const students=dutySortedStudents(c),ids=students.map(s=>String(s.id));if(!ids.length)return[];const last=dutyLastActiveAssigned(c,date);let start=last==null?0:(ids.indexOf(last)+1)%ids.length;if(start<0)start=0;const out=[];for(let k=0;k<Math.min(2,ids.length);k++)out.push(students[ids.indexOf(ids[(start+k)%ids.length])].id);return out}
+function ensureDutyThrough(c,endIso){c.classDuty=normalizeClassDuty(c.classDuty);let dt=dutyDateObj(c.classDuty.startDate),end=dutyDateObj(endIso),guard=0;while(dt<=end&&guard++<1800){const iso=dutyISO(dt);if(dutyIsSchoolDay(c,iso)&&!c.classDuty.assignments[iso])c.classDuty.assignments[iso]=dutyNextPair(c,iso);dt.setDate(dt.getDate()+1)}}
+// Yalnız öğrenci kadrosu değiştiğinde çağrılır. Geçmiş sabit kalır; bugün ve sonrası yeni kadroyla yeniden kurulur.
+function refreshFutureClassDuty(c){if(!c)return;c.classDuty=normalizeClassDuty(c.classDuty);const today=dutyToday();Object.keys(c.classDuty.assignments).forEach(d=>{if(d>=today)delete c.classDuty.assignments[d]})}
 function dutyMonthValue(){return window._dutyMonth||dutyToday().slice(0,7)}
 function dutyMonthEnd(ym){const [y,m]=ym.split('-').map(Number);return dutyISO(new Date(y,m,0,12))}
 function dutyMonthRows(c,ym){ensureDutyThrough(c,dutyMonthEnd(ym));const [y,m]=ym.split('-').map(Number),last=new Date(y,m,0).getDate(),rows=[];for(let d=1;d<=last;d++){const iso=`${ym}-${String(d).padStart(2,'0')}`,dt=dutyDateObj(iso),w=dt.getDay();if(w===0||w===6)continue;rows.push({iso,holiday:c.classDuty.holidays.includes(iso),ids:c.classDuty.assignments[iso]||[]})}return rows}
-function openClassDuty(ym){const c=cls();if(!c)return;c.classDuty=normalizeClassDuty(c.classDuty);window._dutyMonth=ym||dutyMonthValue();const rows=dutyMonthRows(c,window._dutyMonth);save();const [y,m]=window._dutyMonth.split('-').map(Number),month=new Date(y,m-1,1).toLocaleDateString('tr-TR',{month:'long',year:'numeric'});
- el('modalTitle').textContent='Sınıf Nöbeti';el('modalSubtitle').textContent=`${c.name} · Her ders günü 2 öğrenci`;
- modalUpdateBackButton();
- el('modalBody').innerHTML=`<div class="card" style="padding:12px;margin-bottom:10px"><div class="form-row"><label>Ay<input id="dutyMonth" type="month" value="${window._dutyMonth}" onchange="openClassDuty(this.value)"></label><label>Başlangıç tarihi<input id="dutyStart" type="date" value="${c.classDuty.startDate}" onchange="setDutyStart(this.value)"></label></div><div class="tiny" style="margin-top:6px">Sıra ay sonunda sıfırlanmaz. Hafta sonları ve nöbetsiz günlerde sıra ilerlemez.</div></div>
- <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px"><button onclick="exportDutyMonth()">🖨️ Aylık Çıktı</button><button class="secondary" onclick="addDutyHoliday()">📅 Nöbetsiz Gün Ekle</button></div>
- <div class="card duty-desktop-table" style="overflow:auto"><table style="width:100%"><thead><tr><th>Tarih</th><th>1. Nöbetçi</th><th>2. Nöbetçi</th><th>İşlem</th></tr></thead><tbody>${rows.map(r=>{const dt=dutyDateObj(r.iso),label=dt.toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',weekday:'short'});return `<tr><td>${label}</td>${r.holiday?`<td colspan="2"><span class="badge neutral">Nöbet yok</span></td><td><button class="ghost" onclick="removeDutyHoliday('${r.iso}')">Geri Al</button></td>`:`<td>${esc(dutyStudentLabel(c,r.ids[0]))}</td><td>${esc(dutyStudentLabel(c,r.ids[1]))}</td><td><button class="secondary" onclick="openDutySwap('${r.iso}')">Değiştir</button></td>`}</tr>`}).join('')}</tbody></table></div>
- <div class="duty-mobile-list">${rows.map(r=>{const dt=dutyDateObj(r.iso),label=dt.toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',weekday:'short'});if(r.holiday)return `<div class="duty-mobile-card"><div class="duty-mobile-date">${label}</div><div class="duty-mobile-person"><div><div class="duty-mobile-name">Nöbet yok</div></div><button class="ghost" onclick="removeDutyHoliday('${r.iso}')">Geri Al</button></div></div>`;return `<div class="duty-mobile-card"><div class="duty-mobile-date">${label}</div><div class="duty-mobile-person"><div><small>1. Nöbetçi</small><div class="duty-mobile-name">${esc(dutyStudentLabel(c,r.ids[0]))}</div></div><button class="secondary" onclick="openDutySwapFor('${r.iso}',0)">Değiştir</button></div><div class="duty-mobile-person"><div><small>2. Nöbetçi</small><div class="duty-mobile-name">${esc(dutyStudentLabel(c,r.ids[1]))}</div></div><button class="secondary" onclick="openDutySwapFor('${r.iso}',1)">Değiştir</button></div></div>`}).join('')}</div>`;el('modal').classList.add('open');
-}
-function setDutyStart(v){const c=cls();if(!c||!v)return;pushUndo();c.classDuty=normalizeClassDuty(c.classDuty);c.classDuty.startDate=v;c.classDuty.assignments={};save();openClassDuty()}
+function openClassDuty(ym){const c=cls();if(!c)return;c.classDuty=normalizeClassDuty(c.classDuty);window._dutyMonth=ym||dutyMonthValue();const rows=dutyMonthRows(c,window._dutyMonth);save();const [y,m]=window._dutyMonth.split('-').map(Number);el('modalTitle').textContent='Sınıf Nöbeti';el('modalSubtitle').textContent=`${c.name} · Her ders günü 2 öğrenci`;modalUpdateBackButton();el('modalBody').innerHTML=`<div class="card" style="padding:12px;margin-bottom:10px"><div class="form-row"><label>Ay<input id="dutyMonth" type="month" value="${window._dutyMonth}" onchange="openClassDuty(this.value)"></label><label>Başlangıç tarihi<input id="dutyStart" type="date" value="${c.classDuty.startDate}" onchange="setDutyStart(this.value)"></label></div><div class="tiny" style="margin-top:6px">Sıra ay sonunda sıfırlanmaz. Hafta sonları ve nöbetsiz günlerde sıra ilerlemez.</div></div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px"><button onclick="exportDutyMonth()">🖨️ Aylık Çıktı</button><button class="secondary" onclick="addDutyHoliday()">📅 Nöbetsiz Gün Ekle</button><button class="danger" onclick="resetClassDutySchedule()">🗑️ Nöbet Çizelgesini Sıfırla</button></div><div class="card duty-desktop-table" style="overflow:auto"><table style="width:100%"><thead><tr><th>Tarih</th><th>1. Nöbetçi</th><th>2. Nöbetçi</th><th>İşlem</th></tr></thead><tbody>${rows.map(r=>{const label=dutyDateObj(r.iso).toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',weekday:'short'});return `<tr><td>${label}</td>${r.holiday?`<td colspan="2"><span class="badge neutral">Nöbet yok</span></td><td><button class="ghost" onclick="removeDutyHoliday('${r.iso}')">Geri Al</button></td>`:`<td>${esc(dutyStudentLabel(c,r.ids[0]))}</td><td>${esc(dutyStudentLabel(c,r.ids[1]))}</td><td><button class="secondary" onclick="openDutySwap('${r.iso}',0)">Değiştir</button></td>`}</tr>`}).join('')}</tbody></table></div><div class="duty-mobile-list">${rows.map(r=>{const label=dutyDateObj(r.iso).toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',weekday:'short'});if(r.holiday)return `<div class="duty-mobile-card"><div class="duty-mobile-date">${label}</div><div class="duty-mobile-person"><div><div class="duty-mobile-name">Nöbet yok</div></div><button class="ghost" onclick="removeDutyHoliday('${r.iso}')">Geri Al</button></div></div>`;return `<div class="duty-mobile-card"><div class="duty-mobile-date">${label}</div><div class="duty-mobile-person"><div><small>1. Nöbetçi</small><div class="duty-mobile-name">${esc(dutyStudentLabel(c,r.ids[0]))}</div></div><button class="secondary" onclick="openDutySwap('${r.iso}',0)">Değiştir</button></div><div class="duty-mobile-person"><div><small>2. Nöbetçi</small><div class="duty-mobile-name">${esc(dutyStudentLabel(c,r.ids[1]))}</div></div><button class="secondary" onclick="openDutySwap('${r.iso}',1)">Değiştir</button></div></div>`}).join('')}</div>`;el('modal').classList.add('open');modalUpdateBackButton()}
+function setDutyStart(v){const c=cls();if(!c||!v)return;pushUndo();c.classDuty=normalizeClassDuty(c.classDuty);c.classDuty.startDate=v;c.classDuty.assignments={};save();openClassDuty(v.slice(0,7))}
+function resetClassDutySchedule(){const c=cls();if(!c)return;c.classDuty=normalizeClassDuty(c.classDuty);const ym=dutyMonthValue();if(!confirm(`${c.name} sınıfının nöbet çizelgesi sıfırlansın mı?\n\nTüm nöbetçi öğrenci dağılımları ve yaptığınız öğrenci takasları silinecek. Öğrenci listesi, ödevler, notlar, denemeler ve diğer sınıf verileri etkilenmeyecek.\n\nÇizelge mevcut başlangıç tarihinden ve mevcut öğrenci listesinin sırasından yeniden oluşturulacak.`))return;pushUndo();c.classDuty.assignments={};save();openClassDuty(ym);alert('Nöbet çizelgesi sıfırlandı ve mevcut öğrenci listesine göre yeniden oluşturuldu.')}
 function addDutyHoliday(){const c=cls();if(!c)return;const v=prompt('Nöbet olmayan tarihi YYYY-AA-GG biçiminde yazın:',`${dutyMonthValue()}-01`);if(!v||!/^\d{4}-\d{2}-\d{2}$/.test(v))return;pushUndo();c.classDuty=normalizeClassDuty(c.classDuty);if(!c.classDuty.holidays.includes(v))c.classDuty.holidays.push(v);delete c.classDuty.assignments[v];refreshFutureClassDuty(c);save();openClassDuty(v.slice(0,7))}
-function removeDutyHoliday(v){const c=cls();if(!c)return;pushUndo();c.classDuty.holidays=c.classDuty.holidays.filter(x=>x!==v);refreshFutureClassDuty(c);save();openClassDuty(v.slice(0,7))}
-function openDutySwapFor(date,idx){openDutySwap(date,idx)}
-function openDutySwap(date,preferredIdx){
- const c=cls();if(!c)return;ensureDutyThrough(c,dutyMonthEnd(date.slice(0,7)));const ids=c.classDuty.assignments[date]||[];if(!ids.length)return alert('Bu gün için nöbetçi yok.');
- // Sınıf Nöbeti -> Değiştir geçişi tek katmandır; genel modal geçmişine bırakılmaz.
- modalHistory=modalHistory.filter(x=>x.title!=='Sınıf Nöbeti'&&x.title!=='Nöbetçi Değiştir');
- window._dutySwapDate=date;el('modalTitle').textContent='Nöbetçi Değiştir';el('modalSubtitle').textContent=`${c.name} · ${dutyDateObj(date).toLocaleDateString('tr-TR')}`;
- const opts=dutySortedStudents(c).map(s=>`<option value="${s.id}">${esc(dutyStudentLabel(c,s.id))}</option>`).join('');
- el('modalBody').innerHTML=`<div class="duty-swap-form"><div class="notice">Değişiklik bir takastır. Yerine seçilen öğrencinin gelecekteki ilk nöbeti, değiştirilen öğrenciye geçer.</div><label class="duty-swap-field"><span>Değiştirilecek nöbetçi</span><select id="dutyOld" onchange="syncDutySwapChoices()">${ids.map(id=>`<option value="${id}">${esc(dutyStudentLabel(c,id))}</option>`).join('')}</select></label><label class="duty-swap-field"><span>Yerine gelecek öğrenci</span><select id="dutyNew" onchange="updateDutySwapButton()"><option value="">Öğrenci seçin</option>${opts}</select></label><button id="dutySwapBtn" style="width:100%" onclick="commitDutySwap()" disabled>Yer Değiştir</button><button class="secondary" style="width:100%" onclick="returnFromDutySwap()">Vazgeç</button></div>`;
- const old=el('dutyOld');if(old&&Number.isInteger(preferredIdx)&&old.options[preferredIdx])old.selectedIndex=preferredIdx;syncDutySwapChoices();
- const back=el('modalBackBtn');if(back)back.style.display='inline-flex';
-}
-function returnFromDutySwap(){const ym=(window._dutySwapDate||dutyToday()).slice(0,7);modalHistory=modalHistory.filter(x=>x.title!=='Sınıf Nöbeti'&&x.title!=='Nöbetçi Değiştir');openClassDuty(ym);modalUpdateBackButton()}
-function syncDutySwapChoices(){const old=el('dutyOld'),neu=el('dutyNew'),c=cls(),date=window._dutySwapDate;if(!old||!neu||!c||!date)return;const oldId=String(old.value),pair=(c.classDuty.assignments[date]||[]).map(String);Array.from(neu.options).forEach(o=>{if(!o.value)return;const blocked=String(o.value)===oldId||pair.includes(String(o.value));o.hidden=blocked;o.disabled=blocked});if(!neu.value||neu.options[neu.selectedIndex]?.disabled)neu.value='';updateDutySwapButton()}
-function updateDutySwapButton(){const b=el('dutySwapBtn'),old=el('dutyOld'),neu=el('dutyNew');if(!b||!old||!neu)return;b.disabled=!neu.value||String(neu.value)===String(old.value)}
-function dutyFindFutureSlot(c,date,studentId){const target=String(studentId);for(const d of Object.keys(c.classDuty.assignments).filter(d=>d>date).sort()){const pair=c.classDuty.assignments[d]||[];const idx=pair.findIndex(id=>String(id)===target);if(idx>=0)return {date:d,index:idx}}return null}
-function commitDutySwap(){
- const c=cls(),date=window._dutySwapDate,oldRaw=el('dutyOld')?.value,newRaw=el('dutyNew')?.value;if(!c||!date||!oldRaw||!newRaw||String(oldRaw)===String(newRaw))return alert('Farklı bir öğrenci seçin.');
- c.classDuty=normalizeClassDuty(c.classDuty);let todayPair=c.classDuty.assignments[date]||[];const oldIndex=todayPair.findIndex(id=>String(id)===String(oldRaw));if(oldIndex<0)return alert('Değiştirilecek nöbetçi bu tarihte bulunamadı. Listeyi yenileyip tekrar deneyin.');if(todayPair.some(id=>String(id)===String(newRaw)))return alert('Seçtiğiniz öğrenci zaten o gün nöbetçi.');
- let future=dutyFindFutureSlot(c,date,newRaw);if(!future){const end=dutyDateObj(date);end.setMonth(end.getMonth()+12);ensureDutyThrough(c,dutyISO(end));future=dutyFindFutureSlot(c,date,newRaw)}if(!future)return alert('Seçilen öğrencinin takas edilecek ileri tarihli nöbeti bulunamadı.');
- const newStudent=c.students.find(st=>String(st.id)===String(newRaw)),oldStudent=c.students.find(st=>String(st.id)===String(oldRaw));if(!newStudent||!oldStudent)return alert('Öğrenci kaydı bulunamadı.');
- pushUndo();todayPair=[...todayPair];todayPair[oldIndex]=newStudent.id;c.classDuty.assignments[date]=todayPair;const futurePair=[...(c.classDuty.assignments[future.date]||[])];futurePair[future.index]=oldStudent.id;c.classDuty.assignments[future.date]=futurePair;save();
- // Takas sonrası iki tarafı da doğrula. Sessizce bozuk kayıt bırakma.
- const okNow=(c.classDuty.assignments[date]||[]).some(id=>String(id)===String(newStudent.id));const okFuture=(c.classDuty.assignments[future.date]||[]).some(id=>String(id)===String(oldStudent.id));if(!okNow||!okFuture){undo();return alert('Takas doğrulanamadı; değişiklik geri alındı.');}
- modalHistory=modalHistory.filter(x=>x.title!=='Sınıf Nöbeti'&&x.title!=='Nöbetçi Değiştir');openClassDuty(date.slice(0,7));modalUpdateBackButton();
-}
+function removeDutyHoliday(v){const c=cls();if(!c)return;pushUndo();c.classDuty=normalizeClassDuty(c.classDuty);c.classDuty.holidays=c.classDuty.holidays.filter(x=>x!==v);refreshFutureClassDuty(c);save();openClassDuty(v.slice(0,7))}
+function closeDutySwapOverlay(){document.getElementById('dutySwapOverlay')?.remove()}
+function openDutySwap(date,idx=0){const c=cls();if(!c)return;ensureDutyThrough(c,dutyMonthEnd(date.slice(0,7)));const pair=c.classDuty.assignments[date]||[];const oldId=pair[idx];if(oldId==null)return alert('Bu nöbetçi bulunamadı.');closeDutySwapOverlay();const blocked=new Set(pair.map(String));const options=dutySortedStudents(c).filter(s=>!blocked.has(String(s.id))).map(s=>`<option value="${s.id}">${esc(dutyStudentLabel(c,s.id))}</option>`).join('');const o=document.createElement('div');o.id='dutySwapOverlay';o.style.cssText='position:fixed;inset:0;z-index:10060;background:rgba(15,23,42,.48);display:flex;align-items:center;justify-content:center;padding:16px';o.innerHTML=`<div style="width:min(560px,100%);background:#fff;border-radius:22px;box-shadow:0 24px 70px rgba(15,23,42,.3);overflow:hidden"><div style="padding:18px 20px;border-bottom:1px solid #e2e8f0"><b style="font-size:20px">Nöbetçi Değiştir</b><div class="tiny">${esc(c.name)} · ${dutyDateObj(date).toLocaleDateString('tr-TR')}</div></div><div class="duty-swap-form" style="padding:20px"><label class="duty-swap-field"><span>Değiştirilecek nöbetçi</span><input value="${esc(dutyStudentLabel(c,oldId))}" disabled></label><label class="duty-swap-field"><span>Yerine gelecek öğrenci</span><select id="dutySwapNew" onchange="document.getElementById('dutySwapCommit').disabled=!this.value"><option value="">Öğrenci seçin</option>${options}</select></label><button id="dutySwapCommit" style="width:100%" disabled onclick="commitDutySwap('${date}',${idx})">Yer Değiştir</button><button class="secondary" style="width:100%" onclick="closeDutySwapOverlay()">Vazgeç</button></div></div>`;document.body.appendChild(o)}
+function dutyFindFutureSlot(c,date,studentId){const target=String(studentId);for(const d of Object.keys(c.classDuty.assignments).filter(d=>d>date).sort()){const pair=c.classDuty.assignments[d]||[];const i=pair.findIndex(id=>String(id)===target);if(i>=0)return{date:d,index:i}}return null}
+function commitDutySwap(date,idx){const c=cls(),newId=document.getElementById('dutySwapNew')?.value;if(!c||!newId)return;const pair=[...(c.classDuty.assignments[date]||[])],oldId=pair[idx];if(oldId==null||pair.some(id=>String(id)===String(newId)))return alert('Farklı bir öğrenci seçin.');let future=dutyFindFutureSlot(c,date,newId);if(!future){const end=dutyDateObj(date);end.setMonth(end.getMonth()+12);ensureDutyThrough(c,dutyISO(end));future=dutyFindFutureSlot(c,date,newId)}if(!future)return alert('Seçilen öğrencinin ileri tarihli nöbeti bulunamadı.');const newStudent=c.students.find(s=>String(s.id)===String(newId));if(!newStudent)return alert('Öğrenci bulunamadı.');pushUndo();pair[idx]=newStudent.id;c.classDuty.assignments[date]=pair;const fp=[...(c.classDuty.assignments[future.date]||[])];fp[future.index]=oldId;c.classDuty.assignments[future.date]=fp;save();closeDutySwapOverlay();openClassDuty(date.slice(0,7))}
 function buildDutyMonthCanvas(c,ym){const rows=dutyMonthRows(c,ym),[y,m]=ym.split('-').map(Number),month=new Date(y,m-1,1).toLocaleDateString('tr-TR',{month:'long',year:'numeric'}),w=1240,rh=48,top=135,h=top+rows.length*rh+55,cv=document.createElement('canvas');cv.width=w;cv.height=h;const x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.fillStyle='#111827';x.textAlign='center';x.font='bold 30px Arial';x.fillText(`${c.name} Sınıfı - ${month} Nöbetçi Öğrenci Çizelgesi`,w/2,50);x.textAlign='left';x.fillStyle='#eaf2ff';x.fillRect(40,75,w-80,48);x.fillStyle='#1e3a8a';x.font='bold 16px Arial';x.fillText('Tarih',60,106);x.fillText('1. Nöbetçi Öğrenci',300,106);x.fillText('2. Nöbetçi Öğrenci',760,106);rows.forEach((r,i)=>{const yy=top+i*rh;x.fillStyle=i%2?'#fff':'#f8fafc';x.fillRect(40,yy,w-80,rh);x.fillStyle='#111827';x.font='15px Arial';x.fillText(dutyDateObj(r.iso).toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',weekday:'long'}),60,yy+30);if(r.holiday){x.fillStyle='#64748b';x.fillText('NÖBET YOK',300,yy+30)}else{x.fillText(dutyStudentLabel(c,r.ids[0]),300,yy+30);x.fillText(dutyStudentLabel(c,r.ids[1]),760,yy+30)}});return cv}
 function exportDutyMonth(){const c=cls();if(!c)return;const ym=dutyMonthValue(),cv=buildDutyMonthCanvas(c,ym);downloadCanvas(cv,`${safe(c.name)}_${ym}_sinif_nobet_cizelgesi.jpg`)}
 
@@ -5182,7 +5153,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.78",
+    appVersion:"v7.6.80",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5194,7 +5165,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.78",
+    appVersion:"v7.6.80",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
