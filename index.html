@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.63</title>
+<title>Öğrenci Takip Sistemi v7.6.64-JPEG</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -460,12 +460,16 @@ input,select,textarea,button{max-width:100%}
 .smart-alert small{display:block;color:var(--muted);font-size:10px;line-height:1.25;margin-top:5px}
 .smart-alert.danger{border-left:4px solid var(--danger)}.smart-alert.warn{border-left:4px solid var(--warn)}.smart-alert.partial{border-left:4px solid var(--partial)}.smart-alert.info{border-left:4px solid var(--primary)}
 .smart-all-clear{border:1px dashed #86efac;background:#f0fdf4;color:#166534;border-radius:12px;padding:12px;font-size:12px;font-weight:700}
-/* ===== v7.6.63 Akıllı Uyarılar 3.0 — öğrenci bazlı takip ===== */
+/* ===== v7.6.64-JPEG Akıllı Uyarılar 3.0 — öğrenci bazlı takip ===== */
 .smart-follow-list{display:grid;gap:9px;margin-bottom:14px}.smart-follow-card{border:1px solid var(--border);border-radius:14px;padding:11px 12px;background:#fff}.smart-follow-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.smart-follow-name{font-size:13px;font-weight:900}.smart-follow-meta{font-size:10px;color:var(--muted);margin-top:2px}.smart-follow-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}.smart-follow-chip{font-size:9px;font-weight:800;padding:5px 7px;border-radius:999px;background:#f1f5f9;color:#334155;border:1px solid #e2e8f0}.smart-follow-chip.danger{background:#fff1f2;border-color:#fecdd3;color:#9f1239}.smart-follow-chip.warn{background:#fff8e8;border-color:#f5d78e;color:#92400e}.smart-follow-chip.partial{background:#f5f1ff;border-color:#ddd6fe;color:#5b21b6}.smart-follow-chip.info{background:#eff6ff;border-color:#bfdbfe;color:#1d4ed8}.smart-section-title{font-size:12px;font-weight:900;color:#475569;margin:13px 0 8px}.smart-follow-count{min-width:28px;height:28px;padding:0 7px;border-radius:999px;background:#fff1f2;color:#be123c;border:1px solid #fecdd3;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900}
 @media(max-width:900px){.smart-alert-grid{grid-template-columns:1fr 1fr}.smart-alert:last-child{grid-column:1 / -1}}
 @media(max-width:520px){.smart-panel{padding:11px}.smart-alert-grid{grid-template-columns:1fr}.smart-alert:last-child{grid-column:auto}.smart-head{align-items:center}.smart-badge{font-size:10px}.smart-alert{min-height:0}.smart-summary-card b{font-size:17px}}
 
 
+/* ===== v7.6.64-JPEG Akıllı Uyarılar 3.1 — Takip Yaşam Döngüsü ===== */
+.smart-life-badge{display:inline-flex;align-items:center;border-radius:999px;padding:3px 7px;font-size:11px;font-weight:800;margin-left:5px;vertical-align:middle}
+.smart-life-badge.new{background:#e8f1ff;color:#1857c9}.smart-life-badge.ongoing{background:#f2f4f7;color:#5b6574}.smart-life-badge.resolved{background:#e9f8ee;color:#16834b}
+.smart-resolved-list{display:grid;gap:8px}.smart-resolved-card{border:1px solid #cfe8d8;background:#f7fcf8;border-radius:16px;padding:11px 13px;display:flex;justify-content:space-between;gap:10px;align-items:center}.smart-resolved-card small{display:block;color:#687384;margin-top:3px}.smart-resolved-card button{padding:7px 9px}
 /* ===== v7.5.3 Kompakt Akıllı Uyarılar + Genel Veli Görüşmeleri ===== */
 .overview-shortcuts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
 .overview-shortcut{appearance:none;background:#fff;color:var(--text);border:1px solid var(--border);border-radius:14px;padding:12px 13px;display:flex;align-items:center;gap:10px;text-align:left;box-shadow:none;min-width:0}
@@ -494,7 +498,7 @@ input,select,textarea,button{max-width:100%}
 @media(max-width:520px){.student-dashboard-grid{grid-template-columns:1fr 1fr}.student-dashboard-card b{font-size:16px}}
 
 
-/* ===== v7.6.63 Öğrenci Panosu 2.0 — Gelişim Özeti ===== */
+/* ===== v7.6.64-JPEG Öğrenci Panosu 2.0 — Gelişim Özeti ===== */
 .student-growth{border:1px solid #cbd5e1;background:#f8fafc;border-radius:15px;padding:12px;margin:10px 0}
 .student-growth-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}.student-growth-head b{font-size:13px}.student-growth-head small{font-size:9px;color:var(--muted)}
 .student-growth-list{display:grid;gap:7px}.student-growth-row{display:grid;grid-template-columns:34px 1fr auto;gap:9px;align-items:center;background:#fff;border:1px solid #e2e8f0;border-radius:11px;padding:9px}.student-growth-icon{font-size:19px;text-align:center}.student-growth-row b{display:block;font-size:11px}.student-growth-row small{display:block;font-size:9px;color:#64748b;margin-top:2px;line-height:1.35}.student-growth-value{font-size:11px;font-weight:900;white-space:nowrap}.student-growth-value.up{color:#15803d}.student-growth-value.down{color:#b91c1c}.student-growth-value.flat{color:#475569}
@@ -775,9 +779,9 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 
 /* ===== v7.6.47 Yıllık Planlar ===== */
 .annual-source{margin-top:8px;font-size:12px;font-weight:700;color:#52606d}.annual-source.auto{color:#176b45}.annual-plan-row{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-top:8px}.annual-plan-row select{flex:1}.annual-import-grid{display:grid;gap:10px}.annual-week-meta{font-size:12px;color:#667085;margin-top:5px}
-/* ===== v7.6.63 Haftalık gezinme + Derste Nerede Kaldım 2.0 ===== */
+/* ===== v7.6.64-JPEG Haftalık gezinme + Derste Nerede Kaldım 2.0 ===== */
 .week-nav{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:10px 0 12px}.week-nav button{padding:10px 6px;font-size:13px}.week-nav .current{font-weight:900}.progress-card{margin-top:12px}.progress-status{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.progress-status button{padding:9px 5px;font-size:12px}.progress-status button.active{outline:2px solid #2563eb;background:#eff6ff}.progress-note{margin-top:10px}.progress-note textarea{width:100%;box-sizing:border-box}.previous-progress{margin-top:10px;padding:10px 12px;border-radius:10px;background:#f8fafc;line-height:1.5}.previous-progress b{display:block;margin-bottom:4px}.progress-meta{font-size:12px;color:#667085;margin-top:6px}.daily-prev{margin:10px 0 12px;background:#f4f8ff;border:1px solid #dbeafe}
-/* ===== v7.6.63 Sınıf Ders Bilgisi ===== */
+/* ===== v7.6.64-JPEG Sınıf Ders Bilgisi ===== */
 .class-top-actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%;max-width:590px}
 .class-top-actions button{min-width:0}
 .class-lesson-latest{margin:10px 0 12px;padding:12px 14px;border:1px solid #dbeafe;background:#f4f8ff;border-radius:12px;line-height:1.5}
@@ -1898,7 +1902,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.63</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.64-JPEG</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2148,6 +2152,8 @@ function normalizeSettings(s){
   s.annualPlans=Array.isArray(s.annualPlans)?s.annualPlans:[];
   s.annualPlanMappings=s.annualPlanMappings||{};
   s.weeklyOutcomes=s.weeklyOutcomes||{};
+  s.smartAlertLifecycle=(s.smartAlertLifecycle&&typeof s.smartAlertLifecycle==="object")?s.smartAlertLifecycle:{};
+  s.smartAlertLifecycleInitialized=(s.smartAlertLifecycleInitialized&&typeof s.smartAlertLifecycleInitialized==="object")?s.smartAlertLifecycleInitialized:{};
   return s
 }
 function save(){state.currentClassId=currentClassId;state.currentPeriod=currentPeriod;localStorage.setItem(STORAGE_KEY,JSON.stringify(state));modalDataRevision++}
@@ -2353,7 +2359,7 @@ function annualPlanForLesson(className,course){
 }
 function annualWeekForDate(plan,d=new Date()){
   if(!plan)return null;
-  // v7.6.63 — Yıllık plan satırları genellikle Pzt-Cuma aralığı taşır.
+  // v7.6.64-JPEG — Yıllık plan satırları genellikle Pzt-Cuma aralığı taşır.
   // Ders Bilgisi hafta sonu açıldığında da aynı öğretim haftasını bulmak için
   // seçili tarihin kendisi yerine haftanın Pazartesi gününü esas al.
   const weekStart=weekStartISO(d);
@@ -2421,7 +2427,7 @@ function openClassLessonInfo(){
 let lessonDetailDate=null;
 function lessonDateShift(days){const d=lessonDetailDate?new Date(lessonDetailDate):new Date();d.setDate(d.getDate()+days);lessonDetailDate=d;openLessonDetail(true)}
 function lessonDateToday(){lessonDetailDate=new Date();openLessonDetail(true)}
-// v7.6.63 — İlerleme artık haftalık değil, ders/tarih bazlı tutulur.
+// v7.6.64-JPEG — İlerleme artık haftalık değil, ders/tarih bazlı tutulur.
 // Böylece aynı yıllık planı kullanan sınıflar ve aynı haftadaki birden çok ders birbirinden bağımsızdır.
 function progressKey(className,course,d){return `${normName(className||"")}|${normName(course||"")}|${localISODate(d||new Date())}`}
 function progressPrefix(className,course){return `${normName(className||"")}|${normName(course||"")}|`}
@@ -3435,17 +3441,62 @@ function getSmartAlerts(c){
   ];
   return {hs,missingRows,streakRows,lowCompletionRows,missingGradeRows,lowGradeRows,repeatedTrialAbsenceRows,trialDeclineRows,todayHomeworkRows:deadlines.todayRows,upcomingHomeworkRows:deadlines.upcomingRows,uniqueCount:uniqueIds.size,categories,categoryCount:categories.filter(x=>x.count>0).length};
 }
+function smartAlertIssueSnapshot(a){
+  const out=[];
+  const add=(arr,type,label,detailFn)=>arr.forEach(x=>out.push({student:x.student,type,label,detail:detailFn?detailFn(x):""}));
+  add(a.missingRows,"missing","Eksik ödev",x=>`${x.count} eksik`);
+  add(a.streakRows,"streak","Üst üste 3 eksik");
+  add(a.lowCompletionRows,"lowCompletion","Düşük tamamlama",x=>`%${x.rate}`);
+  add(a.missingGradeRows,"missingGrade","Eksik not",x=>`${x.missing.length} alan`);
+  add(a.lowGradeRows,"lowGrade","Düşük ortalama",x=>`${x.avg}`);
+  add(a.repeatedTrialAbsenceRows,"trialAbsence","Deneme katılımı",x=>`${x.count} katılmama`);
+  add(a.trialDeclineRows,"trialDecline","Net düşüşü",x=>`${Math.abs(x.diff).toLocaleString('tr-TR',{maximumFractionDigits:2})} net`);
+  return out;
+}
+function smartLifeScope(c){return `${c.id}|${currentPeriod}`}
+function smartLifeKey(c,studentId,type){return `${smartLifeScope(c)}|${studentId}|${type}`}
+function smartLocalDay(){return localISODate(new Date())}
+function smartDayDiff(a,b){if(!a||!b)return 0;return Math.round((new Date(b+'T12:00:00')-new Date(a+'T12:00:00'))/86400000)}
+function syncSmartAlertLifecycle(c,a){
+  settings.smartAlertLifecycle=settings.smartAlertLifecycle||{};
+  settings.smartAlertLifecycleInitialized=settings.smartAlertLifecycleInitialized||{};
+  const scope=smartLifeScope(c), today=smartLocalDay(), snap=smartAlertIssueSnapshot(a), current=new Set(), initialized=!!settings.smartAlertLifecycleInitialized[scope];
+  let changed=false;
+  snap.forEach(i=>{
+    const k=smartLifeKey(c,i.student.id,i.type); current.add(k); let r=settings.smartAlertLifecycle[k];
+    if(!r){r={classId:c.id,period:String(currentPeriod),studentId:i.student.id,type:i.type,label:i.label,firstSeen:today,lastSeen:today,status:initialized?'new':'ongoing',resolvedAt:null};settings.smartAlertLifecycle[k]=r;changed=true;}
+    else{
+      if(r.resolvedAt){r.firstSeen=today;r.status='new';r.resolvedAt=null;changed=true;}
+      else if(r.status==='new'&&smartDayDiff(r.firstSeen,today)>=1){r.status='ongoing';changed=true;}
+      if(r.lastSeen!==today){r.lastSeen=today;changed=true;}
+      if(r.label!==i.label){r.label=i.label;changed=true;}
+    }
+  });
+  Object.entries(settings.smartAlertLifecycle).forEach(([k,r])=>{
+    if(r.classId!==c.id||String(r.period)!==String(currentPeriod))return;
+    if(!current.has(k)&&!r.resolvedAt){r.status='resolved';r.resolvedAt=today;changed=true;}
+    if(r.resolvedAt&&smartDayDiff(r.resolvedAt,today)>7){delete settings.smartAlertLifecycle[k];changed=true;}
+  });
+  if(!initialized){settings.smartAlertLifecycleInitialized[scope]=today;changed=true;}
+  if(changed)saveSettings();
+}
+function smartLifeFor(c,studentId,type){return settings.smartAlertLifecycle?.[smartLifeKey(c,studentId,type)]||null}
+function smartLifeBadgeHTML(r){if(!r)return '';const st=r.status==='new'?'new':'ongoing',tx=st==='new'?'Yeni':'Devam ediyor';return `<span class="smart-life-badge ${st}">${tx}</span>`}
+function smartRecentlyResolved(c){
+  const today=smartLocalDay();
+  return Object.values(settings.smartAlertLifecycle||{}).filter(r=>r.classId===c.id&&String(r.period)===String(currentPeriod)&&r.resolvedAt&&smartDayDiff(r.resolvedAt,today)<=7).sort((a,b)=>String(b.resolvedAt).localeCompare(String(a.resolvedAt)));
+}
 function smartStudentFollowRows(c,a){
   const byId=new Map();
   const ensure=(st)=>{if(!byId.has(st.id))byId.set(st.id,{student:st,issues:[]});return byId.get(st.id)};
-  const add=(arr,label,tone,detailFn)=>arr.forEach(x=>ensure(x.student).issues.push({label,tone,detail:detailFn?detailFn(x):""}));
-  add(a.missingRows,"Eksik ödev","danger",x=>`${x.count} eksik`);
-  add(a.streakRows,"Üst üste 3 eksik","danger");
-  add(a.lowCompletionRows,"Düşük tamamlama","warn",x=>`%${x.rate}`);
-  add(a.missingGradeRows,"Eksik not","partial",x=>`${x.missing.length} alan`);
-  add(a.lowGradeRows,"Düşük ortalama","info",x=>`${x.avg}`);
-  add(a.repeatedTrialAbsenceRows,"Deneme katılımı","warn",x=>`${x.count} katılmama`);
-  add(a.trialDeclineRows,"Net düşüşü","danger",x=>`${Math.abs(x.diff).toLocaleString('tr-TR',{maximumFractionDigits:2})} net`);
+  const add=(arr,type,label,tone,detailFn)=>arr.forEach(x=>ensure(x.student).issues.push({type,label,tone,detail:detailFn?detailFn(x):"",life:smartLifeFor(c,x.student.id,type)}));
+  add(a.missingRows,"missing","Eksik ödev","danger",x=>`${x.count} eksik`);
+  add(a.streakRows,"streak","Üst üste 3 eksik","danger");
+  add(a.lowCompletionRows,"lowCompletion","Düşük tamamlama","warn",x=>`%${x.rate}`);
+  add(a.missingGradeRows,"missingGrade","Eksik not","partial",x=>`${x.missing.length} alan`);
+  add(a.lowGradeRows,"lowGrade","Düşük ortalama","info",x=>`${x.avg}`);
+  add(a.repeatedTrialAbsenceRows,"trialAbsence","Deneme katılımı","warn",x=>`${x.count} katılmama`);
+  add(a.trialDeclineRows,"trialDecline","Net düşüşü","danger",x=>`${Math.abs(x.diff).toLocaleString('tr-TR',{maximumFractionDigits:2})} net`);
   const weight={danger:4,warn:3,partial:2,info:1};
   return [...byId.values()].map(r=>({...r,score:r.issues.reduce((n,i)=>n+(weight[i.tone]||1),0)}))
     .sort((x,y)=>y.issues.length-x.issues.length||y.score-x.score||x.student.name.localeCompare(y.student.name,"tr"));
@@ -3495,6 +3546,7 @@ function openDailyTeacherPanel(){
 function renderSmartAlerts(){
   const c=cls(),wrap=el("smartPanel"); if(!c||!wrap)return;
   const a=getSmartAlerts(c), totalIssues=a.categories.reduce((n,x)=>n+x.count,0);
+  syncSmartAlertLifecycle(c,a);
   const followRows=smartStudentFollowRows(c,a);
   el("smartBadge").textContent=followRows.length;
   el("smartCompactText").textContent=followRows.length?`${followRows.length} öğrenci takip gerektiriyor`:"Şu anda sorun görünmüyor";
@@ -3505,7 +3557,9 @@ function renderSmartAlerts(){
 }
 function openSmartAlertsOverview(){
   const c=cls(); if(!c)return;
-  const a=getSmartAlerts(c), totalIssues=a.categories.reduce((n,x)=>n+x.count,0), followRows=smartStudentFollowRows(c,a);
+  const a=getSmartAlerts(c), totalIssues=a.categories.reduce((n,x)=>n+x.count,0);
+  syncSmartAlertLifecycle(c,a);
+  const followRows=smartStudentFollowRows(c,a), resolvedRows=smartRecentlyResolved(c);
   el("modalTitle").textContent="Akıllı Uyarılar";
   el("modalSubtitle").textContent=`${smartDateLabel()} · ${c.name} · ${currentPeriod}. Dönem`;
   el("modalBody").innerHTML=`
@@ -3513,13 +3567,14 @@ function openSmartAlertsOverview(){
       <div class="smart-summary-card"><span>TAKİP GEREKTİREN ÖĞRENCİ</span><b>${followRows.length}</b></div>
       <div class="smart-summary-card"><span>UYARI KAYDI</span><b>${totalIssues}</b></div>
     </div>
-    ${followRows.length?`<div class="smart-section-title">👤 Takip Gerekiyor</div><div class="smart-follow-list">${followRows.map(r=>`<div class="smart-follow-card"><div class="smart-follow-top"><div><div class="smart-follow-name">${esc(r.student.number?r.student.number+' - ':'')}${esc(r.student.name)}</div><div class="smart-follow-meta">${r.issues.length} takip başlığı</div></div><div style="display:flex;align-items:center;gap:7px"><span class="smart-follow-count">${r.issues.length}</span><button class="secondary" style="padding:7px 9px" onclick="openSmartFollowStudent('${r.student.id}')">Ayrıntı</button></div></div><div class="smart-follow-chips">${r.issues.map(i=>`<span class="smart-follow-chip ${i.tone}">${esc(i.label)}${i.detail?' · '+esc(i.detail):''}</span>`).join('')}</div></div>`).join('')}</div>
+    ${followRows.length?`<div class="smart-section-title">👤 Takip Gerekiyor</div><div class="smart-follow-list">${followRows.map(r=>`<div class="smart-follow-card"><div class="smart-follow-top"><div><div class="smart-follow-name">${esc(r.student.number?r.student.number+' - ':'')}${esc(r.student.name)}</div><div class="smart-follow-meta">${r.issues.length} takip başlığı</div></div><div style="display:flex;align-items:center;gap:7px"><span class="smart-follow-count">${r.issues.length}</span><button class="secondary" style="padding:7px 9px" onclick="openSmartFollowStudent('${r.student.id}')">Ayrıntı</button></div></div><div class="smart-follow-chips">${r.issues.map(i=>`<span class="smart-follow-chip ${i.tone}">${esc(i.label)}${i.detail?' · '+esc(i.detail):''}${smartLifeBadgeHTML(i.life)}</span>`).join('')}</div></div>`).join('')}</div>
     <div class="smart-section-title">📂 Uyarı Türlerine Göre</div>
     <div class="smart-alert-grid">${a.categories.filter(x=>x.count>0).map(x=>`
       <button class="smart-alert ${x.tone}" onclick="openSmartAlert('${x.type}')">
         <span class="smart-alert-top"><strong>${x.title}</strong><span class="count">${x.count}</span></span>
         <small>${x.detail}</small>
-      </button>`).join("")}</div>`:`<div class="smart-all-clear">✓ Bu sınıf ve dönem için takip gerektiren bir durum yok.</div>`}`;
+      </button>`).join("")}</div>`:`<div class="smart-all-clear">✓ Bu sınıf ve dönem için takip gerektiren bir durum yok.</div>`}
+    ${resolvedRows.length?`<div class="smart-section-title">✅ Son 7 Günde Düzelenler</div><div class="smart-resolved-list">${resolvedRows.map(r=>{const st=(c.students||[]).find(x=>x.id===r.studentId);return `<div class="smart-resolved-card"><div><b>${esc(st?(st.number?st.number+' - ':'')+st.name:'Öğrenci')}</b><small>${esc(r.label)} · ${esc(parentMeetingDateTR(r.resolvedAt))}</small></div><span class="smart-life-badge resolved">Düzeldi</span></div>`}).join('')}</div>`:''}`;
   el("modal").classList.add("open");
 }
 let parentMeetingArchiveFilter="current";
@@ -3733,7 +3788,7 @@ function openStudentGrades(sid){
 function studentDashboardData(c,sid){
   const meetings=(Array.isArray(c.parentMeetings)?c.parentMeetings:[]).filter(x=>x.studentId===sid).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
   const tr=trialReportStudentStats(c,sid), totalTrials=tr.trials.length;
-  const alerts=getSmartAlerts(c), reasons=[];
+  const alerts=getSmartAlerts(c); syncSmartAlertLifecycle(c,alerts); const reasons=[];
   const add=(arr,text)=>{const x=(arr||[]).find(r=>r.student?.id===sid);if(x)reasons.push(text(x));};
   add(alerts.missingRows,x=>`${x.count} eksik ödev`);
   add(alerts.streakRows,()=>`Son 3 ödev yapılmadı`);
@@ -3743,7 +3798,7 @@ function studentDashboardData(c,sid){
   add(alerts.repeatedTrialAbsenceRows,x=>`${x.count} denemeye katılmadı`);
   add(alerts.trialDeclineRows,x=>`Son iki denemede ${Math.abs(x.diff).toLocaleString('tr-TR',{maximumFractionDigits:2})} net düşüş`);
 
-  // v7.6.63: Gelişim özeti yalnız gerçek karşılaştırma varsa veri üretir.
+  // v7.6.64-JPEG: Gelişim özeti yalnız gerçek karşılaştırma varsa veri üretir.
   // Ödev için son 4 kayıt, önceki 4 kayıtla karşılaştırılır (en az 8 ödev gerekir).
   const hs=hwPeriod(c), score=h=>{const v=status(c,sid,h.id);return v==="done"?1:v==="partial"?.5:v==="excused"?null:0};
   let hwTrend=null,hwDiff=null,hwCurrentRate=null,hwPreviousRate=null;
@@ -4201,7 +4256,7 @@ function openNewTrial(){
 }
 function toggleTrialPenaltyOptions(){const on=!!el('trialPenalty')?.checked;const txt=el('trialPenaltyText'),box=el('trialPenaltyOptions'),sel=el('trialDiv');if(txt)txt.textContent=on?'Evet':'Hayır';if(box){box.style.display=on?'block':'none';box.setAttribute('aria-hidden',on?'false':'true')}if(sel)sel.disabled=!on}
 function saveNewTrial(){const name=el('trialName').value.trim(),date=el('trialDateValue').value,subjects=el('trialSubjects').value.split(',').map(x=>x.trim()).filter(Boolean),penalty=!!el('trialPenalty')?.checked,div=Number(el('trialDiv')?.value)||4;if(!name)return alert('Deneme adını girin.');if(!date)return alert('Deneme tarihini seçin.');if(!subjects.length)return alert('En az bir ders girin.');pushUndo();const t={id:uid(),name,date,subjects,wrongPenalty:penalty,wrongDivisor:div,results:{}};cls().students.forEach(st=>t.results[st.id]={attended:true,subjects:{}});cls().trials.push(t);save();render();openTrial(t.id)}
-function openTrial(id){const c=cls(),t=trialList(c).find(x=>x.id===id);if(!t)return;el('modalTitle').textContent=t.name;el('modalSubtitle').textContent=`${c.name} · ${trialDateTR(t.date)}`;el('modalBody').innerHTML=`<div class="trial-card-stats"><div class="trial-mini"><span>Katılan</span><b>${trialStats(t).attended}</b></div><div class="trial-mini"><span>Girmeyen</span><b>${trialStats(t).absent}</b></div><div class="trial-mini"><span>Ort. Net</span><b>${trialStats(t).avg??'-'}</b></div></div><div style="display:grid;gap:8px;margin-top:12px">${c.students.map(st=>trialStudentEditor(t,st)).join('')}</div><div class="modal-actions"><button class="secondary" onclick="exportTrialCSV('${t.id}')">CSV Aktar</button><button class="secondary" onclick="editTrialInfo('${t.id}')">Deneme Bilgileri</button><button class="danger" onclick="deleteTrial('${t.id}')">Denemeyi Sil</button></div>`;el('modal').classList.add('open')}
+function openTrial(id){const c=cls(),t=trialList(c).find(x=>x.id===id);if(!t)return;el('modalTitle').textContent=t.name;el('modalSubtitle').textContent=`${c.name} · ${trialDateTR(t.date)}`;el('modalBody').innerHTML=`<div class="trial-card-stats"><div class="trial-mini"><span>Katılan</span><b>${trialStats(t).attended}</b></div><div class="trial-mini"><span>Girmeyen</span><b>${trialStats(t).absent}</b></div><div class="trial-mini"><span>Ort. Net</span><b>${trialStats(t).avg??'-'}</b></div></div><div style="display:grid;gap:8px;margin-top:12px">${c.students.map(st=>trialStudentEditor(t,st)).join('')}</div><div class="modal-actions"><button class="secondary" onclick="exportTrialCSV('${t.id}')">Excel / CSV Raporu</button><button class="secondary" onclick="exportSingleTrialJPEG('${t.id}')">JPEG Raporu</button><button class="secondary" onclick="editTrialInfo('${t.id}')">Deneme Bilgileri</button><button class="danger" onclick="deleteTrial('${t.id}')">Denemeyi Sil</button></div>`;el('modal').classList.add('open')}
 function trialStudentEditor(t,st){const r=t.results[st.id]||(t.results[st.id]={attended:true,subjects:{}}),att=r.attended!==false,total=trialStudentTotal(t,st.id),trend=trialTrend(t,st.id);return `<div class="trial-student-card" data-trial-student="${st.id}"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>${esc(st.number?st.number+' - ':'')}${esc(st.name)}</b><span><b data-trial-total>${total===null?'Girmedi':total.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net'}</b> <small class="${trend.cls}">${trend.text}</small></span></div><label class="trial-participation" style="display:flex;align-items:center;gap:7px;margin-top:8px"><input type="checkbox" ${att?'checked':''} onchange="setTrialAttendance('${t.id}','${st.id}',this.checked)"> Denemeye katıldı</label>${att?`<div>${(t.subjects||[]).map(sub=>{const x=r.subjects?.[sub]||{},sn=trialNet(x.correct,x.wrong,t.wrongDivisor,t.wrongPenalty!==false);return `<div class="trial-subject-block" data-trial-subject="${esc(sub)}"><div class="trial-subject-head"><b>${esc(sub)}</b><span class="trial-subject-net" data-subject-net>${sn.toLocaleString('tr-TR',{maximumFractionDigits:2})} net</span></div><div class="trial-subject-grid"><label>Doğru<input class="trial-score-input" type="number" min="0" inputmode="numeric" value="${x.correct??''}" oninput="setTrialScoreLive('${t.id}','${st.id}','${esc(sub)}','correct',this.value,this)"></label><label>Yanlış<input class="trial-score-input" type="number" min="0" inputmode="numeric" value="${x.wrong??''}" oninput="setTrialScoreLive('${t.id}','${st.id}','${esc(sub)}','wrong',this.value,this)"></label><label>Boş<input class="trial-score-input" type="number" min="0" inputmode="numeric" value="${x.blank??''}" oninput="setTrialScoreLive('${t.id}','${st.id}','${esc(sub)}','blank',this.value,this)"></label></div></div>`}).join('')}</div>`:''}</div>`}
 function setTrialAttendance(tid,sid,on){const t=trialList().find(x=>x.id===tid);if(!t)return;t.results[sid]=t.results[sid]||{subjects:{}};t.results[sid].attended=!!on;save();render();openTrial(tid)}
 function setTrialScoreLive(tid,sid,sub,key,val,input){const t=trialList().find(x=>x.id===tid);if(!t)return;t.results[sid]=t.results[sid]||{attended:true,subjects:{}};t.results[sid].subjects=t.results[sid].subjects||{};const x=t.results[sid].subjects[sub]=t.results[sid].subjects[sub]||{};x[key]=val===''?'':Math.max(0,Number(val)||0);save();const block=input?.closest('.trial-subject-block');const sn=trialNet(x.correct,x.wrong,t.wrongDivisor,t.wrongPenalty!==false);const snEl=block?.querySelector('[data-subject-net]');if(snEl)snEl.textContent=sn.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net';const card=input?.closest('.trial-student-card');const total=trialStudentTotal(t,sid),totalEl=card?.querySelector('[data-trial-total]');if(totalEl)totalEl.textContent=(total===null?'Girmedi':total.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net');const stats=trialStats(t),statEls=el('modalBody')?.querySelectorAll('.trial-card-stats .trial-mini b');if(statEls&&statEls.length>=3){statEls[0].textContent=stats.attended;statEls[1].textContent=stats.absent;statEls[2].textContent=stats.avg===null?'-':stats.avg.toLocaleString('tr-TR',{maximumFractionDigits:2})}renderTrials()}
@@ -4255,6 +4310,28 @@ function classTrialSVG(metric='total'){
 function updateClassTrialChart(){const metric=el('classTrialMetric')?.value||'total',host=el('classTrialChart');if(host)host.innerHTML=classTrialSVG(metric)}
 function updateClassTrialAnalysis(){const id=el('classTrialSelect')?.value,t=trialList().find(x=>x.id===id),host=el('classTrialDetail');if(!t||!host)return;const c=cls(),st=trialStats(t),ex=classTrialExtremes(t),prev=previousClassTrial(t),prevAvg=prev?trialStats(prev).avg:null,diff=st.avg!==null&&prevAvg!==null?Math.round((st.avg-prevAvg)*100)/100:null,rate=c.students.length?Math.round(st.attended/c.students.length*100):0;host.innerHTML=`<div class="class-trial-summary"><div class="class-trial-stat"><span>ORTALAMA NET</span><b>${st.avg===null?'-':st.avg.toLocaleString('tr-TR',{maximumFractionDigits:2})}</b></div><div class="class-trial-stat"><span>EN YÜKSEK</span><b>${ex.high===null?'-':ex.high.toLocaleString('tr-TR',{maximumFractionDigits:2})}</b></div><div class="class-trial-stat"><span>EN DÜŞÜK</span><b>${ex.low===null?'-':ex.low.toLocaleString('tr-TR',{maximumFractionDigits:2})}</b></div><div class="class-trial-stat"><span>KATILIM</span><b>%${rate}</b></div></div><div class="class-trial-section"><div class="class-trial-section-title"><div><b>${esc(t.name)} · Ders Ortalamaları</b><div class="tiny">${diff===null?'Önceki denemeyle karşılaştırma için yeterli veri yok.':`Önceki denemeye göre sınıf ortalaması <span class="${diff>0?'trend-up':diff<0?'trend-down':'trend-flat'}">${diff>0?'↑ +':diff<0?'↓ ':'→ '}${diff.toLocaleString('tr-TR',{maximumFractionDigits:2})} net</span>`}</div></div></div><div class="class-trial-subjects">${(t.subjects||[]).map(sub=>{const a=classTrialSubjectAvg(t,sub);return `<div class="class-trial-subject"><span>${esc(sub)}</span><b>${a===null?'-':a.toLocaleString('tr-TR',{maximumFractionDigits:2})} net</b></div>`}).join('')}</div></div><div class="class-trial-section"><div class="class-trial-section-title"><div><b>Sınıf Gelişim Grafiği</b><div class="tiny">Denemeler tarih sırasına göre karşılaştırılır.</div></div><select id="classTrialMetric" onchange="updateClassTrialChart()"><option value="total">Toplam Net</option>${[...new Set(trialList().flatMap(x=>x.subjects||[]))].map(sub=>`<option value="${esc(sub)}">${esc(sub)}</option>`).join('')}</select></div><div id="classTrialChart">${classTrialSVG('total')}</div></div>`}
 function openClassTrialAnalysis(){const c=cls(),arr=[...trialList(c)].sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));el('modalTitle').textContent='Sınıf Deneme Analizi';el('modalSubtitle').textContent=c.name;if(!arr.length){el('modalBody').innerHTML='<div class="empty card">Sınıf analizi için önce bir deneme ekleyin.</div>';el('modal').classList.add('open');return}el('modalBody').innerHTML=`<label style="margin-bottom:10px">İncelenecek Deneme<select id="classTrialSelect" onchange="updateClassTrialAnalysis()">${arr.map(t=>`<option value="${t.id}">${esc(t.name)} · ${esc(trialDateTR(t.date))}</option>`).join('')}</select></label><div id="classTrialDetail"></div>`;el('modal').classList.add('open');updateClassTrialAnalysis()}
+function exportSingleTrialJPEG(id){
+ const c=cls(),t=trialList(c).find(x=>x.id===id);if(!c||!t)return;
+ const students=[...(c.students||[])].sort((a,b)=>{const an=Number(a.number),bn=Number(b.number);if(Number.isFinite(an)&&Number.isFinite(bn)&&an!==bn)return an-bn;return String(a.name||'').localeCompare(String(b.name||''),'tr')});
+ if(!students.length)return alert('Öğrenci yok.');
+ const st=trialStats(t),entered=students.map(s=>trialStudentTotal(t,s.id)).filter((n,i)=>n!==null&&trialHasEnteredScore(t,students[i].id));
+ const high=entered.length?Math.max(...entered):null;
+ const subjects=t.subjects||[],w=1400,rowH=48,top=230,height=Math.max(650,top+students.length*rowH+70),cv=document.createElement('canvas');cv.width=w;cv.height=height;const x=cv.getContext('2d');
+ x.fillStyle='#fff';x.fillRect(0,0,w,height);
+ x.fillStyle='#111827';x.font='bold 34px Arial';x.fillText(`${c.name} - ${t.name} Deneme Raporu`,35,52);
+ x.fillStyle='#64748b';x.font='18px Arial';x.fillText(`${trialDateTR(t.date)} · ${currentPeriod}. Dönem`,35,84);
+ const cards=[['KATILAN',st.attended],['GİRMEYEN',st.absent],['SINIF ORT.',st.avg===null?'-':st.avg.toLocaleString('tr-TR',{maximumFractionDigits:2})],['EN YÜKSEK',high===null?'-':high.toLocaleString('tr-TR',{maximumFractionDigits:2})]];
+ cards.forEach((q,i)=>{const cw=310,cx=35+i*330;x.fillStyle='#f8fafc';x.fillRect(cx,108,cw,82);x.fillStyle='#64748b';x.font='14px Arial';x.fillText(q[0],cx+16,136);x.fillStyle='#111827';x.font='bold 25px Arial';x.fillText(String(q[1]),cx+16,174)});
+ const noX=35,nameX=115,subjectStart=600,totalX=1270,subjectW=Math.max(105,Math.floor((totalX-subjectStart-20)/Math.max(1,subjects.length)));
+ x.fillStyle='#eaf2ff';x.fillRect(25,top-42,w-50,42);x.fillStyle='#1e3a8a';x.font='bold 14px Arial';x.fillText('No',noX,top-15);x.fillText('Öğrenci',nameX,top-15);
+ subjects.forEach((sub,i)=>{x.save();x.beginPath();x.rect(subjectStart+i*subjectW,top-42,subjectW-6,42);x.clip();x.fillText(`${sub} Net`,subjectStart+i*subjectW+4,top-15);x.restore()});x.fillText('Toplam Net',totalX,top-15);
+ students.forEach((s,i)=>{const y=top+i*rowH,r=t.results?.[s.id],att=!!r&&r.attended!==false,n=trialStudentTotal(t,s.id);x.fillStyle=i%2?'#fff':'#f8fafc';x.fillRect(25,y,w-50,rowH-2);x.fillStyle='#111827';x.font='14px Arial';x.fillText(String(s.number||'-'),noX,y+30);x.font='bold 14px Arial';let nm=String(s.name||'');while(nm.length>3&&x.measureText(nm).width>455)nm=nm.slice(0,-1);if(nm!==String(s.name||''))nm+='…';x.fillText(nm,nameX,y+30);
+   if(!att){x.fillStyle='#dc2626';x.font='bold 14px Arial';x.fillText('KATILMADI',subjectStart,y+30);x.fillText('-',totalX,y+30);return}
+   subjects.forEach((sub,j)=>{const a=r?.subjects?.[sub]||{},net=trialNet(a.correct,a.wrong,t.wrongDivisor,t.wrongPenalty!==false);x.fillStyle='#334155';x.font='14px Arial';x.fillText(net.toLocaleString('tr-TR',{maximumFractionDigits:2}),subjectStart+j*subjectW+4,y+30)});
+   x.fillStyle='#111827';x.font='bold 15px Arial';x.fillText(n===null?'-':n.toLocaleString('tr-TR',{maximumFractionDigits:2}),totalX,y+30);
+ });
+ downloadCanvas(cv,`${safe(c.name)}_${safe(t.name)}_deneme_raporu.jpg`);
+}
 function exportTrialCSV(id){const c=cls(),t=trialList(c).find(x=>x.id===id);if(!t)return;const head=['No','Öğrenci','Katıldı',...t.subjects.flatMap(x=>[x+' Doğru',x+' Yanlış',x+' Boş',x+' Net']),'Toplam Net'];const rows=[head];c.students.forEach(st=>{const r=t.results[st.id],att=r?.attended!==false,n=trialStudentTotal(t,st.id),row=[st.number,st.name,att?'Evet':'Hayır'];t.subjects.forEach(sub=>{const x=r?.subjects?.[sub]||{};row.push(x.correct??'',x.wrong??'',x.blank??'',att?trialNet(x.correct,x.wrong,t.wrongDivisor,t.wrongPenalty!==false):'')});row.push(n===null?'':n);rows.push(row)});downloadBlob('\uFEFF'+rows.map(r=>r.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(';')).join('\n'),`${safe(c.name)}_${safe(t.name)}.csv`,'text/csv;charset=utf-8')}
 function openTrialCSVImport(){el('modalTitle').textContent='Deneme CSV İçe Aktar';el('modalSubtitle').textContent=cls().name;el('modalBody').innerHTML=`<div class="trial-import-help"><b>Kolay aktarım:</b> Önce bir denemeyi oluşturup “CSV Aktar” ile şablon alın. Excel’de doldurup CSV olarak kaydedin ve buradan seçin. Öğrenci eşleştirmesinde önce numara, sonra ad kullanılır.</div><label>Hedef Deneme<select id="trialImportTarget">${trialList().map(t=>`<option value="${t.id}">${esc(t.name)} · ${esc(t.date)}</option>`).join('')}</select></label><label style="margin-top:10px">CSV Dosyası<input id="trialCSVFile" type="file" accept=".csv,text/csv"></label><div class="modal-actions"><button onclick="importTrialCSV()">CSV'yi İçe Aktar</button><button class="secondary" onclick="closeModal()">Vazgeç</button></div>`;el('modal').classList.add('open')}
 function parseCSVLine(line,sep){let a=[],cur='',q=false;for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(q&&line[i+1]==='"'){cur+='"';i++}else q=!q}else if(ch===sep&&!q){a.push(cur);cur=''}else cur+=ch}a.push(cur);return a}
@@ -4863,7 +4940,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.63",
+    appVersion:"v7.6.64-JPEG",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4874,7 +4951,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.63",
+    appVersion:"v7.6.64-JPEG",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings
@@ -4899,7 +4976,7 @@ function importTransferBackup(ev){
         kind="eski normal yedek";
       }else throw new Error("Bilinmeyen yedek biçimi");
 
-      // v7.6.63 — Geri yüklemeyi çalışan uygulama değişkenlerinden tamamen ayır.
+      // v7.6.64-JPEG — Geri yüklemeyi çalışan uygulama değişkenlerinden tamamen ayır.
       // Önce yalnız yerel kopyalarda doğrula/normalize et, sonra localStorage'a atomik olarak yaz.
       // Böylece `settings` değişkeninin başlatılma sırası geri yüklemeyi etkileyemez.
       const restoredState=normalize(incomingState);
@@ -4934,7 +5011,7 @@ function downloadBlob(content,name,type){const a=document.createElement("a");a.h
 render();
 </script>
 <script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
-  // v7.6.63 — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
+  // v7.6.64-JPEG — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
   // ve aktif oturum güncelleme nedeniyle yeniden yüklenmez.
   navigator.serviceWorker.register("./sw.js?v=7.6.56",{updateViaCache:"none"}).then(reg=>{
     reg.update().catch(()=>{});
