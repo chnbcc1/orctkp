@@ -1821,6 +1821,25 @@ body.class-module-page-open #modal{z-index:9200!important}
 <style id="v7641-lesson-detail">
 .lesson-split-actions{display:grid!important;grid-template-columns:1fr 1fr;gap:10px}.lesson-split-actions .secondary{grid-column:1/-1}.weekly-outcome-card{margin-top:12px}.weekly-value{margin-top:9px;line-height:1.55;color:#334155}.weekly-editor{margin-top:12px}.weekly-editor summary{cursor:pointer}.weekly-editor label{display:block;margin:12px 0 6px;font-weight:700}.weekly-editor input,.weekly-editor textarea{width:100%;box-sizing:border-box}.weekly-editor button{margin-top:12px}@media(max-width:520px){.lesson-split-actions{grid-template-columns:1fr 1fr}.lesson-split-actions button{padding:12px 8px;font-size:14px}}
 </style>
+
+<style id="v766-ui-polish">
+/* v7.6.66: deneme üst işlemleri ve mobil sınıf seçici kullanılabilirlik düzenlemesi */
+.trial-top-actions{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important}
+.trial-top-actions .trial-info-full{grid-column:1/-1!important;width:100%!important}
+.class-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mobile-fixed-add-class,.mobile-class-nav-wrap{display:none}
+@media(max-width:700px){
+  .class-section-head{margin-bottom:6px}
+  .class-section-head .section-title{margin:0!important}
+  .mobile-fixed-add-class{display:inline-flex!important;align-items:center;justify-content:center;flex:0 0 auto;padding:8px 12px!important;min-height:36px!important;border-radius:11px!important;background:#2458dc!important;color:#fff!important;border:0!important;font-size:12px!important;font-weight:800!important}
+  .mobile-class-nav-wrap{display:block!important;position:relative;width:100%;min-width:0}
+  #mobileClassNavFixed{padding-right:28px!important}
+  .mobile-class-scroll-hint{position:absolute;right:0;top:2px;bottom:6px;width:28px;display:flex;align-items:center;justify-content:flex-end;padding-right:3px;pointer-events:none;font-size:27px;font-weight:900;color:#64748b;background:linear-gradient(90deg,rgba(255,255,255,0),#fff 58%)}
+  #mobileClassNavFixed .mobileClassAdd{display:none!important}
+  .trial-top-actions{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}
+  .trial-top-actions .trial-info-full{grid-column:1/-1!important}
+}
+</style>
 </head>
 <body>
 
@@ -1902,7 +1921,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.65</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.66</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1925,7 +1944,8 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <div class="layout">
 <aside>
-<div class="section-title">Sınıflar</div><div id="mobileClassNavFixed" aria-label="Sınıf seçici"></div><div id="classList"></div>
+<div class="class-section-head"><div class="section-title">Sınıflar</div><button type="button" class="mobile-fixed-add-class" onclick="addClass()" aria-label="Sınıf Ekle">＋ Sınıf Ekle</button></div>
+<div class="mobile-class-nav-wrap"><div id="mobileClassNavFixed" aria-label="Sınıf seçici"></div><span class="mobile-class-scroll-hint" aria-hidden="true">›</span></div><div id="classList"></div>
 <button style="width:100%;margin-top:7px" onclick="addClass()" class="add-class-btn">+ Sınıf Ekle</button>
 <div class="footer-note">Veriler cihazdaki tarayıcıda saklanır. “Yedek Al” tüm uygulama verilerini kaydeder ve farklı cihaza aktarım için de kullanılabilir.</div>
 </aside>
@@ -3113,16 +3133,7 @@ function renderClasses(){
       mobileList.appendChild(b);
     }
   });
-  if(mobileList){
-    const plus=document.createElement("button");
-    plus.type="button";
-    plus.className="mobileClassAdd";
-    plus.textContent="+";
-    plus.title="Sınıf Ekle";
-    plus.setAttribute("aria-label","Sınıf Ekle");
-    plus.onclick=addClass;
-    mobileList.appendChild(plus);
-  }
+
 }
 function changePeriod(v){currentPeriod=String(v);save();render()}
 
@@ -4256,7 +4267,7 @@ function openNewTrial(){
 }
 function toggleTrialPenaltyOptions(){const on=!!el('trialPenalty')?.checked;const txt=el('trialPenaltyText'),box=el('trialPenaltyOptions'),sel=el('trialDiv');if(txt)txt.textContent=on?'Evet':'Hayır';if(box){box.style.display=on?'block':'none';box.setAttribute('aria-hidden',on?'false':'true')}if(sel)sel.disabled=!on}
 function saveNewTrial(){const name=el('trialName').value.trim(),date=el('trialDateValue').value,subjects=el('trialSubjects').value.split(',').map(x=>x.trim()).filter(Boolean),penalty=!!el('trialPenalty')?.checked,div=Number(el('trialDiv')?.value)||4;if(!name)return alert('Deneme adını girin.');if(!date)return alert('Deneme tarihini seçin.');if(!subjects.length)return alert('En az bir ders girin.');pushUndo();const t={id:uid(),name,date,subjects,wrongPenalty:penalty,wrongDivisor:div,results:{}};cls().students.forEach(st=>t.results[st.id]={attended:true,subjects:{}});cls().trials.push(t);save();render();openTrial(t.id)}
-function openTrial(id){const c=cls(),t=trialList(c).find(x=>x.id===id);if(!t)return;el('modalTitle').textContent=t.name;el('modalSubtitle').textContent=`${c.name} · ${trialDateTR(t.date)}`;el('modalBody').innerHTML=`<div class="modal-actions" style="margin-top:0;margin-bottom:12px"><button class="secondary" onclick="exportTrialCSV('${t.id}')">Excel / CSV Raporu</button><button class="secondary" onclick="exportSingleTrialJPEG('${t.id}')">JPEG Raporu</button><button class="secondary" onclick="editTrialInfo('${t.id}')">Deneme Bilgileri</button></div><div class="trial-card-stats"><div class="trial-mini"><span>Katılan</span><b>${trialStats(t).attended}</b></div><div class="trial-mini"><span>Girmeyen</span><b>${trialStats(t).absent}</b></div><div class="trial-mini"><span>Ort. Net</span><b>${trialStats(t).avg??'-'}</b></div></div><div style="display:grid;gap:8px;margin-top:12px">${c.students.map(st=>trialStudentEditor(t,st)).join('')}</div><div class="modal-actions"><button class="danger" onclick="deleteTrial('${t.id}')">Denemeyi Sil</button></div>`;el('modal').classList.add('open')}
+function openTrial(id){const c=cls(),t=trialList(c).find(x=>x.id===id);if(!t)return;el('modalTitle').textContent=t.name;el('modalSubtitle').textContent=`${c.name} · ${trialDateTR(t.date)}`;el('modalBody').innerHTML=`<div class="modal-actions trial-top-actions" style="margin-top:0;margin-bottom:12px"><button class="secondary" onclick="exportTrialCSV('${t.id}')">Excel / CSV Raporu</button><button class="secondary" onclick="exportSingleTrialJPEG('${t.id}')">JPEG Raporu</button><button class="secondary trial-info-full" onclick="editTrialInfo('${t.id}')">Deneme Bilgileri</button></div><div class="trial-card-stats"><div class="trial-mini"><span>Katılan</span><b>${trialStats(t).attended}</b></div><div class="trial-mini"><span>Girmeyen</span><b>${trialStats(t).absent}</b></div><div class="trial-mini"><span>Ort. Net</span><b>${trialStats(t).avg??'-'}</b></div></div><div style="display:grid;gap:8px;margin-top:12px">${c.students.map(st=>trialStudentEditor(t,st)).join('')}</div><div class="modal-actions"><button class="danger" onclick="deleteTrial('${t.id}')">Denemeyi Sil</button></div>`;el('modal').classList.add('open')}
 function trialStudentEditor(t,st){const r=t.results[st.id]||(t.results[st.id]={attended:true,subjects:{}}),att=r.attended!==false,total=trialStudentTotal(t,st.id),trend=trialTrend(t,st.id);return `<div class="trial-student-card" data-trial-student="${st.id}"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>${esc(st.number?st.number+' - ':'')}${esc(st.name)}</b><span><b data-trial-total>${total===null?'Girmedi':total.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net'}</b> <small class="${trend.cls}">${trend.text}</small></span></div><label class="trial-participation" style="display:flex;align-items:center;gap:7px;margin-top:8px"><input type="checkbox" ${att?'checked':''} onchange="setTrialAttendance('${t.id}','${st.id}',this.checked)"> Denemeye katıldı</label>${att?`<div>${(t.subjects||[]).map(sub=>{const x=r.subjects?.[sub]||{},sn=trialNet(x.correct,x.wrong,t.wrongDivisor,t.wrongPenalty!==false);return `<div class="trial-subject-block" data-trial-subject="${esc(sub)}"><div class="trial-subject-head"><b>${esc(sub)}</b><span class="trial-subject-net" data-subject-net>${sn.toLocaleString('tr-TR',{maximumFractionDigits:2})} net</span></div><div class="trial-subject-grid"><label>Doğru<input class="trial-score-input" type="number" min="0" inputmode="numeric" value="${x.correct??''}" oninput="setTrialScoreLive('${t.id}','${st.id}','${esc(sub)}','correct',this.value,this)"></label><label>Yanlış<input class="trial-score-input" type="number" min="0" inputmode="numeric" value="${x.wrong??''}" oninput="setTrialScoreLive('${t.id}','${st.id}','${esc(sub)}','wrong',this.value,this)"></label><label>Boş<input class="trial-score-input" type="number" min="0" inputmode="numeric" value="${x.blank??''}" oninput="setTrialScoreLive('${t.id}','${st.id}','${esc(sub)}','blank',this.value,this)"></label></div></div>`}).join('')}</div>`:''}</div>`}
 function setTrialAttendance(tid,sid,on){const t=trialList().find(x=>x.id===tid);if(!t)return;t.results[sid]=t.results[sid]||{subjects:{}};t.results[sid].attended=!!on;save();render();openTrial(tid)}
 function setTrialScoreLive(tid,sid,sub,key,val,input){const t=trialList().find(x=>x.id===tid);if(!t)return;t.results[sid]=t.results[sid]||{attended:true,subjects:{}};t.results[sid].subjects=t.results[sid].subjects||{};const x=t.results[sid].subjects[sub]=t.results[sid].subjects[sub]||{};x[key]=val===''?'':Math.max(0,Number(val)||0);save();const block=input?.closest('.trial-subject-block');const sn=trialNet(x.correct,x.wrong,t.wrongDivisor,t.wrongPenalty!==false);const snEl=block?.querySelector('[data-subject-net]');if(snEl)snEl.textContent=sn.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net';const card=input?.closest('.trial-student-card');const total=trialStudentTotal(t,sid),totalEl=card?.querySelector('[data-trial-total]');if(totalEl)totalEl.textContent=(total===null?'Girmedi':total.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net');const stats=trialStats(t),statEls=el('modalBody')?.querySelectorAll('.trial-card-stats .trial-mini b');if(statEls&&statEls.length>=3){statEls[0].textContent=stats.attended;statEls[1].textContent=stats.absent;statEls[2].textContent=stats.avg===null?'-':stats.avg.toLocaleString('tr-TR',{maximumFractionDigits:2})}renderTrials()}
