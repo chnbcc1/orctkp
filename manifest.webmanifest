@@ -1,8 +1,8 @@
 {
-  "name": "Öğrenci Takip Sistemi v7.6.67",
+  "name": "Öğrenci Takip Sistemi v7.6.68",
   "short_name": "Öğrenci Takip",
   "description": "Öğrenci takip, deneme raporları, akıllı uyarılar ve mobil sınıf yönetimi.",
-  "start_url": "./index.html?v=7.6.66",
+  "start_url": "./index.html?v=7.6.68",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",

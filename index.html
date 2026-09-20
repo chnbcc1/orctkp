@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.67</title>
+<title>Öğrenci Takip Sistemi v7.6.68</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -1823,7 +1823,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </style>
 
 <style id="v766-ui-polish">
-/* v7.6.67: deneme üst işlemleri ve mobil sınıf seçici kullanılabilirlik düzenlemesi */
+/* v7.6.68: deneme üst işlemleri ve dinamik mobil sınıf gezinme alanı */
 .trial-top-actions{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important}
 .trial-top-actions .trial-info-full{grid-column:1/-1!important;width:100%!important}
 .class-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -1845,11 +1845,10 @@ body.class-module-page-open #modal{z-index:9200!important}
 </style>
 <style id="v767-class-navigation">
 @media(max-width:700px){
-.mobile-class-nav-wrap{display:grid!important;grid-template-columns:38px minmax(0,1fr) 38px!important;align-items:center!important;gap:6px!important;width:100%!important;min-width:0!important}
-#mobileClassNavFixed{grid-column:2!important;grid-row:1!important;min-width:0!important;width:100%!important;padding:2px 1px 6px!important}
-.mobile-class-nav-arrow{display:flex!important;align-items:center!important;justify-content:center!important;width:36px!important;height:40px!important;min-width:36px!important;padding:0!important;margin:0!important;border:1px solid #93c5fd!important;border-radius:12px!important;background:#dbeafe!important;color:#1d4ed8!important;font-size:30px!important;font-weight:800!important;line-height:1!important;box-shadow:0 1px 3px rgba(30,64,175,.16)!important;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .15s ease}
-.mobile-class-nav-arrow.show{opacity:1!important;visibility:visible!important;pointer-events:auto!important}
-.mobile-class-nav-arrow.prev{grid-column:1!important;grid-row:1!important}.mobile-class-nav-arrow.next{grid-column:3!important;grid-row:1!important}
+.mobile-class-nav-wrap{display:flex!important;align-items:center!important;gap:6px!important;width:100%!important;min-width:0!important}
+#mobileClassNavFixed{flex:1 1 auto!important;min-width:0!important;width:auto!important;padding:2px 1px 6px!important}
+.mobile-class-nav-arrow{display:none!important;align-items:center!important;justify-content:center!important;width:36px!important;height:40px!important;min-width:36px!important;flex:0 0 36px!important;padding:0!important;margin:0!important;border:1px solid #93c5fd!important;border-radius:12px!important;background:#dbeafe!important;color:#1d4ed8!important;font-size:30px!important;font-weight:800!important;line-height:1!important;box-shadow:0 1px 3px rgba(30,64,175,.16)!important}
+.mobile-class-nav-arrow.show{display:flex!important;pointer-events:auto!important}
 }
 @media(min-width:701px){.mobile-class-nav-arrow{display:none!important}}
 </style>
