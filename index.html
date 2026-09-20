@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.68</title>
+<title>Öğrenci Takip Sistemi v7.6.69</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -1823,7 +1823,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </style>
 
 <style id="v766-ui-polish">
-/* v7.6.68: deneme üst işlemleri ve dinamik mobil sınıf gezinme alanı */
+/* v7.6.69: deneme üst işlemleri ve dinamik mobil sınıf gezinme alanı */
 .trial-top-actions{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important}
 .trial-top-actions .trial-info-full{grid-column:1/-1!important;width:100%!important}
 .class-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -1933,7 +1933,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.67</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.69</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2150,7 +2150,7 @@ async function tryLocalImageOCR(file){
 })();
 
 
-const STORAGE_KEY="odevTakipV1", SETTINGS_KEY="odevTakipV5Settings";
+const STORAGE_KEY="odevTakipV1", SETTINGS_KEY="odevTakipV5Settings", SCHOOL_ARCHIVE_KEY="odevTakipSchoolYearArchivesV1";
 let state=normalize(load()), settings=loadSettings(), currentClassId=state.currentClassId||(state.classes[0]?.id??null), currentPeriod=state.currentPeriod||"1";
 settings.dutySchedule=normalizeDutySchedule(settings.dutySchedule);
 let undoStack=[], redoStack=[]; let reportSectionState={homework:true,students:true};
@@ -2186,8 +2186,60 @@ function normalizeSettings(s){
   s.weeklyOutcomes=s.weeklyOutcomes||{};
   s.smartAlertLifecycle=(s.smartAlertLifecycle&&typeof s.smartAlertLifecycle==="object")?s.smartAlertLifecycle:{};
   s.smartAlertLifecycleInitialized=(s.smartAlertLifecycleInitialized&&typeof s.smartAlertLifecycleInitialized==="object")?s.smartAlertLifecycleInitialized:{};
+  s.currentSchoolYear=s.currentSchoolYear||defaultSchoolYearLabel();
   return s
 }
+function defaultSchoolYearLabel(){
+  const d=new Date(), y=d.getFullYear(), m=d.getMonth()+1;
+  return m>=7?`${y}-${y+1}`:`${y-1}-${y}`;
+}
+function loadSchoolYearArchives(){try{const a=JSON.parse(localStorage.getItem(SCHOOL_ARCHIVE_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
+function saveSchoolYearArchives(a){localStorage.setItem(SCHOOL_ARCHIVE_KEY,JSON.stringify(Array.isArray(a)?a:[]))}
+function settingsSnapshotForArchive(){
+  const x=JSON.parse(JSON.stringify(settings||{}));
+  return x;
+}
+function schoolYearSummary(st){
+  const classes=Array.isArray(st?.classes)?st.classes:[];
+  let students=0,homeworks=0,trials=0,meetings=0;
+  classes.forEach(c=>{students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length});
+  return {classes:classes.length,students,homeworks,trials,meetings};
+}
+function createSchoolYearArchive(label,reason){
+  const a=loadSchoolYearArchives();
+  const item={id:uid(),label:String(label||settings.currentSchoolYear||defaultSchoolYearLabel()),createdAt:new Date().toISOString(),reason:reason||"manuel",state:JSON.parse(JSON.stringify(state)),settings:settingsSnapshotForArchive()};
+  a.unshift(item);saveSchoolYearArchives(a);return item;
+}
+function openSchoolYearArchive(){
+  modalPushCurrent();
+  const a=loadSchoolYearArchives();
+  el("modalTitle").textContent="Eğitim Yılı ve Arşiv";
+  el("modalSubtitle").textContent=`Aktif eğitim yılı: ${settings.currentSchoolYear||defaultSchoolYearLabel()}`;
+  const cards=a.map((x,i)=>{const q=schoolYearSummary(x.state);const dt=x.createdAt?new Date(x.createdAt).toLocaleString("tr-TR"):"";return `<div class="card" style="margin:10px 0;padding:12px"><div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start"><div><b>${esc(x.label||"Arşiv")}</b><div class="tiny">${esc(dt)}</div></div><span class="badge">Arşiv</span></div><div class="tiny" style="margin-top:7px">${q.classes} sınıf · ${q.students} öğrenci · ${q.homeworks} ödev · ${q.trials} deneme · ${q.meetings} veli görüşmesi</div><div class="form-row" style="margin-top:9px"><button class="secondary" onclick="exportSchoolYearArchive(${i})">Dışa Aktar</button><button class="secondary" onclick="restoreSchoolYearArchive(${i})">Geri Yükle</button><button class="ghost" onclick="deleteSchoolYearArchive(${i})">Sil</button></div></div>`}).join("");
+  el("modalBody").innerHTML=`<div class="card" style="padding:12px;margin-bottom:12px"><h3 style="margin-top:0">Aktif Yıl</h3><label class="tiny">Eğitim yılı</label><input id="activeSchoolYearLabel" style="width:100%;margin:5px 0 10px" value="${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}" placeholder="2026-2027"><div class="form-row"><button class="secondary" onclick="saveActiveSchoolYearLabel()">Yılı Kaydet</button><button onclick="archiveAndStartNewSchoolYear()">Arşivle ve Yeni Yıla Başla</button></div><div class="tiny" style="margin-top:8px">Yeni yıla başlarken mevcut sınıf/öğrenci/ödev/not/deneme/görüşme verileri arşivlenir. Profil, PIN ve öğretmen ayarları korunur.</div></div><h3>Arşivlenen Eğitim Yılları</h3>${cards||'<div class="empty">Henüz eğitim yılı arşivi yok.</div>'}`;
+  el("modal").classList.add("open");
+}
+function saveActiveSchoolYearLabel(){const v=(el("activeSchoolYearLabel")?.value||"").trim();if(!/^\d{4}\s*[-/]\s*\d{4}$/.test(v))return alert("Eğitim yılını 2026-2027 biçiminde girin.");settings.currentSchoolYear=v.replace(/\s/g,"").replace("/","-");saveSettings();openSchoolYearArchive()}
+function nextSchoolYearLabel(v){const m=String(v||"").match(/(\d{4})\D+(\d{4})/);if(!m)return defaultSchoolYearLabel();return `${Number(m[1])+1}-${Number(m[2])+1}`}
+function archiveAndStartNewSchoolYear(){
+  const label=(el("activeSchoolYearLabel")?.value||settings.currentSchoolYear||defaultSchoolYearLabel()).trim().replace(/\s/g,"").replace("/","-");
+  if(!/^\d{4}-\d{4}$/.test(label))return alert("Önce eğitim yılını 2026-2027 biçiminde düzeltin.");
+  const next=prompt("Yeni eğitim yılı:",nextSchoolYearLabel(label));if(next===null)return;const n=next.trim().replace(/\s/g,"").replace("/","-");if(!/^\d{4}-\d{4}$/.test(n))return alert("Yeni eğitim yılını 2027-2028 biçiminde girin.");
+  if(!confirm(`${label} eğitim yılı arşivlenecek ve aktif sınıf verileri temizlenerek ${n} yılı başlatılacak. Devam edilsin mi?`))return;
+  createSchoolYearArchive(label,"yıl sonu");
+  state={classes:[],currentClassId:null,currentPeriod:"1"};currentClassId=null;currentPeriod="1";
+  settings.currentSchoolYear=n;settings.annualPlanMappings={};settings.weeklyOutcomes={};settings.smartAlertLifecycle={};settings.smartAlertLifecycleInitialized={};
+  save();saveSettings();undoStack=[];redoStack=[];render();openSchoolYearArchive();alert(`${label} arşivlendi. ${n} eğitim yılı başlatıldı.`)
+}
+function exportSchoolYearArchive(i){const a=loadSchoolYearArchives(),x=a[i];if(!x)return;downloadBlob(JSON.stringify({backupType:"ogrenci-takip-egitim-yili-arsivi",version:1,archive:x},null,2),`ogrenci_takip_${safe(x.label||"egitim_yili")}_arsiv.json`,"application/json")}
+function restoreSchoolYearArchive(i){
+  const a=loadSchoolYearArchives(),x=a[i];if(!x)return;
+  if(!confirm(`${x.label} arşivi aktif çalışma alanına geri yüklenecek. Mevcut aktif yıl önce otomatik olarak arşivlenecek. Devam edilsin mi?`))return;
+  createSchoolYearArchive(settings.currentSchoolYear||defaultSchoolYearLabel(),"geri yükleme öncesi otomatik");
+  state=normalize(JSON.parse(JSON.stringify(x.state||{classes:[]})));settings=normalizeSettings(JSON.parse(JSON.stringify(x.settings||{})));settings.currentSchoolYear=x.label||settings.currentSchoolYear;
+  currentClassId=state.currentClassId||state.classes[0]?.id||null;currentPeriod=state.currentPeriod||"1";save();saveSettings();undoStack=[];redoStack=[];render();closeModal();alert(`${x.label} arşivi geri yüklendi.`)
+}
+function deleteSchoolYearArchive(i){const a=loadSchoolYearArchives(),x=a[i];if(!x)return;if(!confirm(`${x.label} arşivi kalıcı olarak silinsin mi? Bu işlem geri alınamaz.`))return;a.splice(i,1);saveSchoolYearArchives(a);openSchoolYearArchive()}
 function save(){state.currentClassId=currentClassId;state.currentPeriod=currentPeriod;localStorage.setItem(STORAGE_KEY,JSON.stringify(state));modalDataRevision++}
 function saveSettings(){localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));modalDataRevision++}
 function normalize(s){
@@ -3018,7 +3070,11 @@ function openSettings(){window._activeStudentModalId=null;
       <label>Yeni PIN<input id="changeNewPin" type="password" inputmode="numeric" maxlength="8"></label>
       <button class="secondary" onclick="changePin()">PIN'i Değiştir</button>
     </div>
-    <div class="tiny">Yeni PIN 4-8 rakam olmalıdır. PIN yalnızca bu cihazdaki uygulama kilididir.</div>`;
+    <div class="tiny">Yeni PIN 4-8 rakam olmalıdır. PIN yalnızca bu cihazdaki uygulama kilididir.</div>
+    <hr style="border:0;border-top:1px solid #e5e7eb;margin:18px 0">
+    <h3>Eğitim Yılı ve Arşiv</h3>
+    <div class="tiny" style="margin-bottom:8px">Aktif yıl: <b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b>. Yıl sonu verilerini güvenle arşivleyip yeni eğitim yılına geçebilirsiniz.</div>
+    <button class="secondary" onclick="openSchoolYearArchive()">🗃️ Eğitim Yılı / Arşiv</button>`;
   el("modal").classList.add("open");
 }
 let pendingProfilePhoto=null;
@@ -5001,10 +5057,11 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.64-JPEG",
+    appVersion:"v7.6.69",
     exportedAt:new Date().toISOString(),
     state:state,
-    settings:settings
+    settings:settings,
+    schoolYearArchives:loadSchoolYearArchives()
   };
   downloadBlob(JSON.stringify(backup,null,2),"ogrenci_takip_TAM_yedek.json","application/json")
 }
@@ -5012,10 +5069,11 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.64-JPEG",
+    appVersion:"v7.6.69",
     exportedAt:new Date().toISOString(),
     state:state,
-    settings:settings
+    settings:settings,
+    schoolYearArchives:loadSchoolYearArchives()
   };
   downloadBlob(JSON.stringify(backup,null,2),"ogrenci_takip_CIHAZ_AKTARIM_TAM_yedegi.json","application/json")
 }
@@ -5049,6 +5107,7 @@ function importTransferBackup(ev){
       try{
         localStorage.setItem(STORAGE_KEY,JSON.stringify(restoredState));
         localStorage.setItem(SETTINGS_KEY,JSON.stringify(restoredSettings));
+        if(Array.isArray(d.schoolYearArchives)) localStorage.setItem(SCHOOL_ARCHIVE_KEY,JSON.stringify(d.schoolYearArchives));
       }catch(storageError){
         console.error("Yedek yerel depolamaya kaydedilemedi:",storageError);
         throw new Error("Yedek okundu ancak bu cihazın yerel depolamasına kaydedilemedi: "+(storageError?.message||storageError));
