@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.71</title>
+<title>Öğrenci Takip Sistemi v7.6.72</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -1823,7 +1823,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </style>
 
 <style id="v766-ui-polish">
-/* v7.6.71: deneme üst işlemleri ve dinamik mobil sınıf gezinme alanı */
+/* v7.6.72: deneme üst işlemleri ve dinamik mobil sınıf gezinme alanı */
 .trial-top-actions{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important}
 .trial-top-actions .trial-info-full{grid-column:1/-1!important;width:100%!important}
 .class-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -1933,7 +1933,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.71</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.72</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -1966,7 +1966,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 <div id="noClass" class="empty card"><h2>Henüz sınıf yok</h2><p>Yukarıdaki + Sınıf Ekle düğmesinden ilk sınıfınızı oluşturun.</p></div>
 <div id="classView" style="display:none">
 <div class="compact-class-summary">
-  <div class="compact-class-head"><div><h1 id="currentClassTitle"></h1><div class="tiny" id="periodLabel" style="display:none"></div></div><div class="class-top-actions"><button class="secondary seating-plan-btn" onclick="openSeatingPlan()">🪑 Oturma Planı</button><button class="secondary class-lesson-btn" onclick="openClassLessonInfo()">📖 Ders Bilgisi</button><button class="secondary class-settings-btn" onclick="openClassSettings()">⚙️ Sınıf Ayarları</button></div></div>
+  <div class="compact-class-head"><div><h1 id="currentClassTitle"></h1><div class="tiny" id="periodLabel" style="display:none"></div></div><div class="class-top-actions"><button class="secondary seating-plan-btn" onclick="openSeatingPlan()">🪑 Oturma Planı</button><button class="secondary" onclick="openClassDuty()">🧹 Sınıf Nöbeti</button><button class="secondary class-lesson-btn" onclick="openClassLessonInfo()">📖 Ders Bilgisi</button><button class="secondary class-settings-btn" onclick="openClassSettings()">⚙️ Sınıf Ayarları</button></div></div>
   <div class="class-module-grid" aria-label="Sınıf modülleri">
     <button class="class-module-btn" onclick="openClassModule('students')"><span>👥</span><b>Öğrenciler</b><em id="statStudents">0</em></button>
     <button class="class-module-btn" onclick="openClassModule('homeworks')"><span>📚</span><b>Ödevler</b><em id="statHomeworks">0</em></button>
@@ -2025,7 +2025,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </section>
 
 <section id="reports" class="panel">
-<div class="toolbar"><div></div><div class="toolbar-right"><button onclick="exportClassJPEG()">Sınıf JPEG</button><button class="secondary" onclick="exportClassCSV()">CSV Aktar</button></div></div>
+<div class="toolbar"><div></div><div class="toolbar-right"><button onclick="exportClassJPEG()">Sınıf Çıktısı</button><button class="secondary" onclick="exportClassCSV()">CSV Aktar</button></div></div>
 <div id="reportSummary" class="report-summary-grid"></div>
 
 <div class="report-section-head" onclick="toggleReportSection('homeworkReportWrap','homeworkReportToggle')">
@@ -2278,7 +2278,7 @@ function save(){state.currentClassId=currentClassId;state.currentPeriod=currentP
 function saveSettings(){localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings));modalDataRevision++}
 function normalize(s){
  if(!s||!Array.isArray(s.classes))s={classes:[]};
- s.classes.forEach(c=>{c.students||=[];c.students.forEach(st=>{st.gender=["female","male"].includes(st.gender)?st.gender:""});c.homeworks||=[];c.checks||={};c.notes||={};c.grades||={};c.parentMeetings=Array.isArray(c.parentMeetings)?c.parentMeetings:[];c.trials=Array.isArray(c.trials)?c.trials:[];c.seatingPlan=normalizeSeatingPlan(c.seatingPlan);c.trials.forEach(t=>{t.subjects=Array.isArray(t.subjects)&&t.subjects.length?t.subjects:["Türkçe","Matematik","Fen","Sosyal"];t.results=(t.results&&typeof t.results==="object")?t.results:{};t.wrongDivisor=Number(t.wrongDivisor||4)||4;t.wrongPenalty=(t.wrongPenalty!==false);});
+ s.classes.forEach(c=>{c.students||=[];c.students.forEach(st=>{st.gender=["female","male"].includes(st.gender)?st.gender:""});c.homeworks||=[];c.checks||={};c.notes||={};c.grades||={};c.parentMeetings=Array.isArray(c.parentMeetings)?c.parentMeetings:[];c.trials=Array.isArray(c.trials)?c.trials:[];c.seatingPlan=normalizeSeatingPlan(c.seatingPlan);c.classDuty=normalizeClassDuty(c.classDuty);c.trials.forEach(t=>{t.subjects=Array.isArray(t.subjects)&&t.subjects.length?t.subjects:["Türkçe","Matematik","Fen","Sosyal"];t.results=(t.results&&typeof t.results==="object")?t.results:{};t.wrongDivisor=Number(t.wrongDivisor||4)||4;t.wrongPenalty=(t.wrongPenalty!==false);});
    c.students.forEach(st=>{st.number=st.number||""});
    // v7.6.47 — Silinmiş öğrencilere bağlı eski/yetim veli görüşmelerini temizle.
    {const validStudentIds=new Set(c.students.map(st=>st.id));c.parentMeetings=c.parentMeetings.filter(m=>validStudentIds.has(m.studentId));}
@@ -2289,6 +2289,14 @@ function normalize(s){
 }
 function pushUndo(){undoStack.push(JSON.stringify(state));if(undoStack.length>30)undoStack.shift();redoStack=[];updateUndoRedo()}
 function updateUndoRedo(){document.getElementById("undoBtn").disabled=!undoStack.length;document.getElementById("redoBtn").disabled=!redoStack.length}
+function normalizeClassDuty(d){
+ d=(d&&typeof d==="object")?d:{};
+ d.startDate=d.startDate||new Date().toISOString().slice(0,10);
+ d.assignments=(d.assignments&&typeof d.assignments==="object")?d.assignments:{};
+ d.holidays=Array.isArray(d.holidays)?d.holidays:[];
+ d.studentArchive=(d.studentArchive&&typeof d.studentArchive==='object')?d.studentArchive:{};
+ return d;
+}
 function undo(){if(!undoStack.length)return;redoStack.push(JSON.stringify(state));state=normalize(JSON.parse(undoStack.pop()));currentClassId=state.currentClassId||(state.classes[0]?.id??null);currentPeriod=state.currentPeriod||"1";save();render();updateUndoRedo()}
 function redo(){if(!redoStack.length)return;undoStack.push(JSON.stringify(state));state=normalize(JSON.parse(redoStack.pop()));currentClassId=state.currentClassId||(state.classes[0]?.id??null);currentPeriod=state.currentPeriod||"1";save();render();updateUndoRedo()}
 function cls(){return state.classes.find(c=>c.id===currentClassId)||null}
@@ -3290,7 +3298,7 @@ function cleanSeatingAssignments(c){
 function openSeatingPlan(){
   const c=cls();if(!c)return;cleanSeatingAssignments(c);
   el("modalTitle").textContent="Sınıf Oturma Planı";el("modalSubtitle").textContent=c.name;
-  el("modalBody").innerHTML=`<div class="seating-config"><label>Sıra satırı<input id="seatRows" type="number" min="1" max="8" value="${c.seatingPlan.rows}" onchange="updateSeatingLayout()"></label><label>Sıra sütunu<input id="seatCols" type="number" min="1" max="5" value="${c.seatingPlan.cols}" onchange="updateSeatingLayout()"></label><label>Sıra başına öğrenci<select id="seatPerDesk" onchange="updateSeatingLayout()"><option value="1" ${c.seatingPlan.seatsPerDesk===1?'selected':''}>1</option><option value="2" ${c.seatingPlan.seatsPerDesk===2?'selected':''}>2</option><option value="3" ${c.seatingPlan.seatsPerDesk===3?'selected':''}>3</option></select></label></div><div class="tiny" style="margin-bottom:8px">Bir öğrenciyi başka dolu yere seçerseniz iki öğrencinin yeri otomatik değiştirilir.</div><div class="seating-auto-panel"><button class="secondary" onclick="autoPlaceSeatingStudents()">⚡ Otomatik Yerleştir</button><label>Karşı cinsler yan yana yerleştirilebilsin mi?<select id="seatShuffleMode"><option value="any">Evet</option><option value="same">Hayır</option></select></label><button class="secondary" onclick="shuffleSeatingStudents()">🔀 Karıştır</button><button class="ghost" onclick="openSeatingGenderEditor()">👥 Cinsiyetleri Düzenle</button></div><div class="tiny seating-rule-note">“Hayır” seçildiğinde kız ve erkek öğrenciler aynı sıraya yerleştirilmez. Cinsiyet bilgisi isimden tahmin edilmez; öğrenci bilgilerini siz belirlersiniz.</div><div id="seatingPlanHost"></div><div class="seating-actions"><button class="secondary" onclick="clearSeatingPlan()">Yerleşimi Temizle</button><button onclick="exportSeatingPlanJPEG()">JPEG Oluştur</button></div>`;
+  el("modalBody").innerHTML=`<div class="seating-config"><label>Sıra satırı<input id="seatRows" type="number" min="1" max="8" value="${c.seatingPlan.rows}" onchange="updateSeatingLayout()"></label><label>Sıra sütunu<input id="seatCols" type="number" min="1" max="5" value="${c.seatingPlan.cols}" onchange="updateSeatingLayout()"></label><label>Sıra başına öğrenci<select id="seatPerDesk" onchange="updateSeatingLayout()"><option value="1" ${c.seatingPlan.seatsPerDesk===1?'selected':''}>1</option><option value="2" ${c.seatingPlan.seatsPerDesk===2?'selected':''}>2</option><option value="3" ${c.seatingPlan.seatsPerDesk===3?'selected':''}>3</option></select></label></div><div class="tiny" style="margin-bottom:8px">Bir öğrenciyi başka dolu yere seçerseniz iki öğrencinin yeri otomatik değiştirilir.</div><div class="seating-auto-panel"><button class="secondary" onclick="autoPlaceSeatingStudents()">⚡ Otomatik Yerleştir</button><label>Karşı cinsler yan yana yerleştirilebilsin mi?<select id="seatShuffleMode"><option value="any">Evet</option><option value="same">Hayır</option></select></label><button class="secondary" onclick="shuffleSeatingStudents()">🔀 Karıştır</button><button class="ghost" onclick="openSeatingGenderEditor()">👥 Cinsiyetleri Düzenle</button></div><div class="tiny seating-rule-note">“Hayır” seçildiğinde kız ve erkek öğrenciler aynı sıraya yerleştirilmez. Cinsiyet bilgisi isimden tahmin edilmez; öğrenci bilgilerini siz belirlersiniz.</div><div id="seatingPlanHost"></div><div class="seating-actions"><button class="secondary" onclick="clearSeatingPlan()">Yerleşimi Temizle</button><button onclick="exportSeatingPlanJPEG()">Çıktı Al</button></div>`;
   el("modal").classList.add("open");renderSeatingPlan();
 }
 function updateSeatingLayout(){
@@ -3473,10 +3481,10 @@ function saveNewStudent(){
   const c=cls(),no=(el("newStudentNo")?.value||"").trim(),name=(el("newStudentName")?.value||"").trim(),gender=(el("newStudentGender")?.value||"");
   if(!c||!name)return alert("Öğrenci adı soyadı girin.");
   if(c.students.some(s=>normName(s.name)===normName(name)&&String(s.number||"")===no))return alert("Bu öğrenci zaten listede.");
-  pushUndo();c.students.push({id:uid(),number:no,name,gender});save();closeModal();render();
+  pushUndo();c.students.push({id:uid(),number:no,name,gender});refreshFutureClassDuty(c);save();closeModal();render();
 }
 function openBulkStudents(){el("modalTitle").textContent="Toplu Öğrenci Ekle";el("modalSubtitle").textContent="Her satır: numara, ad soyad. Numara yoksa sadece ad yazabilirsiniz.";el("modalBody").innerHTML=`<textarea id="bulkStudents" class="note" placeholder="101, Ali Yılmaz&#10;102, Ayşe Demir&#10;Mehmet Kaya"></textarea><div style="margin-top:10px"><button class="full-action" onclick="saveBulkStudents()">Listeyi Ekle</button></div>`;el("modal").classList.add("open")}
-function saveBulkStudents(){const c=cls(),lines=el("bulkStudents").value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),ex=new Set(c.students.map(s=>normName(s.name)));pushUndo();let added=0,skipped=0;for(const line of lines){let no="",name=line;const m=line.match(/^\s*(\d{1,6})\s*[,;\t-]\s*(.+)$/);if(m){no=m[1];name=m[2].trim()}if(name&&!ex.has(normName(name))){c.students.push({id:uid(),number:no,name});ex.add(normName(name));added++}else if(name)skipped++}save();closeModal();render();alert(`${added} öğrenci eklendi${skipped?`, ${skipped} mükerrer kayıt atlandı`:""}.`)}
+function saveBulkStudents(){const c=cls(),lines=el("bulkStudents").value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),ex=new Set(c.students.map(s=>normName(s.name)));pushUndo();let added=0,skipped=0;for(const line of lines){let no="",name=line;const m=line.match(/^\s*(\d{1,6})\s*[,;\t-]\s*(.+)$/);if(m){no=m[1];name=m[2].trim()}if(name&&!ex.has(normName(name))){c.students.push({id:uid(),number:no,name});ex.add(normName(name));added++}else if(name)skipped++}refreshFutureClassDuty(c);save();closeModal();render();alert(`${added} öğrenci eklendi${skipped?`, ${skipped} mükerrer kayıt atlandı`:""}.`)}
 
 function openFileStudentImport(){el("modalTitle").textContent="CSV / XLSX'ten Öğrenci Al";el("modalSubtitle").textContent="Tamamen çevrimdışı. Dosya cihazdan dışarı çıkmaz.";el("modalBody").innerHTML=`<div class="notice">İlk sütunda öğrenci numarası, ikinci sütunda ad-soyad olması önerilir. Başlık satırı varsa otomatik atlanmaya çalışılır.</div><div class="file-import-row"><input id="studentFile" type="file" accept=".csv,.txt,.xlsx" onchange="toggleStudentFileButton()"><button id="studentFileReadBtn" class="secondary" disabled onclick="importStudentFile()">Dosyayı Oku</button></div><div id="filePreview" style="margin-top:12px"></div>`;el("modal").classList.add("open")}
 function toggleStudentFileButton(){const b=el("studentFileReadBtn"),f=el("studentFile");if(b)b.disabled=!(f&&f.files&&f.files.length)}
@@ -3502,7 +3510,7 @@ function showImportPreview(rows){
  const cleaned=[];for(const r of rows){if(!r?.length)continue;let a=String(r[0]??"").trim(),b=String(r[1]??"").trim();if(!b){b=a;a=""}if(/^(no|numara|öğrenci no)$/i.test(a)||/ad.?soyad|öğrenci/i.test(b))continue;if(b)cleaned.push({number:a,name:b})}
  window._fileRows=cleaned;el("filePreview").innerHTML=`<b>${cleaned.length} kayıt bulundu.</b><div class="card table-wrap" style="margin-top:8px"><table><thead><tr><th>No</th><th>Ad Soyad</th></tr></thead><tbody>${cleaned.slice(0,100).map(x=>`<tr><td>${esc(x.number)}</td><td>${esc(x.name)}</td></tr>`).join("")}</tbody></table></div><button class="success" style="margin-top:10px" onclick="commitFileStudents()">Sınıfa Ekle</button>`;
 }
-function commitFileStudents(){const c=cls(),rows=window._fileRows||[],ex=new Set(c.students.map(s=>normName(s.name)));pushUndo();let n=0;for(const r of rows){if(r.name&&!ex.has(normName(r.name))){c.students.push({id:uid(),number:r.number,name:r.name});ex.add(normName(r.name));n++}}save();closeModal();render();alert(n+" öğrenci eklendi.")}
+function commitFileStudents(){const c=cls(),rows=window._fileRows||[],ex=new Set(c.students.map(s=>normName(s.name)));pushUndo();let n=0;for(const r of rows){if(r.name&&!ex.has(normName(r.name))){c.students.push({id:uid(),number:r.number,name:r.name});ex.add(normName(r.name));n++}}refreshFutureClassDuty(c);save();closeModal();render();alert(n+" öğrenci eklendi.")}
 
 function addHomework(){
   const c=cls();if(!c)return;
@@ -3882,7 +3890,7 @@ function renderStudents(){
 function deleteStudent(id){
   const c=cls(),s=c.students.find(x=>x.id===id);if(!s)return;
   if(confirm(`${s.name} adlı öğrenci silinsin mi?\n\nÖdev durumları, öğretmen notu, not kayıtları, deneme sonuçları ve veli görüşmeleri de silinecek. Bu oturumda Geri Al ile geri getirilebilir.`)){
-    pushUndo();c.students=c.students.filter(x=>x.id!==id);delete c.checks[id];delete c.notes[id];
+    pushUndo();archiveDutyStudent(c,s);c.students=c.students.filter(x=>x.id!==id);delete c.checks[id];delete c.notes[id];refreshFutureClassDuty(c);
     // Öğrenciye bağlı veli görüşmeleri de aynı işlemde silinir; Geri Al ile birlikte geri gelir.
     c.parentMeetings=(c.parentMeetings||[]).filter(m=>m.studentId!==id);
     if(c.grades){delete c.grades[id];Object.keys(c.grades).forEach(p=>{if(c.grades[p]&&typeof c.grades[p]==="object")delete c.grades[p][id]})}
@@ -4023,7 +4031,7 @@ function openStudent(sid){
  </div>
  ${d.reasons.length?`<div class="student-dashboard-alerts"><b>⚠️ Bu öğrenci için aktif uyarılar</b><ul>${d.reasons.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>`:""}`})()}
  <div class="student-actions student-actions-two">
-   <button onclick="exportStudentJPEG('${sid}')">Öğrenci JPEG</button>
+   <button onclick="exportStudentJPEG('${sid}')">Öğrenci Çıktısı</button>
    <button class="secondary" onclick="openMoveStudent('${sid}')">Başka Sınıfa Taşı</button>
    <button class="secondary" onclick="openParentMeetings('${sid}')">👥 Veli Görüşmeleri</button>
    <button class="secondary" onclick="openStudentTrials('${sid}')">📊 Deneme Geçmişi</button>
@@ -4149,7 +4157,10 @@ function commitMoveStudent(sid){
   }
 
   // Eski sınıftaki öğrenciye ait kayıtları temizle.
+  archiveDutyStudent(from,s);
   from.students=from.students.filter(x=>x.id!==sid);
+  refreshFutureClassDuty(from);
+  refreshFutureClassDuty(to);
   if(from.checks)delete from.checks[sid];
   if(from.notes)delete from.notes[sid];
   if(from.grades){
@@ -4166,7 +4177,7 @@ function commitMoveStudent(sid){
 function openHomework(hid){window._activeStudentModalId=null;
  const c=cls(),h=c.homeworks.find(x=>x.id===hid),st=hstat(c,hid);el("modalTitle").textContent=h.name;el("modalSubtitle").textContent=`${c.name} · ${st.done}/${st.total} yaptı · %${st.rate}`;
  el("modalBody").innerHTML=`<div class="form-row"><label>Verilme Tarihi<input id="givenDate" type="date" value="${esc(h.given)}"></label><label>Son Teslim<input id="dueDate" type="date" value="${esc(h.due)}"></label><button onclick="saveDates('${hid}')">Kaydet</button></div>
- <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px"><button onclick="exportHomeworkJPEG('${hid}')">Bu Ödevin JPEG'i</button><button class="secondary" onclick="openCopyHomework('${hid}')">Diğer Sınıflara Kopyala</button><button class="success" onclick="markAll('${hid}','done')">Tümünü Yaptı</button><button class="danger" onclick="markAll('${hid}','missing')">Tümünü Yapmadı</button></div>
+ <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px"><button onclick="exportHomeworkJPEG('${hid}')">Bu Ödevin Çıktısı</button><button class="secondary" onclick="openCopyHomework('${hid}')">Diğer Sınıflara Kopyala</button><button class="success" onclick="markAll('${hid}','done')">Tümünü Yaptı</button><button class="danger" onclick="markAll('${hid}','missing')">Tümünü Yapmadı</button></div>
  <div class="quick-grid">${c.students.map(s=>`<div class="quick-card"><span class="student-name-with-dot"><b>${esc(s.number? s.number+" - ":"")}${esc(s.name)}</b><span class="student-status-dot ${status(c,s.id,hid)}" data-status-dot="${s.id}:${hid}" title="${status(c,s.id,hid)==="done"?"Yaptı":status(c,s.id,hid)==="partial"?"Kısmen":status(c,s.id,hid)==="excused"?"Mazeretli":"Yapmadı"}"></span></span>${statusButtons(s.id,hid)}</div>`).join("")}</div>`;el("modal").classList.add("open")
 }
 function saveDates(hid){const h=cls().homeworks.find(x=>x.id===hid);pushUndo();h.given=el("givenDate").value||"";h.due=el("dueDate").value||"";save();render();openHomework(hid)}
@@ -4346,8 +4357,8 @@ function openTrialReportCenter(){
  const c=cls();if(!c)return;const students=[...(c.students||[])].sort((a,b)=>a.name.localeCompare(b.name,'tr'));
  el('modalTitle').textContent='Deneme Raporları';el('modalSubtitle').textContent=`${c.name} · öğrenci ve sınıf gelişim çıktıları`;
  el('modalBody').innerHTML=`<div class="notice">Raporlar cihazınızda oluşturulur. Öğrenci raporu öğrencinin tüm deneme geçmişini; sınıf raporu ise denemelerin genel gelişimini ve öğrenci özetlerini içerir.</div>
- <div class="card" style="padding:12px;margin-top:12px"><b>Öğrenci Gelişim Raporu</b><div class="tiny" style="margin:4px 0 9px">Tek sayfalık JPEG: son net, en yüksek, ortalama, katılım ve deneme geçmişi.</div><label>Öğrenci<select id="trialReportStudent">${students.map(st=>`<option value="${st.id}">${esc(st.number?st.number+' - ':'')}${esc(st.name)}</option>`).join('')}</select></label><button style="width:100%;margin-top:9px" onclick="exportStudentTrialReportJPEG(el('trialReportStudent').value)">Öğrenci Raporu Oluştur</button></div>
- <div class="card" style="padding:12px;margin-top:10px"><b>Sınıf Genel Deneme Raporu</b><div class="tiny" style="margin:4px 0 9px">Deneme bazında katılım ve ortalama netler ile öğrencilerin genel deneme özetini içerir.</div><button style="width:100%" onclick="exportClassTrialReportJPEG()">Sınıf Raporu Oluştur</button></div>`;
+ <div class="card" style="padding:12px;margin-top:12px"><b>Öğrenci Gelişim Raporu</b><div class="tiny" style="margin:4px 0 9px">JPEG / PDF: son net, en yüksek, ortalama, katılım ve deneme geçmişi.</div><label>Öğrenci<select id="trialReportStudent">${students.map(st=>`<option value="${st.id}">${esc(st.number?st.number+' - ':'')}${esc(st.name)}</option>`).join('')}</select></label><button style="width:100%;margin-top:9px" onclick="exportStudentTrialReportJPEG(el('trialReportStudent').value)">Öğrenci Raporu Çıktısı</button></div>
+ <div class="card" style="padding:12px;margin-top:10px"><b>Sınıf Genel Deneme Raporu</b><div class="tiny" style="margin:4px 0 9px">Deneme bazında katılım ve ortalama netler ile öğrencilerin genel deneme özetini içerir.</div><button style="width:100%" onclick="exportClassTrialReportJPEG()">Sınıf Raporu Çıktısı</button></div>`;
  el('modal').classList.add('open');
 }
 function trialReportStudentStats(c,sid){
@@ -4402,7 +4413,7 @@ function openNewTrial(){
 }
 function toggleTrialPenaltyOptions(){const on=!!el('trialPenalty')?.checked;const txt=el('trialPenaltyText'),box=el('trialPenaltyOptions'),sel=el('trialDiv');if(txt)txt.textContent=on?'Evet':'Hayır';if(box){box.style.display=on?'block':'none';box.setAttribute('aria-hidden',on?'false':'true')}if(sel)sel.disabled=!on}
 function saveNewTrial(){const name=el('trialName').value.trim(),date=el('trialDateValue').value,subjects=el('trialSubjects').value.split(',').map(x=>x.trim()).filter(Boolean),penalty=!!el('trialPenalty')?.checked,div=Number(el('trialDiv')?.value)||4;if(!name)return alert('Deneme adını girin.');if(!date)return alert('Deneme tarihini seçin.');if(!subjects.length)return alert('En az bir ders girin.');pushUndo();const t={id:uid(),name,date,subjects,wrongPenalty:penalty,wrongDivisor:div,results:{}};cls().students.forEach(st=>t.results[st.id]={attended:true,subjects:{}});cls().trials.push(t);save();render();openTrial(t.id)}
-function openTrial(id){const c=cls(),t=trialList(c).find(x=>x.id===id);if(!t)return;el('modalTitle').textContent=t.name;el('modalSubtitle').textContent=`${c.name} · ${trialDateTR(t.date)}`;el('modalBody').innerHTML=`<div class="modal-actions trial-top-actions" style="margin-top:0;margin-bottom:12px"><button class="secondary" onclick="exportTrialCSV('${t.id}')">Excel / CSV Raporu</button><button class="secondary" onclick="exportSingleTrialJPEG('${t.id}')">JPEG Raporu</button><button class="secondary trial-info-full" onclick="editTrialInfo('${t.id}')">Deneme Bilgileri</button></div><div class="trial-card-stats"><div class="trial-mini"><span>Katılan</span><b>${trialStats(t).attended}</b></div><div class="trial-mini"><span>Girmeyen</span><b>${trialStats(t).absent}</b></div><div class="trial-mini"><span>Ort. Net</span><b>${trialStats(t).avg??'-'}</b></div></div><div style="display:grid;gap:8px;margin-top:12px">${c.students.map(st=>trialStudentEditor(t,st)).join('')}</div><div class="modal-actions"><button class="danger" onclick="deleteTrial('${t.id}')">Denemeyi Sil</button></div>`;el('modal').classList.add('open')}
+function openTrial(id){const c=cls(),t=trialList(c).find(x=>x.id===id);if(!t)return;el('modalTitle').textContent=t.name;el('modalSubtitle').textContent=`${c.name} · ${trialDateTR(t.date)}`;el('modalBody').innerHTML=`<div class="modal-actions trial-top-actions" style="margin-top:0;margin-bottom:12px"><button class="secondary" onclick="exportTrialCSV('${t.id}')">Excel / CSV Raporu</button><button class="secondary" onclick="exportSingleTrialJPEG('${t.id}')">Rapor Çıktısı</button><button class="secondary trial-info-full" onclick="editTrialInfo('${t.id}')">Deneme Bilgileri</button></div><div class="trial-card-stats"><div class="trial-mini"><span>Katılan</span><b>${trialStats(t).attended}</b></div><div class="trial-mini"><span>Girmeyen</span><b>${trialStats(t).absent}</b></div><div class="trial-mini"><span>Ort. Net</span><b>${trialStats(t).avg??'-'}</b></div></div><div style="display:grid;gap:8px;margin-top:12px">${c.students.map(st=>trialStudentEditor(t,st)).join('')}</div><div class="modal-actions"><button class="danger" onclick="deleteTrial('${t.id}')">Denemeyi Sil</button></div>`;el('modal').classList.add('open')}
 function trialStudentEditor(t,st){const r=t.results[st.id]||(t.results[st.id]={attended:true,subjects:{}}),att=r.attended!==false,total=trialStudentTotal(t,st.id),trend=trialTrend(t,st.id);return `<div class="trial-student-card" data-trial-student="${st.id}"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>${esc(st.number?st.number+' - ':'')}${esc(st.name)}</b><span><b data-trial-total>${total===null?'Girmedi':total.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net'}</b> <small class="${trend.cls}">${trend.text}</small></span></div><label class="trial-participation" style="display:flex;align-items:center;gap:7px;margin-top:8px"><input type="checkbox" ${att?'checked':''} onchange="setTrialAttendance('${t.id}','${st.id}',this.checked)"> Denemeye katıldı</label>${att?`<div>${(t.subjects||[]).map(sub=>{const x=r.subjects?.[sub]||{},sn=trialNet(x.correct,x.wrong,t.wrongDivisor,t.wrongPenalty!==false);return `<div class="trial-subject-block" data-trial-subject="${esc(sub)}"><div class="trial-subject-head"><b>${esc(sub)}</b><span class="trial-subject-net" data-subject-net>${sn.toLocaleString('tr-TR',{maximumFractionDigits:2})} net</span></div><div class="trial-subject-grid"><label>Doğru<input class="trial-score-input" type="number" min="0" inputmode="numeric" value="${x.correct??''}" oninput="setTrialScoreLive('${t.id}','${st.id}','${esc(sub)}','correct',this.value,this)"></label><label>Yanlış<input class="trial-score-input" type="number" min="0" inputmode="numeric" value="${x.wrong??''}" oninput="setTrialScoreLive('${t.id}','${st.id}','${esc(sub)}','wrong',this.value,this)"></label><label>Boş<input class="trial-score-input" type="number" min="0" inputmode="numeric" value="${x.blank??''}" oninput="setTrialScoreLive('${t.id}','${st.id}','${esc(sub)}','blank',this.value,this)"></label></div></div>`}).join('')}</div>`:''}</div>`}
 function setTrialAttendance(tid,sid,on){const t=trialList().find(x=>x.id===tid);if(!t)return;t.results[sid]=t.results[sid]||{subjects:{}};t.results[sid].attended=!!on;save();render();openTrial(tid)}
 function setTrialScoreLive(tid,sid,sub,key,val,input){const t=trialList().find(x=>x.id===tid);if(!t)return;t.results[sid]=t.results[sid]||{attended:true,subjects:{}};t.results[sid].subjects=t.results[sid].subjects||{};const x=t.results[sid].subjects[sub]=t.results[sid].subjects[sub]||{};x[key]=val===''?'':Math.max(0,Number(val)||0);save();const block=input?.closest('.trial-subject-block');const sn=trialNet(x.correct,x.wrong,t.wrongDivisor,t.wrongPenalty!==false);const snEl=block?.querySelector('[data-subject-net]');if(snEl)snEl.textContent=sn.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net';const card=input?.closest('.trial-student-card');const total=trialStudentTotal(t,sid),totalEl=card?.querySelector('[data-trial-total]');if(totalEl)totalEl.textContent=(total===null?'Girmedi':total.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net');const stats=trialStats(t),statEls=el('modalBody')?.querySelectorAll('.trial-card-stats .trial-mini b');if(statEls&&statEls.length>=3){statEls[0].textContent=stats.attended;statEls[1].textContent=stats.absent;statEls[2].textContent=stats.avg===null?'-':stats.avg.toLocaleString('tr-TR',{maximumFractionDigits:2})}renderTrials()}
@@ -5056,51 +5067,72 @@ function commitPDFRegionStudents(){
     const i=ch.dataset.i,no=document.querySelector(`.pdf-row-no[data-i="${i}"]`)?.value.trim()||"",name=document.querySelector(`.pdf-row-name[data-i="${i}"]`)?.value.trim()||"",gender=document.querySelector(`.pdf-row-gender[data-i="${i}"]`)?.value||"";
     if(name&&!ex.has(normName(name))){c.students.push({id:uid(),number:no,name,gender});ex.add(normName(name));n++;if(gender)withGender++}
   });
-  save();render();closeModal();alert(`${n} öğrenci eklendi${withGender?` · ${withGender} öğrencinin cinsiyet bilgisi PDF'den alındı`:""}.`);
+  refreshFutureClassDuty(c);save();render();closeModal();alert(`${n} öğrenci eklendi${withGender?` · ${withGender} öğrencinin cinsiyet bilgisi PDF'den alındı`:""}.`);
 }
+/* ===== v7.6.72 Sınıf Nöbetçi Öğrenci Sistemi ===== */
+function dutyToday(){return new Date().toISOString().slice(0,10)}
+function dutyDateObj(iso){const [y,m,d]=iso.split('-').map(Number);return new Date(y,m-1,d,12)}
+function dutyISO(dt){return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`}
+function dutyIsSchoolDay(c,iso){const d=dutyDateObj(iso),w=d.getDay(),x=normalizeClassDuty(c.classDuty);return w!==0&&w!==6&&!x.holidays.includes(iso)}
+function dutyStudentLabel(c,id){const s=c.students.find(x=>x.id===id);if(s)return `${s.number?s.number+' - ':''}${s.name}`;return normalizeClassDuty(c.classDuty).studentArchive[id]||'—'}
+function archiveDutyStudent(c,s){if(!c||!s)return;c.classDuty=normalizeClassDuty(c.classDuty);c.classDuty.studentArchive[s.id]=`${s.number?s.number+' - ':''}${s.name}`}
+function dutySortedStudents(c){return [...c.students].sort((a,b)=>{const na=Number(a.number),nb=Number(b.number);if(Number.isFinite(na)&&Number.isFinite(nb)&&na!==nb)return na-nb;return a.name.localeCompare(b.name,'tr')})}
+function dutyLastAssignedIds(c,before){const a=normalizeClassDuty(c.classDuty).assignments;return Object.keys(a).filter(d=>d<before).sort().flatMap(d=>a[d]||[])}
+function dutyNextPair(c,date){const students=dutySortedStudents(c);if(!students.length)return [];
+ const ids=students.map(s=>s.id),used=dutyLastAssignedIds(c,date).filter(id=>ids.includes(id));let start=0;
+ if(used.length){const last=used[used.length-1],i=ids.indexOf(last);start=i<0?0:(i+1)%ids.length}
+ const out=[];for(let k=0;k<Math.min(2,ids.length);k++)out.push(ids[(start+k)%ids.length]);return out;
+}
+function ensureDutyThrough(c,endIso){c.classDuty=normalizeClassDuty(c.classDuty);let dt=dutyDateObj(c.classDuty.startDate),end=dutyDateObj(endIso),guard=0;
+ while(dt<=end&&guard++<1500){const iso=dutyISO(dt);if(dutyIsSchoolDay(c,iso)&&!c.classDuty.assignments[iso])c.classDuty.assignments[iso]=dutyNextPair(c,iso);dt.setDate(dt.getDate()+1)}
+}
+function refreshFutureClassDuty(c){if(!c)return;c.classDuty=normalizeClassDuty(c.classDuty);const today=dutyToday();Object.keys(c.classDuty.assignments).forEach(d=>{if(d>=today)delete c.classDuty.assignments[d]});}
+function dutyMonthValue(){return window._dutyMonth||dutyToday().slice(0,7)}
+function dutyMonthEnd(ym){const [y,m]=ym.split('-').map(Number);return dutyISO(new Date(y,m,0,12))}
+function dutyMonthRows(c,ym){ensureDutyThrough(c,dutyMonthEnd(ym));const [y,m]=ym.split('-').map(Number),last=new Date(y,m,0).getDate(),rows=[];for(let d=1;d<=last;d++){const iso=`${ym}-${String(d).padStart(2,'0')}`,dt=dutyDateObj(iso),w=dt.getDay();if(w===0||w===6)continue;rows.push({iso,holiday:c.classDuty.holidays.includes(iso),ids:c.classDuty.assignments[iso]||[]})}return rows}
+function openClassDuty(ym){const c=cls();if(!c)return;c.classDuty=normalizeClassDuty(c.classDuty);window._dutyMonth=ym||dutyMonthValue();const rows=dutyMonthRows(c,window._dutyMonth);save();const [y,m]=window._dutyMonth.split('-').map(Number),month=new Date(y,m-1,1).toLocaleDateString('tr-TR',{month:'long',year:'numeric'});
+ el('modalTitle').textContent='Sınıf Nöbeti';el('modalSubtitle').textContent=`${c.name} · Her ders günü 2 öğrenci`;
+ el('modalBody').innerHTML=`<div class="card" style="padding:12px;margin-bottom:10px"><div class="form-row"><label>Ay<input id="dutyMonth" type="month" value="${window._dutyMonth}" onchange="openClassDuty(this.value)"></label><label>Başlangıç tarihi<input id="dutyStart" type="date" value="${c.classDuty.startDate}" onchange="setDutyStart(this.value)"></label></div><div class="tiny" style="margin-top:6px">Sıra ay sonunda sıfırlanmaz. Hafta sonları ve nöbetsiz günlerde sıra ilerlemez.</div></div>
+ <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:10px"><button onclick="exportDutyMonth()">🖨️ Aylık Çıktı</button><button class="secondary" onclick="addDutyHoliday()">📅 Nöbetsiz Gün Ekle</button></div>
+ <div class="card" style="overflow:auto"><table style="width:100%"><thead><tr><th>Tarih</th><th>1. Nöbetçi</th><th>2. Nöbetçi</th><th>İşlem</th></tr></thead><tbody>${rows.map(r=>{const dt=dutyDateObj(r.iso),label=dt.toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',weekday:'short'});return `<tr><td>${label}</td>${r.holiday?`<td colspan="2"><span class="badge neutral">Nöbet yok</span></td><td><button class="ghost" onclick="removeDutyHoliday('${r.iso}')">Geri Al</button></td>`:`<td>${esc(dutyStudentLabel(c,r.ids[0]))}</td><td>${esc(dutyStudentLabel(c,r.ids[1]))}</td><td><button class="secondary" onclick="openDutySwap('${r.iso}')">Değiştir</button></td>`}</tr>`}).join('')}</tbody></table></div>
+ <div class="tiny" style="margin-top:9px">“Değiştir” işlemi öğrenciyi fazladan nöbetçi yapmaz; seçilen öğrenciyle gelecekteki nöbet sırası takas edilir.</div>`;el('modal').classList.add('open');
+}
+function setDutyStart(v){const c=cls();if(!c||!v)return;pushUndo();c.classDuty=normalizeClassDuty(c.classDuty);c.classDuty.startDate=v;c.classDuty.assignments={};save();openClassDuty()}
+function addDutyHoliday(){const c=cls();if(!c)return;const v=prompt('Nöbet olmayan tarihi YYYY-AA-GG biçiminde yazın:',`${dutyMonthValue()}-01`);if(!v||!/^\d{4}-\d{2}-\d{2}$/.test(v))return;pushUndo();c.classDuty=normalizeClassDuty(c.classDuty);if(!c.classDuty.holidays.includes(v))c.classDuty.holidays.push(v);delete c.classDuty.assignments[v];refreshFutureClassDuty(c);save();openClassDuty(v.slice(0,7))}
+function removeDutyHoliday(v){const c=cls();if(!c)return;pushUndo();c.classDuty.holidays=c.classDuty.holidays.filter(x=>x!==v);refreshFutureClassDuty(c);save();openClassDuty(v.slice(0,7))}
+function openDutySwap(date){const c=cls();if(!c)return;ensureDutyThrough(c,dutyMonthEnd(date.slice(0,7)));const ids=c.classDuty.assignments[date]||[];if(!ids.length)return alert('Bu gün için nöbetçi yok.');window._dutySwapDate=date;el('modalTitle').textContent='Nöbetçi Değiştir';el('modalSubtitle').textContent=`${c.name} · ${dutyDateObj(date).toLocaleDateString('tr-TR')}`;const opts=dutySortedStudents(c).map(s=>`<option value="${s.id}">${esc(dutyStudentLabel(c,s.id))}</option>`).join('');el('modalBody').innerHTML=`<div class="notice">Değişiklik bir takastır. Yerine seçilen öğrencinin gelecekteki ilk nöbeti, değiştirilen öğrenciye geçer.</div><label>Değiştirilecek nöbetçi<select id="dutyOld"><option value="${ids[0]}">${esc(dutyStudentLabel(c,ids[0]))}</option>${ids[1]?`<option value="${ids[1]}">${esc(dutyStudentLabel(c,ids[1]))}</option>`:''}</select></label><label>Yerine gelecek öğrenci<select id="dutyNew">${opts}</select></label><button style="width:100%;margin-top:10px" onclick="commitDutySwap()">Yer Değiştir</button><button class="secondary" style="width:100%;margin-top:7px" onclick="openClassDuty('${date.slice(0,7)}')">Vazgeç</button>`}
+function commitDutySwap(){const c=cls(),date=window._dutySwapDate,oldId=el('dutyOld').value,newId=el('dutyNew').value;if(!c||!date||!oldId||!newId||oldId===newId)return alert('Farklı bir öğrenci seçin.');const todayPair=c.classDuty.assignments[date]||[];if(todayPair.includes(newId))return alert('Seçtiğiniz öğrenci zaten o gün nöbetçi.');let future=null;for(const d of Object.keys(c.classDuty.assignments).filter(d=>d>date).sort()){if((c.classDuty.assignments[d]||[]).includes(newId)){future=d;break}}if(!future){const end=dutyDateObj(date);end.setMonth(end.getMonth()+3);ensureDutyThrough(c,dutyISO(end));for(const d of Object.keys(c.classDuty.assignments).filter(d=>d>date).sort()){if((c.classDuty.assignments[d]||[]).includes(newId)){future=d;break}}}if(!future)return alert('Seçilen öğrencinin takas edilecek ileri tarihli nöbeti bulunamadı.');pushUndo();c.classDuty.assignments[date]=todayPair.map(id=>id===oldId?newId:id);c.classDuty.assignments[future]=(c.classDuty.assignments[future]||[]).map(id=>id===newId?oldId:id);save();openClassDuty(date.slice(0,7))}
+function buildDutyMonthCanvas(c,ym){const rows=dutyMonthRows(c,ym),[y,m]=ym.split('-').map(Number),month=new Date(y,m-1,1).toLocaleDateString('tr-TR',{month:'long',year:'numeric'}),w=1240,rh=48,top=180,h=top+rows.length*rh+120,cv=document.createElement('canvas');cv.width=w;cv.height=h;const x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.fillStyle='#111827';x.textAlign='center';x.font='bold 30px Arial';x.fillText(`${c.name} Sınıfı - ${month} Nöbetçi Öğrenci Çizelgesi`,w/2,50);x.font='17px Arial';x.fillStyle='#475569';x.fillText(settings.profile?.school||'',w/2,82);x.textAlign='left';x.fillStyle='#eaf2ff';x.fillRect(40,120,w-80,48);x.fillStyle='#1e3a8a';x.font='bold 16px Arial';x.fillText('Tarih',60,151);x.fillText('1. Nöbetçi Öğrenci',300,151);x.fillText('2. Nöbetçi Öğrenci',760,151);rows.forEach((r,i)=>{const yy=top+i*rh;x.fillStyle=i%2?'#fff':'#f8fafc';x.fillRect(40,yy,w-80,rh);x.fillStyle='#111827';x.font='15px Arial';x.fillText(dutyDateObj(r.iso).toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',weekday:'long'}),60,yy+30);if(r.holiday){x.fillStyle='#64748b';x.fillText('NÖBET YOK',300,yy+30)}else{x.fillText(dutyStudentLabel(c,r.ids[0]),300,yy+30);x.fillText(dutyStudentLabel(c,r.ids[1]),760,yy+30)}});x.fillStyle='#64748b';x.font='14px Arial';x.fillText('Not: Hafta sonlarında nöbetçi öğrenci görevlendirilmez.',40,h-45);return cv}
+function exportDutyMonth(){const c=cls();if(!c)return;const ym=dutyMonthValue(),cv=buildDutyMonthCanvas(c,ym);downloadCanvas(cv,`${safe(c.name)}_${ym}_sinif_nobet_cizelgesi.jpg`)}
+
 /* Rapor */
 function safe(s){return String(s).replace(/[^\w\-ÇĞİÖŞÜçğıöşü]+/g,"_")}
 function exportStudentJPEG(sid){const c=cls(),s=c.students.find(x=>x.id===sid),hs=hwPeriod(c),w=900,rh=40,top=120,height=top+hs.length*rh+70,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 25px Arial";x.fillText(`${s.name} - Ödev Raporu`,25,35);x.font="14px Arial";x.fillStyle="#64748b";x.fillText(`${c.name} · No: ${s.number||"-"} · ${currentPeriod}. Dönem`,25,62);x.fillStyle="#eaf2ff";x.fillRect(20,82,w-40,38);x.fillStyle="#1e3a8a";x.font="bold 13px Arial";x.fillText("Ödev",30,107);x.fillText("Durum",650,107);hs.forEach((h,i)=>{const y=top+i*rh,v=status(c,sid,h.id);x.fillStyle=i%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";x.font="13px Arial";x.fillText(h.name,30,y+25);x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":"#dc2626";x.fillText(v==="done"?"YAPTI":v==="partial"?"KISMEN":v==="excused"?"MAZERETLİ":"YAPMADI",650,y+25)});downloadCanvas(cv,`${safe(c.name)}_${safe(s.name)}_rapor.jpg`)}
 function exportHomeworkJPEG(hid){const c=cls(),h=c.homeworks.find(x=>x.id===hid),students=[...c.students].sort((a,b)=>a.name.localeCompare(b.name,"tr")),w=900,rh=40,top=120,height=top+students.length*rh+70,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 25px Arial";x.fillText(`${c.name} - ${h.name}`,25,35);x.font="14px Arial";x.fillStyle="#64748b";x.fillText(`${currentPeriod}. Dönem`,25,62);students.forEach((s,i)=>{const y=top+i*rh,v=status(c,s.id,hid);x.fillStyle=i%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";x.font="13px Arial";x.fillText(`${s.number? s.number+" - ":""}${s.name}`,30,y+25);x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":"#dc2626";x.fillText(v==="done"?"YAPTI":v==="partial"?"KISMEN":v==="excused"?"MAZERETLİ":"YAPMADI",650,y+25)});downloadCanvas(cv,`${safe(c.name)}_${safe(h.name)}.jpg`)}
 function exportClassJPEG(){const c=cls(),hs=hwPeriod(c),students=[...c.students].sort((a,b)=>a.name.localeCompare(b.name,"tr"));if(!students.length)return alert("Öğrenci yok.");const left=250,cw=100,rh=38,top=125,w=Math.max(1050,left+hs.length*cw+80),height=top+students.length*rh+60,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 24px Arial";x.fillText(`${c.name} - ${currentPeriod}. Dönem Ödev Durumu`,25,36);x.fillStyle="#eaf2ff";x.fillRect(20,78,w-40,47);x.fillStyle="#1e3a8a";x.font="bold 12px Arial";x.fillText("Öğrenci",30,108);hs.forEach((h,i)=>{x.save();x.translate(left+i*cw+8,118);x.rotate(-Math.PI/5);x.fillText(h.name.slice(0,15),0,0);x.restore()});students.forEach((s,r)=>{const y=top+r*rh;x.fillStyle=r%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";x.font="12px Arial";x.fillText(`${s.number? s.number+" - ":""}${s.name}`,30,y+24);hs.forEach((h,i)=>{const v=status(c,s.id,h.id);x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":"#dc2626";x.fillText(v==="done"?"✓":v==="partial"?"½":v==="excused"?"M":"✕",left+i*cw+35,y+24)})});downloadCanvas(cv,`${safe(c.name)}_${currentPeriod}_donem_odev.jpg`)}
-async function downloadCanvas(cv,name){
-  try{
-    const blob=await new Promise((resolve,reject)=>cv.toBlob(b=>b?resolve(b):reject(new Error("JPEG oluşturulamadı.")),"image/jpeg",.94));
-    const file=new File([blob],name,{type:"image/jpeg"});
-    const isiOS=/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
-
-    // iPhone/PWA'da doğrudan indirme bazı sürümlerde çalışmadığı için paylaşım/dosyaya kaydet ekranı daha güvenilirdir.
-    if(isiOS && navigator.share && (!navigator.canShare || navigator.canShare({files:[file]}))){
-      try{
-        await navigator.share({files:[file],title:name});
-        return;
-      }catch(e){
-        if(e && e.name==="AbortError") return;
-        console.warn("JPEG paylaşımı açılamadı, indirme yöntemi deneniyor.",e);
-      }
-    }
-
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement("a");
-    a.href=url;
-    a.download=name;
-    a.rel="noopener";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),5000);
-  }catch(e){
-    console.error(e);
-    alert("JPEG oluşturulamadı: "+(e?.message||e));
-  }
+let _pendingOutput=null;
+function downloadCanvas(cv,name){
+ _pendingOutput={cv,name};
+ el('modalTitle').textContent='Çıktı Formatı';el('modalSubtitle').textContent='İstediğiniz dosya türünü seçin';
+ el('modalBody').innerHTML=`<div class="card" style="padding:14px"><button style="width:100%;margin-bottom:9px" onclick="finishCanvasOutput('jpeg')">🖼️ JPEG — Görsel olarak kaydet</button><button class="secondary" style="width:100%" onclick="finishCanvasOutput('pdf')">📄 PDF — A4 belge olarak kaydet</button></div><div class="tiny" style="margin-top:9px">PDF cihazınızda çevrimdışı oluşturulur. Uzun çıktılar otomatik olarak birden fazla A4 sayfasına bölünür.</div>`;
+ el('modal').classList.add('open');
 }
+async function finishCanvasOutput(kind){const p=_pendingOutput;if(!p)return;try{if(kind==='pdf')await downloadCanvasPDF(p.cv,p.name.replace(/\.jpe?g$/i,'.pdf'));else await downloadCanvasJPEG(p.cv,p.name);_pendingOutput=null;closeModal()}catch(e){console.error(e);alert('Çıktı oluşturulamadı: '+(e?.message||e))}}
+async function downloadCanvasJPEG(cv,name){const blob=await new Promise((resolve,reject)=>cv.toBlob(b=>b?resolve(b):reject(new Error('JPEG oluşturulamadı.')),'image/jpeg',.94));await saveOutputBlob(blob,name,'image/jpeg')}
+async function saveOutputBlob(blob,name,type){const file=new File([blob],name,{type}),isiOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);if(isiOS&&navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){try{await navigator.share({files:[file],title:name});return}catch(e){if(e&&e.name==='AbortError')return}}const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.rel='noopener';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000)}
+function bytesFromDataURL(u){const b=atob(u.split(',')[1]),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
+function asciiBytes(s){return new TextEncoder().encode(s)}
+function concatBytes(parts){let n=parts.reduce((a,b)=>a+b.length,0),o=new Uint8Array(n),p=0;for(const b of parts){o.set(b,p);p+=b.length}return o}
+async function downloadCanvasPDF(cv,name){const PW=595.28,PH=841.89,M=28,usableW=PW-2*M,usableH=PH-2*M,sliceH=Math.max(1,Math.floor(cv.width*usableH/usableW)),images=[];for(let y=0;y<cv.height;y+=sliceH){const h=Math.min(sliceH,cv.height-y),part=document.createElement('canvas');part.width=cv.width;part.height=h;const q=part.getContext('2d');q.fillStyle='#fff';q.fillRect(0,0,part.width,part.height);q.drawImage(cv,0,y,cv.width,h,0,0,cv.width,h);images.push({w:part.width,h:part.height,data:bytesFromDataURL(part.toDataURL('image/jpeg',.92))})}
+ const count=images.length,objs={},pageIds=[];for(let i=0;i<count;i++)pageIds.push(5+i*3);objs[1]=asciiBytes('<< /Type /Catalog /Pages 2 0 R >>');objs[2]=asciiBytes(`<< /Type /Pages /Count ${count} /Kids [${pageIds.map(id=>id+' 0 R').join(' ')}] >>`);images.forEach((im,i)=>{const imgId=3+i*3,contentId=4+i*3,pageId=5+i*3,scale=Math.min(usableW/im.w,usableH/im.h),dw=im.w*scale,dh=im.h*scale,x=M+(usableW-dw)/2,y=M+(usableH-dh)/2,stream=`q\n${dw.toFixed(2)} 0 0 ${dh.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm\n/Im0 Do\nQ\n`,sb=asciiBytes(stream);objs[imgId]=concatBytes([asciiBytes(`<< /Type /XObject /Subtype /Image /Width ${im.w} /Height ${im.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${im.data.length} >>\nstream\n`),im.data,asciiBytes('\nendstream')]);objs[contentId]=concatBytes([asciiBytes(`<< /Length ${sb.length} >>\nstream\n`),sb,asciiBytes('endstream')]);objs[pageId]=asciiBytes(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im0 ${imgId} 0 R >> >> /Contents ${contentId} 0 R >>`) });
+ let parts=[asciiBytes('%PDF-1.4\n%âãÏÓ\n')],offsets=[0],pos=parts[0].length,max=2+count*3;for(let id=1;id<=max;id++){offsets[id]=pos;const b=concatBytes([asciiBytes(`${id} 0 obj\n`),objs[id],asciiBytes('\nendobj\n')]);parts.push(b);pos+=b.length}const xref=pos;let xs=`xref\n0 ${max+1}\n0000000000 65535 f \n`;for(let id=1;id<=max;id++)xs+=String(offsets[id]).padStart(10,'0')+' 00000 n \n';xs+=`trailer\n<< /Size ${max+1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;parts.push(asciiBytes(xs));await saveOutputBlob(new Blob(parts,{type:'application/pdf'}),name,'application/pdf')}
 function exportClassCSV(){const c=cls(),rows=[["Sınıf","Dönem","No","Öğrenci","Yaptı","Kısmen","Mazeretli","Yapmadı","Başarı %"]];c.students.forEach(s=>{const st=sstat(c,s.id);rows.push([c.name,currentPeriod,s.number,s.name,st.done,st.partial,st.excused,st.missing,st.rate])});downloadBlob("\uFEFF"+rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(";")).join("\n"),`${safe(c.name)}_${currentPeriod}_donem_rapor.csv`,"text/csv;charset=utf-8")}
 
 function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.71",
+    appVersion:"v7.6.72",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5112,7 +5144,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.71",
+    appVersion:"v7.6.72",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
