@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.72</title>
+<title>Öğrenci Takip Sistemi v7.6.73</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -1823,7 +1823,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </style>
 
 <style id="v766-ui-polish">
-/* v7.6.72: deneme üst işlemleri ve dinamik mobil sınıf gezinme alanı */
+/* v7.6.73: deneme üst işlemleri ve dinamik mobil sınıf gezinme alanı */
 .trial-top-actions{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important}
 .trial-top-actions .trial-info-full{grid-column:1/-1!important;width:100%!important}
 .class-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -1933,7 +1933,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.72</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.73</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -5069,7 +5069,7 @@ function commitPDFRegionStudents(){
   });
   refreshFutureClassDuty(c);save();render();closeModal();alert(`${n} öğrenci eklendi${withGender?` · ${withGender} öğrencinin cinsiyet bilgisi PDF'den alındı`:""}.`);
 }
-/* ===== v7.6.72 Sınıf Nöbetçi Öğrenci Sistemi ===== */
+/* ===== v7.6.73 Sınıf Nöbetçi Öğrenci Sistemi ===== */
 function dutyToday(){return new Date().toISOString().slice(0,10)}
 function dutyDateObj(iso){const [y,m,d]=iso.split('-').map(Number);return new Date(y,m-1,d,12)}
 function dutyISO(dt){return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`}
@@ -5102,7 +5102,7 @@ function addDutyHoliday(){const c=cls();if(!c)return;const v=prompt('Nöbet olma
 function removeDutyHoliday(v){const c=cls();if(!c)return;pushUndo();c.classDuty.holidays=c.classDuty.holidays.filter(x=>x!==v);refreshFutureClassDuty(c);save();openClassDuty(v.slice(0,7))}
 function openDutySwap(date){const c=cls();if(!c)return;ensureDutyThrough(c,dutyMonthEnd(date.slice(0,7)));const ids=c.classDuty.assignments[date]||[];if(!ids.length)return alert('Bu gün için nöbetçi yok.');window._dutySwapDate=date;el('modalTitle').textContent='Nöbetçi Değiştir';el('modalSubtitle').textContent=`${c.name} · ${dutyDateObj(date).toLocaleDateString('tr-TR')}`;const opts=dutySortedStudents(c).map(s=>`<option value="${s.id}">${esc(dutyStudentLabel(c,s.id))}</option>`).join('');el('modalBody').innerHTML=`<div class="notice">Değişiklik bir takastır. Yerine seçilen öğrencinin gelecekteki ilk nöbeti, değiştirilen öğrenciye geçer.</div><label>Değiştirilecek nöbetçi<select id="dutyOld"><option value="${ids[0]}">${esc(dutyStudentLabel(c,ids[0]))}</option>${ids[1]?`<option value="${ids[1]}">${esc(dutyStudentLabel(c,ids[1]))}</option>`:''}</select></label><label>Yerine gelecek öğrenci<select id="dutyNew">${opts}</select></label><button style="width:100%;margin-top:10px" onclick="commitDutySwap()">Yer Değiştir</button><button class="secondary" style="width:100%;margin-top:7px" onclick="openClassDuty('${date.slice(0,7)}')">Vazgeç</button>`}
 function commitDutySwap(){const c=cls(),date=window._dutySwapDate,oldId=el('dutyOld').value,newId=el('dutyNew').value;if(!c||!date||!oldId||!newId||oldId===newId)return alert('Farklı bir öğrenci seçin.');const todayPair=c.classDuty.assignments[date]||[];if(todayPair.includes(newId))return alert('Seçtiğiniz öğrenci zaten o gün nöbetçi.');let future=null;for(const d of Object.keys(c.classDuty.assignments).filter(d=>d>date).sort()){if((c.classDuty.assignments[d]||[]).includes(newId)){future=d;break}}if(!future){const end=dutyDateObj(date);end.setMonth(end.getMonth()+3);ensureDutyThrough(c,dutyISO(end));for(const d of Object.keys(c.classDuty.assignments).filter(d=>d>date).sort()){if((c.classDuty.assignments[d]||[]).includes(newId)){future=d;break}}}if(!future)return alert('Seçilen öğrencinin takas edilecek ileri tarihli nöbeti bulunamadı.');pushUndo();c.classDuty.assignments[date]=todayPair.map(id=>id===oldId?newId:id);c.classDuty.assignments[future]=(c.classDuty.assignments[future]||[]).map(id=>id===newId?oldId:id);save();openClassDuty(date.slice(0,7))}
-function buildDutyMonthCanvas(c,ym){const rows=dutyMonthRows(c,ym),[y,m]=ym.split('-').map(Number),month=new Date(y,m-1,1).toLocaleDateString('tr-TR',{month:'long',year:'numeric'}),w=1240,rh=48,top=180,h=top+rows.length*rh+120,cv=document.createElement('canvas');cv.width=w;cv.height=h;const x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.fillStyle='#111827';x.textAlign='center';x.font='bold 30px Arial';x.fillText(`${c.name} Sınıfı - ${month} Nöbetçi Öğrenci Çizelgesi`,w/2,50);x.font='17px Arial';x.fillStyle='#475569';x.fillText(settings.profile?.school||'',w/2,82);x.textAlign='left';x.fillStyle='#eaf2ff';x.fillRect(40,120,w-80,48);x.fillStyle='#1e3a8a';x.font='bold 16px Arial';x.fillText('Tarih',60,151);x.fillText('1. Nöbetçi Öğrenci',300,151);x.fillText('2. Nöbetçi Öğrenci',760,151);rows.forEach((r,i)=>{const yy=top+i*rh;x.fillStyle=i%2?'#fff':'#f8fafc';x.fillRect(40,yy,w-80,rh);x.fillStyle='#111827';x.font='15px Arial';x.fillText(dutyDateObj(r.iso).toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',weekday:'long'}),60,yy+30);if(r.holiday){x.fillStyle='#64748b';x.fillText('NÖBET YOK',300,yy+30)}else{x.fillText(dutyStudentLabel(c,r.ids[0]),300,yy+30);x.fillText(dutyStudentLabel(c,r.ids[1]),760,yy+30)}});x.fillStyle='#64748b';x.font='14px Arial';x.fillText('Not: Hafta sonlarında nöbetçi öğrenci görevlendirilmez.',40,h-45);return cv}
+function buildDutyMonthCanvas(c,ym){const rows=dutyMonthRows(c,ym),[y,m]=ym.split('-').map(Number),month=new Date(y,m-1,1).toLocaleDateString('tr-TR',{month:'long',year:'numeric'}),w=1240,rh=48,top=135,h=top+rows.length*rh+55,cv=document.createElement('canvas');cv.width=w;cv.height=h;const x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.fillStyle='#111827';x.textAlign='center';x.font='bold 30px Arial';x.fillText(`${c.name} Sınıfı - ${month} Nöbetçi Öğrenci Çizelgesi`,w/2,50);x.textAlign='left';x.fillStyle='#eaf2ff';x.fillRect(40,75,w-80,48);x.fillStyle='#1e3a8a';x.font='bold 16px Arial';x.fillText('Tarih',60,106);x.fillText('1. Nöbetçi Öğrenci',300,106);x.fillText('2. Nöbetçi Öğrenci',760,106);rows.forEach((r,i)=>{const yy=top+i*rh;x.fillStyle=i%2?'#fff':'#f8fafc';x.fillRect(40,yy,w-80,rh);x.fillStyle='#111827';x.font='15px Arial';x.fillText(dutyDateObj(r.iso).toLocaleDateString('tr-TR',{day:'2-digit',month:'2-digit',weekday:'long'}),60,yy+30);if(r.holiday){x.fillStyle='#64748b';x.fillText('NÖBET YOK',300,yy+30)}else{x.fillText(dutyStudentLabel(c,r.ids[0]),300,yy+30);x.fillText(dutyStudentLabel(c,r.ids[1]),760,yy+30)}});return cv}
 function exportDutyMonth(){const c=cls();if(!c)return;const ym=dutyMonthValue(),cv=buildDutyMonthCanvas(c,ym);downloadCanvas(cv,`${safe(c.name)}_${ym}_sinif_nobet_cizelgesi.jpg`)}
 
 /* Rapor */
@@ -5111,13 +5111,15 @@ function exportStudentJPEG(sid){const c=cls(),s=c.students.find(x=>x.id===sid),h
 function exportHomeworkJPEG(hid){const c=cls(),h=c.homeworks.find(x=>x.id===hid),students=[...c.students].sort((a,b)=>a.name.localeCompare(b.name,"tr")),w=900,rh=40,top=120,height=top+students.length*rh+70,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 25px Arial";x.fillText(`${c.name} - ${h.name}`,25,35);x.font="14px Arial";x.fillStyle="#64748b";x.fillText(`${currentPeriod}. Dönem`,25,62);students.forEach((s,i)=>{const y=top+i*rh,v=status(c,s.id,hid);x.fillStyle=i%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";x.font="13px Arial";x.fillText(`${s.number? s.number+" - ":""}${s.name}`,30,y+25);x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":"#dc2626";x.fillText(v==="done"?"YAPTI":v==="partial"?"KISMEN":v==="excused"?"MAZERETLİ":"YAPMADI",650,y+25)});downloadCanvas(cv,`${safe(c.name)}_${safe(h.name)}.jpg`)}
 function exportClassJPEG(){const c=cls(),hs=hwPeriod(c),students=[...c.students].sort((a,b)=>a.name.localeCompare(b.name,"tr"));if(!students.length)return alert("Öğrenci yok.");const left=250,cw=100,rh=38,top=125,w=Math.max(1050,left+hs.length*cw+80),height=top+students.length*rh+60,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 24px Arial";x.fillText(`${c.name} - ${currentPeriod}. Dönem Ödev Durumu`,25,36);x.fillStyle="#eaf2ff";x.fillRect(20,78,w-40,47);x.fillStyle="#1e3a8a";x.font="bold 12px Arial";x.fillText("Öğrenci",30,108);hs.forEach((h,i)=>{x.save();x.translate(left+i*cw+8,118);x.rotate(-Math.PI/5);x.fillText(h.name.slice(0,15),0,0);x.restore()});students.forEach((s,r)=>{const y=top+r*rh;x.fillStyle=r%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";x.font="12px Arial";x.fillText(`${s.number? s.number+" - ":""}${s.name}`,30,y+24);hs.forEach((h,i)=>{const v=status(c,s.id,h.id);x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":"#dc2626";x.fillText(v==="done"?"✓":v==="partial"?"½":v==="excused"?"M":"✕",left+i*cw+35,y+24)})});downloadCanvas(cv,`${safe(c.name)}_${currentPeriod}_donem_odev.jpg`)}
 let _pendingOutput=null;
+function closeOutputPicker(){const o=document.getElementById('outputPickerOverlay');if(o)o.remove();_pendingOutput=null}
 function downloadCanvas(cv,name){
  _pendingOutput={cv,name};
- el('modalTitle').textContent='Çıktı Formatı';el('modalSubtitle').textContent='İstediğiniz dosya türünü seçin';
- el('modalBody').innerHTML=`<div class="card" style="padding:14px"><button style="width:100%;margin-bottom:9px" onclick="finishCanvasOutput('jpeg')">🖼️ JPEG — Görsel olarak kaydet</button><button class="secondary" style="width:100%" onclick="finishCanvasOutput('pdf')">📄 PDF — A4 belge olarak kaydet</button></div><div class="tiny" style="margin-top:9px">PDF cihazınızda çevrimdışı oluşturulur. Uzun çıktılar otomatik olarak birden fazla A4 sayfasına bölünür.</div>`;
- el('modal').classList.add('open');
+ let old=document.getElementById('outputPickerOverlay');if(old)old.remove();
+ const o=document.createElement('div');o.id='outputPickerOverlay';o.style.cssText='position:fixed;inset:0;z-index:10050;background:rgba(15,23,42,.46);display:flex;align-items:center;justify-content:center;padding:18px';
+ o.innerHTML=`<div style="width:min(760px,100%);background:#fff;border-radius:24px;box-shadow:0 24px 70px rgba(15,23,42,.28);overflow:hidden"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:22px 28px;border-bottom:1px solid #e2e8f0"><div><div style="font-size:26px;font-weight:800;color:#172033">Çıktı Formatı</div><div style="color:#64748b;margin-top:2px">İstediğiniz dosya türünü seçin</div></div><button class="secondary" onclick="closeOutputPicker()">Kapat</button></div><div style="padding:28px"><div class="card" style="padding:14px"><button style="width:100%;margin-bottom:9px" onclick="finishCanvasOutput('jpeg')">🖼️ JPEG — Görsel olarak kaydet</button><button class="secondary" style="width:100%" onclick="finishCanvasOutput('pdf')">📄 PDF — A4 belge olarak kaydet</button></div><div class="tiny" style="margin-top:9px">PDF cihazınızda çevrimdışı oluşturulur. Uzun çıktılar otomatik olarak birden fazla A4 sayfasına bölünür.</div></div></div>`;
+ document.body.appendChild(o);
 }
-async function finishCanvasOutput(kind){const p=_pendingOutput;if(!p)return;try{if(kind==='pdf')await downloadCanvasPDF(p.cv,p.name.replace(/\.jpe?g$/i,'.pdf'));else await downloadCanvasJPEG(p.cv,p.name);_pendingOutput=null;closeModal()}catch(e){console.error(e);alert('Çıktı oluşturulamadı: '+(e?.message||e))}}
+async function finishCanvasOutput(kind){const p=_pendingOutput;if(!p)return;try{if(kind==='pdf')await downloadCanvasPDF(p.cv,p.name.replace(/\.jpe?g$/i,'.pdf'));else await downloadCanvasJPEG(p.cv,p.name);closeOutputPicker()}catch(e){console.error(e);alert('Çıktı oluşturulamadı: '+(e?.message||e))}}
 async function downloadCanvasJPEG(cv,name){const blob=await new Promise((resolve,reject)=>cv.toBlob(b=>b?resolve(b):reject(new Error('JPEG oluşturulamadı.')),'image/jpeg',.94));await saveOutputBlob(blob,name,'image/jpeg')}
 async function saveOutputBlob(blob,name,type){const file=new File([blob],name,{type}),isiOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);if(isiOS&&navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){try{await navigator.share({files:[file],title:name});return}catch(e){if(e&&e.name==='AbortError')return}}const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.rel='noopener';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000)}
 function bytesFromDataURL(u){const b=atob(u.split(',')[1]),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
@@ -5132,7 +5134,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.72",
+    appVersion:"v7.6.73",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5144,7 +5146,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.72",
+    appVersion:"v7.6.73",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
