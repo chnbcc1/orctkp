@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.70</title>
+<title>Öğrenci Takip Sistemi v7.6.71</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -1823,7 +1823,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </style>
 
 <style id="v766-ui-polish">
-/* v7.6.70: deneme üst işlemleri ve dinamik mobil sınıf gezinme alanı */
+/* v7.6.71: deneme üst işlemleri ve dinamik mobil sınıf gezinme alanı */
 .trial-top-actions{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important}
 .trial-top-actions .trial-info-full{grid-column:1/-1!important;width:100%!important}
 .class-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -1933,7 +1933,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.70</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.71</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2704,7 +2704,10 @@ function openScheduleEntryEditor(id){
   const e=id?sc.entries.find(x=>x.id===id):null;
   el("modalTitle").textContent=e?"Dersi Düzenle":"Ders Ekle";
   el("modalSubtitle").textContent="Ders programı";
-  const dayOpts=SCHEDULE_DAYS.map(d=>`<option value="${d.key}" ${(e?.day||"Pa")===d.key?"selected":""}>${d.label}</option>`).join("");
+  // Yeni ders eklenirken mobil görünümde seçili olan günü devral.
+  // "Tüm Hafta" görünümünde belirli bir gün olmadığı için Pazartesi varsayılan kalır.
+  const initialDay=e?.day||((scheduleMobileViewDay&&scheduleMobileViewDay!=="ALL")?scheduleMobileViewDay:"Pa");
+  const dayOpts=SCHEDULE_DAYS.map(d=>`<option value="${d.key}" ${initialDay===d.key?"selected":""}>${d.label}</option>`).join("");
   const perOpts=sc.periods.map(p=>`<option value="${p.no}">${p.no}. ders (${esc(p.start)}–${esc(p.end)})</option>`).join("");
   el("modalBody").innerHTML=`
     <div class="schedule-editor-grid">
@@ -2904,12 +2907,18 @@ function localISODate(d=new Date()){return `${d.getFullYear()}-${String(d.getMon
 function dateFromISO(v){return new Date(v+"T12:00:00")}
 function addDaysISO(v,n){let d=dateFromISO(v);d.setDate(d.getDate()+n);return localISODate(d)}
 function dutyDate(v){return v?dateFromISO(v).toLocaleDateString("tr-TR",{weekday:"long",day:"numeric",month:"long",year:"numeric"}):"Tarih yok"}
+function boardingHoursForDate(dateISO,b){
+ const day=dateFromISO(dateISO).getDay();
+ // Cumartesi (6) ve Pazar (0) pansiyon nöbetleri tam gündür: 08:00 -> ertesi gün 08:00.
+ // Hafta içi kullanıcı tarafından tanımlanan normal başlangıç/bitiş saatleri korunur.
+ return (day===0||day===6)?{start:"08:00",end:"08:00"}:{start:b.start,end:b.end};
+}
 function boardingDates(ds,fromISO,toISO){
  const b=ds.boarding;if(!b?.enabled||!b.startDate)return[];
  let cur=b.startDate, out=[], guard=0;
  while(cur>fromISO && guard++<80){let prev=addDaysISO(cur,-8); if(prev<fromISO)break;cur=prev}
  guard=0;while(cur<fromISO && guard++<80)cur=addDaysISO(cur,6);
- guard=0;while(cur<=toISO&&guard++<120){if(cur>=fromISO)out.push({id:"boarding_"+cur,type:"boarding",date:cur,place:b.place||"Pansiyon",start:b.start,end:b.end,note:b.note||"",generated:true});cur=addDaysISO(cur,6)}
+ guard=0;while(cur<=toISO&&guard++<120){if(cur>=fromISO){const hours=boardingHoursForDate(cur,b);out.push({id:"boarding_"+cur,type:"boarding",date:cur,place:b.place||"Pansiyon",start:hours.start,end:hours.end,note:b.note||"",generated:true})}cur=addDaysISO(cur,6)}
  return out;
 }
 function dutyEntriesForRange(fromISO,toISO){
@@ -5091,7 +5100,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.70",
+    appVersion:"v7.6.71",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5103,7 +5112,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.70",
+    appVersion:"v7.6.71",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
