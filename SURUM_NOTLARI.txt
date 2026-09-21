@@ -1,7 +1,5 @@
-Öğrenci Takip Sistemi v7.7.03
-
-- ŞÖK doğrudan PDF çıktısında gövde yazı puntosu büyütüldü.
-- Görüşmeler, akademik sınav değerlendirmesi ve Alınan Kararlar aynı okunabilir punto standardına getirildi.
-- ALINAN KARARLAR başlığı belirginleştirildi.
-- Sayfaya sığdırmak için yazı küçültme yapılmıyor; içerik uzarsa yeni sayfaya geçiyor.
-- v7.7.02'deki görüşmeler/kararlar yapısı ve önceki belge yerleşimleri korundu.
+Öğrenci Takip Sistemi v7.7.04
+- ŞÖK PDF otomatik sayfa geçişinde ilk satırların küçülmesi düzeltildi.
+- Paragraf yeni sayfaya geçtiğinde 12 punto gövde yazı standardı korunuyor.
+- OLUR bloğu tek parça tutuluyor; Müdür görevinin tek başına boş sayfaya taşması düzeltildi.
+- Görüşmeler ve Alınan Kararlar aynı okunabilir punto düzeninde korunuyor.
