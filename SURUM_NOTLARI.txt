@@ -1,10 +1,7 @@
-Öğrenci Takip Sistemi v7.7.02
+Öğrenci Takip Sistemi v7.7.03
 
-- ŞÖK görüşme ve karar düzeni yenilendi.
-- Her gündem maddesinde artık “Görüşme:” ve “Karar:” etiketleri yok.
-- Gündem maddeleri GÖRÜŞMELER bölümünde başlık + doğal tutanak metni biçiminde yer alır.
-- Tüm görüşmeler tamamlandıktan sonra ALINAN KARARLAR bölümü oluşturulur.
-- Karar numaraları gündem numaralarıyla eşleşir.
-- Akademik başarı maddesi, varsa uygulamadaki 1. ve/veya 2. sınav verilerini kullanır.
-- Akademik değerlendirme diğer tutanak metinleriyle aynı belge yazı düzeninde gösterilir.
-- Önceki PDF/DOCX, toplantı bilgileri, katılımcılar ve imza yerleşimi korunmuştur.
+- ŞÖK doğrudan PDF çıktısında gövde yazı puntosu büyütüldü.
+- Görüşmeler, akademik sınav değerlendirmesi ve Alınan Kararlar aynı okunabilir punto standardına getirildi.
+- ALINAN KARARLAR başlığı belirginleştirildi.
+- Sayfaya sığdırmak için yazı küçültme yapılmıyor; içerik uzarsa yeni sayfaya geçiyor.
+- v7.7.02'deki görüşmeler/kararlar yapısı ve önceki belge yerleşimleri korundu.
