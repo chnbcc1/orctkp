@@ -1,10 +1,6 @@
-Öğrenci Takip Sistemi v7.6.92
+Öğrenci Takip Sistemi v7.6.93
 
-- ŞÖK taslağındaki köşeli parantezli [Görüşme notu: ...] yer tutucuları kaldırıldı.
-- Görüşme bölümleri, öğretmenin toplantıda gerçek görüşleri yazabilmesi için sade "Görüşme:" alanlarına dönüştürüldü.
-- [Karar: ... yazılacaktır.] metinleri kaldırıldı; karar bölümü sade "Karar:" alanlarına dönüştürüldü.
-- İmza sirküsünde İMZA hücreleri boş bırakıldı; çıktı alındıktan sonra imzalanmaya uygun hale getirildi.
-- İmza tablosunun altında tekrarlanan Sınıf Rehber Öğretmeni adı/görevi kaldırıldı.
-- Aynı öğretmenin farklı görev/branşlarla birden fazla satırda bulunması korunur.
-- Doğrudan PDF üretimi ve gerçek DOCX dışa aktarma korunmuştur.
-- Dışa Aktar düğmesi Yeni Belge düğmesinin sağındaki konumunu korur.
+- Belge Asistanı taslak ekranındaki üst "Geri" düğmesi düzeltildi. Artık taslaktan belge oluşturma/ayar ekranına döner.
+- Belge çıktılarında programdan gelen okul adı her sayfanın üst başlığında ortalı ve kalın gösterilir.
+- Bu başlık kuralı A4 önizleme, doğrudan PDF ve gerçek DOCX çıktılarında ortak uygulanır.
+- v7.6.92 doğrudan PDF/DOCX dışa aktarma ve temiz ŞÖK taslak yapısı korunur.
