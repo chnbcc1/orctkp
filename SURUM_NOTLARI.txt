@@ -1,6 +1,8 @@
-Öğrenci Takip Sistemi v7.6.93
+Öğrenci Takip Sistemi v7.6.97
 
-- Belge Asistanı taslak ekranındaki üst "Geri" düğmesi düzeltildi. Artık taslaktan belge oluşturma/ayar ekranına döner.
-- Belge çıktılarında programdan gelen okul adı her sayfanın üst başlığında ortalı ve kalın gösterilir.
-- Bu başlık kuralı A4 önizleme, doğrudan PDF ve gerçek DOCX çıktılarında ortak uygulanır.
-- v7.6.92 doğrudan PDF/DOCX dışa aktarma ve temiz ŞÖK taslak yapısı korunur.
+- v7.6.95 çalışan sürümü doğrudan temel alınmıştır.
+- v7.6.96 kullanılmamıştır.
+- Yalnızca modal üst Geri düğmesinin görünürlüğü değiştirilmiştir.
+- Belge Asistanı ana formunda Geri düğmesi gizlidir.
+- Oluşturulan taslakta Geri düğmesi görünür ve v7.6.95 tek-dokunuş davranışı korunur.
+- Belge şablonları, PDF/DOCX motorları ve okul başlığı biçimi değiştirilmemiştir.
