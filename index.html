@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.80</title>
+<title>Öğrenci Takip Sistemi v7.6.81</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -795,7 +795,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 /* ===== v7.6.47 Sınıf bazlı yıllık plan ===== */
 .class-annual-card{margin-top:16px}.class-annual-card label{display:block;font-weight:700}.class-annual-card select,.class-annual-card input[type=file]{width:100%;margin-top:7px}.class-annual-import{margin-top:16px;padding-top:14px;border-top:1px solid #e2e8f0;display:grid;gap:10px}
 
-/* v7.6.80 - Sınıf nöbeti mobil görünüm */
+/* v7.6.81 - Sınıf nöbeti mobil görünüm */
 .duty-mobile-list{display:none}
 .duty-mobile-card{border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:9px;background:#fff}
 .duty-mobile-date{font-weight:900;font-size:15px;margin-bottom:8px;color:#0f172a}
@@ -809,7 +809,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
  .duty-mobile-list{display:block}
 }
 
-/* v7.6.80 - Nöbetçi değiştir mobil formu */
+/* v7.6.81 - Nöbetçi değiştir mobil formu */
 .duty-swap-form{display:flex;flex-direction:column;gap:14px}
 .duty-swap-field{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:6px!important;width:100%!important;min-width:0!important;margin:0!important}
 .duty-swap-field>span{display:block;font-weight:700;line-height:1.3}
@@ -1846,7 +1846,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </style>
 
 <style id="v766-ui-polish">
-/* v7.6.80: deneme üst işlemleri ve dinamik mobil sınıf gezinme alanı */
+/* v7.6.81: deneme üst işlemleri ve dinamik mobil sınıf gezinme alanı */
 .trial-top-actions{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important}
 .trial-top-actions .trial-info-full{grid-column:1/-1!important;width:100%!important}
 .class-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -1956,7 +1956,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.80</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.81</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -3552,7 +3552,7 @@ function saveNewHomework(){
 function openBulkHomeworks(){el("modalTitle").textContent="Toplu Ödev Ekle";el("modalSubtitle").textContent=(currentPeriod==="1"?"1. Dönem":"2. Dönem")+" · Her satıra bir ödev";el("modalBody").innerHTML=`<textarea id="bulkHomeworks" class="note" placeholder="Üslü Sayılar Testi&#10;Köklü Sayılar Çalışması"></textarea><div style="margin-top:10px"><button class="full-action" onclick="saveBulkHomeworks()">Ödevleri Ekle</button></div>`;el("modal").classList.add("open")}
 function saveBulkHomeworks(){const c=cls(),a=el("bulkHomeworks").value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),ex=new Set(hwPeriod(c).map(h=>h.name.toLocaleLowerCase("tr")));pushUndo();let added=0,skipped=0;a.forEach(n=>{const k=n.toLocaleLowerCase("tr");if(!ex.has(k)){c.homeworks.push({id:uid(),name:n,given:"",due:"",period:currentPeriod});ex.add(k);added++}else skipped++});save();closeModal();render();alert(`${added} ödev eklendi${skipped?`, ${skipped} tekrar eden ödev atlandı`:""}.`)}
 
-function status(c,sid,hid){let v=c.checks?.[sid]?.[hid];return ["done","partial","excused","missing"].includes(v)?v:"missing"}
+function status(c,sid,hid){let v=c.checks?.[sid]?.[hid];return ["done","partial","excused","missing"].includes(v)?v:"pending"}
 function setStatus(c,sid,hid,v,doPush=true){
   if(doPush)pushUndo();
   c.checks[sid]??={};
@@ -3562,8 +3562,8 @@ function setStatus(c,sid,hid,v,doPush=true){
   syncStatusUI(sid,hid,v);
 }
 function cycleStatus(sid,hid){const c=cls(),arr=["missing","done","partial","excused"],v=status(c,sid,hid);setStatus(c,sid,hid,arr[(arr.indexOf(v)+1)%arr.length])}
-function sstat(c,sid){const hs=hwPeriod(c),x={total:hs.length,done:0,partial:0,excused:0,missing:0};hs.forEach(h=>x[status(c,sid,h.id)]++);const denom=x.total-x.excused;x.rate=denom?Math.round((x.done+x.partial*.5)*100/denom):0;return x}
-function hstat(c,hid){const x={total:c.students.length,done:0,partial:0,excused:0,missing:0};c.students.forEach(s=>x[status(c,s.id,hid)]++);const denom=x.total-x.excused;x.rate=denom?Math.round((x.done+x.partial*.5)*100/denom):0;return x}
+function sstat(c,sid){const hs=hwPeriod(c),x={total:hs.length,done:0,partial:0,excused:0,missing:0,pending:0};hs.forEach(h=>x[status(c,sid,h.id)]++);const denom=x.total-x.excused-x.pending;x.rate=denom?Math.round((x.done+x.partial*.5)*100/denom):0;return x}
+function hstat(c,hid){const x={total:c.students.length,done:0,partial:0,excused:0,missing:0,pending:0};c.students.forEach(s=>x[status(c,s.id,hid)]++);const denom=x.total-x.excused-x.pending;x.rate=denom?Math.round((x.done+x.partial*.5)*100/denom):0;return x}
 function smartDateLabel(){
   try{return new Intl.DateTimeFormat("tr-TR",{weekday:"long",day:"numeric",month:"long"}).format(new Date())}catch(e){return "Bugün"}
 }
@@ -3592,12 +3592,14 @@ function smartTrialDeclineRows(c){
 }
 function getSmartAlerts(c){
   const hs=hwPeriod(c), students=c.students||[];
-  const missingRows=[], streakRows=[], lowCompletionRows=[], missingGradeRows=[], lowGradeRows=[], repeatedTrialAbsenceRows=[];
+  const missingRows=[], overduePendingRows=[], streakRows=[], lowCompletionRows=[], missingGradeRows=[], lowGradeRows=[], repeatedTrialAbsenceRows=[];
   students.forEach(s=>{
     const missingHs=hs.filter(h=>status(c,s.id,h.id)==="missing");
     if(missingHs.length) missingRows.push({student:s,count:missingHs.length,homeworks:missingHs});
+    const overduePendingHs=hs.filter(h=>h.due&&h.due<smartTodayISO()&&status(c,s.id,h.id)==="pending");
+    if(overduePendingHs.length) overduePendingRows.push({student:s,count:overduePendingHs.length,homeworks:overduePendingHs});
     if(hs.length>=3){const last3=hs.slice(-3);if(last3.every(h=>status(c,s.id,h.id)==="missing")) streakRows.push({student:s,homeworks:last3});}
-    if(hs.length>=2){const st=sstat(c,s.id);const active=hs.filter(h=>status(c,s.id,h.id)!=="excused").length;if(active>0&&st.rate<50)lowCompletionRows.push({student:s,rate:st.rate,stat:st});}
+    if(hs.length>=2){const st=sstat(c,s.id);const active=hs.filter(h=>!["excused","pending"].includes(status(c,s.id,h.id))).length;if(active>0&&st.rate<50)lowCompletionRows.push({student:s,rate:st.rate,stat:st});}
     const g=getGradeRecord(c,s.id), miss=missingGradeLabels(g), avg=gradeAverage(g);
     if(hasAnyRequiredGrade(g)&&miss.length)missingGradeRows.push({student:s,missing:miss,avg});
     if(avg!==null&&avg<50)lowGradeRows.push({student:s,avg});
@@ -3606,12 +3608,13 @@ function getSmartAlerts(c){
   students.forEach(st=>{const missed=trials.filter(t=>t?.results?.[st.id]?.attended===false);if(missed.length>=2)repeatedTrialAbsenceRows.push({student:st,count:missed.length,trials:missed});});
   const trialDeclineRows=smartTrialDeclineRows(c), deadlines=smartHomeworkDeadlineRows(c);
   repeatedTrialAbsenceRows.sort((a,b)=>b.count-a.count||a.student.name.localeCompare(b.student.name,"tr"));
-  missingRows.sort((a,b)=>b.count-a.count||a.student.name.localeCompare(b.student.name,"tr"));streakRows.sort((a,b)=>a.student.name.localeCompare(b.student.name,"tr"));lowCompletionRows.sort((a,b)=>a.rate-b.rate||a.student.name.localeCompare(b.student.name,"tr"));missingGradeRows.sort((a,b)=>b.missing.length-a.missing.length||a.student.name.localeCompare(b.student.name,"tr"));lowGradeRows.sort((a,b)=>a.avg-b.avg||a.student.name.localeCompare(b.student.name,"tr"));
-  const uniqueIds=new Set([...missingRows,...streakRows,...lowCompletionRows,...missingGradeRows,...lowGradeRows,...repeatedTrialAbsenceRows,...trialDeclineRows].map(x=>x.student.id));
+  missingRows.sort((a,b)=>b.count-a.count||a.student.name.localeCompare(b.student.name,"tr"));overduePendingRows.sort((a,b)=>b.count-a.count||a.student.name.localeCompare(b.student.name,"tr"));streakRows.sort((a,b)=>a.student.name.localeCompare(b.student.name,"tr"));lowCompletionRows.sort((a,b)=>a.rate-b.rate||a.student.name.localeCompare(b.student.name,"tr"));missingGradeRows.sort((a,b)=>b.missing.length-a.missing.length||a.student.name.localeCompare(b.student.name,"tr"));lowGradeRows.sort((a,b)=>a.avg-b.avg||a.student.name.localeCompare(b.student.name,"tr"));
+  const uniqueIds=new Set([...missingRows,...overduePendingRows,...streakRows,...lowCompletionRows,...missingGradeRows,...lowGradeRows,...repeatedTrialAbsenceRows,...trialDeclineRows].map(x=>x.student.id));
   const categories=[
     {type:"dueToday",title:"Bugünkü ödev kontrolü",count:deadlines.todayRows.length,detail:deadlines.todayRows.length?"Son teslim / kontrol günü bugün":"Bugün kontrol yok",tone:"warn"},
     {type:"upcomingDue",title:"Yaklaşan ödev",count:deadlines.upcomingRows.length,detail:"Önümüzdeki 3 gün içinde",tone:"partial"},
     {type:"missing",title:"Eksik ödev",count:missingRows.length,detail:missingRows.length?`${missingRows.reduce((n,x)=>n+x.count,0)} toplam eksik`:`Eksik ödev yok`,tone:"danger"},
+    {type:"homeworkCheckPending",title:"Ödev kontrolü bekliyor",count:overduePendingRows.length,detail:overduePendingRows.length?`${overduePendingRows.reduce((n,x)=>n+x.count,0)} değerlendirme bekliyor`:`Bekleyen kontrol yok`,tone:"warn"},
     {type:"streak",title:"Üst üste 3 eksik",count:streakRows.length,detail:"Son 3 ödevini yapmayanlar",tone:"danger"},
     {type:"lowCompletion",title:"Düşük tamamlama",count:lowCompletionRows.length,detail:"En az 2 ödevde %50 altı",tone:"warn"},
     {type:"missingGrade",title:"Eksik not",count:missingGradeRows.length,detail:"Not girişi başlamış, alanı eksik",tone:"partial"},
@@ -3619,7 +3622,7 @@ function getSmartAlerts(c){
     {type:"trialAbsence",title:"Deneme katılımı",count:repeatedTrialAbsenceRows.length,detail:"En az 2 denemeye katılmayanlar",tone:"warn"},
     {type:"trialDecline",title:"Deneme neti düşüşü",count:trialDeclineRows.length,detail:"Son iki sonuçta 5+ net düşüş",tone:"danger"}
   ];
-  return {hs,missingRows,streakRows,lowCompletionRows,missingGradeRows,lowGradeRows,repeatedTrialAbsenceRows,trialDeclineRows,todayHomeworkRows:deadlines.todayRows,upcomingHomeworkRows:deadlines.upcomingRows,uniqueCount:uniqueIds.size,categories,categoryCount:categories.filter(x=>x.count>0).length};
+  return {hs,missingRows,overduePendingRows,streakRows,lowCompletionRows,missingGradeRows,lowGradeRows,repeatedTrialAbsenceRows,trialDeclineRows,todayHomeworkRows:deadlines.todayRows,upcomingHomeworkRows:deadlines.upcomingRows,uniqueCount:uniqueIds.size,categories,categoryCount:categories.filter(x=>x.count>0).length};
 }
 function smartAlertIssueSnapshot(a){
   const out=[];
@@ -3820,6 +3823,9 @@ function openSmartAlert(type){
   }else if(type==="missing"){
     title="Eksik Ödevi Olan Öğrenciler"; rows=a.missingRows;
     body=rows.map(x=>smartStudentButton(c,x.student,`${x.count} eksik · ${x.homeworks.map(h=>esc(h.name)).join(" · ")}`)).join("");
+  }else if(type==="homeworkCheckPending"){
+    title="Ödev Kontrolü Bekleyen Öğrenciler"; rows=a.overduePendingRows;
+    body=rows.map(x=>smartStudentButton(c,x.student,`${x.count} kontrol bekliyor · ${x.homeworks.map(h=>esc(h.name)).join(" · ")}`)).join("");
   }else if(type==="streak"){
     title="Üst Üste 3 Ödevi Eksik Olanlar"; rows=a.streakRows;
     body=rows.map(x=>smartStudentButton(c,x.student,`Son 3: ${x.homeworks.map(h=>esc(h.name)).join(" · ")}`)).join("");
@@ -3845,7 +3851,7 @@ function openSmartAlert(type){
   el("modal").classList.add("open");
 }
 
-function renderStats(){const c=cls(),hs=hwPeriod(c);let points=0,den=0,missing=0;c.students.forEach(s=>hs.forEach(h=>{const v=status(c,s.id,h.id);if(v!=="excused"){den++;if(v==="done")points++;else if(v==="partial")points+=.5;if(v==="missing")missing++}}));const rate=den?Math.round(points*100/den):0;el("statStudents").textContent=c.students.length;el("statHomeworks").textContent=hs.length;el("statRate").textContent="%"+rate;el("statMissing").textContent=missing;const bar=el("classCompletionBar");if(bar)bar.style.width=rate+"%"}
+function renderStats(){const c=cls(),hs=hwPeriod(c);let points=0,den=0,missing=0;c.students.forEach(s=>hs.forEach(h=>{const v=status(c,s.id,h.id);if(v!=="excused"&&v!=="pending"){den++;if(v==="done")points++;else if(v==="partial")points+=.5;if(v==="missing")missing++}}));const rate=den?Math.round(points*100/den):0;el("statStudents").textContent=c.students.length;el("statHomeworks").textContent=hs.length;el("statRate").textContent="%"+rate;el("statMissing").textContent=missing;const bar=el("classCompletionBar");if(bar)bar.style.width=rate+"%"}
 function openMissingStudents(){
   const c=cls(); if(!c)return;
   const hs=hwPeriod(c);
@@ -3880,18 +3886,18 @@ function openMissingStudents(){
 
 
 function syncStatusUI(sid,hid,v){
-  const labels={done:"Yaptı",partial:"Kısmen",excused:"Mazeretli",missing:"Yapmadı"};
+  const labels={done:"Yaptı",partial:"Kısmen",excused:"Mazeretli",missing:"Yapmadı",pending:"Bekliyor"};
 
   // Durum hücresi
   document.querySelectorAll(`[data-status-badge="${sid}:${hid}"]`).forEach(b=>{
-    b.textContent=labels[v]||"Yapmadı";
+    b.textContent=labels[v]||"Bekliyor";
     b.className=`badge ${v}`;
   });
 
   // Ödev ayrıntısında öğrenci adının yanındaki hızlı durum noktası
   document.querySelectorAll(`[data-status-dot="${sid}:${hid}"]`).forEach(dot=>{
     dot.className=`student-status-dot ${v}`;
-    dot.title=labels[v]||"Yapmadı";
+    dot.title=labels[v]||"Bekliyor";
   });
 
   // Hızlı işlem düğmelerindeki aktif durum
@@ -3934,7 +3940,7 @@ function deleteHomework(id){const c=cls(),h=c.homeworks.find(x=>x.id===id);if(h&
 
 function statusBadge(v,sid="",hid=""){
   const attr=(sid&&hid)?` data-status-badge="${sid}:${hid}"`:"";
-  return `<span class="badge ${v}"${attr}>${v==="done"?"Yaptı":v==="partial"?"Kısmen":v==="excused"?"Mazeretli":"Yapmadı"}</span>`
+  return `<span class="badge ${v}"${attr}>${v==="done"?"Yaptı":v==="partial"?"Kısmen":v==="excused"?"Mazeretli":v==="missing"?"Yapmadı":"Bekliyor"}</span>`
 }
 function statusButtons(sid,hid){
   const c=cls(),v=status(c,sid,hid),key=`${sid}:${hid}`;
@@ -4214,7 +4220,7 @@ function commitCopyHomework(hid){const c=cls(),h=c.homeworks.find(x=>x.id===hid)
 function renderMatrix(){
   const c=cls(),hs=hwPeriod(c);if(!c)return;
   if(!hs.length){el("matrixWrap").innerHTML='<div class="empty">Bu dönemde ödev yok.</div>';return;}
-  const desktop=`<div class="desktop-matrix"><table class="matrix"><thead><tr><th>Öğrenci</th>${hs.map(h=>`<th>${esc(h.name)}</th>`).join("")}</tr></thead><tbody>${c.students.map(s=>`<tr><td>${esc(s.number?s.number+" - ":"")}${esc(s.name)}</td>${hs.map(h=>`<td><button class="${status(c,s.id,h.id)==="done"?"success":status(c,s.id,h.id)==="partial"?"partial":status(c,s.id,h.id)==="excused"?"warn":"danger"}" onclick="cycleStatus('${s.id}','${h.id}')">${status(c,s.id,h.id)==="done"?"Yaptı":status(c,s.id,h.id)==="partial"?"Kısmen":status(c,s.id,h.id)==="excused"?"Mazeret":"Yapmadı"}</button></td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  const desktop=`<div class="desktop-matrix"><table class="matrix"><thead><tr><th>Öğrenci</th>${hs.map(h=>`<th>${esc(h.name)}</th>`).join("")}</tr></thead><tbody>${c.students.map(s=>`<tr><td>${esc(s.number?s.number+" - ":"")}${esc(s.name)}</td>${hs.map(h=>`<td><button class="${status(c,s.id,h.id)==="done"?"success":status(c,s.id,h.id)==="partial"?"partial":status(c,s.id,h.id)==="excused"?"warn":status(c,s.id,h.id)==="missing"?"danger":"secondary"}" onclick="cycleStatus('${s.id}','${h.id}')">${status(c,s.id,h.id)==="done"?"Yaptı":status(c,s.id,h.id)==="partial"?"Kısmen":status(c,s.id,h.id)==="excused"?"Mazeret":status(c,s.id,h.id)==="missing"?"Yapmadı":"Bekliyor"}</button></td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
   const mobile=`<div class="mobile-matrix">${c.students.map(s=>`<div class="mobile-matrix-card"><div class="mobile-matrix-head"><div class="mobile-matrix-title">${esc(s.number?s.number+" - ":"")}${esc(s.name)}</div></div>${hs.map(h=>`<div class="matrix-homework-row"><div class="matrix-homework-name">${esc(h.name)}</div>${statusButtons(s.id,h.id)}</div>`).join("")}</div>`).join("")}</div>`;
   el("matrixWrap").innerHTML=desktop+mobile;
 }
@@ -4276,9 +4282,9 @@ function classGradeAverage(c){
   return avgs.length?Math.round((avgs.reduce((a,b)=>a+b,0)/avgs.length)*100)/100:null;
 }
 function homeworkStatusSummary(c,h){
-  const x={done:0,partial:0,excused:0,missing:0};
+  const x={done:0,partial:0,excused:0,missing:0,pending:0};
   c.students.forEach(s=>x[status(c,s.id,h.id)]++);
-  const den=c.students.length-x.excused;
+  const den=c.students.length-x.excused-x.pending;
   x.rate=den?Math.round((x.done+x.partial*.5)*100/den):0;
   return x;
 }
@@ -4332,7 +4338,7 @@ function renderReport(){
  const studentStats=c.students.map(s=>sstat(c,s.id));
  const missingStudents=studentStats.filter(x=>x.missing>0).length;
  let points=0,den=0,totalMissing=0;
- c.students.forEach(s=>hs.forEach(h=>{const v=status(c,s.id,h.id);if(v!=="excused"){den++;if(v==="done")points++;else if(v==="partial")points+=.5;}if(v==="missing")totalMissing++;}));
+ c.students.forEach(s=>hs.forEach(h=>{const v=status(c,s.id,h.id);if(v!=="excused"&&v!=="pending"){den++;if(v==="done")points++;else if(v==="partial")points+=.5;}if(v==="missing")totalMissing++;}));
  const completion=den?Math.round(points*100/den):0,gradeAvg=classGradeAverage(c);
  if(summary)summary.innerHTML=`
    <div class="report-summary-card"><span>Tamamlanma</span><b>%${completion}</b></div>
@@ -5095,7 +5101,7 @@ function commitPDFRegionStudents(){
   });
   refreshFutureClassDuty(c);save();render();closeModal();alert(`${n} öğrenci eklendi${withGender?` · ${withGender} öğrencinin cinsiyet bilgisi PDF'den alındı`:""}.`);
 }
-/* ===== v7.6.80 Sınıf Nöbetçi Öğrenci Sistemi — Baştan Kurulum ===== */
+/* ===== v7.6.81 Sınıf Nöbetçi Öğrenci Sistemi — Baştan Kurulum ===== */
 function dutyToday(){return new Date().toISOString().slice(0,10)}
 function dutyDateObj(iso){const [y,m,d]=iso.split('-').map(Number);return new Date(y,m-1,d,12)}
 function dutyISO(dt){return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`}
@@ -5153,7 +5159,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.80",
+    appVersion:"v7.6.81",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5165,7 +5171,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.80",
+    appVersion:"v7.6.81",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
