@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.86</title>
+<title>Öğrenci Takip Sistemi v7.6.87</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -818,7 +818,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 .duty-swap-underlay .modal-box{width:min(1100px,100%);max-height:94vh;overflow:hidden;background:#fff;border-radius:15px;border:1px solid var(--border);box-shadow:0 10px 30px rgba(15,23,42,.12)}
 @media(max-width:700px){.duty-swap-form{gap:12px}.duty-swap-field select{font-size:16px}.duty-swap-underlay{inset:14px}}
 
-/* ===== v7.6.86 Ödev görseli ===== */
+/* ===== v7.6.87 Ödev görseli ===== */
 .homework-image-box{border:1px dashed #bfdbfe;background:#f8fbff;border-radius:14px;padding:12px;margin-top:4px}
 .homework-image-preview{display:block;max-width:100%;max-height:260px;object-fit:contain;margin:10px auto 0;border-radius:12px;border:1px solid var(--border);background:#fff}
 .homework-image-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.homework-image-actions button{flex:1;min-width:120px}
@@ -1882,6 +1882,13 @@ body.class-module-page-open #modal{z-index:9200!important}
 }
 @media(min-width:701px){.mobile-class-nav-arrow{display:none!important}}
 </style>
+<style id="v7687-document-assistant-style">
+.document-assistant-shortcut{border-color:#c4b5fd!important;background:linear-gradient(135deg,#faf5ff,#f5f3ff)!important}
+.doc-ai-badge{font-size:18px;color:#6d28d9!important;background:#ede9fe!important}
+.doc-assistant-note{display:flex;flex-direction:column;gap:3px;padding:12px;border:1px solid #c4b5fd;background:#faf5ff;border-radius:12px;margin-bottom:12px}.doc-assistant-note span{font-size:12px;color:#64748b}
+.doc-assistant-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.doc-assistant-grid label,.doc-assistant-prompt{font-size:12px;font-weight:700;color:#475569}.doc-assistant-grid input,.doc-assistant-grid select,.doc-assistant-prompt textarea{width:100%;box-sizing:border-box;margin-top:4px}.doc-assistant-prompt{display:block;margin-top:10px}.doc-assistant-prompt textarea{resize:vertical;min-height:90px}.doc-draft-editor{width:100%;min-height:55vh;box-sizing:border-box;resize:vertical;line-height:1.55;font-family:Arial,sans-serif;font-size:14px;padding:14px}.doc-assistant-warning{padding:10px;border-radius:10px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:12px;margin-bottom:10px}.doc-template-list{display:grid;gap:8px}.doc-template-list .card{padding:12px}
+@media(max-width:600px){.doc-assistant-grid{grid-template-columns:1fr}.doc-draft-editor{min-height:52vh}.overview-shortcuts{grid-template-columns:1fr 1fr}.document-assistant-shortcut{grid-column:1/-1}}
+</style>
 </head>
 <body>
 
@@ -1963,7 +1970,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.86</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.87</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2021,6 +2028,11 @@ body.class-module-page-open #modal{z-index:9200!important}
     <span class="overview-shortcut-icon">👥</span>
     <span class="overview-shortcut-text"><b>Veli Görüşmeleri</b><small id="parentMeetingCompactText">Tüm görüşme geçmişi</small></span>
     <span id="parentMeetingBadge" class="overview-count">0</span>
+  </button>
+  <button class="overview-shortcut document-assistant-shortcut" onclick="openDocumentAssistant()">
+    <span class="overview-shortcut-icon">🤖</span>
+    <span class="overview-shortcut-text"><b>Belge Asistanı</b><small>Zümre · ŞÖK · Veli · Rapor</small></span>
+    <span class="overview-count doc-ai-badge">✦</span>
   </button>
 </div>
 
@@ -2099,6 +2111,67 @@ body.class-module-page-open #modal{z-index:9200!important}
 <script>
 window.addEventListener("error",function(ev){ console.error("Uygulama hatası:",ev.error||ev.message); });
 window.addEventListener("unhandledrejection",function(ev){ console.error("Uygulama promise hatası:",ev.reason); });
+
+// ===== v7.6.87 Belge Asistanı / yerel şablon altyapısı =====
+const documentAssistantTypes={
+  zumre:{label:"Zümre Toplantı Tutanağı",icon:"📘"},
+  sok:{label:"ŞÖK Toplantı Tutanağı",icon:"👥"},
+  veli:{label:"Veli Toplantı Tutanağı",icon:"🤝"},
+  durum:{label:"Sınıf / Öğrenci Durum Raporu",icon:"📄"},
+  serbest:{label:"Serbest Belge Taslağı",icon:"✍️"}
+};
+function documentAssistantContext(){
+  const c=typeof cls==="function"?cls():null,p=settings.profile||{};
+  return {teacher:p.name||"",school:p.school||"",className:c?.name||"",year:settings.currentSchoolYear||defaultSchoolYearLabel(),period:String(currentPeriod||"1")};
+}
+function openDocumentAssistant(){
+  const x=documentAssistantContext();
+  el("modalTitle").textContent="🤖 Belge Asistanı";
+  el("modalSubtitle").textContent="v7.6.87 · Yerel belge şablonları · Yapay zekâ bağlantısı sonraki aşamada";
+  el("modalBody").innerHTML=`
+    <div class="doc-assistant-note"><b>Çevrimdışı şablon modu</b><span>Bu sürüm internete veri göndermez. Belge iskeletini uygulamadaki bilgilerle hazırlar; oluşturulan metni düzenleyebilirsiniz.</span></div>
+    <div class="doc-assistant-grid">
+      <label>Belge Türü<select id="docAssistantType">${Object.entries(documentAssistantTypes).map(([k,v])=>`<option value="${k}">${v.icon} ${v.label}</option>`).join("")}</select></label>
+      <label>Tarih<input id="docAssistantDate" type="date" value="${localISODate()}"></label>
+      <label>Eğitim Yılı<input id="docAssistantYear" value="${esc(x.year)}"></label>
+      <label>Dönem<select id="docAssistantPeriod"><option value="1" ${x.period==="1"?"selected":""}>1. Dönem</option><option value="2" ${x.period==="2"?"selected":""}>2. Dönem</option></select></label>
+      <label>Okul<input id="docAssistantSchool" value="${esc(x.school)}" placeholder="Okul adı"></label>
+      <label>Öğretmen / Başkan<input id="docAssistantTeacher" value="${esc(x.teacher)}" placeholder="Ad Soyad"></label>
+      <label>Sınıf / Şube<input id="docAssistantClass" value="${esc(x.className)}" placeholder="Örn. 9/D"></label>
+    </div>
+    <label class="doc-assistant-prompt">Belgede özellikle yer almasını istedikleriniz<textarea id="docAssistantPrompt" rows="4" placeholder="Örn. Devamsızlık, akademik başarı, sınıf disiplini ve alınacak tedbirler yer alsın."></textarea></label>
+    <div class="modal-actions"><button onclick="generateDocumentAssistantDraft()">✨ Taslak Oluştur</button><button class="secondary" onclick="openDocumentAssistantTemplates()">Şablonları Gör</button></div>`;
+  el("modal").classList.add("open");
+}
+function docDateTR(v){if(!v)return "";const [y,m,d]=v.split("-");return `${d}.${m}.${y}`}
+function docAssistantValues(){return {
+  type:el("docAssistantType")?.value||"zumre",date:el("docAssistantDate")?.value||localISODate(),year:el("docAssistantYear")?.value.trim()||"",period:el("docAssistantPeriod")?.value||"1",
+  school:el("docAssistantSchool")?.value.trim()||"",teacher:el("docAssistantTeacher")?.value.trim()||"",className:el("docAssistantClass")?.value.trim()||"",prompt:el("docAssistantPrompt")?.value.trim()||""
+}}
+function buildDocumentDraft(v){
+  const school=v.school||"........................................................", teacher=v.teacher||"................................", clsName=v.className||"........", date=docDateTR(v.date), extra=v.prompt?`\n\nÖZEL GÜNDEM / NOTLAR\n${v.prompt}`:"";
+  if(v.type==="zumre") return `${school.toLocaleUpperCase("tr-TR")}\n${v.year} EĞİTİM ÖĞRETİM YILI ${v.period}. DÖNEM\nZÜMRE ÖĞRETMENLER KURULU TOPLANTI TUTANAĞI\n\nToplantı Tarihi: ${date}\nZümre Başkanı: ${teacher}\n\nGÜNDEM\n1. Açılış ve yoklama.\n2. Eğitim öğretim çalışmalarının değerlendirilmesi.\n3. Öğretim programı, öğrenme çıktıları ve yıllık planların değerlendirilmesi.\n4. Ölçme ve değerlendirme uygulamalarının görüşülmesi.\n5. Öğrenci başarılarının artırılmasına yönelik çalışmaların görüşülmesi.\n6. Derslerde kullanılacak yöntem, teknik, materyal ve etkinliklerin değerlendirilmesi.\n7. Dilek ve temenniler.\n\nGÖRÜŞMELER VE ALINAN KARARLAR\nToplantı, gündem maddelerinin görüşülmesi amacıyla gerçekleştirilmiştir. Aşağıdaki bölüm öğretmen tarafından toplantıda alınan gerçek kararlara göre düzenlenmelidir.\n\n1. ................................................................................................\n2. ................................................................................................\n3. ................................................................................................\n4. ................................................................................................${extra}\n\nİMZA\nZümre Başkanı: ${teacher}\nDiğer Üyeler: ................................................................................`;
+  if(v.type==="sok") return `${school.toLocaleUpperCase("tr-TR")}\n${v.year} EĞİTİM ÖĞRETİM YILI ${v.period}. DÖNEM\n${clsName} SINIFI ŞUBE ÖĞRETMENLER KURULU (ŞÖK) TOPLANTI TUTANAĞI\n\nToplantı Tarihi: ${date}\nSınıf Rehber Öğretmeni: ${teacher}\n\nGÜNDEM\n1. Sınıfın genel akademik durumunun değerlendirilmesi.\n2. Öğrencilerin derslere katılım ve çalışma alışkanlıklarının görüşülmesi.\n3. Devamsızlık ve devam durumlarının değerlendirilmesi.\n4. Sınıf içi davranışlar, okul kurallarına uyum ve rehberlik ihtiyaçlarının görüşülmesi.\n5. Başarıyı artırmak için alınabilecek tedbirlerin belirlenmesi.\n6. Veli iş birliği gerektiren durumların değerlendirilmesi.\n7. Dilek ve temenniler.\n\nGÖRÜŞMELER VE ALINAN KARARLAR\nBu taslak, kurulda görüşülen gerçek durumlara göre öğretmen tarafından düzenlenmelidir.\n\n1. ................................................................................................\n2. ................................................................................................\n3. ................................................................................................\n4. ................................................................................................${extra}\n\nSınıf Rehber Öğretmeni: ${teacher}\nİmzalar: ........................................................................................`;
+  if(v.type==="veli") return `${school.toLocaleUpperCase("tr-TR")}\n${v.year} EĞİTİM ÖĞRETİM YILI ${v.period}. DÖNEM\n${clsName} SINIFI VELİ TOPLANTISI TUTANAĞI\n\nToplantı Tarihi: ${date}\nSınıf Rehber Öğretmeni: ${teacher}\n\nGÜNDEM\n1. Açılış, tanışma ve toplantının amacı.\n2. Sınıfın genel akademik durumunun değerlendirilmesi.\n3. Devam-devamsızlık ve ders çalışma alışkanlıkları.\n4. Okul-aile iş birliği ve iletişim.\n5. Öğrencilerin sosyal, kültürel ve rehberlik ihtiyaçları.\n6. Dilek ve temenniler.\n\nGÖRÜŞÜLEN KONULAR VE KARARLAR\n1. ................................................................................................\n2. ................................................................................................\n3. ................................................................................................${extra}\n\nSınıf Rehber Öğretmeni: ${teacher}\nVeli İmzaları: ................................................................................`;
+  if(v.type==="durum") return `${school.toLocaleUpperCase("tr-TR")}\n${v.year} EĞİTİM ÖĞRETİM YILI\n${clsName} SINIFI DURUM DEĞERLENDİRME RAPORU\n\nTarih: ${date}\nHazırlayan: ${teacher}\nDönem: ${v.period}. Dönem\n\n1. GENEL DURUM\n....................................................................................................\n\n2. AKADEMİK DURUM\n....................................................................................................\n\n3. ÖDEV / ÇALIŞMA TAKİBİ\n....................................................................................................\n\n4. DEVAM VE KATILIM\n....................................................................................................\n\n5. ALINMASI PLANLANAN TEDBİRLER\n....................................................................................................${extra}\n\nHazırlayan: ${teacher}`;
+  return `${school.toLocaleUpperCase("tr-TR")}\n${v.year} EĞİTİM ÖĞRETİM YILI\nBELGE TASLAĞI\n\nTarih: ${date}\nHazırlayan: ${teacher}\nSınıf / Şube: ${clsName}\nDönem: ${v.period}. Dönem\n\nKONU\n....................................................................................................\n\nAÇIKLAMA\n....................................................................................................${extra}\n\nHazırlayan: ${teacher}`;
+}
+function generateDocumentAssistantDraft(){
+  const v=docAssistantValues(),draft=buildDocumentDraft(v),label=documentAssistantTypes[v.type]?.label||"Belge Taslağı";
+  el("modalTitle").textContent=`${documentAssistantTypes[v.type]?.icon||"📄"} ${label}`;
+  el("modalSubtitle").textContent="Taslak düzenlenebilir · Kaydetmeden önce içeriği kontrol edin";
+  el("modalBody").innerHTML=`<div class="doc-assistant-warning">Bu metin yerel şablondan oluşturuldu; toplantıda gerçekten görüşülen konular ve alınan kararlar öğretmen tarafından doğrulanmalıdır.</div><textarea id="docAssistantDraft" class="doc-draft-editor" spellcheck="true">${esc(draft)}</textarea><div class="modal-actions"><button onclick="printDocumentAssistantDraft()">🖨️ Yazdır / PDF</button><button class="secondary" onclick="copyDocumentAssistantDraft()">📋 Metni Kopyala</button><button class="secondary" onclick="openDocumentAssistant()">← Yeni Belge</button></div>`;
+}
+async function copyDocumentAssistantDraft(){const t=el("docAssistantDraft")?.value||"";try{await navigator.clipboard.writeText(t);alert("Belge metni panoya kopyalandı.")}catch(e){el("docAssistantDraft")?.select();document.execCommand("copy");alert("Belge metni kopyalandı.")}}
+function printDocumentAssistantDraft(){
+  const t=el("docAssistantDraft")?.value||"";if(!t.trim())return alert("Önce belge taslağı oluşturun.");
+  const w=window.open("","_blank");if(!w)return alert("Yazdırma penceresi açılamadı. Açılır pencere iznini kontrol edin.");
+  w.document.write(`<!doctype html><html lang="tr"><head><meta charset="utf-8"><title>Belge Asistanı</title><style>body{font-family:Arial,sans-serif;max-width:800px;margin:36px auto;padding:0 28px;color:#111;line-height:1.55;white-space:pre-wrap;font-size:12pt}@media print{body{margin:0;max-width:none}}</style></head><body>${esc(t)}</body></html>`);w.document.close();w.focus();setTimeout(()=>w.print(),250);
+}
+function openDocumentAssistantTemplates(){
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.6.87 · İlk şablon paketi";
+  el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
+}
 
 function switchTab(id){
   document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===id));
@@ -5227,7 +5300,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.86",
+    appVersion:"v7.6.87",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5239,7 +5312,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.86",
+    appVersion:"v7.6.87",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
