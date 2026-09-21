@@ -1,7 +1,10 @@
-Öğrenci Takip Sistemi v7.7.01
+Öğrenci Takip Sistemi v7.7.02
 
-- v7.7.00 ŞÖK oluşturma hatası düzeltildi.
-- Sınıf araması artık doğru uygulama durumu (state.classes) üzerinden yapılıyor.
-- Akademik veri okuma hata toleranslı: not verisi okunamazsa belge üretimi durmaz.
-- Not yok / tek sınav / iki sınav senaryolarında ŞÖK üretimi korunur.
-- v7.7.00 yerleşim iyileştirmeleri, doğrudan PDF ve DOCX çıktısı korunmuştur.
+- ŞÖK görüşme ve karar düzeni yenilendi.
+- Her gündem maddesinde artık “Görüşme:” ve “Karar:” etiketleri yok.
+- Gündem maddeleri GÖRÜŞMELER bölümünde başlık + doğal tutanak metni biçiminde yer alır.
+- Tüm görüşmeler tamamlandıktan sonra ALINAN KARARLAR bölümü oluşturulur.
+- Karar numaraları gündem numaralarıyla eşleşir.
+- Akademik başarı maddesi, varsa uygulamadaki 1. ve/veya 2. sınav verilerini kullanır.
+- Akademik değerlendirme diğer tutanak metinleriyle aynı belge yazı düzeninde gösterilir.
+- Önceki PDF/DOCX, toplantı bilgileri, katılımcılar ve imza yerleşimi korunmuştur.
