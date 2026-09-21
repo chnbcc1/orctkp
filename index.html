@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.88</title>
+<title>Öğrenci Takip Sistemi v7.6.89</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -818,14 +818,14 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 .duty-swap-underlay .modal-box{width:min(1100px,100%);max-height:94vh;overflow:hidden;background:#fff;border-radius:15px;border:1px solid var(--border);box-shadow:0 10px 30px rgba(15,23,42,.12)}
 @media(max-width:700px){.duty-swap-form{gap:12px}.duty-swap-field select{font-size:16px}.duty-swap-underlay{inset:14px}}
 
-/* ===== v7.6.88 Ödev görseli ===== */
+/* ===== v7.6.89 Ödev görseli ===== */
 .homework-image-box{border:1px dashed #bfdbfe;background:#f8fbff;border-radius:14px;padding:12px;margin-top:4px}
 .homework-image-preview{display:block;max-width:100%;max-height:260px;object-fit:contain;margin:10px auto 0;border-radius:12px;border:1px solid var(--border);background:#fff}
 .homework-image-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.homework-image-actions button{flex:1;min-width:120px}
 .homework-thumb{width:44px;height:44px;object-fit:cover;border-radius:8px;border:1px solid var(--border);vertical-align:middle;margin-right:8px}
 .homework-view-image{display:block;max-width:100%;max-height:70vh;object-fit:contain;margin:auto;border-radius:12px;background:#fff}
 
-/* ===== v7.6.88 Belge Asistanı ŞÖK şablonu + mobil alan optimizasyonu ===== */
+/* ===== v7.6.89 Belge Asistanı ŞÖK şablonu + mobil alan optimizasyonu ===== */
 @media(max-width:700px){
   .compact-class-summary{padding:9px 10px!important;margin-bottom:7px!important}
   .compact-class-head h1{font-size:23px!important;line-height:1.05}
@@ -842,6 +842,9 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 .doc-print-sheet{position:fixed;inset:0;z-index:10000;background:#e5e7eb;overflow:auto;padding:12px}.doc-print-toolbar{position:sticky;top:0;z-index:2;display:flex;gap:8px;justify-content:center;padding:8px;background:rgba(229,231,235,.96)}.doc-paper{width:210mm;min-height:297mm;margin:0 auto;background:#fff;box-sizing:border-box;padding:12.35mm;font-family:"Times New Roman",serif;font-size:12pt;line-height:1.15;color:#000}.doc-paper h1,.doc-paper h2,.doc-paper h3{font-family:"Times New Roman",serif}.doc-paper .center{text-align:center}.doc-paper .doc-title{font-weight:700;text-align:center;margin:0 0 8pt;font-size:12pt}.doc-paper .doc-section{font-weight:700;margin:9pt 0 5pt}.doc-paper p{margin:0 0 6pt;text-align:justify}.doc-paper ol{margin:0 0 7pt;padding-left:24px}.doc-paper li{margin:0 0 3pt}.doc-paper table{width:100%;border-collapse:collapse;margin:6pt 0 10pt}.doc-paper td,.doc-paper th{border:1px solid #000;padding:4pt 5pt;vertical-align:top}.doc-paper .meta td:first-child{width:36%;font-weight:700}.doc-paper .signature th{text-align:left}.doc-paper .signature td{height:24pt}.doc-paper .page-break{break-before:page;page-break-before:always}.doc-paper .notice{font-size:10pt;border:1px solid #aaa;padding:6pt;margin-bottom:8pt;background:#fafafa}
 @media(max-width:760px){.doc-print-sheet{padding:6px}.doc-paper{width:100%;min-height:0;padding:18px 14px;font-size:12pt}.doc-print-toolbar button{padding:9px 10px;font-size:12px}}
 @media print{body>*:not(.doc-print-sheet){display:none!important}.doc-print-sheet{position:static!important;padding:0!important;background:#fff!important;overflow:visible!important}.doc-print-toolbar{display:none!important}.doc-paper{width:auto!important;min-height:0!important;margin:0!important;padding:0!important}@page{size:A4;margin:12.35mm}}
+/* ===== v7.6.89 ŞÖK belge düzeni + öğretmen kadrosu + dışa aktar ===== */
+.doc-staff-list{display:grid;gap:7px;margin-top:8px}.doc-staff-row{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) auto auto;gap:6px;align-items:center;padding:7px;border:1px solid #e2e8f0;border-radius:10px;background:#fff}.doc-staff-row input[type=text]{min-width:0}.doc-staff-row .staff-check{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;white-space:nowrap}.doc-staff-row .staff-del{padding:7px 9px}.doc-export-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.doc-export-actions button{width:100%}.doc-paper p{font-weight:400!important}.doc-paper .agenda-item{font-weight:400!important}.doc-paper .placeholder{font-style:italic;color:#555}.doc-paper .signature{table-layout:fixed}.doc-paper .signature th:nth-child(1){width:38%}.doc-paper .signature th:nth-child(2){width:42%}.doc-paper .signature th:nth-child(3){width:20%}.doc-paper .signature td{word-break:break-word}.doc-paper section{overflow:hidden}
+@media(max-width:760px){.doc-print-sheet{padding:6px;overflow-y:auto;overflow-x:hidden}.doc-print-toolbar{position:sticky;left:0;right:0}.doc-paper{width:210mm!important;min-height:297mm!important;padding:12.35mm!important;transform-origin:top left;margin:0!important;font-size:12pt!important}.doc-staff-row{grid-template-columns:1fr 1fr}.doc-staff-row .staff-check,.doc-staff-row .staff-del{justify-self:start}}
 
 </style>
 
@@ -1989,7 +1992,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.88</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.89</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2131,7 +2134,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 window.addEventListener("error",function(ev){ console.error("Uygulama hatası:",ev.error||ev.message); });
 window.addEventListener("unhandledrejection",function(ev){ console.error("Uygulama promise hatası:",ev.reason); });
 
-// ===== v7.6.88 Belge Asistanı / yerel şablon altyapısı =====
+// ===== v7.6.89 Belge Asistanı / yerel şablon altyapısı =====
 const documentAssistantTypes={
   zumre:{label:"Zümre Toplantı Tutanağı",icon:"📘"},
   sok:{label:"ŞÖK Toplantı Tutanağı",icon:"👥"},
@@ -2146,7 +2149,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.6.88 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
+  el("modalSubtitle").textContent="v7.6.89 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2159,26 +2162,39 @@ function openDocumentAssistant(){
       <label>Sınıf / Şube<input id="docAssistantClass" value="${esc(x.className)}" placeholder="Örn. 9/D"></label>
     </div>
     <label class="doc-assistant-prompt">Belgede özellikle yer almasını istedikleriniz<textarea id="docAssistantPrompt" rows="3" placeholder="Örn. Devamsızlık, akademik başarı, sınıf disiplini ve alınacak tedbirler yer alsın."></textarea></label>
-    <details class="doc-participants"><summary>👥 ŞÖK Katılımcıları / İmza Sirküsü</summary><textarea id="docAssistantParticipants" placeholder="Her satıra: Ad Soyad | Branş">${esc((settings.docAssistantParticipants||[]).join("\n"))}</textarea><div class="tiny" style="margin-top:5px">Örnek: Meltem YAŞAR | Arapça Öğretmeni</div><button class="secondary" style="margin-top:7px" onclick="saveDocumentAssistantParticipants()">Katılımcıları Kaydet</button></details>
+    <details class="doc-participants" id="docParticipantsDetails" ontoggle="documentParticipantsToggle(this)"><summary>👥 ŞÖK Katılımcıları / İmza Sirküsü</summary><div class="tiny" style="margin-top:7px">Öğretmen kadrosu bir kez kaydedilir; her ŞÖK'te katılacak kişileri işaretleyebilirsiniz.</div><div id="docStaffList" class="doc-staff-list"></div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:8px"><button type="button" class="secondary" onclick="addDocumentStaffRow()">+ Öğretmen Ekle</button><button type="button" class="secondary" onclick="saveDocumentStaff()">Kadroyu Kaydet</button></div></details>
     <div class="modal-actions"><button onclick="generateDocumentAssistantDraft()">✨ Taslak Oluştur</button><button class="secondary" onclick="openDocumentAssistantTemplates()">Şablonları Gör</button></div>`;
   el("modal").classList.add("open");
+  renderDocumentStaff();
 }
 function docDateTR(v){if(!v)return "";const [y,m,d]=v.split("-");return `${d}.${m}.${y}`}
+function getDocumentStaff(){
+  if(Array.isArray(settings.docAssistantStaff)&&settings.docAssistantStaff.length)return settings.docAssistantStaff.map(x=>({name:x.name||"",branch:x.branch||"",active:x.active!==false}));
+  const legacy=(settings.docAssistantParticipants||[]).map(x=>{const a=String(x).split("|");return {name:(a[0]||"").trim(),branch:(a[1]||"").trim(),active:true}}).filter(x=>x.name);
+  return legacy;
+}
+function renderDocumentStaff(){
+  const box=el("docStaffList");if(!box)return;let staff=getDocumentStaff();
+  if(!staff.length){const x=documentAssistantContext();staff=[{name:x.teacher||"",branch:"Sınıf Rehber Öğretmeni",active:true}]}
+  box.innerHTML=staff.map((x,i)=>`<div class="doc-staff-row"><input type="text" class="staff-name" value="${esc(x.name)}" placeholder="Ad Soyad"><input type="text" class="staff-branch" value="${esc(x.branch)}" placeholder="Branş"><label class="staff-check"><input type="checkbox" class="staff-active" ${x.active!==false?"checked":""}> Katılıyor</label><button type="button" class="danger staff-del" onclick="this.closest('.doc-staff-row').remove()">Sil</button></div>`).join("");
+}
+function addDocumentStaffRow(){const box=el("docStaffList");if(!box)return;box.insertAdjacentHTML("beforeend",`<div class="doc-staff-row"><input type="text" class="staff-name" placeholder="Ad Soyad"><input type="text" class="staff-branch" placeholder="Branş"><label class="staff-check"><input type="checkbox" class="staff-active" checked> Katılıyor</label><button type="button" class="danger staff-del" onclick="this.closest('.doc-staff-row').remove()">Sil</button></div>`);box.lastElementChild?.querySelector('.staff-name')?.focus()}
+function readDocumentStaff(){return [...document.querySelectorAll("#docStaffList .doc-staff-row")].map(r=>({name:r.querySelector('.staff-name')?.value.trim()||"",branch:r.querySelector('.staff-branch')?.value.trim()||"",active:!!r.querySelector('.staff-active')?.checked})).filter(x=>x.name)}
+function saveDocumentStaff(){settings.docAssistantStaff=readDocumentStaff();settings.docAssistantParticipants=settings.docAssistantStaff.map(x=>`${x.name} | ${x.branch}`);saveSettings();alert("Öğretmen kadrosu kaydedildi.")}
+function documentParticipantsToggle(d){if(d.open)setTimeout(()=>d.scrollIntoView({behavior:"smooth",block:"start"}),80)}
 function docAssistantValues(){return {
   type:el("docAssistantType")?.value||"zumre",date:el("docAssistantDate")?.value||localISODate(),year:el("docAssistantYear")?.value.trim()||"",period:el("docAssistantPeriod")?.value||"1",
-  school:el("docAssistantSchool")?.value.trim()||"",teacher:el("docAssistantTeacher")?.value.trim()||"",className:el("docAssistantClass")?.value.trim()||"",prompt:el("docAssistantPrompt")?.value.trim()||"",participants:(el("docAssistantParticipants")?.value||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean)
+  school:el("docAssistantSchool")?.value.trim()||"",teacher:el("docAssistantTeacher")?.value.trim()||"",className:el("docAssistantClass")?.value.trim()||"",prompt:el("docAssistantPrompt")?.value.trim()||"",participants:readDocumentStaff().filter(x=>x.active).map(x=>`${x.name} | ${x.branch}`)
 }}
-function saveDocumentAssistantParticipants(){
-  settings.docAssistantParticipants=(el("docAssistantParticipants")?.value||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);saveSettings();alert("ŞÖK katılımcıları kaydedildi.");
-}
+function saveDocumentAssistantParticipants(){saveDocumentStaff()}
 const sokAgenda1=["Açılış yoklama","Veli ziyaretleri için planlama yapılması","Kılık kıyafet kurallarına uygun gelmeyen öğrencilerin durumunun görüşülmesi","Sınıf değişiklikleri hakkında fikir alışverişinde bulunulması","Türkiye Yüzyılı Maarif Modelinin görüşülmesi","Öğrenci başarı durumlarının incelenmesi ve başarıyı artırıcı önlemlerin alınması","Derslerin öğretim programlarına uyumlu olarak yürütülmesi","Sınıf geçme ve sınıf tekrarı durumlarının görüşülmesi","Özel eğitime ihtiyacı olan/kaynaştırma yoluyla eğitimlerine devam eden öğrenciler için alınacak tedbirlerin görüşülmesi","Eğitim kaynakları, laboratuvar ve diğer birimlerden güvenli yararlanma ve planlama","Ortak sınavların görüşülmesi","Bilimsel, sosyal, kültürel ve sportif etkinlikler, yarışmalar, geziler ve topluma hizmet çalışmalarının görüşülmesi","Değerler eğitimi çalışmalarının görüşülmesi","İş sağlığı ve güvenliği tedbirleri doğrultusunda eğitim öğretim faaliyetlerinin planlanması","Devamsızlık yapan öğrencilerin durumlarının görüşülmesi","Okulda uygulanan projelerin görüşülmesi","Dilek, temenniler ve kapanış"];
 const sokAgenda2=["Açılış yoklama","Bir önceki dönemde alınan kararların değerlendirilmesi","Öğrenci başarı durumlarının incelenmesi ve başarıyı artırıcı önlemlerin alınması","Veli ziyaretleri için planlama yapılması","Kılık kıyafet kurallarına uygun gelmeyen öğrencilerin durumunun görüşülmesi","Sınıf değişiklikleri hakkında fikir alışverişinde bulunulması","Türkiye Yüzyılı Maarif Modelinin görüşülmesi","Derslerin öğretim programlarına uyumlu olarak yürütülmesi","Sınıf geçme ve sınıf tekrar durumlarının görüşülmesi","Özel eğitime ihtiyacı olan/kaynaştırma yoluyla eğitimlerine devam eden öğrenciler için alınacak tedbirlerin görüşülmesi","Eğitim kaynakları, laboratuvar ve diğer birimlerden güvenli yararlanma ve planlama","Ortak sınavların görüşülmesi","Bilimsel, sosyal, kültürel, sanatsal ve sportif etkinlikler, yarışmalar, geziler, öğrenci kulüp ve topluma hizmet çalışmalarının görüşülmesi","Öğrencilerin kişilik, beslenme, sağlık ve sosyal ilişkilerinin geliştirilmesi","Değerler eğitimi çalışmalarının görüşülmesi","İş sağlığı ve güvenliği tedbirleri doğrultusunda eğitim öğretim faaliyetlerinin planlanması","Devamsızlık yapan öğrencilerin durumlarının görüşülmesi","Okulda uygulanan projelerin görüşülmesi","Okul güvenliği ile ilgili işlemlerin görüşülmesi","Dilek, temenniler ve kapanış"];
 function buildSokDraft(v){
  const school=v.school||"........................................................",teacher=v.teacher||"................................",clsName=v.className||"........",date=docDateTR(v.date),agenda=v.period==="2"?sokAgenda2:sokAgenda1,no=v.period==="2"?2:1;
  const participants=v.participants?.length?v.participants:[`${teacher} | Sınıf Rehber Öğretmeni`];
  const agendaText=agenda.map((x,i)=>`${i+1}. ${x}.`).join("\n");
- const discussion=agenda.map((x,i)=>`${i+1}. ${x}\nToplantıda bu maddeye ilişkin görüşülen hususlar ve öğretmen görüşleri buraya yazılacaktır.`).join("\n\n");
- const decisions=agenda.filter((_,i)=>i>0&&i<agenda.length-1).slice(0,15).map((x,i)=>`${i+1}. ${x} konusunda toplantıda alınan gerçek karar buraya yazılacaktır.`).join("\n");
+ const discussion=agenda.map((x,i)=>`${i+1}. ${x}\n[Görüşme notu: Bu madde toplantıdaki gerçek görüşlere göre düzenlenecektir.]`).join("\n\n");
+ const decisions=agenda.filter((_,i)=>i>0&&i<agenda.length-1).slice(0,15).map((x,i)=>`${i+1}. [Karar: ${x} için toplantıda alınan karar yazılacaktır.]`).join("\n");
  const signatures=participants.map(x=>{const [n,b]=x.split("|").map(y=>(y||"").trim());return `${n}${b?` | ${b}`:""} | İmza`}).join("\n");
  const extra=v.prompt?`\n\nÖZEL GÜNDEM / NOTLAR\n${v.prompt}`:"";
  return `${school.toLocaleUpperCase("tr-TR")} MÜDÜRLÜĞÜNE\n${v.year} Eğitim-Öğretim Yılı ${v.period}. Dönem Şube Öğretmenler Kurulu toplantısı ${date} tarihinde aşağıdaki gündem maddelerini görüşmek üzere ${clsName} Sınıfı Şube Rehber Öğretmeni ${teacher} başkanlığında toplanacaktır.\nBilgilerinize arz ederim.\n\n${teacher}\n${clsName} Sınıf Rehber Öğretmeni\n\nGÜNDEM MADDELERİ\n${agendaText}\n\n--- SAYFA SONU ---\n\n${school.toLocaleUpperCase("tr-TR")}\n${v.year} EĞİTİM-ÖĞRETİM YILI\n${clsName} SINIFI ${v.period}. DÖNEM ŞUBE ÖĞRETMENLER KURULU TOPLANTI TUTANAĞI\n\nToplantı No: ${no}\nToplantının Öğretim Yılı: ${v.year}\nToplantının Dönemi: ${v.period}. Dönem\nSınıf: ${clsName}\nToplantının Tarihi: ${date}\nSınıf Rehber Öğretmeni: ${teacher}\n\nToplantı Katılımcıları\n${participants.join("\n")}\n\nGÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ\n${discussion}${extra}\n\n--- SAYFA SONU ---\n\n${school.toLocaleUpperCase("tr-TR")}\n${v.year} EĞİTİM-ÖĞRETİM YILI\n${clsName} SINIFI ${v.period}. DÖNEM ŞUBE ÖĞRETMENLER KURULU TOPLANTISINDA ALINAN KARARLAR\n\n${decisions}\n\n--- SAYFA SONU ---\n\n${school.toLocaleUpperCase("tr-TR")}\n${v.year} EĞİTİM-ÖĞRETİM YILI\n${clsName} SINIFI ${v.period}. DÖNEM ŞUBE ÖĞRETMENLER KURULU TOPLANTI TUTANAĞI İMZA SİRKÜSÜ\n\nADI SOYADI | BRANŞI | İMZA\n${signatures}\n\n${teacher}\n${clsName} Sınıf Rehber Öğretmeni`;
@@ -2195,7 +2211,7 @@ function generateDocumentAssistantDraft(){
   const v=docAssistantValues(),draft=buildDocumentDraft(v),label=documentAssistantTypes[v.type]?.label||"Belge Taslağı";
   el("modalTitle").textContent=`${documentAssistantTypes[v.type]?.icon||"📄"} ${label}`;
   el("modalSubtitle").textContent="Taslak düzenlenebilir · Kaydetmeden önce içeriği kontrol edin";
-  el("modalBody").innerHTML=`<div class="doc-assistant-warning">Bu metin yerel şablondan oluşturuldu; toplantıda gerçekten görüşülen konular ve alınan kararlar öğretmen tarafından doğrulanmalıdır.</div><textarea id="docAssistantDraft" class="doc-draft-editor" spellcheck="true">${esc(draft)}</textarea><div class="modal-actions"><button onclick="printDocumentAssistantDraft()">🖨️ Yazdır / PDF</button><button class="secondary" onclick="copyDocumentAssistantDraft()">📋 Metni Kopyala</button><button class="secondary" onclick="openDocumentAssistant()">← Yeni Belge</button></div>`;
+  el("modalBody").innerHTML=`<div class="doc-assistant-warning">Bu metin yerel şablondan oluşturuldu; toplantıda gerçekten görüşülen konular ve alınan kararlar öğretmen tarafından doğrulanmalıdır.</div><textarea id="docAssistantDraft" class="doc-draft-editor" spellcheck="true">${esc(draft)}</textarea><div class="modal-actions"><button onclick="printDocumentAssistantDraft()">👁️ A4 Önizle</button><button class="secondary" onclick="copyDocumentAssistantDraft()">📋 Metni Kopyala</button><button class="secondary" onclick="openDocumentAssistant()">← Yeni Belge</button></div><div class="doc-export-actions"><button onclick="exportDocumentAssistantWord()">📝 Word Olarak Kaydet</button><button onclick="exportDocumentAssistantPDF()">📄 PDF Olarak Kaydet</button></div>`;
 }
 async function copyDocumentAssistantDraft(){const t=el("docAssistantDraft")?.value||"";try{await navigator.clipboard.writeText(t);alert("Belge metni panoya kopyalandı.")}catch(e){el("docAssistantDraft")?.select();document.execCommand("copy");alert("Belge metni kopyalandı.")}}
 function docDraftToHTML(t){
@@ -2209,20 +2225,26 @@ function docDraftToHTML(t){
      if(inSig){html+='</tbody></table>';inSig=false}
      if(/^(GÜNDEM MADDELERİ|GÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ)$/.test(x)||/TOPLANTISINDA ALINAN KARARLAR$/.test(x)){html+=`<div class="doc-section">${escLine(x)}</div>`}
      else if(/^(YÜKSEKOVA|.*ANADOLU.*LİSESİ|\d{4}-\d{4} EĞİTİM|.*TOPLANTI TUTANAĞI$|.*İMZA SİRKÜSÜ$)/i.test(x)){html+=`<div class="doc-title">${escLine(x)}</div>`}
-     else if(/^\d+\.\s/.test(x)){html+=`<p><b>${escLine(x)}</b></p>`}
+     else if(/^\d+\.\s/.test(x)){html+=`<p class="agenda-item">${escLine(x)}</p>`}
      else if(/^(Toplantı No:|Toplantının |Sınıf:|Sınıf Rehber Öğretmeni:|Toplantı Katılımcıları)/.test(x)){html+=`<p>${escLine(x)}</p>`}
+     else if(/^\[(Görüşme notu|Karar):/.test(x)){html+=`<p class="placeholder">${escLine(x)}</p>`}
      else html+=`<p>${escLine(x)}</p>`;
    });if(inSig)html+='</tbody></table>';return `<section${pi?' class="page-break"':''}>${html}</section>`
  }).join("");
 }
 function closeDocumentPrintPreview(){document.querySelector('.doc-print-sheet')?.remove();document.body.classList.remove('doc-print-open')}
+function fitDocumentPreview(){const sh=document.querySelector('.doc-print-sheet'),paper=sh?.querySelector('.doc-paper');if(!sh||!paper)return;if(innerWidth<=760){paper.style.transform='none';paper.style.marginBottom='0';requestAnimationFrame(()=>{const natural=paper.getBoundingClientRect().width;const avail=sh.clientWidth-12;const scale=Math.min(1,avail/natural);paper.style.transform=`scale(${scale})`;paper.style.marginBottom=`-${paper.scrollHeight*(1-scale)}px`;});}else{paper.style.transform='none';paper.style.marginBottom='0'}}
 function printDocumentAssistantDraft(){
   const t=el("docAssistantDraft")?.value||"";if(!t.trim())return alert("Önce belge taslağı oluşturun.");
-  closeDocumentPrintPreview();const sh=document.createElement('div');sh.className='doc-print-sheet';sh.innerHTML=`<div class="doc-print-toolbar"><button class="secondary" onclick="closeDocumentPrintPreview()">← Belge Asistanına Dön</button><button onclick="window.print()">🖨️ Yazdır / PDF</button></div><article class="doc-paper">${docDraftToHTML(t)}</article>`;document.body.appendChild(sh);document.body.classList.add('doc-print-open');sh.scrollTop=0;
+  closeDocumentPrintPreview();const sh=document.createElement('div');sh.className='doc-print-sheet';sh.innerHTML=`<div class="doc-print-toolbar"><button class="secondary" onclick="closeDocumentPrintPreview()">← Belge Asistanına Dön</button><button onclick="window.print()">🖨️ Yazdır / PDF</button></div><article class="doc-paper">${docDraftToHTML(t)}</article>`;document.body.appendChild(sh);document.body.classList.add('doc-print-open');sh.scrollTop=0;fitDocumentPreview();
 }
+function documentExportBaseName(){const x=documentAssistantContext(),title=(el("modalTitle")?.textContent||"Belge").replace(/[^A-Za-z0-9ÇĞİÖŞÜçğıöşü _-]+/g,"").trim();return `${title||"Belge"}_${x.className||""}_${localISODate()}`.replace(/\s+/g,"_")}
+function downloadDocumentBlob(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1200)}
+function exportDocumentAssistantWord(){const t=el("docAssistantDraft")?.value||"";if(!t.trim())return alert("Önce belge taslağı oluşturun.");const html=`<!doctype html><html><head><meta charset="utf-8"><style>@page{size:A4;margin:12.35mm}body{font-family:'Times New Roman',serif;font-size:12pt;line-height:1.15;color:#000}p{margin:0 0 6pt;text-align:justify}.doc-title{text-align:center;font-weight:bold;margin:0 0 8pt}.doc-section{font-weight:bold;margin:9pt 0 5pt}.page-break{page-break-before:always}table{width:100%;border-collapse:collapse}th,td{border:1px solid #000;padding:5pt}th{text-align:left}.signature{table-layout:fixed}.signature th:nth-child(1){width:38%}.signature th:nth-child(2){width:42%}.signature th:nth-child(3){width:20%}.placeholder{font-style:italic;color:#555}</style></head><body>${docDraftToHTML(t)}</body></html>`;downloadDocumentBlob(new Blob(['\ufeff',html],{type:'application/msword'}),documentExportBaseName()+'.doc')}
+function exportDocumentAssistantPDF(){printDocumentAssistantDraft();setTimeout(()=>alert("A4 önizleme açıldı. ‘Yazdır / PDF’ düğmesine dokunup iPhone yazdırma ekranından PDF olarak kaydedebilirsiniz."),100)}
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.6.88 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.6.89 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -5353,7 +5375,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.88",
+    appVersion:"v7.6.89",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5365,7 +5387,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.88",
+    appVersion:"v7.6.89",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
