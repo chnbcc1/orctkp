@@ -1,67 +1,9 @@
-ÖĞRENCİ TAKİP SİSTEMİ — SÜRÜM NOTLARI
+ÖĞRENCİ TAKİP SİSTEMİ v7.6.91
 
-STABİL TABAN: v7.6.84
-
-v7.6.85 — Sürüm Güvence / Changelog
-Tarih: 21 Eylül 2026
-- v7.6.84 kaynak kodu aynen korunarak sürüm numarası v7.6.85 olarak güncellendi.
-- Kalıcı SÜRÜM_NOTLARI.txt dosyası eklendi.
-- Bu sürümde işlevsel özellik eklenmedi veya mevcut çalışma mantığı değiştirilmedi.
-- Amaç: Bundan sonraki geliştirmelerde sürüm geçmişinin ZIP dosyasının içinde korunması.
-- v7.6.84 Ödev Görseli özelliği korunmuştur.
-- Eğitim Yılı/Arşiv, Günlük Öğretmen Paneli, Sınıf Nöbeti, Veli Görüşmeleri, Oturma Planı, Deneme modülleri ve Akıllı Uyarılar mevcut halleriyle korunmuştur.
-- JPEG/PDF çıktılarında tam öğrenci adı gösterme standardı korunmuştur.
-- Akıllı Uyarılar 3.1 geliştirmesi ertelenmiş durumdadır.
-
-KURAL
-Her yeni sürümde bu dosyaya: sürüm numarası, yapılan değişiklik, korunan özellikler, test sonucu, bilinen sorun ve sonraki hedef eklenecektir.
-
-v7.6.86 — Sürüm Gösterimi Uyumluluğu
-- Tarayıcı/önizleme başlığında kalan eski v7.6.83 etiketi düzeltildi.
-- Uygulama içi sürüm, HTML başlığı ve yedek metadata sürümü v7.6.86 olarak eşitlendi.
-- Çalışan özelliklere ve kullanıcı verilerine dokunulmadı.
-
-v7.6.87 - Belge Asistanı / Yerel Şablon Altyapısı
-- Ana ekrana Belge Asistanı kısayolu eklendi.
-- Zümre Toplantı Tutanağı, ŞÖK Toplantı Tutanağı, Veli Toplantı Tutanağı, Sınıf/Öğrenci Durum Raporu ve Serbest Belge Taslağı şablonları eklendi.
-- Öğretmen, okul, sınıf, eğitim yılı ve dönem bilgileri uygulamadan otomatik alınır.
-- Belge taslağı uygulama içinde düzenlenebilir.
-- Metni kopyalama ve Yazdır/PDF çıktısı eklendi.
-- Bu aşama tamamen çevrimdışıdır; yapay zekâ servisine veri göndermez.
-- Güvenli çevrimiçi yapay zekâ bağlantısı sonraki aşamaya bırakıldı.
-
-
-v7.6.88 - ŞÖK Ana Şablonu + Mobil Yerleşim + Yazdırma Dönüşü
-- Ana ekrandaki sınıf özet alanı mobilde sıkıştırıldı; Belge Asistanı daha yukarı taşındı.
-- Belge Asistanındaki çevrimdışı açıklama kutusu kompakt hale getirildi.
-- Kullanıcının yüklediği 1. ve 2. dönem ŞÖK örnekleri temel alınarak dönem bazlı ŞÖK gündem yapısı eklendi.
-- ŞÖK taslağı çağrı/gündem, toplantı bilgileri, katılımcılar, gündem görüşmeleri, alınan kararlar ve imza sirküsü bölümlerine ayrıldı.
-- ŞÖK katılımcıları Ad Soyad | Branş biçiminde kaydedilebilir hale getirildi.
-- Yazdır/PDF için A4, Times New Roman 12 punto ve yaklaşık 1,23 cm kenar boşluğu hedeflendi.
-- Yazdırma önizlemesi artık uygulama içinde açılır ve Belge Asistanına Dön düğmesi içerir; çıkışsız yeni pencere kaldırıldı.
-- 2. dönem Alınan Kararlar başlığı seçilen döneme göre otomatik oluşturulur.
-- Yapay zekâ bağlantısı henüz eklenmedi; görüşme ve karar metinleri doğrulanabilir yer tutucu taslaktır.
-
-============================================================
-v7.6.89 - ŞÖK Belge Düzeni + Öğretmen Kadrosu + Dışa Aktar
-Tarih: 21.09.2026
-
-- ŞÖK katılımcıları serbest metin alanından öğretmen kartlarına dönüştürüldü.
-- Öğretmen adı, branşı ve Katılıyor seçimi eklendi; kadro cihazda saklanır.
-- Katılımcı bölümü açıldığında ilgili alana otomatik kaydırma eklendi.
-- A4 mobil önizleme telefon genişliğine otomatik ölçeklenir; yatay taşma azaltıldı.
-- ŞÖK imza sirküsü 3 sütunlu tablo olarak korunur ve sütun oranları düzenlendi.
-- İmza sirküsünün altında tekrarlanan rehber öğretmen bilgisi kaldırıldı.
-- Gündem maddelerinin tamamının gereksiz kalın görünmesi düzeltildi.
-- Şablon yer tutucuları daha belirgin taslak notlarına dönüştürüldü.
-- Belge ekranına A4 Önizle, Word Olarak Kaydet ve PDF Olarak Kaydet akışı eklendi.
-- Word çıktısı çevrimdışı Word-uyumlu .doc dosyası üretir.
-- PDF akışı A4 önizleme üzerinden iOS Yazdır/PDF kaydetme ekranına yönlendirir.
-- v7.6.88'de çalışan geri dönüş güvenliği korunmuştur.
-
-v7.6.90
-- Belge Asistanındaki iki ayrı Word/PDF düğmesi tek “Dışa Aktar” düğmesinde birleştirildi.
-- Dışa Aktar menüsüne PDF (.pdf), Word (.docx) ve İptal seçenekleri eklendi.
-- Word dışa aktarma gerçek DOCX paketi olarak çevrimdışı oluşturulacak şekilde yenilendi.
-- PDF akışı boş sayfa sorununa karşı uygulamanın gizli yazdırma katmanı yerine bağımsız A4 yazdırma belgesi kullanacak şekilde değiştirildi.
-- A4 Önizle ve katılımcıların aynı adla farklı branşlarda ayrı satır olarak tutulması korundu.
+- Belge Asistanı: Dışa Aktar düğmesi Yeni Belge düğmesinin sağına taşındı.
+- PDF dışa aktarma artık iPhone/Safari Yazdır ekranını kullanmıyor.
+- PDF, uygulama içinde çevrimdışı olarak doğrudan .pdf dosyası halinde oluşturuluyor.
+- PDF seçildiğinde iPhone paylaş/kaydet ekranına gerçek PDF dosyası gönderiliyor.
+- Safari URL, tarih-saat ve tarayıcı sayfa altbilgilerinin PDF'ye eklenmesi önlendi.
+- A4 Önizle ayrı kontrol özelliği olarak korundu; önizlemedeki Yazdır düğmesi PDF dışa aktarmanın parçası değildir.
+- Word .docx dışa aktarma korunmuştur.
