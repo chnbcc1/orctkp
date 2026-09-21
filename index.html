@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.81</title>
+<title>Öğrenci Takip Sistemi v7.6.82</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -1956,7 +1956,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.81</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.82</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -3590,6 +3590,16 @@ function smartTrialDeclineRows(c){
   }
   return rows.sort((a,b)=>a.diff-b.diff||a.student.name.localeCompare(b.student.name,"tr"));
 }
+function smartStudentNumberValue(st){
+  const raw=String(st?.number??"").trim();
+  const m=raw.match(/\d+/);
+  return m?Number(m[0]):Number.MAX_SAFE_INTEGER;
+}
+function smartStudentNumberCompare(a,b){
+  const na=smartStudentNumberValue(a), nb=smartStudentNumberValue(b);
+  if(na!==nb)return na-nb;
+  return String(a?.name||"").localeCompare(String(b?.name||""),"tr");
+}
 function getSmartAlerts(c){
   const hs=hwPeriod(c), students=c.students||[];
   const missingRows=[], overduePendingRows=[], streakRows=[], lowCompletionRows=[], missingGradeRows=[], lowGradeRows=[], repeatedTrialAbsenceRows=[];
@@ -3607,8 +3617,14 @@ function getSmartAlerts(c){
   const trials=[...trialList(c)].sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
   students.forEach(st=>{const missed=trials.filter(t=>t?.results?.[st.id]?.attended===false);if(missed.length>=2)repeatedTrialAbsenceRows.push({student:st,count:missed.length,trials:missed});});
   const trialDeclineRows=smartTrialDeclineRows(c), deadlines=smartHomeworkDeadlineRows(c);
-  repeatedTrialAbsenceRows.sort((a,b)=>b.count-a.count||a.student.name.localeCompare(b.student.name,"tr"));
-  missingRows.sort((a,b)=>b.count-a.count||a.student.name.localeCompare(b.student.name,"tr"));overduePendingRows.sort((a,b)=>b.count-a.count||a.student.name.localeCompare(b.student.name,"tr"));streakRows.sort((a,b)=>a.student.name.localeCompare(b.student.name,"tr"));lowCompletionRows.sort((a,b)=>a.rate-b.rate||a.student.name.localeCompare(b.student.name,"tr"));missingGradeRows.sort((a,b)=>b.missing.length-a.missing.length||a.student.name.localeCompare(b.student.name,"tr"));lowGradeRows.sort((a,b)=>a.avg-b.avg||a.student.name.localeCompare(b.student.name,"tr"));
+  repeatedTrialAbsenceRows.sort((a,b)=>smartStudentNumberCompare(a.student,b.student));
+  missingRows.sort((a,b)=>smartStudentNumberCompare(a.student,b.student));
+  overduePendingRows.sort((a,b)=>smartStudentNumberCompare(a.student,b.student));
+  streakRows.sort((a,b)=>smartStudentNumberCompare(a.student,b.student));
+  lowCompletionRows.sort((a,b)=>smartStudentNumberCompare(a.student,b.student));
+  missingGradeRows.sort((a,b)=>smartStudentNumberCompare(a.student,b.student));
+  lowGradeRows.sort((a,b)=>smartStudentNumberCompare(a.student,b.student));
+  trialDeclineRows.sort((a,b)=>smartStudentNumberCompare(a.student,b.student));
   const uniqueIds=new Set([...missingRows,...overduePendingRows,...streakRows,...lowCompletionRows,...missingGradeRows,...lowGradeRows,...repeatedTrialAbsenceRows,...trialDeclineRows].map(x=>x.student.id));
   const categories=[
     {type:"dueToday",title:"Bugünkü ödev kontrolü",count:deadlines.todayRows.length,detail:deadlines.todayRows.length?"Son teslim / kontrol günü bugün":"Bugün kontrol yok",tone:"warn"},
@@ -3667,7 +3683,15 @@ function smartLifeFor(c,studentId,type){return settings.smartAlertLifecycle?.[sm
 function smartLifeBadgeHTML(r){if(!r)return '';const st=r.status==='new'?'new':'ongoing',tx=st==='new'?'Yeni':'Devam ediyor';return `<span class="smart-life-badge ${st}">${tx}</span>`}
 function smartRecentlyResolved(c){
   const today=smartLocalDay();
-  return Object.values(settings.smartAlertLifecycle||{}).filter(r=>r.classId===c.id&&String(r.period)===String(currentPeriod)&&r.resolvedAt&&smartDayDiff(r.resolvedAt,today)<=7).sort((a,b)=>String(b.resolvedAt).localeCompare(String(a.resolvedAt)));
+  return Object.values(settings.smartAlertLifecycle||{}).filter(r=>{
+    if(!(r.classId===c.id&&String(r.period)===String(currentPeriod)&&r.resolvedAt&&smartDayDiff(r.resolvedAt,today)<=7))return false;
+    // v7.6.82: v7.6.81 geçişinde, hiç gerçek uyarı olmadan aynı gün "Eksik ödev -> Düzeldi"ye dönüşen sahte kayıtları gösterme.
+    if(r.type==="missing"&&r.firstSeen===r.resolvedAt&&r.lastSeen===r.resolvedAt)return false;
+    return true;
+  }).sort((a,b)=>{
+    const sa=(c.students||[]).find(x=>x.id===a.studentId), sb=(c.students||[]).find(x=>x.id===b.studentId);
+    return smartStudentNumberCompare(sa,sb)||String(b.resolvedAt).localeCompare(String(a.resolvedAt));
+  });
 }
 function smartStudentFollowRows(c,a){
   const byId=new Map();
@@ -3682,7 +3706,7 @@ function smartStudentFollowRows(c,a){
   add(a.trialDeclineRows,"trialDecline","Net düşüşü","danger",x=>`${Math.abs(x.diff).toLocaleString('tr-TR',{maximumFractionDigits:2})} net`);
   const weight={danger:4,warn:3,partial:2,info:1};
   return [...byId.values()].map(r=>({...r,score:r.issues.reduce((n,i)=>n+(weight[i.tone]||1),0)}))
-    .sort((x,y)=>y.issues.length-x.issues.length||y.score-x.score||x.student.name.localeCompare(y.student.name,"tr"));
+    .sort((x,y)=>smartStudentNumberCompare(x.student,y.student));
 }
 function openSmartFollowStudent(sid){openStudent(sid)}
 function allParentMeetingRows(){
@@ -5159,7 +5183,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.81",
+    appVersion:"v7.6.82",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5171,7 +5195,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.81",
+    appVersion:"v7.6.82",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
