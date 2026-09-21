@@ -1,9 +1,10 @@
-ÖĞRENCİ TAKİP SİSTEMİ v7.6.91
+Öğrenci Takip Sistemi v7.6.92
 
-- Belge Asistanı: Dışa Aktar düğmesi Yeni Belge düğmesinin sağına taşındı.
-- PDF dışa aktarma artık iPhone/Safari Yazdır ekranını kullanmıyor.
-- PDF, uygulama içinde çevrimdışı olarak doğrudan .pdf dosyası halinde oluşturuluyor.
-- PDF seçildiğinde iPhone paylaş/kaydet ekranına gerçek PDF dosyası gönderiliyor.
-- Safari URL, tarih-saat ve tarayıcı sayfa altbilgilerinin PDF'ye eklenmesi önlendi.
-- A4 Önizle ayrı kontrol özelliği olarak korundu; önizlemedeki Yazdır düğmesi PDF dışa aktarmanın parçası değildir.
-- Word .docx dışa aktarma korunmuştur.
+- ŞÖK taslağındaki köşeli parantezli [Görüşme notu: ...] yer tutucuları kaldırıldı.
+- Görüşme bölümleri, öğretmenin toplantıda gerçek görüşleri yazabilmesi için sade "Görüşme:" alanlarına dönüştürüldü.
+- [Karar: ... yazılacaktır.] metinleri kaldırıldı; karar bölümü sade "Karar:" alanlarına dönüştürüldü.
+- İmza sirküsünde İMZA hücreleri boş bırakıldı; çıktı alındıktan sonra imzalanmaya uygun hale getirildi.
+- İmza tablosunun altında tekrarlanan Sınıf Rehber Öğretmeni adı/görevi kaldırıldı.
+- Aynı öğretmenin farklı görev/branşlarla birden fazla satırda bulunması korunur.
+- Doğrudan PDF üretimi ve gerçek DOCX dışa aktarma korunmuştur.
+- Dışa Aktar düğmesi Yeni Belge düğmesinin sağındaki konumunu korur.
