@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.82</title>
+<title>Öğrenci Takip Sistemi v7.6.83</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -1956,7 +1956,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.82</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.83</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -3424,6 +3424,33 @@ function openSeatingGenderEditor(){
 }
 function saveSeatingGenders(){const c=cls();if(!c)return;pushUndo();c.students.forEach(st=>{const q=document.querySelector(`[data-gender-student="${st.id}"]`);if(q)st.gender=q.value||''});save();openSeatingPlan();}
 function clearSeatingPlan(){const c=cls();if(!c||!confirm('Bu sınıfın oturma yerleşimi temizlensin mi?'))return;pushUndo();c.seatingPlan.assignments={};save();renderSeatingPlan()}
+// v7.6.83 — Çıktı standardı: öğrenci adları JPEG/PDF içinde asla üç nokta ile kesilmez.
+function outputWrapLines(ctx,text,maxWidth,maxLines=3){
+  const words=String(text??'').trim().split(/\s+/).filter(Boolean),lines=[];let line='';
+  for(const word of words){
+    const test=line?line+' '+word:word;
+    if(line&&ctx.measureText(test).width>maxWidth){lines.push(line);line=word}else line=test;
+  }
+  if(line)lines.push(line);
+  // Tek bir çok uzun kelime varsa font küçültme aşaması bunu çözer; hiçbir zaman … ekleme.
+  return lines.slice(0,Math.max(maxLines,lines.length));
+}
+function drawFullStudentName(ctx,name,cx,cy,maxWidth,maxHeight,{maxFont=14,minFont=9,maxLines=3,weight='bold',align='center'}={}){
+  const text=String(name??'').trim()||'-';let size=maxFont,lines=[],lh=0;
+  while(size>=minFont){
+    ctx.font=`${weight} ${size}px Arial`;lines=outputWrapLines(ctx,text,maxWidth,maxLines);lh=Math.ceil(size*1.18);
+    const widest=Math.max(0,...lines.map(v=>ctx.measureText(v).width));
+    if(lines.length<=maxLines&&widest<=maxWidth&&lines.length*lh<=maxHeight)break;
+    size--;
+  }
+  ctx.font=`${weight} ${size}px Arial`;ctx.textAlign=align;ctx.textBaseline='middle';
+  // Son güvenlik: kelime bazlı satırlama 3 satırı aşarsa satır sayısını korumak yerine tam adı daha küçük fontla tek/çok satır çiz.
+  if(lines.length>maxLines){
+    while(size>6&&ctx.measureText(text).width>maxWidth){size--;ctx.font=`${weight} ${size}px Arial`}
+    lines=[text];lh=Math.ceil(size*1.18);
+  }
+  const start=cy-(lines.length-1)*lh/2;lines.forEach((ln,i)=>ctx.fillText(ln,cx,start+i*lh));ctx.textBaseline='alphabetic';
+}
 function exportSeatingPlanJPEG(){
   const c=cls();if(!c)return;cleanSeatingAssignments(c);const p=c.seatingPlan,a=p.assignments;
   const deskW=300,deskH=94,gap=18,left=35,top=190,w=Math.max(900,left*2+p.cols*deskW+(p.cols-1)*gap),h=top+p.rows*deskH+(p.rows-1)*gap+80;
@@ -3437,8 +3464,10 @@ function exportSeatingPlanJPEG(){
     const seatW=deskW/p.seatsPerDesk;
     for(let si=0;si<p.seatsPerDesk;si++){
       if(si){x.strokeStyle='#e2e8f0';x.beginPath();x.moveTo(dx+si*seatW,dy);x.lineTo(dx+si*seatW,dy+deskH);x.stroke()}
-      const sid=a[seatingSeatKey(r,co,si)],st=c.students.find(z=>z.id===sid),label=st?seatingStudentLabel(st):'Boş';
-      x.fillStyle=st?'#111827':'#94a3b8';x.font=st?'bold 12px Arial':'12px Arial';const max=seatW-16;let txt=label;while(x.measureText(txt).width>max&&txt.length>5)txt=txt.slice(0,-2);if(txt!==label)txt+='…';x.textAlign='center';x.fillText(txt,dx+si*seatW+seatW/2,dy+52);
+      const sid=a[seatingSeatKey(r,co,si)],st=c.students.find(z=>z.id===sid);
+      x.fillStyle=st?'#111827':'#94a3b8';
+      if(st)drawFullStudentName(x,st.name,dx+si*seatW+seatW/2,dy+deskH/2,seatW-14,deskH-14,{maxFont:13,minFont:8,maxLines:3,weight:'bold',align:'center'});
+      else{x.font='12px Arial';x.textAlign='center';x.textBaseline='middle';x.fillText('Boş',dx+si*seatW+seatW/2,dy+deskH/2);x.textBaseline='alphabetic'}
     }
   }
   x.textAlign='left';downloadCanvas(cv,`${safe(c.name)}_oturma_plani.jpg`)
@@ -3685,7 +3714,7 @@ function smartRecentlyResolved(c){
   const today=smartLocalDay();
   return Object.values(settings.smartAlertLifecycle||{}).filter(r=>{
     if(!(r.classId===c.id&&String(r.period)===String(currentPeriod)&&r.resolvedAt&&smartDayDiff(r.resolvedAt,today)<=7))return false;
-    // v7.6.82: v7.6.81 geçişinde, hiç gerçek uyarı olmadan aynı gün "Eksik ödev -> Düzeldi"ye dönüşen sahte kayıtları gösterme.
+    // v7.6.83: v7.6.81 geçişinde, hiç gerçek uyarı olmadan aynı gün "Eksik ödev -> Düzeldi"ye dönüşen sahte kayıtları gösterme.
     if(r.type==="missing"&&r.firstSeen===r.resolvedAt&&r.lastSeen===r.resolvedAt)return false;
     return true;
   }).sort((a,b)=>{
@@ -4443,7 +4472,7 @@ function exportClassTrialReportJPEG(){
  x.fillStyle='#eaf2ff';x.fillRect(25,110,w-50,38);x.fillStyle='#1e3a8a';x.font='bold 14px Arial';x.fillText('Deneme',40,135);x.fillText('Tarih',350,135);x.fillText('Katılan',600,135);x.fillText('Girmeyen',750,135);x.fillText('Ort. Net',930,135);
  trials.forEach((t,i)=>{const y=top+i*trialH,st=trialStats(t);x.fillStyle=i%2?'#fff':'#f8fafc';x.fillRect(25,y,w-50,trialH-1);x.fillStyle='#111827';x.font='15px Arial';x.fillText(t.name||'Deneme',40,y+32);x.fillText(trialDateTR(t.date),350,y+32);x.fillText(String(st.attended),600,y+32);x.fillText(String(st.absent),750,y+32);x.font='bold 16px Arial';x.fillText(st.avg===null?'-':st.avg.toLocaleString('tr-TR',{maximumFractionDigits:2}),930,y+32)});
  x.fillStyle='#111827';x.font='bold 22px Arial';x.fillText('Öğrenci Genel Özeti',35,mid-25);x.fillStyle='#eaf2ff';x.fillRect(25,mid,w-50,36);x.fillStyle='#1e3a8a';x.font='bold 14px Arial';x.fillText('Öğrenci',40,mid+24);x.fillText('Katılım',560,mid+24);x.fillText('Son Net',750,mid+24);x.fillText('En Yüksek',900,mid+24);x.fillText('Ortalama',1040,mid+24);
- students.forEach((st,i)=>{const y=mid+36+i*studentH,ss=trialReportStudentStats(c,st.id);x.fillStyle=i%2?'#fff':'#f8fafc';x.fillRect(25,y,w-50,studentH-1);x.fillStyle='#111827';x.font='14px Arial';x.fillText(`${st.number?st.number+' - ':''}${st.name}`,40,y+28);x.fillText(`${ss.attended}/${ss.trials.length}`,560,y+28);const fmt=v=>v===null?'-':v.toLocaleString('tr-TR',{maximumFractionDigits:2});x.fillText(fmt(ss.last),750,y+28);x.fillText(fmt(ss.best),900,y+28);x.fillText(fmt(ss.avg),1040,y+28)});
+ students.forEach((st,i)=>{const y=mid+36+i*studentH,ss=trialReportStudentStats(c,st.id);x.fillStyle=i%2?'#fff':'#f8fafc';x.fillRect(25,y,w-50,studentH-1);x.fillStyle='#111827';drawFullStudentName(x,`${st.number?st.number+' - ':''}${st.name}`,40,y+22,500,studentH-6,{maxFont:14,minFont:9,maxLines:2,weight:'normal',align:'left'});x.font='14px Arial';x.textAlign='left';x.fillText(`${ss.attended}/${ss.trials.length}`,560,y+28);const fmt=v=>v===null?'-':v.toLocaleString('tr-TR',{maximumFractionDigits:2});x.fillText(fmt(ss.last),750,y+28);x.fillText(fmt(ss.best),900,y+28);x.fillText(fmt(ss.avg),1040,y+28)});
  downloadCanvas(cv,`${safe(c.name)}_sinif_deneme_raporu.jpg`);
 }
 function previousTrialFor(t,sid){const arr=trialList().filter(x=>x.id!==t.id&&String(x.date||'')<String(t.date||'')).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));return arr.find(x=>trialStudentTotal(x,sid)!==null)||null}
@@ -4538,7 +4567,7 @@ function exportSingleTrialJPEG(id){
  const noX=35,nameX=115,subjectStart=600,totalX=1270,subjectW=Math.max(105,Math.floor((totalX-subjectStart-20)/Math.max(1,subjects.length)));
  x.fillStyle='#eaf2ff';x.fillRect(25,top-42,w-50,42);x.fillStyle='#1e3a8a';x.font='bold 14px Arial';x.fillText('No',noX,top-15);x.fillText('Öğrenci',nameX,top-15);
  subjects.forEach((sub,i)=>{x.save();x.beginPath();x.rect(subjectStart+i*subjectW,top-42,subjectW-6,42);x.clip();x.fillText(`${sub} Net`,subjectStart+i*subjectW+4,top-15);x.restore()});x.fillText('Toplam Net',totalX,top-15);
- students.forEach((s,i)=>{const y=top+i*rowH,r=t.results?.[s.id],att=!!r&&r.attended!==false,n=trialStudentTotal(t,s.id);x.fillStyle=i%2?'#fff':'#f8fafc';x.fillRect(25,y,w-50,rowH-2);x.fillStyle='#111827';x.font='14px Arial';x.fillText(String(s.number||'-'),noX,y+30);x.font='bold 14px Arial';let nm=String(s.name||'');while(nm.length>3&&x.measureText(nm).width>455)nm=nm.slice(0,-1);if(nm!==String(s.name||''))nm+='…';x.fillText(nm,nameX,y+30);
+ students.forEach((s,i)=>{const y=top+i*rowH,r=t.results?.[s.id],att=!!r&&r.attended!==false,n=trialStudentTotal(t,s.id);x.fillStyle=i%2?'#fff':'#f8fafc';x.fillRect(25,y,w-50,rowH-2);x.fillStyle='#111827';x.font='14px Arial';x.fillText(String(s.number||'-'),noX,y+30);drawFullStudentName(x,s.name,nameX,y+24,455,rowH-8,{maxFont:14,minFont:9,maxLines:2,weight:'bold',align:'left'});
    if(!att){x.fillStyle='#dc2626';x.font='bold 14px Arial';x.fillText('KATILMADI',subjectStart,y+30);x.fillText('-',totalX,y+30);return}
    subjects.forEach((sub,j)=>{const a=r?.subjects?.[sub]||{},net=trialNet(a.correct,a.wrong,t.wrongDivisor,t.wrongPenalty!==false);x.fillStyle='#334155';x.font='14px Arial';x.fillText(net.toLocaleString('tr-TR',{maximumFractionDigits:2}),subjectStart+j*subjectW+4,y+30)});
    x.fillStyle='#111827';x.font='bold 15px Arial';x.fillText(n===null?'-':n.toLocaleString('tr-TR',{maximumFractionDigits:2}),totalX,y+30);
@@ -5157,8 +5186,8 @@ function exportDutyMonth(){const c=cls();if(!c)return;const ym=dutyMonthValue(),
 /* Rapor */
 function safe(s){return String(s).replace(/[^\w\-ÇĞİÖŞÜçğıöşü]+/g,"_")}
 function exportStudentJPEG(sid){const c=cls(),s=c.students.find(x=>x.id===sid),hs=hwPeriod(c),w=900,rh=40,top=120,height=top+hs.length*rh+70,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 25px Arial";x.fillText(`${s.name} - Ödev Raporu`,25,35);x.font="14px Arial";x.fillStyle="#64748b";x.fillText(`${c.name} · No: ${s.number||"-"} · ${currentPeriod}. Dönem`,25,62);x.fillStyle="#eaf2ff";x.fillRect(20,82,w-40,38);x.fillStyle="#1e3a8a";x.font="bold 13px Arial";x.fillText("Ödev",30,107);x.fillText("Durum",650,107);hs.forEach((h,i)=>{const y=top+i*rh,v=status(c,sid,h.id);x.fillStyle=i%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";x.font="13px Arial";x.fillText(h.name,30,y+25);x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":"#dc2626";x.fillText(v==="done"?"YAPTI":v==="partial"?"KISMEN":v==="excused"?"MAZERETLİ":"YAPMADI",650,y+25)});downloadCanvas(cv,`${safe(c.name)}_${safe(s.name)}_rapor.jpg`)}
-function exportHomeworkJPEG(hid){const c=cls(),h=c.homeworks.find(x=>x.id===hid),students=[...c.students].sort((a,b)=>a.name.localeCompare(b.name,"tr")),w=900,rh=40,top=120,height=top+students.length*rh+70,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 25px Arial";x.fillText(`${c.name} - ${h.name}`,25,35);x.font="14px Arial";x.fillStyle="#64748b";x.fillText(`${currentPeriod}. Dönem`,25,62);students.forEach((s,i)=>{const y=top+i*rh,v=status(c,s.id,hid);x.fillStyle=i%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";x.font="13px Arial";x.fillText(`${s.number? s.number+" - ":""}${s.name}`,30,y+25);x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":"#dc2626";x.fillText(v==="done"?"YAPTI":v==="partial"?"KISMEN":v==="excused"?"MAZERETLİ":"YAPMADI",650,y+25)});downloadCanvas(cv,`${safe(c.name)}_${safe(h.name)}.jpg`)}
-function exportClassJPEG(){const c=cls(),hs=hwPeriod(c),students=[...c.students].sort((a,b)=>a.name.localeCompare(b.name,"tr"));if(!students.length)return alert("Öğrenci yok.");const left=250,cw=100,rh=38,top=125,w=Math.max(1050,left+hs.length*cw+80),height=top+students.length*rh+60,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 24px Arial";x.fillText(`${c.name} - ${currentPeriod}. Dönem Ödev Durumu`,25,36);x.fillStyle="#eaf2ff";x.fillRect(20,78,w-40,47);x.fillStyle="#1e3a8a";x.font="bold 12px Arial";x.fillText("Öğrenci",30,108);hs.forEach((h,i)=>{x.save();x.translate(left+i*cw+8,118);x.rotate(-Math.PI/5);x.fillText(h.name.slice(0,15),0,0);x.restore()});students.forEach((s,r)=>{const y=top+r*rh;x.fillStyle=r%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";x.font="12px Arial";x.fillText(`${s.number? s.number+" - ":""}${s.name}`,30,y+24);hs.forEach((h,i)=>{const v=status(c,s.id,h.id);x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":"#dc2626";x.fillText(v==="done"?"✓":v==="partial"?"½":v==="excused"?"M":"✕",left+i*cw+35,y+24)})});downloadCanvas(cv,`${safe(c.name)}_${currentPeriod}_donem_odev.jpg`)}
+function exportHomeworkJPEG(hid){const c=cls(),h=c.homeworks.find(x=>x.id===hid),students=[...c.students].sort((a,b)=>a.name.localeCompare(b.name,"tr")),w=900,rh=40,top=120,height=top+students.length*rh+70,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 25px Arial";x.fillText(`${c.name} - ${h.name}`,25,35);x.font="14px Arial";x.fillStyle="#64748b";x.fillText(`${currentPeriod}. Dönem`,25,62);students.forEach((s,i)=>{const y=top+i*rh,v=status(c,s.id,hid);x.fillStyle=i%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";drawFullStudentName(x,`${s.number? s.number+' - ':''}${s.name}`,30,y+20,590,rh-4,{maxFont:13,minFont:9,maxLines:2,weight:'normal',align:'left'});x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":"#dc2626";x.fillText(v==="done"?"YAPTI":v==="partial"?"KISMEN":v==="excused"?"MAZERETLİ":"YAPMADI",650,y+25)});downloadCanvas(cv,`${safe(c.name)}_${safe(h.name)}.jpg`)}
+function exportClassJPEG(){const c=cls(),hs=hwPeriod(c),students=[...c.students].sort((a,b)=>a.name.localeCompare(b.name,"tr"));if(!students.length)return alert("Öğrenci yok.");const left=250,cw=100,rh=38,top=125,w=Math.max(1050,left+hs.length*cw+80),height=top+students.length*rh+60,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 24px Arial";x.fillText(`${c.name} - ${currentPeriod}. Dönem Ödev Durumu`,25,36);x.fillStyle="#eaf2ff";x.fillRect(20,78,w-40,47);x.fillStyle="#1e3a8a";x.font="bold 12px Arial";x.fillText("Öğrenci",30,108);hs.forEach((h,i)=>{x.save();x.translate(left+i*cw+8,118);x.rotate(-Math.PI/5);x.fillText(h.name.slice(0,15),0,0);x.restore()});students.forEach((s,r)=>{const y=top+r*rh;x.fillStyle=r%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";drawFullStudentName(x,`${s.number? s.number+' - ':''}${s.name}`,30,y+19,left-45,rh-4,{maxFont:12,minFont:8,maxLines:2,weight:'normal',align:'left'});hs.forEach((h,i)=>{const v=status(c,s.id,h.id);x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":"#dc2626";x.fillText(v==="done"?"✓":v==="partial"?"½":v==="excused"?"M":"✕",left+i*cw+35,y+24)})});downloadCanvas(cv,`${safe(c.name)}_${currentPeriod}_donem_odev.jpg`)}
 let _pendingOutput=null;
 function closeOutputPicker(){const o=document.getElementById('outputPickerOverlay');if(o)o.remove();_pendingOutput=null}
 function downloadCanvas(cv,name){
@@ -5183,7 +5212,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.82",
+    appVersion:"v7.6.83",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5195,7 +5224,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.82",
+    appVersion:"v7.6.83",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
