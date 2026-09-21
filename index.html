@@ -817,6 +817,13 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 .duty-swap-underlay{position:fixed;inset:14px;z-index:49;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .duty-swap-underlay .modal-box{width:min(1100px,100%);max-height:94vh;overflow:hidden;background:#fff;border-radius:15px;border:1px solid var(--border);box-shadow:0 10px 30px rgba(15,23,42,.12)}
 @media(max-width:700px){.duty-swap-form{gap:12px}.duty-swap-field select{font-size:16px}.duty-swap-underlay{inset:14px}}
+
+/* ===== v7.6.84 Ödev görseli ===== */
+.homework-image-box{border:1px dashed #bfdbfe;background:#f8fbff;border-radius:14px;padding:12px;margin-top:4px}
+.homework-image-preview{display:block;max-width:100%;max-height:260px;object-fit:contain;margin:10px auto 0;border-radius:12px;border:1px solid var(--border);background:#fff}
+.homework-image-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.homework-image-actions button{flex:1;min-width:120px}
+.homework-thumb{width:44px;height:44px;object-fit:cover;border-radius:8px;border:1px solid var(--border);vertical-align:middle;margin-right:8px}
+.homework-view-image{display:block;max-width:100%;max-height:70vh;object-fit:contain;margin:auto;border-radius:12px;background:#fff}
 </style>
 
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
@@ -1956,7 +1963,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.83</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.84</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2305,7 +2312,7 @@ function normalize(s){
    c.students.forEach(st=>{st.number=st.number||""});
    // v7.6.47 — Silinmiş öğrencilere bağlı eski/yetim veli görüşmelerini temizle.
    {const validStudentIds=new Set(c.students.map(st=>st.id));c.parentMeetings=c.parentMeetings.filter(m=>validStudentIds.has(m.studentId));}
-   c.homeworks.forEach(h=>{h.given=h.given||"";h.due=h.due||"";h.period=String(h.period||"1");delete h.category});
+   c.homeworks.forEach(h=>{h.given=h.given||"";h.due=h.due||"";h.period=String(h.period||"1");h.imageData=typeof h.imageData==="string"?h.imageData:"";delete h.category});
    Object.keys(c.checks).forEach(sid=>Object.keys(c.checks[sid]||{}).forEach(hid=>{let v=c.checks[sid][hid];if(v===true)v="done";if(v===false||!v)v="missing";c.checks[sid][hid]=v;}));
  });
  return s;
@@ -3570,14 +3577,21 @@ function commitFileStudents(){const c=cls(),rows=window._fileRows||[],ex=new Set
 function addHomework(){
   const c=cls();if(!c)return;
   el("modalTitle").textContent="Yeni Ödev";el("modalSubtitle").textContent=`${c.name} · ${currentPeriod}. Dönem`;
-  el("modalBody").innerHTML=`<div class="app-form-grid"><label class="full">Ödev Adı<input id="newHomeworkName" placeholder="Örn. Üslü Sayılar Testi" autocomplete="off"></label><label>Verilme Tarihi<input id="newHomeworkGiven" type="date"></label><label>Son Teslim<input id="newHomeworkDue" type="date"></label><button class="full" onclick="saveNewHomework()">Ödevi Ekle</button></div>`;
+  window._newHomeworkImage="";
+  el("modalBody").innerHTML=`<div class="app-form-grid"><label class="full">Ödev Adı<input id="newHomeworkName" placeholder="Örn. Üslü Sayılar Testi" autocomplete="off"></label><label>Verilme Tarihi<input id="newHomeworkGiven" type="date"></label><label>Son Teslim<input id="newHomeworkDue" type="date"></label><div class="full homework-image-box"><b>📷 Ödev Görseli</b><div class="tiny" style="margin-top:4px">İsteğe bağlıdır. Fotoğraf cihazda küçültülerek saklanır ve tam yedeğe dahil edilir.</div><input id="newHomeworkImageInput" type="file" accept="image/*" style="margin-top:9px" onchange="prepareHomeworkImage(this)"><div id="newHomeworkImagePreview"></div></div><button class="full" onclick="saveNewHomework()">Ödevi Ekle</button></div>`;
   el("modal").classList.add("open");setTimeout(()=>el("newHomeworkName")?.focus(),100);
 }
+function compressHomeworkImage(file){return new Promise((resolve,reject)=>{if(!file)return resolve("");if(!String(file.type||"").startsWith("image/"))return reject(new Error("Lütfen bir görsel dosyası seçin."));const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{try{const max=1400,scale=Math.min(1,max/Math.max(im.width,im.height)),cv=document.createElement("canvas");cv.width=Math.max(1,Math.round(im.width*scale));cv.height=Math.max(1,Math.round(im.height*scale));const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,cv.width,cv.height);x.drawImage(im,0,0,cv.width,cv.height);resolve(cv.toDataURL("image/jpeg",.78))}catch(e){reject(e)}};im.onerror=()=>reject(new Error("Görsel açılamadı."));im.src=r.result};r.onerror=()=>reject(new Error("Görsel okunamadı."));r.readAsDataURL(file)})}
+async function prepareHomeworkImage(input){const f=input?.files?.[0];if(!f){window._newHomeworkImage="";return}try{const data=await compressHomeworkImage(f);window._newHomeworkImage=data;const host=el("newHomeworkImagePreview");if(host)host.innerHTML=`<img class="homework-image-preview" src="${data}" alt="Ödev görseli önizleme"><div class="homework-image-actions"><button type="button" class="danger" onclick="removeNewHomeworkImage()">Görseli Kaldır</button></div>`}catch(e){input.value="";window._newHomeworkImage="";alert(e?.message||"Görsel eklenemedi.")}}
+function removeNewHomeworkImage(){window._newHomeworkImage="";const i=el("newHomeworkImageInput");if(i)i.value="";const h=el("newHomeworkImagePreview");if(h)h.innerHTML=""}
 function saveNewHomework(){
   const c=cls(),name=(el("newHomeworkName")?.value||"").trim();if(!c||!name)return alert("Ödev adı girin.");
-  pushUndo();c.homeworks.push({id:uid(),name,given:el("newHomeworkGiven")?.value||"",due:el("newHomeworkDue")?.value||"",period:currentPeriod});
-  save();closeModal();render();
+  pushUndo();c.homeworks.push({id:uid(),name,given:el("newHomeworkGiven")?.value||"",due:el("newHomeworkDue")?.value||"",period:currentPeriod,imageData:window._newHomeworkImage||""});
+  window._newHomeworkImage="";save();closeModal();render();
 }
+function viewHomeworkImage(hid){const h=cls()?.homeworks?.find(x=>x.id===hid);if(!h?.imageData)return alert("Bu ödeve görsel eklenmemiş.");el("modalTitle").textContent=h.name;el("modalSubtitle").textContent="Ödev görseli";el("modalBody").innerHTML=`<img class="homework-view-image" src="${h.imageData}" alt="${esc(h.name)} görseli"><div class="modal-actions"><button class="secondary" onclick="openHomework('${hid}')">← Ödev Kontrolüne Dön</button></div>`;el("modal").classList.add("open")}
+function changeHomeworkImage(hid,input){const f=input?.files?.[0];if(!f)return;compressHomeworkImage(f).then(data=>{const h=cls()?.homeworks?.find(x=>x.id===hid);if(!h)return;pushUndo();h.imageData=data;save();render();openHomework(hid)}).catch(e=>alert(e?.message||"Görsel eklenemedi."))}
+function removeHomeworkImage(hid){const h=cls()?.homeworks?.find(x=>x.id===hid);if(!h?.imageData)return;if(!confirm("Bu ödevin görseli kaldırılsın mı?"))return;pushUndo();h.imageData="";save();render();openHomework(hid)}
 function openBulkHomeworks(){el("modalTitle").textContent="Toplu Ödev Ekle";el("modalSubtitle").textContent=(currentPeriod==="1"?"1. Dönem":"2. Dönem")+" · Her satıra bir ödev";el("modalBody").innerHTML=`<textarea id="bulkHomeworks" class="note" placeholder="Üslü Sayılar Testi&#10;Köklü Sayılar Çalışması"></textarea><div style="margin-top:10px"><button class="full-action" onclick="saveBulkHomeworks()">Ödevleri Ekle</button></div>`;el("modal").classList.add("open")}
 function saveBulkHomeworks(){const c=cls(),a=el("bulkHomeworks").value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),ex=new Set(hwPeriod(c).map(h=>h.name.toLocaleLowerCase("tr")));pushUndo();let added=0,skipped=0;a.forEach(n=>{const k=n.toLocaleLowerCase("tr");if(!ex.has(k)){c.homeworks.push({id:uid(),name:n,given:"",due:"",period:currentPeriod});ex.add(k);added++}else skipped++});save();closeModal();render();alert(`${added} ödev eklendi${skipped?`, ${skipped} tekrar eden ödev atlandı`:""}.`)}
 
@@ -3986,8 +4000,8 @@ function deleteStudent(id){
 function renderHomeworks(){
   const c=cls(),q=(el("homeworkSearch")?.value||"").toLocaleLowerCase("tr"),arr=hwPeriod(c).filter(h=>h.name.toLocaleLowerCase("tr").includes(q));
   el("homeworksBody").innerHTML="";el("homeworksEmpty").style.display=arr.length?"none":"block";
-  arr.forEach(h=>{const st=hstat(c,h.id),tr=document.createElement("tr");tr.className="clickable";tr.onclick=()=>openHomework(h.id);tr.innerHTML=`<td><b>${esc(h.name)}</b></td><td>${esc(h.given||"-")}</td><td>${esc(h.due||"-")}</td><td>${st.done}/${st.total} (%${st.rate})</td><td><button class="ghost" onclick="event.stopPropagation();deleteHomework('${h.id}')">Sil</button></td>`;el("homeworksBody").appendChild(tr)});
-  const mobile=el("homeworksMobile");if(mobile)mobile.innerHTML=arr.length?arr.map(h=>{const st=hstat(c,h.id);return `<div class="mobile-list-card"><div class="mobile-list-head" onclick="openHomework('${h.id}')"><div class="mobile-list-title">${esc(h.name)}</div><span class="avg-pill ${st.rate>=50?"avg-pass":"avg-fail"}">%${st.rate}</span></div><div class="mobile-list-meta">Verilme: ${esc(h.given||"-")} · Son teslim: ${esc(h.due||"-")} · Yaptı: ${st.done}/${st.total}</div><div class="mobile-list-actions"><button class="secondary" onclick="openHomework('${h.id}')">Ayrıntı</button><button class="danger" onclick="deleteHomework('${h.id}')">Ödevi Sil</button></div></div>`}).join(""):'<div class="empty card">Bu dönemde ödev yok.</div>';
+  arr.forEach(h=>{const st=hstat(c,h.id),tr=document.createElement("tr");tr.className="clickable";tr.onclick=()=>openHomework(h.id);tr.innerHTML=`<td>${h.imageData?`<img class="homework-thumb" src="${h.imageData}" alt="">`:""}<b>${esc(h.name)}</b></td><td>${esc(h.given||"-")}</td><td>${esc(h.due||"-")}</td><td>${st.done}/${st.total} (%${st.rate})</td><td><button class="ghost" onclick="event.stopPropagation();deleteHomework('${h.id}')">Sil</button></td>`;el("homeworksBody").appendChild(tr)});
+  const mobile=el("homeworksMobile");if(mobile)mobile.innerHTML=arr.length?arr.map(h=>{const st=hstat(c,h.id);return `<div class="mobile-list-card"><div class="mobile-list-head" onclick="openHomework('${h.id}')"><div class="mobile-list-title">${h.imageData?"🖼️ ":""}${esc(h.name)}</div><span class="avg-pill ${st.rate>=50?"avg-pass":"avg-fail"}">%${st.rate}</span></div><div class="mobile-list-meta">Verilme: ${esc(h.given||"-")} · Son teslim: ${esc(h.due||"-")} · Yaptı: ${st.done}/${st.total}</div><div class="mobile-list-actions"><button class="secondary" onclick="openHomework('${h.id}')">Ayrıntı</button><button class="danger" onclick="deleteHomework('${h.id}')">Ödevi Sil</button></div></div>`}).join(""):'<div class="empty card">Bu dönemde ödev yok.</div>';
 }
 function deleteHomework(id){const c=cls(),h=c.homeworks.find(x=>x.id===id);if(h&&confirm(`${h.name} silinsin mi?`)){pushUndo();c.homeworks=c.homeworks.filter(x=>x.id!==id);Object.keys(c.checks).forEach(sid=>delete c.checks[sid]?.[id]);save();render()}}
 
@@ -4262,13 +4276,14 @@ function commitMoveStudent(sid){
 function openHomework(hid){window._activeStudentModalId=null;
  const c=cls(),h=c.homeworks.find(x=>x.id===hid),st=hstat(c,hid);el("modalTitle").textContent=h.name;el("modalSubtitle").textContent=`${c.name} · ${st.done}/${st.total} yaptı · %${st.rate}`;
  el("modalBody").innerHTML=`<div class="form-row"><label>Verilme Tarihi<input id="givenDate" type="date" value="${esc(h.given)}"></label><label>Son Teslim<input id="dueDate" type="date" value="${esc(h.due)}"></label><button onclick="saveDates('${hid}')">Kaydet</button></div>
+ ${h.imageData?`<div class="homework-image-box" style="margin-bottom:12px"><b>📷 Ödev Görseli</b><img class="homework-image-preview" src="${h.imageData}" alt="Ödev görseli"><div class="homework-image-actions"><button onclick="viewHomeworkImage('${hid}')">Görseli Büyük Aç</button><label class="secondary" style="display:flex;align-items:center;justify-content:center;cursor:pointer;padding:10px;border-radius:10px">Görseli Değiştir<input type="file" accept="image/*" style="display:none" onchange="changeHomeworkImage('${hid}',this)"></label><button class="danger" onclick="removeHomeworkImage('${hid}')">Görseli Kaldır</button></div></div>`:`<div class="homework-image-box" style="margin-bottom:12px"><b>📷 Ödev Görseli</b><div class="tiny" style="margin:5px 0 9px">Bu ödeve henüz görsel eklenmemiş.</div><label class="secondary" style="display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:10px;border-radius:10px">Görsel Ekle<input type="file" accept="image/*" style="display:none" onchange="changeHomeworkImage('${hid}',this)"></label></div>`}
  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px"><button onclick="exportHomeworkJPEG('${hid}')">Bu Ödevin Çıktısı</button><button class="secondary" onclick="openCopyHomework('${hid}')">Diğer Sınıflara Kopyala</button><button class="success" onclick="markAll('${hid}','done')">Tümünü Yaptı</button><button class="danger" onclick="markAll('${hid}','missing')">Tümünü Yapmadı</button></div>
  <div class="quick-grid">${c.students.map(s=>`<div class="quick-card"><span class="student-name-with-dot"><b>${esc(s.number? s.number+" - ":"")}${esc(s.name)}</b><span class="student-status-dot ${status(c,s.id,hid)}" data-status-dot="${s.id}:${hid}" title="${status(c,s.id,hid)==="done"?"Yaptı":status(c,s.id,hid)==="partial"?"Kısmen":status(c,s.id,hid)==="excused"?"Mazeretli":"Yapmadı"}"></span></span>${statusButtons(s.id,hid)}</div>`).join("")}</div>`;el("modal").classList.add("open")
 }
 function saveDates(hid){const h=cls().homeworks.find(x=>x.id===hid);pushUndo();h.given=el("givenDate").value||"";h.due=el("dueDate").value||"";save();render();openHomework(hid)}
 function markAll(hid,v){const c=cls();pushUndo();c.students.forEach(s=>{c.checks[s.id]??={};c.checks[s.id][hid]=v});save();render();openHomework(hid)}
 function openCopyHomework(hid){const c=cls(),h=c.homeworks.find(x=>x.id===hid),targets=state.classes.filter(x=>x.id!==c.id);if(!targets.length)return alert("Başka sınıf yok.");el("modalBody").innerHTML=`<h3>${esc(h.name)} ödevini kopyala</h3>${targets.map(t=>`<label style="display:block;padding:7px"><input class="copyClass" type="checkbox" value="${t.id}"> ${esc(t.name)}</label>`).join("")}<button onclick="commitCopyHomework('${hid}')">Seçili Sınıflara Kopyala</button>`}
-function commitCopyHomework(hid){const c=cls(),h=c.homeworks.find(x=>x.id===hid),ids=[...document.querySelectorAll(".copyClass:checked")].map(x=>x.value);if(!ids.length)return;pushUndo();ids.forEach(id=>{const t=state.classes.find(x=>x.id===id);t.homeworks.push({id:uid(),name:h.name,given:h.given,due:h.due,period:currentPeriod})});save();closeModal();render();alert("Ödev kopyalandı.")}
+function commitCopyHomework(hid){const c=cls(),h=c.homeworks.find(x=>x.id===hid),ids=[...document.querySelectorAll(".copyClass:checked")].map(x=>x.value);if(!ids.length)return;pushUndo();ids.forEach(id=>{const t=state.classes.find(x=>x.id===id);t.homeworks.push({id:uid(),name:h.name,given:h.given,due:h.due,period:currentPeriod,imageData:h.imageData||""})});save();closeModal();render();alert("Ödev kopyalandı.")}
 
 function renderMatrix(){
   const c=cls(),hs=hwPeriod(c);if(!c)return;
@@ -5212,7 +5227,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.83",
+    appVersion:"v7.6.84",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5224,7 +5239,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.83",
+    appVersion:"v7.6.84",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
