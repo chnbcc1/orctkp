@@ -825,7 +825,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 .homework-thumb{width:44px;height:44px;object-fit:cover;border-radius:8px;border:1px solid var(--border);vertical-align:middle;margin-right:8px}
 .homework-view-image{display:block;max-width:100%;max-height:70vh;object-fit:contain;margin:auto;border-radius:12px;background:#fff}
 
-/* ===== v7.6.95 Belge Asistanı ŞÖK şablonu + mobil alan optimizasyonu ===== */
+/* ===== v7.6.96 Belge Asistanı ana ekran geri düğmesi görünürlük düzeltmesi ===== */
 @media(max-width:700px){
   .compact-class-summary{padding:9px 10px!important;margin-bottom:7px!important}
   .compact-class-head h1{font-size:23px!important;line-height:1.05}
@@ -2135,7 +2135,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 window.addEventListener("error",function(ev){ console.error("Uygulama hatası:",ev.error||ev.message); });
 window.addEventListener("unhandledrejection",function(ev){ console.error("Uygulama promise hatası:",ev.reason); });
 
-// ===== v7.6.95 Belge Asistanı / yerel şablon altyapısı =====
+// ===== v7.6.96 Belge Asistanı / yerel şablon altyapısı =====
 const documentAssistantTypes={
   zumre:{label:"Zümre Toplantı Tutanağı",icon:"📘"},
   sok:{label:"ŞÖK Toplantı Tutanağı",icon:"👥"},
@@ -2148,9 +2148,13 @@ function documentAssistantContext(){
   return {teacher:p.name||"",school:p.school||"",className:c?.name||"",year:settings.currentSchoolYear||defaultSchoolYearLabel(),period:String(currentPeriod||"1")};
 }
 function openDocumentAssistant(){
+  // Ana Belge Asistanı ekranı bir kök ekrandır: burada Geri düğmesi gösterilmez.
+  modalHistory=[];
+  const backBtn=el("modalBackBtn");
+  if(backBtn){backBtn.style.display="none";backBtn.setAttribute("onclick","modalGoBack()");}
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.6.95 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
+  el("modalSubtitle").textContent="v7.6.96 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2167,6 +2171,7 @@ function openDocumentAssistant(){
     <div class="modal-actions"><button onclick="generateDocumentAssistantDraft()">✨ Taslak Oluştur</button><button class="secondary" onclick="openDocumentAssistantTemplates()">Şablonları Gör</button></div>`;
   el("modal").classList.add("open");
   renderDocumentStaff();
+  modalUpdateBackButton();
 }
 function docDateTR(v){if(!v)return "";const [y,m,d]=v.split("-");return `${d}.${m}.${y}`}
 function getDocumentStaff(){
