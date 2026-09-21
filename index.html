@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.6.83</title>
+<title>Öğrenci Takip Sistemi v7.6.86</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -818,7 +818,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 .duty-swap-underlay .modal-box{width:min(1100px,100%);max-height:94vh;overflow:hidden;background:#fff;border-radius:15px;border:1px solid var(--border);box-shadow:0 10px 30px rgba(15,23,42,.12)}
 @media(max-width:700px){.duty-swap-form{gap:12px}.duty-swap-field select{font-size:16px}.duty-swap-underlay{inset:14px}}
 
-/* ===== v7.6.85 Ödev görseli ===== */
+/* ===== v7.6.86 Ödev görseli ===== */
 .homework-image-box{border:1px dashed #bfdbfe;background:#f8fbff;border-radius:14px;padding:12px;margin-top:4px}
 .homework-image-preview{display:block;max-width:100%;max-height:260px;object-fit:contain;margin:10px auto 0;border-radius:12px;border:1px solid var(--border);background:#fff}
 .homework-image-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.homework-image-actions button{flex:1;min-width:120px}
@@ -1963,7 +1963,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.85</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.6.86</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -5227,7 +5227,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.85",
+    appVersion:"v7.6.86",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5239,7 +5239,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.6.85",
+    appVersion:"v7.6.86",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
