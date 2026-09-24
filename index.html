@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.7.24</title>
+<title>Öğrenci Takip Sistemi v7.7.25</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -929,6 +929,16 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 }
 .homework-edit-form label{display:block;font-size:12px;font-weight:700;color:var(--muted);min-width:0}
 .homework-edit-form input{display:block;width:100%;max-width:100%;min-width:0;margin-top:5px;box-sizing:border-box}
+\n/* ===== v7.7.25 — Ödev formu iOS tarih görünümü ===== */
+.homework-create-form .homework-date-field,
+.homework-edit-form .homework-date-field{display:block;min-width:0!important;overflow:visible!important}
+.homework-date-shell{position:relative;display:block;width:100%;height:44px;margin-top:5px;box-sizing:border-box}
+.homework-date-display{display:flex;align-items:center;justify-content:center;width:100%;height:44px;padding:9px 10px;border:1px solid var(--border);border-radius:9px;background:#fff;color:var(--text);font:inherit;font-weight:600;line-height:1;box-sizing:border-box;pointer-events:none}
+.homework-date-display.is-empty{color:transparent}
+.homework-date-shell input[type="date"]{position:absolute!important;inset:0!important;width:100%!important;height:44px!important;min-width:0!important;max-width:100%!important;min-height:44px!important;max-height:44px!important;margin:0!important;padding:0!important;border:0!important;border-radius:9px!important;opacity:.001!important;background:transparent!important;color:transparent!important;-webkit-appearance:none!important;appearance:none!important;box-sizing:border-box!important;cursor:pointer}
+.homework-create-form #newHomeworkName:focus,
+.homework-edit-form #editHomeworkName:focus{outline:none!important;box-shadow:none!important;border-color:var(--border)!important}
+
 </style>
 
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
@@ -2076,7 +2086,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.24</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.25</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2234,7 +2244,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.24 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.25 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2785,7 +2795,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.24 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.25 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -4276,11 +4286,13 @@ function showImportPreview(rows){
 }
 function commitFileStudents(){const c=cls(),rows=window._fileRows||[],ex=new Set(c.students.map(s=>normName(s.name)));pushUndo();let n=0;for(const r of rows){if(r.name&&!ex.has(normName(r.name))){c.students.push({id:uid(),number:r.number,name:r.name});ex.add(normName(r.name));n++}}refreshFutureClassDuty(c);save();closeModal();render();alert(n+" öğrenci eklendi.")}
 
+function formatHomeworkDateInput(v){if(!v)return "Tarih";const m=String(v).match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!m)return v;const months=["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"];return `${Number(m[3])} ${months[Number(m[2])-1]} ${m[1]}`}
+function syncHomeworkDateDisplay(inputId,textId){const i=el(inputId),t=el(textId);if(!i||!t)return;t.textContent=formatHomeworkDateInput(i.value);t.classList.toggle("is-empty",!i.value)}
 function addHomework(){
   const c=cls();if(!c)return;
   el("modalTitle").textContent="Yeni Ödev";el("modalSubtitle").textContent=`${c.name} · ${currentPeriod}. Dönem`;
   window._newHomeworkImage="";
-  el("modalBody").innerHTML=`<div class="app-form-grid homework-create-form"><label class="full">Ödev Adı<input id="newHomeworkName" placeholder="Örn. Üslü Sayılar Testi" autocomplete="off"></label><label>Verilme Tarihi<input id="newHomeworkGiven" type="date"></label><label>Son Teslim<input id="newHomeworkDue" type="date"></label><div class="full homework-image-box"><b>📷 Ödev Görseli</b><div class="tiny" style="margin-top:4px">İsteğe bağlıdır. Fotoğraf cihazda küçültülerek saklanır ve tam yedeğe dahil edilir.</div><input id="newHomeworkImageInput" type="file" accept="image/*" style="margin-top:9px" onchange="prepareHomeworkImage(this)"><div id="newHomeworkImagePreview"></div></div><button class="full" onclick="saveNewHomework()">Ödevi Ekle</button></div>`;
+  el("modalBody").innerHTML=`<div class="app-form-grid homework-create-form"><label class="full">Ödev Adı<input id="newHomeworkName" placeholder="Örn. Üslü Sayılar Testi" autocomplete="off"></label><label class="homework-date-field">Verilme Tarihi<div class="homework-date-shell"><span id="newHomeworkGivenText" class="homework-date-display is-empty">Tarih</span><input id="newHomeworkGiven" type="date" onchange="syncHomeworkDateDisplay('newHomeworkGiven','newHomeworkGivenText')"></div></label><label class="homework-date-field">Son Teslim<div class="homework-date-shell"><span id="newHomeworkDueText" class="homework-date-display is-empty">Tarih</span><input id="newHomeworkDue" type="date" onchange="syncHomeworkDateDisplay('newHomeworkDue','newHomeworkDueText')"></div></label><div class="full homework-image-box"><b>📷 Ödev Görseli</b><div class="tiny" style="margin-top:4px">İsteğe bağlıdır. Fotoğraf cihazda küçültülerek saklanır ve tam yedeğe dahil edilir.</div><input id="newHomeworkImageInput" type="file" accept="image/*" style="margin-top:9px" onchange="prepareHomeworkImage(this)"><div id="newHomeworkImagePreview"></div></div><button class="full" onclick="saveNewHomework()">Ödevi Ekle</button></div>`;
   el("modal").classList.add("open");
 }
 function compressHomeworkImage(file){return new Promise((resolve,reject)=>{if(!file)return resolve("");if(!String(file.type||"").startsWith("image/"))return reject(new Error("Lütfen bir görsel dosyası seçin."));const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{try{const max=1000,scale=Math.min(1,max/Math.max(im.width,im.height)),cv=document.createElement("canvas");cv.width=Math.max(1,Math.round(im.width*scale));cv.height=Math.max(1,Math.round(im.height*scale));const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,cv.width,cv.height);x.drawImage(im,0,0,cv.width,cv.height);resolve(cv.toDataURL("image/jpeg",.68))}catch(e){reject(e)}};im.onerror=()=>reject(new Error("Görsel açılamadı."));im.src=r.result};r.onerror=()=>reject(new Error("Görsel okunamadı."));r.readAsDataURL(file)})}
@@ -4299,8 +4311,9 @@ function removeHomeworkImage(hid){const h=cls()?.homeworks?.find(x=>x.id===hid);
 function openEditHomework(hid){
   const c=cls(),h=c?.homeworks?.find(x=>x.id===hid);if(!c||!h)return;
   el("modalTitle").textContent="Ödevi Düzenle";el("modalSubtitle").textContent=`${c.name} · ${currentPeriod}. Dönem`;
-  el("modalBody").innerHTML=`<div class="app-form-grid homework-edit-form"><label class="full">Ödev Adı<input id="editHomeworkName" value="${esc(h.name)}" autocomplete="off"></label><label>Verilme Tarihi<input id="editHomeworkGiven" type="date" value="${esc(h.given||"")}"></label><label>Son Teslim<input id="editHomeworkDue" type="date" value="${esc(h.due||"")}"></label><div class="full tiny" style="padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#f8fafc">Ödev düzenlendiğinde öğrencilerin mevcut Yaptı / Kısmen / Mazeretli / Yapmadı kayıtları korunur.</div><button class="full" onclick="saveHomeworkEdit('${hid}')">Değişiklikleri Kaydet</button><button class="full secondary" onclick="openHomework('${hid}')">İptal · Ödev Kontrolüne Dön</button></div>`;
+  el("modalBody").innerHTML=`<div class="app-form-grid homework-edit-form"><label class="full">Ödev Adı<input id="editHomeworkName" value="${esc(h.name)}" autocomplete="off"></label><label class="homework-date-field">Verilme Tarihi<div class="homework-date-shell"><span id="editHomeworkGivenText" class="homework-date-display">${esc(formatHomeworkDateInput(h.given||""))}</span><input id="editHomeworkGiven" type="date" value="${esc(h.given||"")}" onchange="syncHomeworkDateDisplay('editHomeworkGiven','editHomeworkGivenText')"></div></label><label class="homework-date-field">Son Teslim<div class="homework-date-shell"><span id="editHomeworkDueText" class="homework-date-display">${esc(formatHomeworkDateInput(h.due||""))}</span><input id="editHomeworkDue" type="date" value="${esc(h.due||"")}" onchange="syncHomeworkDateDisplay('editHomeworkDue','editHomeworkDueText')"></div></label><div class="full tiny" style="padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:#f8fafc">Ödev düzenlendiğinde öğrencilerin mevcut Yaptı / Kısmen / Mazeretli / Yapmadı kayıtları korunur.</div><button class="full" onclick="saveHomeworkEdit('${hid}')">Değişiklikleri Kaydet</button><button class="full secondary" onclick="openHomework('${hid}')">İptal · Ödev Kontrolüne Dön</button></div>`;
   el("modal").classList.add("open");
+  syncHomeworkDateDisplay("editHomeworkGiven","editHomeworkGivenText");syncHomeworkDateDisplay("editHomeworkDue","editHomeworkDueText");
 }
 function saveHomeworkEdit(hid){
   const c=cls(),h=c?.homeworks?.find(x=>x.id===hid);if(!h)return;
@@ -5953,7 +5966,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.24",
+    appVersion:"v7.7.25",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5965,7 +5978,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.24",
+    appVersion:"v7.7.25",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
