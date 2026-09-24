@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.7.21</title>
+<title>Öğrenci Takip Sistemi v7.7.22</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -226,10 +226,13 @@ border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:12px;fon
 .app-form-grid .full{grid-column:1/-1}
 .app-form-grid label{font-size:12px;font-weight:700;color:var(--muted)}
 .app-form-grid input{width:100%;margin-top:5px}
-/* v7.7.21 — iPhone tarih alanlarının modal dışına taşmasını engelle */
+/* v7.7.22 — iPhone tarih alanlarının modal dışına taşmasını engelle */
 .app-form-grid label{min-width:0}
-.app-form-grid input[type="date"]{display:block;width:100%;max-width:100%;min-width:0;box-sizing:border-box;-webkit-appearance:none;appearance:none}
-@media(max-width:700px){.app-form-grid input[type="date"]{font-size:16px!important}}
+.app-form-grid input[type="date"]{display:block;width:100%;max-width:100%;min-width:0;box-sizing:border-box}
+@media(max-width:700px){
+  .app-form-grid input[type="date"]{font-size:16px!important;height:50px!important;min-height:50px!important;padding:10px 12px!important;line-height:28px!important}
+  .app-form-grid label{width:100%;max-width:100%;overflow:hidden}
+}
 .danger-zone{margin-top:18px;padding:12px;border:1px solid #fecaca;background:#fef2f2;border-radius:12px}
 .danger-zone b{color:#991b1b}
 .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
@@ -292,7 +295,7 @@ input,select,textarea,button{max-width:100%}
 .file-import-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.file-import-row input[type=file]{flex:1;min-width:210px}.file-import-row button{min-height:40px}
 .student-detail-mobile,.report-mobile{display:none}
 .grade-average-stack{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}.missing-grade-note{font-size:10px;font-weight:800;color:#9a3412;background:#fff7ed;border:1px solid #fed7aa;border-radius:999px;padding:4px 7px}.field-missing-mark{float:right;font-size:9px;color:#9a3412;background:#fff7ed;border-radius:999px;padding:2px 5px}.grade-missing-field input{border-color:#fdba74;background:#fffaf5}.grade-missing-summary{margin-top:8px;font-size:11px;color:#9a3412;background:#fff7ed;border:1px solid #fed7aa;border-radius:9px;padding:7px 8px}
-.report-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:10px}.report-card-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.report-status-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.report-stat{display:flex;justify-content:space-between;align-items:center;padding:8px 9px;border-radius:10px;font-size:12px;font-weight:700}.report-stat.done{background:#dcfce7;color:#166534}.report-stat.partial{background:#ede9fe;color:#5b21b6}.report-stat.excused{background:#ffedd5;color:#9a3412}.report-stat.missing{background:#fee2e2;color:#991b1b}
+.report-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:10px}.report-card-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.report-status-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.report-stat{display:flex;justify-content:space-between;align-items:center;padding:8px 9px;border-radius:10px;font-size:12px;font-weight:700}.report-stat.done{background:#dcfce7;color:#166534}.report-stat.partial{background:#ede9fe;color:#5b21b6}.report-stat.excused{background:#ffedd5;color:#9a3412}.report-stat.missing{background:#fee2e2;color:#991b1b}.report-stat.pending{background:#f1f5f9;color:#475569}
 .student-homework-card{border:1px solid var(--border);border-radius:12px;padding:10px;margin-bottom:9px;background:#fff}.student-homework-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}.student-homework-card .status-group{display:grid;grid-template-columns:1fr 1fr;gap:7px}.student-homework-card .status-btn{width:100%;min-height:39px;font-size:12px!important}
 @media(max-width:700px){
   .student-detail-desktop,.reports-desktop{display:none!important}.student-detail-mobile,.report-mobile{display:block!important}
@@ -822,14 +825,14 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 .duty-swap-underlay .modal-box{width:min(1100px,100%);max-height:94vh;overflow:hidden;background:#fff;border-radius:15px;border:1px solid var(--border);box-shadow:0 10px 30px rgba(15,23,42,.12)}
 @media(max-width:700px){.duty-swap-form{gap:12px}.duty-swap-field select{font-size:16px}.duty-swap-underlay{inset:14px}}
 
-/* ===== v7.7.21 Ödev görseli ===== */
+/* ===== v7.7.22 Ödev görseli ===== */
 .homework-image-box{border:1px dashed #bfdbfe;background:#f8fbff;border-radius:14px;padding:12px;margin-top:4px}
 .homework-image-preview{display:block;max-width:100%;max-height:260px;object-fit:contain;margin:10px auto 0;border-radius:12px;border:1px solid var(--border);background:#fff}
 .homework-image-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}.homework-image-actions button{flex:1;min-width:120px}
 .homework-thumb{width:44px;height:44px;object-fit:cover;border-radius:8px;border:1px solid var(--border);vertical-align:middle;margin-right:8px}
 .homework-view-image{display:block;max-width:100%;max-height:70vh;object-fit:contain;margin:auto;border-radius:12px;background:#fff}
 
-/* ===== v7.7.21 Belge Asistanı ŞÖK şablonu + mobil alan optimizasyonu ===== */
+/* ===== v7.7.22 Belge Asistanı ŞÖK şablonu + mobil alan optimizasyonu ===== */
 @media(max-width:700px){
   .compact-class-summary{padding:9px 10px!important;margin-bottom:7px!important}
   .compact-class-head h1{font-size:23px!important;line-height:1.05}
@@ -848,12 +851,12 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 
 .doc-paper .sok-invite-sign{width:46%;margin:14pt 0 12pt auto;text-align:center}.doc-paper .sok-invite-sign b{display:block;margin-top:5pt}.doc-paper .sok-approval{text-align:center;margin-top:18pt;page-break-inside:avoid}.doc-paper .sok-approval b{display:block}.doc-paper .sok-final-signatures{display:grid;grid-template-columns:1fr 1fr;gap:20pt 50pt;margin-top:28pt;page-break-inside:avoid;text-align:center}.doc-paper .sok-final-signatures .advisor{grid-column:1/3}.doc-paper .sok-final-signatures b{display:block;margin-top:3pt}.doc-paper .meta-table td:first-child,.doc-paper .participants-table td:first-child{width:40%;font-weight:700}.doc-paper .participants-table td:first-child{font-weight:400}.doc-paper .participants-table th{font-weight:700;text-align:left}
 @media print{body>*:not(.doc-print-sheet){display:none!important}.doc-print-sheet{position:static!important;padding:0!important;background:#fff!important;overflow:visible!important}.doc-print-toolbar{display:none!important}.doc-paper{width:auto!important;min-height:0!important;margin:0!important;padding:0!important}@page{size:A4;margin:12.35mm}}
-/* ===== v7.7.21 ŞÖK belge düzeni + öğretmen kadrosu + dışa aktar ===== */
+/* ===== v7.7.22 ŞÖK belge düzeni + öğretmen kadrosu + dışa aktar ===== */
 .doc-staff-list{display:grid;gap:7px;margin-top:8px}.doc-staff-row{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) auto auto;gap:6px;align-items:center;padding:7px;border:1px solid #e2e8f0;border-radius:10px;background:#fff}.doc-staff-row input[type=text]{min-width:0}.doc-staff-row .staff-check{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;white-space:nowrap}.doc-staff-row .staff-del{padding:7px 9px}.doc-export-actions{display:grid;grid-template-columns:1fr;gap:8px;margin-top:9px}.doc-export-actions button{width:100%}.doc-export-menu{position:fixed;inset:0;z-index:12000;background:rgba(15,23,42,.46);display:flex;align-items:flex-end;justify-content:center;padding:14px}.doc-export-panel{width:min(520px,100%);background:#fff;border-radius:18px;padding:14px;box-shadow:0 20px 50px rgba(0,0,0,.24)}.doc-export-panel h3{margin:0 0 4px;font-size:18px}.doc-export-panel p{margin:0 0 12px;color:#64748b;font-size:12px}.doc-export-panel button{width:100%;margin-top:8px}.doc-export-panel .secondary{background:#fff;color:#0f172a;border:1px solid #cbd5e1}.doc-paper p{font-weight:400!important}.doc-paper .agenda-item{font-weight:400!important}.doc-paper .placeholder{font-style:italic;color:#555}.doc-paper .signature{table-layout:fixed}.doc-paper .signature th:nth-child(1){width:38%}.doc-paper .signature th:nth-child(2){width:42%}.doc-paper .signature th:nth-child(3){width:20%}.doc-paper .signature td{word-break:break-word}.doc-paper section{overflow:hidden}
 @media(max-width:760px){.doc-print-sheet{padding:6px;overflow-y:auto;overflow-x:hidden}.doc-print-toolbar{position:sticky;left:0;right:0}.doc-paper{width:210mm!important;min-height:297mm!important;padding:12.35mm!important;transform-origin:top center;margin:0 auto!important;font-size:12pt!important}.doc-staff-row{grid-template-columns:1fr 1fr}.doc-staff-row .staff-check,.doc-staff-row .staff-del{justify-self:start}}
 
 
-/* v7.7.21 gündem metni düzenleyicisi */
+/* v7.7.22 gündem metni düzenleyicisi */
 .sok-local-panel:not([hidden]){display:flex;flex-direction:column;max-height:min(58vh,520px);min-height:0;overflow:hidden;border:1px solid #cbd5e1;border-radius:12px;padding:10px;margin-top:12px;background:#f8fafc}
 .sok-local-caption{flex:none;margin-bottom:8px}
 .sok-local-suggestion{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;white-space:normal;line-height:1.55;padding:12px;background:#fff;border:1px solid #d5deea;border-radius:9px;font-size:clamp(14px,3.5vw,17px)}
@@ -2011,7 +2014,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.21</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.22</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2129,7 +2132,7 @@ body.class-module-page-open #modal{z-index:9200!important}
       <option value="rate-desc">En yüksek tamamlanma</option>
     </select>
   </div>
-  <div class="card table-wrap reports-desktop"><table><thead><tr><th>No</th><th>Öğrenci</th><th>Yaptı</th><th>Kısmen</th><th>Mazeretli</th><th>Yapmadı</th><th>Başarı %</th></tr></thead><tbody id="reportBody"></tbody></table></div>
+  <div class="card table-wrap reports-desktop"><table><thead><tr><th>No</th><th>Öğrenci</th><th>Yaptı</th><th>Kısmen</th><th>Mazeretli</th><th>Yapmadı</th><th>Kontrol Edilmedi</th><th>Başarı %</th></tr></thead><tbody id="reportBody"></tbody></table></div>
   <div id="reportMobile" class="report-mobile"></div>
 </div>
 </section>
@@ -2153,7 +2156,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 window.addEventListener("error",function(ev){ console.error("Uygulama hatası:",ev.error||ev.message); });
 window.addEventListener("unhandledrejection",function(ev){ console.error("Uygulama promise hatası:",ev.reason); });
 
-// ===== v7.7.21 Belge Asistanı / yerel şablon altyapısı =====
+// ===== v7.7.22 Belge Asistanı / yerel şablon altyapısı =====
 // Akademik veri entegrasyonu hata toleranslıdır; veri okunamasa da ŞÖK taslağı oluşturulur.
 const documentAssistantTypes={
   zumre:{label:"Zümre Toplantı Tutanağı",icon:"📘"},
@@ -2169,7 +2172,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.21 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.22 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2458,7 +2461,7 @@ function buildDocumentDraft(v){
   if(v.type==="durum") return `${school.toLocaleUpperCase("tr-TR")}\n${v.year} EĞİTİM ÖĞRETİM YILI\n${clsName} SINIFI DURUM DEĞERLENDİRME RAPORU\n\nTarih: ${date}\nHazırlayan: ${teacher}\nDönem: ${v.period}. Dönem\n\n1. GENEL DURUM\n....................................................................................................\n\n2. AKADEMİK DURUM\n....................................................................................................\n\n3. ÖDEV / ÇALIŞMA TAKİBİ\n....................................................................................................\n\n4. DEVAM VE KATILIM\n....................................................................................................\n\n5. ALINMASI PLANLANAN TEDBİRLER\n....................................................................................................${extra}\n\nHazırlayan: ${teacher}`;
   return `${school.toLocaleUpperCase("tr-TR")}\n${v.year} EĞİTİM ÖĞRETİM YILI\nBELGE TASLAĞI\n\nTarih: ${date}\nHazırlayan: ${teacher}\nSınıf / Şube: ${clsName}\nDönem: ${v.period}. Dönem\n\nKONU\n....................................................................................................\n\nAÇIKLAMA\n....................................................................................................${extra}\n\nHazırlayan: ${teacher}`;
 }
-// v7.7.21: ŞÖK gündemlerini ana belge taslağıyla çift yönlü eşleyen düzenleyici.
+// v7.7.22: ŞÖK gündemlerini ana belge taslağıyla çift yönlü eşleyen düzenleyici.
 function sokEditorSections(t){
  const start=t.indexOf('GÖRÜŞMELER\n'),end=t.indexOf('\n\nALINAN KARARLAR\n',start);
  if(start<0||end<0)return null;
@@ -2478,7 +2481,7 @@ function sokEditorSync(){
  sokEditorSave();
 }
 function sokEditorSave(){const main=el('docAssistantDraft');if(!main)return;try{sessionStorage.setItem('sokDraft7716',main.value)}catch(e){}}
-// v7.7.21: Yerel, ücretsiz gündem metni seçenekleri. Veri ve öğretmen beyanı uydurulmaz.
+// v7.7.22: Yerel, ücretsiz gündem metni seçenekleri. Veri ve öğretmen beyanı uydurulmaz.
 const sokLocalTopics=[
  {keys:['açılış','yoklama'],label:'Açılış ve yoklama',core:'Toplantının gündemi ve izlenecek çalışma sırası katılımcıların değerlendirmesine sunulmuştur.'},
  {keys:['veli','aile','ziyaret'],label:'Veli iletişimi',core:'Öğrencilerin gelişiminin izlenmesinde okul ve aile arasındaki iletişimin sürdürülmesi üzerinde durulmuştur.'},
@@ -2506,9 +2509,9 @@ function sokLocalMatch(title){const q=sokLocalNorm(title);let best=null,score=0;
 function sokLocalLibrary(){try{const a=JSON.parse(localStorage.getItem('sokLocalLibrary7718')||'[]');return Array.isArray(a)?a:[]}catch(e){return []}}
 function sokLocalSaveLibrary(){const row=document.querySelector('.sok-edit-item.sok-local-active');if(!row)return;const title=row.querySelector('.sok-edit-title').value.trim(),body=row.querySelector('.sok-edit-text').value.trim();if(!title||!body)return alert('Kaydetmek için başlık ve görüşme metni girin.');const a=sokLocalLibrary();if(a.some(x=>sokLocalNorm(x.title)===sokLocalNorm(title)&&x.text===body))return alert('Bu metin kütüphanede zaten var.');a.push({title,text:body});try{localStorage.setItem('sokLocalLibrary7718',JSON.stringify(a));alert('Metin bu cihazdaki yerel kütüphaneye kaydedildi. Tam yedek almadan tarayıcı verilerini silmeyin.')}catch(e){alert('Yerel kütüphaneye kaydedilemedi.')}}
 function sokLocalSelect(no){const row=[...document.querySelectorAll('.sok-edit-item')].find(x=>x.dataset.no===String(no));if(!row)return;document.querySelectorAll('.sok-edit-item').forEach(x=>x.classList.remove('sok-local-active'));row.classList.add('sok-local-active');return row}
-// v7.7.21: Metni yalnızca başına/sonuna cümle ekleyerek değil, anlamı koruyan
+// v7.7.22: Metni yalnızca başına/sonuna cümle ekleyerek değil, anlamı koruyan
 // kontrollü cümle dönüşümleriyle yeniden kur. Sayılar ve kişi adları değiştirilmez.
-// v7.7.21: Üç farklı cümle kuruluşu × iki paragraf sırası × iki anlatım
+// v7.7.22: Üç farklı cümle kuruluşu × iki paragraf sırası × iki anlatım
 // başlangıcı = 12 farklı akademik öneri. Yalnızca mevcut taslaktaki olgular dönüştürülür.
 function sokLocalRewrite(text,variant){
  let t=String(text||'').trim();
@@ -2643,7 +2646,7 @@ function docDraftToHTML(t){
      if(pi===0&&i>1&&lines[i+1]?.trim()&&/Sınıf Rehber Öğretmeni$/.test(lines[i+1].trim())&&!x.includes(':')){html+=`<div class="sok-invite-sign"><div>${escLine(x)}</div><b>${escLine(lines[i+1].trim())}</b></div>`;i++;continue}
      if(/^(GÜNDEM MADDELERİ|GÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ|GÖRÜŞMELER|ALINAN KARARLAR)$/.test(x)){html+=`<div class="doc-section${x==="ALINAN KARARLAR"?" keep-with-next":""}">${escLine(x)}</div>`}
      else if(/^\d+\.\s+/.test(x)){
-       // v7.7.21: Gündem başlığı ile ona ait görüşme metninin TAMAMINI tek blokta tut.
+       // v7.7.22: Gündem başlığı ile ona ait görüşme metninin TAMAMINI tek blokta tut.
        // Aradaki boş satırlar artık başlık-görüşme bağını koparmıyor.
        const body=[];let j=i+1;
        while(j<lines.length){
@@ -2720,7 +2723,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.21 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.22 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -2928,7 +2931,7 @@ function restoreSchoolYearArchive(i){
   currentClassId=state.currentClassId||state.classes[0]?.id||null;currentPeriod=state.currentPeriod||"1";save();saveSettings();undoStack=[];redoStack=[];render();closeModal();alert(`${x.label} arşivi geri yüklendi.`)
 }
 function deleteSchoolYearArchive(i){const a=loadSchoolYearArchives(),x=a[i];if(!x)return;if(!confirm(`${x.label} arşivi kalıcı olarak silinsin mi? Bu işlem geri alınamaz.`))return;a.splice(i,1);saveSchoolYearArchives(a);openSchoolYearArchive()}
-// v7.7.21 — Ödev görsellerini localStorage kotasından ayırıp IndexedDB'de sakla.
+// v7.7.22 — Ödev görsellerini localStorage kotasından ayırıp IndexedDB'de sakla.
 const HOMEWORK_IMAGE_DB="OgrenciTakipMediaV1", HOMEWORK_IMAGE_STORE="homeworkImages";
 function openHomeworkImageDB(){return new Promise((resolve,reject)=>{if(!window.indexedDB)return reject(new Error("IndexedDB desteklenmiyor."));const q=indexedDB.open(HOMEWORK_IMAGE_DB,1);q.onupgradeneeded=()=>{const db=q.result;if(!db.objectStoreNames.contains(HOMEWORK_IMAGE_STORE))db.createObjectStore(HOMEWORK_IMAGE_STORE)};q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error||new Error("Görsel deposu açılamadı."))})}
 async function idbPutHomeworkImage(key,data){if(!key||!data)return;const db=await openHomeworkImageDB();return new Promise((resolve,reject)=>{const tx=db.transaction(HOMEWORK_IMAGE_STORE,"readwrite");tx.objectStore(HOMEWORK_IMAGE_STORE).put(data,key);tx.oncomplete=()=>{db.close();resolve()};tx.onerror=()=>{db.close();reject(tx.error)}})}
@@ -4095,7 +4098,7 @@ function drawFullStudentName(ctx,name,cx,cy,maxWidth,maxHeight,{maxFont=14,minFo
 }
 function exportSeatingPlanJPEG(){
   const c=cls();if(!c)return;cleanSeatingAssignments(c);const p=c.seatingPlan,a=p.assignments;
-  // v7.7.21 — A4 yatay oranına yakın sabit tuval. Satır sayısı artsa da çıktı yatay kalır.
+  // v7.7.22 — A4 yatay oranına yakın sabit tuval. Satır sayısı artsa da çıktı yatay kalır.
   const w=1600,h=1130,left=55,right=55,top=205,bottom=70,gap=18;
   const gridW=w-left-right,gridH=h-top-bottom;
   const deskW=(gridW-(p.cols-1)*gap)/p.cols,deskH=(gridH-(p.rows-1)*gap)/p.rows;
@@ -4642,7 +4645,14 @@ function renderHomeworks(){
   arr.forEach(h=>{const st=hstat(c,h.id),tr=document.createElement("tr");tr.className="clickable";tr.onclick=()=>openHomework(h.id);tr.innerHTML=`<td>${h.imageData?`<img class="homework-thumb" src="${h.imageData}" alt="">`:""}<b>${esc(h.name)}</b></td><td>${esc(h.given||"-")}</td><td>${esc(h.due||"-")}</td><td>${st.done}/${st.total} (%${st.rate})</td><td><button class="ghost" onclick="event.stopPropagation();deleteHomework('${h.id}')">Sil</button></td>`;el("homeworksBody").appendChild(tr)});
   const mobile=el("homeworksMobile");if(mobile)mobile.innerHTML=arr.length?arr.map(h=>{const st=hstat(c,h.id);return `<div class="mobile-list-card"><div class="mobile-list-head" onclick="openHomework('${h.id}')"><div class="mobile-list-title">${h.imageData?"🖼️ ":""}${esc(h.name)}</div><span class="avg-pill ${st.rate>=50?"avg-pass":"avg-fail"}">%${st.rate}</span></div><div class="mobile-list-meta">Verilme: ${esc(h.given||"-")} · Son teslim: ${esc(h.due||"-")} · Yaptı: ${st.done}/${st.total}</div><div class="mobile-list-actions"><button class="secondary" onclick="openHomework('${h.id}')">Ayrıntı</button><button class="danger" onclick="deleteHomework('${h.id}')">Ödevi Sil</button></div></div>`}).join(""):'<div class="empty card">Bu dönemde ödev yok.</div>';
 }
-function deleteHomework(id){const c=cls(),h=c.homeworks.find(x=>x.id===id);if(h&&confirm(`${h.name} silinsin mi?`)){pushUndo();if(h.imageKey)idbDeleteHomeworkImage(h.imageKey).catch(()=>{});c.homeworks=c.homeworks.filter(x=>x.id!==id);Object.keys(c.checks).forEach(sid=>delete c.checks[sid]?.[id]);save();render()}}
+function stableConfirm(message){
+  const y=window.scrollY||document.documentElement.scrollTop||0;
+  const ok=confirm(message);
+  requestAnimationFrame(()=>window.scrollTo(0,y));
+  setTimeout(()=>window.scrollTo(0,y),80);
+  return ok;
+}
+function deleteHomework(id){const c=cls(),h=c.homeworks.find(x=>x.id===id);if(h&&stableConfirm(`${h.name} silinsin mi?`)){pushUndo();if(h.imageKey)idbDeleteHomeworkImage(h.imageKey).catch(()=>{});c.homeworks=c.homeworks.filter(x=>x.id!==id);Object.keys(c.checks).forEach(sid=>delete c.checks[sid]?.[id]);save();render()}}
 
 function statusBadge(v,sid="",hid=""){
   const attr=(sid&&hid)?` data-status-badge="${sid}:${hid}"`:"";
@@ -4917,7 +4927,7 @@ function openHomework(hid){window._activeStudentModalId=null;
  el("modalBody").innerHTML=`<div class="form-row"><label>Verilme Tarihi<input id="givenDate" type="date" value="${esc(h.given)}"></label><label>Son Teslim<input id="dueDate" type="date" value="${esc(h.due)}"></label><button onclick="saveDates('${hid}')">Kaydet</button></div>
  ${h.imageData?`<div class="homework-image-box" style="margin-bottom:12px"><b>📷 Ödev Görseli</b><img class="homework-image-preview" src="${h.imageData}" alt="Ödev görseli"><div class="homework-image-actions"><button onclick="viewHomeworkImage('${hid}')">Görseli Büyük Aç</button><label class="secondary" style="display:flex;align-items:center;justify-content:center;cursor:pointer;padding:10px;border-radius:10px">Görseli Değiştir<input type="file" accept="image/*" style="display:none" onchange="changeHomeworkImage('${hid}',this)"></label><button class="danger" onclick="removeHomeworkImage('${hid}')">Görseli Kaldır</button></div></div>`:`<div class="homework-image-box" style="margin-bottom:12px"><b>📷 Ödev Görseli</b><div class="tiny" style="margin:5px 0 9px">Bu ödeve henüz görsel eklenmemiş.</div><label class="secondary" style="display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:10px;border-radius:10px">Görsel Ekle<input type="file" accept="image/*" style="display:none" onchange="changeHomeworkImage('${hid}',this)"></label></div>`}
  <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px"><button onclick="exportHomeworkJPEG('${hid}')">Bu Ödevin Çıktısı</button><button class="secondary" onclick="openCopyHomework('${hid}')">Diğer Sınıflara Kopyala</button><button class="success" onclick="markAll('${hid}','done')">Tümünü Yaptı</button><button class="danger" onclick="markAll('${hid}','missing')">Tümünü Yapmadı</button></div>
- <div class="quick-grid">${c.students.map(s=>`<div class="quick-card"><span class="student-name-with-dot"><b>${esc(s.number? s.number+" - ":"")}${esc(s.name)}</b><span class="student-status-dot ${status(c,s.id,hid)}" data-status-dot="${s.id}:${hid}" title="${status(c,s.id,hid)==="done"?"Yaptı":status(c,s.id,hid)==="partial"?"Kısmen":status(c,s.id,hid)==="excused"?"Mazeretli":"Yapmadı"}"></span></span>${statusButtons(s.id,hid)}</div>`).join("")}</div>`;el("modal").classList.add("open")
+ <div class="quick-grid">${c.students.map(s=>`<div class="quick-card"><span class="student-name-with-dot"><b>${esc(s.number? s.number+" - ":"")}${esc(s.name)}</b><span class="student-status-dot ${status(c,s.id,hid)}" data-status-dot="${s.id}:${hid}" title="${status(c,s.id,hid)==="done"?"Yaptı":status(c,s.id,hid)==="partial"?"Kısmen":status(c,s.id,hid)==="excused"?"Mazeretli":status(c,s.id,hid)==="missing"?"Yapmadı":"Kontrol Edilmedi"}"></span></span>${statusButtons(s.id,hid)}</div>`).join("")}</div>`;el("modal").classList.add("open")
 }
 function saveDates(hid){const h=cls().homeworks.find(x=>x.id===hid);pushUndo();h.given=el("givenDate").value||"";h.due=el("dueDate").value||"";save();render();openHomework(hid)}
 function markAll(hid,v){const c=cls();pushUndo();c.students.forEach(s=>{c.checks[s.id]??={};c.checks[s.id][hid]=v});save();render();openHomework(hid)}
@@ -4997,7 +5007,7 @@ function homeworkStatusSummary(c,h){
 }
 function openStudentStatusList(sid,kind){
   const c=cls(),s=c?.students.find(x=>x.id===sid);if(!c||!s)return;
-  const labels={done:"Yaptığı Ödevler",partial:"Kısmen Yaptığı Ödevler",excused:"Mazeretli Olduğu Ödevler",missing:"Yapmadığı Ödevler"};
+  const labels={done:"Yaptığı Ödevler",partial:"Kısmen Yaptığı Ödevler",excused:"Mazeretli Olduğu Ödevler",missing:"Yapmadığı Ödevler",pending:"Kontrol Edilmeyen Ödevler"};
   const hs=hwPeriod(c).filter(h=>status(c,sid,h.id)===kind);
   el("modalTitle").textContent=labels[kind]||"Ödevler";
   el("modalSubtitle").textContent=`${s.number?s.number+" - ":""}${s.name} · ${hs.length} ödev`;
@@ -5006,7 +5016,7 @@ function openStudentStatusList(sid,kind){
 }
 function openHomeworkStatusList(hid,kind){
   const c=cls(),h=c?.homeworks.find(x=>x.id===hid);if(!c||!h)return;
-  const labels={done:"Yapan Öğrenciler",partial:"Kısmen Yapan Öğrenciler",excused:"Mazeretli Öğrenciler",missing:"Yapmayan Öğrenciler"};
+  const labels={done:"Yapan Öğrenciler",partial:"Kısmen Yapan Öğrenciler",excused:"Mazeretli Öğrenciler",missing:"Yapmayan Öğrenciler",pending:"Kontrol Edilmeyen Öğrenciler"};
   const students=c.students.filter(s=>status(c,s.id,hid)===kind);
   el("modalTitle").textContent=labels[kind]||"Öğrenciler";
   el("modalSubtitle").textContent=`${h.name} · ${students.length} öğrenci`;
@@ -5035,9 +5045,9 @@ function renderReportStudents(){
   });
 
   el("reportBody").innerHTML="";
-  rows.forEach(({s,st})=>{const tr=document.createElement("tr");tr.innerHTML=`<td>${esc(s.number||"-")}</td><td><button class="ghost" onclick="openStudent('${s.id}')"><b>${esc(s.name)}</b></button></td><td>${st.done}</td><td>${st.partial}</td><td>${st.excused}</td><td>${st.missing}</td><td>%${st.rate}</td>`;el("reportBody").appendChild(tr)});
+  rows.forEach(({s,st})=>{const tr=document.createElement("tr");tr.innerHTML=`<td>${esc(s.number||"-")}</td><td><button class="ghost" onclick="openStudent('${s.id}')"><b>${esc(s.name)}</b></button></td><td>${st.done}</td><td>${st.partial}</td><td>${st.excused}</td><td>${st.missing}</td><td>${st.pending}</td><td>%${st.rate}</td>`;el("reportBody").appendChild(tr)});
   const mobile=el("reportMobile");
-  if(mobile)mobile.innerHTML=rows.length?rows.map(({s,st})=>`<div class="report-card" onclick="openStudent('${s.id}')"><div class="report-card-head"><b>${esc(s.number?s.number+" - ":"")}${esc(s.name)}</b><span class="avg-pill ${st.rate>=50?"avg-pass":"avg-fail"}">%${st.rate}</span></div><div class="report-status-grid"><span class="report-stat done" onclick="event.stopPropagation();openStudentStatusList('${s.id}','done')">Yaptı <b>${st.done}</b></span><span class="report-stat partial" onclick="event.stopPropagation();openStudentStatusList('${s.id}','partial')">Kısmen <b>${st.partial}</b></span><span class="report-stat excused" onclick="event.stopPropagation();openStudentStatusList('${s.id}','excused')">Mazeretli <b>${st.excused}</b></span><span class="report-stat missing" onclick="event.stopPropagation();openStudentStatusList('${s.id}','missing')">Yapmadı <b>${st.missing}</b></span></div></div>`).join(""):'<div class="empty card">Aramaya uyan öğrenci bulunamadı.</div>';
+  if(mobile)mobile.innerHTML=rows.length?rows.map(({s,st})=>`<div class="report-card" onclick="openStudent('${s.id}')"><div class="report-card-head"><b>${esc(s.number?s.number+" - ":"")}${esc(s.name)}</b><span class="avg-pill ${st.rate>=50?"avg-pass":"avg-fail"}">%${st.rate}</span></div><div class="report-status-grid"><span class="report-stat done" onclick="event.stopPropagation();openStudentStatusList('${s.id}','done')">Yaptı <b>${st.done}</b></span><span class="report-stat partial" onclick="event.stopPropagation();openStudentStatusList('${s.id}','partial')">Kısmen <b>${st.partial}</b></span><span class="report-stat excused" onclick="event.stopPropagation();openStudentStatusList('${s.id}','excused')">Mazeretli <b>${st.excused}</b></span><span class="report-stat missing" onclick="event.stopPropagation();openStudentStatusList('${s.id}','missing')">Yapmadı <b>${st.missing}</b></span><span class="report-stat pending" onclick="event.stopPropagation();openStudentStatusList('${s.id}','pending')">Kontrol Edilmedi <b>${st.pending}</b></span></div></div>`).join(""):'<div class="empty card">Aramaya uyan öğrenci bulunamadı.</div>';
 }
 function renderReport(){
  const c=cls();if(!c)return;
@@ -5060,6 +5070,7 @@ function renderReport(){
       <span class="report-stat partial" onclick="openHomeworkStatusList('${h.id}','partial')">Kısmen <b>${x.partial}</b></span>
       <span class="report-stat excused" onclick="openHomeworkStatusList('${h.id}','excused')">Mazeretli <b>${x.excused}</b></span>
       <span class="report-stat missing" onclick="openHomeworkStatusList('${h.id}','missing')">Yapmadı <b>${x.missing}</b></span>
+      <span class="report-stat pending" onclick="openHomeworkStatusList('${h.id}','pending')">Kontrol Edilmedi <b>${x.pending}</b></span>
     </div>
    </div>`}).join(""):'<div class="empty card">Bu dönemde ödev yok.</div>';
 
@@ -5839,9 +5850,9 @@ function exportDutyMonth(){const c=cls();if(!c)return;const ym=dutyMonthValue(),
 
 /* Rapor */
 function safe(s){return String(s).replace(/[^\w\-ÇĞİÖŞÜçğıöşü]+/g,"_")}
-function exportStudentJPEG(sid){const c=cls(),s=c.students.find(x=>x.id===sid),hs=hwPeriod(c),w=900,rh=40,top=120,height=top+hs.length*rh+70,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 25px Arial";x.fillText(`${s.name} - Ödev Raporu`,25,35);x.font="14px Arial";x.fillStyle="#64748b";x.fillText(`${c.name} · No: ${s.number||"-"} · ${currentPeriod}. Dönem`,25,62);x.fillStyle="#eaf2ff";x.fillRect(20,82,w-40,38);x.fillStyle="#1e3a8a";x.font="bold 13px Arial";x.fillText("Ödev",30,107);x.fillText("Durum",650,107);hs.forEach((h,i)=>{const y=top+i*rh,v=status(c,sid,h.id);x.fillStyle=i%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";x.font="13px Arial";x.fillText(h.name,30,y+25);x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":"#dc2626";x.fillText(v==="done"?"YAPTI":v==="partial"?"KISMEN":v==="excused"?"MAZERETLİ":"YAPMADI",650,y+25)});downloadCanvas(cv,`${safe(c.name)}_${safe(s.name)}_rapor.jpg`)}
-function exportHomeworkJPEG(hid){const c=cls(),h=c.homeworks.find(x=>x.id===hid),students=[...c.students].sort((a,b)=>a.name.localeCompare(b.name,"tr")),w=900,rh=40,top=120,height=top+students.length*rh+70,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 25px Arial";x.fillText(`${c.name} - ${h.name}`,25,35);x.font="14px Arial";x.fillStyle="#64748b";x.fillText(`${currentPeriod}. Dönem`,25,62);students.forEach((s,i)=>{const y=top+i*rh,v=status(c,s.id,hid);x.fillStyle=i%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";drawFullStudentName(x,`${s.number? s.number+' - ':''}${s.name}`,30,y+20,590,rh-4,{maxFont:13,minFont:9,maxLines:2,weight:'normal',align:'left'});x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":"#dc2626";x.fillText(v==="done"?"YAPTI":v==="partial"?"KISMEN":v==="excused"?"MAZERETLİ":"YAPMADI",650,y+25)});downloadCanvas(cv,`${safe(c.name)}_${safe(h.name)}.jpg`)}
-function exportClassJPEG(){const c=cls(),hs=hwPeriod(c),students=[...c.students].sort((a,b)=>a.name.localeCompare(b.name,"tr"));if(!students.length)return alert("Öğrenci yok.");const left=250,cw=100,rh=38,top=125,w=Math.max(1050,left+hs.length*cw+80),height=top+students.length*rh+60,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 24px Arial";x.fillText(`${c.name} - ${currentPeriod}. Dönem Ödev Durumu`,25,36);x.fillStyle="#eaf2ff";x.fillRect(20,78,w-40,47);x.fillStyle="#1e3a8a";x.font="bold 12px Arial";x.fillText("Öğrenci",30,108);hs.forEach((h,i)=>{x.save();x.translate(left+i*cw+8,118);x.rotate(-Math.PI/5);x.fillText(h.name.slice(0,15),0,0);x.restore()});students.forEach((s,r)=>{const y=top+r*rh;x.fillStyle=r%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";drawFullStudentName(x,`${s.number? s.number+' - ':''}${s.name}`,30,y+19,left-45,rh-4,{maxFont:12,minFont:8,maxLines:2,weight:'normal',align:'left'});hs.forEach((h,i)=>{const v=status(c,s.id,h.id);x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":"#dc2626";x.fillText(v==="done"?"✓":v==="partial"?"½":v==="excused"?"M":"✕",left+i*cw+35,y+24)})});downloadCanvas(cv,`${safe(c.name)}_${currentPeriod}_donem_odev.jpg`)}
+function exportStudentJPEG(sid){const c=cls(),s=c.students.find(x=>x.id===sid),hs=hwPeriod(c),w=900,rh=40,top=120,height=top+hs.length*rh+70,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 25px Arial";x.fillText(`${s.name} - Ödev Raporu`,25,35);x.font="14px Arial";x.fillStyle="#64748b";x.fillText(`${c.name} · No: ${s.number||"-"} · ${currentPeriod}. Dönem`,25,62);x.fillStyle="#eaf2ff";x.fillRect(20,82,w-40,38);x.fillStyle="#1e3a8a";x.font="bold 13px Arial";x.fillText("Ödev",30,107);x.fillText("Durum",650,107);hs.forEach((h,i)=>{const y=top+i*rh,v=status(c,sid,h.id);x.fillStyle=i%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";x.font="13px Arial";x.fillText(h.name,30,y+25);x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":v==="missing"?"#dc2626":"#64748b";x.fillText(v==="done"?"YAPTI":v==="partial"?"KISMEN":v==="excused"?"MAZERETLİ":v==="missing"?"YAPMADI":"KONTROL EDİLMEDİ",650,y+25)});downloadCanvas(cv,`${safe(c.name)}_${safe(s.name)}_rapor.jpg`)}
+function exportHomeworkJPEG(hid){const c=cls(),h=c.homeworks.find(x=>x.id===hid),students=[...c.students].sort((a,b)=>a.name.localeCompare(b.name,"tr")),w=900,rh=40,top=120,height=top+students.length*rh+70,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 25px Arial";x.fillText(`${c.name} - ${h.name}`,25,35);x.font="14px Arial";x.fillStyle="#64748b";x.fillText(`${currentPeriod}. Dönem`,25,62);students.forEach((s,i)=>{const y=top+i*rh,v=status(c,s.id,hid);x.fillStyle=i%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";drawFullStudentName(x,`${s.number? s.number+' - ':''}${s.name}`,30,y+20,590,rh-4,{maxFont:13,minFont:9,maxLines:2,weight:'normal',align:'left'});x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":v==="missing"?"#dc2626":"#64748b";x.fillText(v==="done"?"YAPTI":v==="partial"?"KISMEN":v==="excused"?"MAZERETLİ":v==="missing"?"YAPMADI":"KONTROL EDİLMEDİ",650,y+25)});downloadCanvas(cv,`${safe(c.name)}_${safe(h.name)}.jpg`)}
+function exportClassJPEG(){const c=cls(),hs=hwPeriod(c),students=[...c.students].sort((a,b)=>a.name.localeCompare(b.name,"tr"));if(!students.length)return alert("Öğrenci yok.");const left=250,cw=100,rh=38,top=125,w=Math.max(1050,left+hs.length*cw+80),height=top+students.length*rh+60,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 24px Arial";x.fillText(`${c.name} - ${currentPeriod}. Dönem Ödev Durumu`,25,36);x.fillStyle="#eaf2ff";x.fillRect(20,78,w-40,47);x.fillStyle="#1e3a8a";x.font="bold 12px Arial";x.fillText("Öğrenci",30,108);hs.forEach((h,i)=>{x.save();x.translate(left+i*cw+8,118);x.rotate(-Math.PI/5);x.fillText(h.name.slice(0,15),0,0);x.restore()});students.forEach((s,r)=>{const y=top+r*rh;x.fillStyle=r%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";drawFullStudentName(x,`${s.number? s.number+' - ':''}${s.name}`,30,y+19,left-45,rh-4,{maxFont:12,minFont:8,maxLines:2,weight:'normal',align:'left'});hs.forEach((h,i)=>{const v=status(c,s.id,h.id);x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":v==="missing"?"#dc2626":"#64748b";x.fillText(v==="done"?"✓":v==="partial"?"½":v==="excused"?"M":v==="missing"?"✕":"·",left+i*cw+35,y+24)})});downloadCanvas(cv,`${safe(c.name)}_${currentPeriod}_donem_odev.jpg`)}
 let _pendingOutput=null;
 function closeOutputPicker(){const o=document.getElementById('outputPickerOverlay');if(o)o.remove();_pendingOutput=null}
 function downloadCanvas(cv,name){
@@ -5860,13 +5871,13 @@ function concatBytes(parts){let n=parts.reduce((a,b)=>a+b.length,0),o=new Uint8A
 async function downloadCanvasPDF(cv,name){const PW=595.28,PH=841.89,M=28,usableW=PW-2*M,usableH=PH-2*M,sliceH=Math.max(1,Math.floor(cv.width*usableH/usableW)),images=[];for(let y=0;y<cv.height;y+=sliceH){const h=Math.min(sliceH,cv.height-y),part=document.createElement('canvas');part.width=cv.width;part.height=h;const q=part.getContext('2d');q.fillStyle='#fff';q.fillRect(0,0,part.width,part.height);q.drawImage(cv,0,y,cv.width,h,0,0,cv.width,h);images.push({w:part.width,h:part.height,data:bytesFromDataURL(part.toDataURL('image/jpeg',.92))})}
  const count=images.length,objs={},pageIds=[];for(let i=0;i<count;i++)pageIds.push(5+i*3);objs[1]=asciiBytes('<< /Type /Catalog /Pages 2 0 R >>');objs[2]=asciiBytes(`<< /Type /Pages /Count ${count} /Kids [${pageIds.map(id=>id+' 0 R').join(' ')}] >>`);images.forEach((im,i)=>{const imgId=3+i*3,contentId=4+i*3,pageId=5+i*3,scale=Math.min(usableW/im.w,usableH/im.h),dw=im.w*scale,dh=im.h*scale,x=M+(usableW-dw)/2,y=M+(usableH-dh)/2,stream=`q\n${dw.toFixed(2)} 0 0 ${dh.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm\n/Im0 Do\nQ\n`,sb=asciiBytes(stream);objs[imgId]=concatBytes([asciiBytes(`<< /Type /XObject /Subtype /Image /Width ${im.w} /Height ${im.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${im.data.length} >>\nstream\n`),im.data,asciiBytes('\nendstream')]);objs[contentId]=concatBytes([asciiBytes(`<< /Length ${sb.length} >>\nstream\n`),sb,asciiBytes('endstream')]);objs[pageId]=asciiBytes(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im0 ${imgId} 0 R >> >> /Contents ${contentId} 0 R >>`) });
  let parts=[asciiBytes('%PDF-1.4\n%âãÏÓ\n')],offsets=[0],pos=parts[0].length,max=2+count*3;for(let id=1;id<=max;id++){offsets[id]=pos;const b=concatBytes([asciiBytes(`${id} 0 obj\n`),objs[id],asciiBytes('\nendobj\n')]);parts.push(b);pos+=b.length}const xref=pos;let xs=`xref\n0 ${max+1}\n0000000000 65535 f \n`;for(let id=1;id<=max;id++)xs+=String(offsets[id]).padStart(10,'0')+' 00000 n \n';xs+=`trailer\n<< /Size ${max+1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;parts.push(asciiBytes(xs));await saveOutputBlob(new Blob(parts,{type:'application/pdf'}),name,'application/pdf')}
-function exportClassCSV(){const c=cls(),rows=[["Sınıf","Dönem","No","Öğrenci","Yaptı","Kısmen","Mazeretli","Yapmadı","Başarı %"]];c.students.forEach(s=>{const st=sstat(c,s.id);rows.push([c.name,currentPeriod,s.number,s.name,st.done,st.partial,st.excused,st.missing,st.rate])});downloadBlob("\uFEFF"+rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(";")).join("\n"),`${safe(c.name)}_${currentPeriod}_donem_rapor.csv`,"text/csv;charset=utf-8")}
+function exportClassCSV(){const c=cls(),rows=[["Sınıf","Dönem","No","Öğrenci","Yaptı","Kısmen","Mazeretli","Yapmadı","Kontrol Edilmedi","Başarı %"]];c.students.forEach(s=>{const st=sstat(c,s.id);rows.push([c.name,currentPeriod,s.number,s.name,st.done,st.partial,st.excused,st.missing,st.pending,st.rate])});downloadBlob("\uFEFF"+rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(";")).join("\n"),`${safe(c.name)}_${currentPeriod}_donem_rapor.csv`,"text/csv;charset=utf-8")}
 
 function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.21",
+    appVersion:"v7.7.22",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5878,7 +5889,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.21",
+    appVersion:"v7.7.22",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5938,7 +5949,7 @@ function importTransferBackup(ev){
 function downloadBlob(content,name,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 
 render();
-// v7.7.21: Eski localStorage görsellerini sessizce medya deposuna taşı ve yeniden yüklenen görselleri ekrana getir.
+// v7.7.22: Eski localStorage görsellerini sessizce medya deposuna taşı ve yeniden yüklenen görselleri ekrana getir.
 migrateHomeworkImagesToIDB().then(()=>hydrateHomeworkImages()).catch(()=>{});
 </script>
 <script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
