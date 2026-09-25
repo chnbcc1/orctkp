@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.7.25</title>
+<title>Öğrenci Takip Sistemi v7.7.26-test</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -929,7 +929,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 }
 .homework-edit-form label{display:block;font-size:12px;font-weight:700;color:var(--muted);min-width:0}
 .homework-edit-form input{display:block;width:100%;max-width:100%;min-width:0;margin-top:5px;box-sizing:border-box}
-\n/* ===== v7.7.25 — Ödev formu iOS tarih görünümü ===== */
+\n/* ===== v7.7.26-test — Ödev formu iOS tarih görünümü ===== */
 .homework-create-form .homework-date-field,
 .homework-edit-form .homework-date-field{display:block;min-width:0!important;overflow:visible!important}
 .homework-date-shell{position:relative;display:block;width:100%;height:44px;margin-top:5px;box-sizing:border-box}
@@ -2005,7 +2005,6 @@ body.class-module-page-open #modal{z-index:9200!important}
 @media(max-width:600px){.doc-assistant-grid{grid-template-columns:1fr}.doc-draft-editor{min-height:52vh}.overview-shortcuts{grid-template-columns:1fr 1fr}.document-assistant-shortcut{grid-column:1/-1}}
 </style>
 <script src="./jszip.min.js"></script>
-<!-- v7.7.26 SAFE: ŞÖK metin havuzu genişletildi; diğer modüller korunmuştur. -->
 </head>
 <body>
 
@@ -2087,7 +2086,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.25</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.26-test</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2245,7 +2244,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.25 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.26-test · ŞÖK 1./2. dönem şablonu · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2573,9 +2572,7 @@ const sokLocalTopics=[
  {keys:['devamsız','devam durumu'],label:'Devamsızlık',core:'Devam durumunun okulun resmî kayıtları üzerinden takip edilmesi ve gerekli hâllerde ailelerle iletişim kurulması üzerinde durulmuştur.'},
  {keys:['proje'],label:'Okul projeleri',core:'Okulda yürütülen projelerin eğitim hedefleriyle ilişkisi ve öğrenci katılımını destekleyen yönleri ele alınmıştır.'},
  {keys:['dilek','temenni','kapanış'],label:'Dilek ve temenniler',core:'Katılımcıların ek görüş ve önerilerini paylaşmalarına imkân verilmesi üzerinde durulmuştur.'},
- {keys:['dijital','teknoloji','internet'],label:'Dijital araçlar',core:'Dijital araçların bilinçli, güvenli ve öğrenmeyi destekleyecek biçimde kullanılmasına yönelik çalışmalar ele alınmıştır.'},
- {keys:['kişisel gelişim','sağlık','sağlıklı yaşam'],label:'Kişisel gelişim ve sağlık',core:'Öğrencilerin kişisel gelişimlerini ve sağlıklı yaşam alışkanlıklarını destekleyecek çalışmaların eğitim süreciyle ilişkilendirilmesi görüşülmüştür.'},
- {keys:['önceki dönem','önceki karar','alınan kararların'],label:'Önceki kararların değerlendirilmesi',core:'Önceki toplantılarda alınan kararların uygulanma durumu gözden geçirilmiş ve devam eden çalışmalar değerlendirilmiştir.'}
+ {keys:['dijital','teknoloji','internet'],label:'Dijital araçlar',core:'Dijital araçların bilinçli, güvenli ve öğrenmeyi destekleyecek biçimde kullanılmasına yönelik çalışmalar ele alınmıştır.'}
 ];
 const sokLocalIntros=['Gündem maddesi kapsamında,','İlgili konu ele alınırken,','Bu başlık altında,','Yapılan değerlendirmede,'];
 const sokLocalEndings=['Uygulamanın öğrencilerin ihtiyaçlarına göre sürdürülmesi üzerinde durulmuştur.','Konuya ilişkin çalışmaların öğretmenler arasında eş güdüm içinde yürütülmesi görüşülmüştür.','Gerekli görülen hususların toplantı sonrasında takip edilmesi değerlendirilmiştir.'];
@@ -2656,12 +2653,12 @@ function sokLocalPropose(no){
 
   }else{
    // Tanımlı diğer başlıklarda özgün metin yerine konuya ait kontrollü alternatifler.
-   const lead=['Toplantıda','Gündem kapsamında','İlgili başlıkta','Kurul görüşmelerinde','Yapılan değerlendirmelerde'];
+   const lead=['Toplantıda','Gündem kapsamında','İlgili başlıkta','Kurul görüşmelerinde'];
    const endings=['Konuya ilişkin uygulamaların öğretmenler arasında eş güdümle yürütülmesi ele alınmıştır.','Çalışmaların ihtiyaçlar doğrultusunda sürdürülmesi görüşülmüştür.','Uygulamaların süreç içinde gözden geçirilmesi üzerinde durulmuştur.'];
-   for(let i=0;i<15;i++){
+   for(let i=0;i<12;i++){
     const core=original&&/\d/.test(original)?original:topic.core;
     const first=core.charAt(0).toLocaleLowerCase('tr-TR')+core.slice(1);
-    const text=`${lead[i%5]} ${first} ${endings[Math.floor(i/5)]}`;
+    const text=`${lead[i%4]} ${first} ${endings[Math.floor(i/4)]}`;
     if(!candidates.includes(text))candidates.push(text);
    }
   }
@@ -2798,7 +2795,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.25 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.26-test · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -5969,7 +5966,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.25",
+    appVersion:"v7.7.26-test",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5981,7 +5978,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.25",
+    appVersion:"v7.7.26-test",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
