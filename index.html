@@ -2244,7 +2244,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.25 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.26 · ŞÖK gelişmiş yerel metin motoru · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2494,7 +2494,10 @@ function sokDiscussionWithSpeaker(title,discussion,v){
  const plan=sokSpeakerPlan(title,v); if(!plan.length)return discussion;
  if(/Açılış yoklama/.test(String(title||"")))return `${sokNaturalSpeakerIntro(title,plan[0],0,plan.length)} ${discussion}`;
  if(/Öğrenci başarı/.test(String(title||"")))return `${sokRoleTitle(plan[0].branch)} ${plan[0].name} tarafından sınıfın sınav sonuçları paylaşıldı. ${discussion}`;
- return discussion;
+ // v7.7.26: Uygun branş/görev tanımlıysa görüşme metninde gerçekten konuştur.
+ // Aynı kişi farklı görevlerle kayıtlı olabilir; plan başlığa göre doğru rolü seçer.
+ const intros=plan.map((person,i)=>sokNaturalSpeakerIntro(title,person,i,plan.length));
+ return `${intros.join(" ")} ${discussion}`;
 }
 function sokDiscussionText(v,agenda){
  let academic=null,homework=null,parentMeetings=null;
@@ -2571,6 +2574,9 @@ const sokLocalTopics=[
  {keys:['iş sağlığı','iş güvenliği','güvenlik'],label:'İş sağlığı ve güvenliği',core:'Eğitim öğretim faaliyetlerinde güvenli ortamın korunması ve gerekli tedbirlerin düzenli izlenmesi değerlendirilmiştir.'},
  {keys:['devamsız','devam durumu'],label:'Devamsızlık',core:'Devam durumunun okulun resmî kayıtları üzerinden takip edilmesi ve gerekli hâllerde ailelerle iletişim kurulması üzerinde durulmuştur.'},
  {keys:['proje'],label:'Okul projeleri',core:'Okulda yürütülen projelerin eğitim hedefleriyle ilişkisi ve öğrenci katılımını destekleyen yönleri ele alınmıştır.'},
+ {keys:['kişilik','beslenme','sağlık','sosyal ilişki'],label:'Kişisel gelişim ve sağlık',core:'Öğrencilerin kişisel gelişimleri, sağlıklı yaşam alışkanlıkları ve olumlu sosyal ilişkiler geliştirmeleri için yapılabilecek çalışmalar değerlendirilmiştir.'},
+ {keys:['okul güvenliği','giriş çıkış'],label:'Okul güvenliği',core:'Öğrencilerin güvenli bir eğitim ortamında bulunmaları için okul güvenliğine ilişkin kurallar ve riskli durumlarda izlenecek süreçler değerlendirilmiştir.'},
+ {keys:['bir önceki dönem','önceki dönemde alınan'],label:'Önceki dönem kararları',core:'Bir önceki dönemde alınan kararların uygulanma durumu gözden geçirilmiş ve devam ettirilmesi gereken çalışmalar değerlendirilmiştir.'},
  {keys:['dilek','temenni','kapanış'],label:'Dilek ve temenniler',core:'Katılımcıların ek görüş ve önerilerini paylaşmalarına imkân verilmesi üzerinde durulmuştur.'},
  {keys:['dijital','teknoloji','internet'],label:'Dijital araçlar',core:'Dijital araçların bilinçli, güvenli ve öğrenmeyi destekleyecek biçimde kullanılmasına yönelik çalışmalar ele alınmıştır.'}
 ];
@@ -2638,6 +2644,176 @@ function sokLocalRewrite(text,variant){
  }
  return paragraphs.join('\n\n');
 }
+
+// ===== v7.7.26 ŞÖK GELİŞMİŞ YEREL METİN MOTORU =====
+// Her konu için 5 konuya özel gövde × 3 sonuç cümlesi = en az 15 kontrollü anlatım.
+// Sayısal/öğrenci verisi uydurulmaz; akademik maddede mevcut gerçek veri dönüşümü korunur.
+const sokLocalTopicVariants={
+ 'Açılış ve yoklama':[
+  'Toplantı açılarak katılımcıların yoklaması yapılmış ve gündem maddeleri kurulun bilgisine sunulmuştur.',
+  'Katılımcıların hazır bulunduğu tespit edildikten sonra toplantının gündem sırası değerlendirilmiştir.',
+  'Toplantının açılışının ardından yoklama yapılmış ve görüşülecek başlıklar sırasıyla ele alınmıştır.',
+  'Kurul üyelerinin katılım durumu belirlenmiş, toplantının amacı ve gündem maddeleri açıklanmıştır.',
+  'Toplantıya katılan öğretmenlerin yoklaması yapılarak gündemin görüşülmesine geçilmiştir.'
+ ],
+ 'Veli iletişimi':[
+  'Öğrencilerin akademik ve sosyal gelişimlerinin desteklenmesinde okul-aile iletişiminin düzenli sürdürülmesinin önemi değerlendirilmiştir.',
+  'İhtiyaç duyulan öğrenciler için velilerle zamanında iletişim kurulması ve görüşmelerin öğrenci gelişimini destekleyecek biçimde yürütülmesi ele alınmıştır.',
+  'Veli görüşmelerinin öğrencilerin gelişim sürecinin izlenmesine katkısı üzerinde durulmuş, gerekli durumlarda ailelerle iş birliği yapılması görüşülmüştür.',
+  'Öğrenci takibinde öğretmen-veli iletişiminin sürekliliği değerlendirilmiş ve ihtiyaç hâlinde veli görüşmelerinin planlanması ele alınmıştır.',
+  'Okul ile aile arasındaki bilgi paylaşımının öğrencinin akademik ve sosyal gelişimine katkısı değerlendirilmiştir.'
+ ],
+ 'Kılık ve kıyafet':[
+  'Öğrencilerin okulun kılık ve kıyafet kurallarına uyum durumları değerlendirilmiştir.',
+  'Kılık ve kıyafet konusunda okul kurallarının öğrencilere açık ve tutarlı biçimde hatırlatılması ele alınmıştır.',
+  'Öğrencilerin kılık ve kıyafet uygulamalarında okul düzenine uygun hareket etmeleri gerektiği görüşülmüştür.',
+  'Kılık ve kıyafet kurallarına uyumun eğitim ortamındaki düzen açısından önemi üzerinde durulmuştur.',
+  'Kılık ve kıyafetle ilgili kuralların öğrenci ve velilerle iş birliği içinde takip edilmesi değerlendirilmiştir.'
+ ],
+ 'Sınıf değişiklikleri':[
+  'Sınıf değişikliği taleplerinin öğrenci yararı, sınıf dengesi ve eğitim sürecinin devamlılığı gözetilerek değerlendirilmesi görüşülmüştür.',
+  'Şube değişikliği gerektiren durumlarda öğrencinin eğitim süreci ile sınıfların mevcut yapısının birlikte dikkate alınması ele alınmıştır.',
+  'Sınıf değişikliklerinde öğrencinin uyumu ve eğitim ortamının dengesi açısından dikkatli değerlendirme yapılması gerektiği belirtilmiştir.',
+  'Sınıf veya şube değişikliği taleplerinin ilgili birimler arasında koordinasyon sağlanarak ele alınması görüşülmüştür.',
+  'Sınıf değişikliklerinin öğrencinin akademik ve sosyal uyumuna etkileri dikkate alınarak değerlendirilmesi üzerinde durulmuştur.'
+ ],
+ 'Türkiye Yüzyılı Maarif Modeli':[
+  'Türkiye Yüzyılı Maarif Modelinin öngördüğü beceri, değer ve bütüncül gelişim yaklaşımının ders süreçlerine yansıtılması değerlendirilmiştir.',
+  'Öğrencilerin aktif katılımını ve beceri gelişimini destekleyen uygulamaların Türkiye Yüzyılı Maarif Modeli doğrultusunda sürdürülmesi ele alınmıştır.',
+  'Öğrenme çıktıları ile değerler ve beceriler arasındaki ilişkinin ders içi etkinliklerde görünür hâle getirilmesi görüşülmüştür.',
+  'Türkiye Yüzyılı Maarif Modelinin öğrenci merkezli ve bütüncül yaklaşımına uygun öğretim uygulamaları değerlendirilmiştir.',
+  'Derslerin planlanmasında modelin beceri temelli ve değer odaklı yapısının dikkate alınması üzerinde durulmuştur.'
+ ],
+ 'Öğretim programları':[
+  'Derslerin öğretim programlarında yer alan öğrenme çıktıları ve yıllık planlarla uyumlu yürütülmesi değerlendirilmiştir.',
+  'Öğretim sürecinin program hedeflerine uygun ilerlemesi ve öğrenme eksikliği görülen alanların zamanında desteklenmesi görüşülmüştür.',
+  'Derslerde öğrenme çıktılarının gerçekleşme düzeyinin izlenmesi ve ihtiyaç hâlinde tamamlayıcı çalışmalara yer verilmesi ele alınmıştır.',
+  'Yıllık planlarla sınıf içi uygulamalar arasındaki uyumun korunması ve programın zamanında yürütülmesi üzerinde durulmuştur.',
+  'Öğretim programının öngördüğü içerik, beceri ve öğrenme çıktılarının ders süreçlerine dengeli biçimde yansıtılması değerlendirilmiştir.'
+ ],
+ 'Sınıf geçme':[
+  'Öğrencilerin dönem içindeki akademik gelişimlerinin sınıf geçme ve sınıf tekrarı açısından düzenli izlenmesi değerlendirilmiştir.',
+  'Sınıf geçme sürecinde öğrencilerin ders başarılarının zamanında takip edilmesi ve risk görülen durumlarda gerekli desteğin sağlanması görüşülmüştür.',
+  'Akademik açıdan desteğe ihtiyaç duyan öğrencilerin dönem sonu beklenmeden izlenmesi gerektiği üzerinde durulmuştur.',
+  'Sınıf geçme ve sınıf tekrarıyla ilgili durumların ilgili mevzuat ve öğrencinin dönem içi gelişimi çerçevesinde ele alınması görüşülmüştür.',
+  'Öğrencilerin başarı durumlarının düzenli izlenerek gerekli bilgilendirme ve destek çalışmalarının zamanında yapılması değerlendirilmiştir.'
+ ],
+ 'Özel eğitim':[
+  'Özel eğitim veya kaynaştırma kapsamında desteğe ihtiyaç duyan öğrencilerin bireysel gereksinimlerine uygun düzenlemeler değerlendirilmiştir.',
+  'Öğrenme ihtiyaçları farklılaşan öğrenciler için ders içi uyarlamalar ve destekleyici çalışmaların sürdürülmesi görüşülmüştür.',
+  'Kaynaştırma yoluyla eğitimine devam eden öğrencilerin gelişimlerinin ilgili öğretmenler ve rehberlik birimiyle iş birliği içinde izlenmesi ele alınmıştır.',
+  'Özel eğitim ihtiyacı bulunan öğrencilerin eğitim sürecine etkin katılımını destekleyecek uygulamalar üzerinde durulmuştur.',
+  'Bireysel farklılıkların dikkate alınarak uygun öğretim yöntemleri ve destek çalışmalarının planlanması değerlendirilmiştir.'
+ ],
+ 'Eğitim kaynakları':[
+  'Eğitim kaynakları, laboratuvarlar ve okulun diğer birimlerinin ders amaçlarına uygun ve güvenli kullanımı değerlendirilmiştir.',
+  'Okulun eğitim ortamlarından öğrencilerin öğrenmesini destekleyecek biçimde planlı yararlanılması görüşülmüştür.',
+  'Laboratuvar ve diğer eğitim kaynaklarının kullanımında verimlilik ile güvenlik kurallarının birlikte gözetilmesi ele alınmıştır.',
+  'Derslerde kullanılabilecek okul kaynaklarının planlı kullanımı ve öğrencilerin bu imkânlardan yararlanması değerlendirilmiştir.',
+  'Eğitim araçları ve ortak kullanım alanlarının ders hedeflerine uygun biçimde kullanılmasına ilişkin uygulamalar görüşülmüştür.'
+ ],
+ 'Ortak sınavlar':[
+  'Ortak sınavların kapsamı, uygulanması ve sonuçların öğrenme eksiklerini belirlemede kullanılması değerlendirilmiştir.',
+  'Ortak sınav sürecinde ölçme ve değerlendirme uygulamalarının tutarlı biçimde yürütülmesi görüşülmüştür.',
+  'Ortak sınav sonuçlarının öğrencilerin öğrenme durumlarını izlemek ve gerekli destek çalışmalarını planlamak amacıyla değerlendirilmesi ele alınmıştır.',
+  'Sınavların uygulanmasında ortak esaslara uyulması ve sonuçların ders bazında değerlendirilmesi üzerinde durulmuştur.',
+  'Ortak sınavların hazırlık, uygulama ve sonuç değerlendirme aşamalarında öğretmenler arası eş güdümün önemi görüşülmüştür.'
+ ],
+ 'Etkinlikler':[
+  'Öğrencilerin bilimsel, sosyal, kültürel, sanatsal ve sportif etkinliklere katılımının çok yönlü gelişimlerine katkısı değerlendirilmiştir.',
+  'Öğrencilerin ilgi ve yeteneklerine uygun etkinliklere katılımlarının desteklenmesi ve okul imkânlarının etkili kullanılması görüşülmüştür.',
+  'Ders dışı etkinliklerin öğrencilerin sorumluluk, iş birliği ve sosyal becerilerini geliştirecek biçimde planlanması ele alınmıştır.',
+  'Yarışma, gezi, kulüp ve benzeri çalışmaların eğitim hedefleriyle ilişkilendirilmesi üzerinde durulmuştur.',
+  'Öğrencilerin akademik çalışmalarını aksatmadan sosyal, kültürel ve sportif faaliyetlere katılmalarını destekleyecek uygulamalar değerlendirilmiştir.'
+ ],
+ 'Değerler eğitimi':[
+  'Değerler eğitiminin ders içi ve ders dışı çalışmalarla desteklenerek öğrencilerin günlük davranışlarına yansıtılması değerlendirilmiştir.',
+  'Sorumluluk, saygı, yardımlaşma ve iş birliği gibi değerlerin okul yaşamında güçlendirilmesine yönelik çalışmalar görüşülmüştür.',
+  'Değerlerin yalnızca teorik olarak değil, öğrencilerin aktif katılım göstereceği uygulamalarla ele alınması üzerinde durulmuştur.',
+  'Öğrencilerin millî, manevi ve evrensel değerlerle bağ kurmalarını destekleyecek eğitim faaliyetleri değerlendirilmiştir.',
+  'Değerler eğitiminin farklı ders ve etkinliklerle ilişkilendirilerek bütüncül biçimde sürdürülmesi görüşülmüştür.'
+ ],
+ 'İş sağlığı ve güvenliği':[
+  'Eğitim öğretim faaliyetlerinde öğrenci ve personel güvenliğinin korunmasına yönelik tedbirler değerlendirilmiştir.',
+  'Sınıf, laboratuvar ve ortak kullanım alanlarında güvenlik kurallarına uyulmasının önemi üzerinde durulmuştur.',
+  'Risk oluşturabilecek durumların zamanında fark edilmesi ve ilgili birimlere bildirilmesi gerektiği görüşülmüştür.',
+  'İş sağlığı ve güvenliği kurallarının günlük eğitim faaliyetlerinde düzenli biçimde uygulanması ele alınmıştır.',
+  'Güvenli eğitim ortamının sürdürülmesi için öğretmen ve öğrencilerin sorumluluklarına ilişkin hususlar değerlendirilmiştir.'
+ ],
+ 'Devamsızlık':[
+  'Öğrencilerin devam durumlarının okulun resmî kayıtları üzerinden düzenli izlenmesinin önemi değerlendirilmiştir.',
+  'Devamsızlığın öğrencilerin öğrenme süreci ve okul uyumu üzerindeki etkileri üzerinde durulmuştur.',
+  'Devam sorunu görülen durumlarda okulun resmî kayıtları esas alınarak öğrenci ve veliyle zamanında iletişim kurulması görüşülmüştür.',
+  'Öğrencilerin okula devamının desteklenmesi ve devamsızlık nedenlerinin uygun yollarla takip edilmesi ele alınmıştır.',
+  'Devam durumunun düzenli izlenmesi ve gerekli hâllerde ailelerle iş birliği yapılması değerlendirilmiştir.'
+ ],
+ 'Okul projeleri':[
+  'Okulda yürütülen projelerin öğrencilerin akademik, sosyal ve kültürel gelişimlerine katkısı değerlendirilmiştir.',
+  'Öğrencilerin ilgi ve yeteneklerine uygun okul projelerine katılımlarının desteklenmesi görüşülmüştür.',
+  'Proje çalışmalarının öğrencilerde araştırma, sorumluluk ve iş birliği becerilerini geliştirecek biçimde yürütülmesi ele alınmıştır.',
+  'Okul projelerinin eğitim hedefleriyle ilişkilendirilmesi ve öğrenci katılımının artırılması üzerinde durulmuştur.',
+  'Yürütülen projelerde öğrencilerin aktif görev almalarını destekleyecek uygulamalar değerlendirilmiştir.'
+ ],
+ 'Dilek ve temenniler':[
+  'Katılımcıların eğitim öğretim sürecine ilişkin ek görüş, öneri ve temennileri alınmıştır.',
+  'Kurul üyelerine gündem dışında iletmek istedikleri görüş ve önerileri paylaşma imkânı verilmiştir.',
+  'Toplantının sonunda katılımcıların dilek ve temennileri dinlenmiş, ek görüşler değerlendirilmiştir.',
+  'Gündem maddelerinin tamamlanmasının ardından kurul üyelerinin öneri ve değerlendirmeleri alınmıştır.',
+  'Katılımcıların toplantıya ilişkin son görüşleri ve eğitim sürecine yönelik önerileri değerlendirilmiştir.'
+ ],
+ 'Dijital araçlar':[
+  'Dijital araçların öğrenmeyi destekleyecek, güvenli ve bilinçli biçimde kullanılması değerlendirilmiştir.',
+  'Teknolojik araçlardan ders amaçlarına uygun yararlanılması ve öğrencilerde bilinçli kullanım alışkanlığı geliştirilmesi görüşülmüştür.',
+  'Dijital kaynakların eğitim sürecine katkısı ile güvenli kullanım ilkelerinin birlikte ele alınması üzerinde durulmuştur.',
+  'Derslerde teknoloji kullanımının pedagojik amaçlara uygun ve ölçülü biçimde planlanması değerlendirilmiştir.',
+  'Öğrencilerin dijital araçları sorumlu, güvenli ve öğrenme odaklı kullanmalarını destekleyecek çalışmalar görüşülmüştür.'
+ ],
+ 'Kişisel gelişim ve sağlık':[
+  'Öğrencilerin kişisel gelişimleri, sağlıklı yaşam alışkanlıkları ve olumlu sosyal ilişkiler geliştirmeleri değerlendirilmiştir.',
+  'Beslenme, sağlık ve sosyal ilişkiler konusunda öğrencilerin bilinçlendirilmesine yönelik rehberlik çalışmaları görüşülmüştür.',
+  'Öğrencilerin fiziksel ve sosyal iyilik hâllerini destekleyecek okul içi çalışmalar üzerinde durulmuştur.',
+  'Sağlıklı yaşam alışkanlıkları ile akran ilişkilerinin öğrencilerin okul yaşamına etkileri değerlendirilmiştir.',
+  'Kişisel gelişim, sağlık ve sosyal ilişkiler alanlarında ihtiyaç duyulan rehberlik çalışmalarının sürdürülmesi ele alınmıştır.'
+ ],
+ 'Okul güvenliği':[
+  'Öğrencilerin güvenli bir eğitim ortamında bulunmalarını sağlamak amacıyla okul güvenliğine ilişkin uygulamalar değerlendirilmiştir.',
+  'Okula giriş çıkışlar ve risk oluşturabilecek durumlarda izlenecek süreçler üzerinde durulmuştur.',
+  'Okul güvenliğinin korunmasında öğrenci, öğretmen ve yönetim arasındaki iş birliğinin önemi görüşülmüştür.',
+  'Güvenliği etkileyebilecek durumların gecikmeden ilgili yöneticilere bildirilmesi gerektiği değerlendirilmiştir.',
+  'Okul ortamında güvenli davranışların desteklenmesi ve belirlenen kurallara uyulması ele alınmıştır.'
+ ],
+ 'Önceki dönem kararları':[
+  'Bir önceki dönemde alınan kararlar gözden geçirilerek uygulanma durumları değerlendirilmiştir.',
+  'Önceki toplantıda alınan kararların ne ölçüde uygulandığı ve sürdürülmesi gereken çalışmalar ele alınmıştır.',
+  'Geçmiş dönemde kararlaştırılan çalışmaların uygulamadaki durumu kurul üyelerince değerlendirilmiştir.',
+  'Bir önceki dönem kararlarından devam etmesi gereken uygulamalar ile tamamlanan çalışmalar gözden geçirilmiştir.',
+  'Önceki kurul kararlarının eğitim öğretim sürecine yansımaları ve takip gerektiren hususlar değerlendirilmiştir.'
+ ]
+};
+const sokLocalOutcomeVariants=[
+ 'Konuya ilişkin uygulamaların öğretmenler arasında eş güdüm içinde sürdürülmesi üzerinde durulmuştur.',
+ 'İhtiyaç görülen çalışmaların süreç içinde takip edilmesi ve gerekli durumlarda yeniden değerlendirilmesi görüşülmüştür.',
+ 'Belirlenen hususların öğrencilerin ihtiyaçları ve okulun imkânları dikkate alınarak uygulanması değerlendirilmiştir.'
+];
+function sokLocalSpeakerPrefix(text){
+ const parts=String(text||'').trim().split(/(?<=[.!?])\s+/);let kept=[];
+ for(const part of parts){
+  if(kept.length<2&&/(Öğretmeni|Müdür|Rehber Öğretmen).{0,80}(bilgi verdi|görüşlerini|değerlendirmelerini|açıklamalarda|belirtti|ifade etti|başkanlığında)/i.test(part))kept.push(part);
+  else break;
+ }
+ return kept.join(' ');
+}
+function sokLocalControlledCandidates(topic,original){
+ const cores=sokLocalTopicVariants[topic.label]||[topic.core];
+ const prefix=sokLocalSpeakerPrefix(original);const out=[];
+ for(let i=0;i<15;i++){
+  const core=cores[i%cores.length], ending=sokLocalOutcomeVariants[Math.floor(i/cores.length)%sokLocalOutcomeVariants.length];
+  const text=[prefix,core,ending].filter(Boolean).join(' ');
+  if(!out.includes(text))out.push(text);
+ }
+ return out;
+}
+
 function sokLocalPropose(no){
  const row=sokLocalSelect(no);if(!row)return;
  const title=row.querySelector('.sok-edit-title').value.trim(),area=row.querySelector('.sok-edit-text'),panel=row.querySelector('.sok-local-panel');
@@ -2652,15 +2828,9 @@ function sokLocalPropose(no){
    }
 
   }else{
-   // Tanımlı diğer başlıklarda özgün metin yerine konuya ait kontrollü alternatifler.
-   const lead=['Toplantıda','Gündem kapsamında','İlgili başlıkta','Kurul görüşmelerinde'];
-   const endings=['Konuya ilişkin uygulamaların öğretmenler arasında eş güdümle yürütülmesi ele alınmıştır.','Çalışmaların ihtiyaçlar doğrultusunda sürdürülmesi görüşülmüştür.','Uygulamaların süreç içinde gözden geçirilmesi üzerinde durulmuştur.'];
-   for(let i=0;i<12;i++){
-    const core=original&&/\d/.test(original)?original:topic.core;
-    const first=core.charAt(0).toLocaleLowerCase('tr-TR')+core.slice(1);
-    const text=`${lead[i%4]} ${first} ${endings[Math.floor(i/4)]}`;
-    if(!candidates.includes(text))candidates.push(text);
-   }
+   // v7.7.26: Her tanımlı başlık için en az 15 konuya özel, kontrollü anlatım.
+   // Uygun branş konuşmacısı mevcut taslaktan korunur; yeni kişi/veri uydurulmaz.
+   candidates.push(...sokLocalControlledCandidates(topic,original));
   }
  }
  candidates.push(...saved.map(x=>x.text));candidates=[...new Set(candidates)];
@@ -2795,7 +2965,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.25 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.26 · ŞÖK metin motoru güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
