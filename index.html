@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.7.26-test4</title>
+<title>Öğrenci Takip Sistemi v7.7.26-test5</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -929,7 +929,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 }
 .homework-edit-form label{display:block;font-size:12px;font-weight:700;color:var(--muted);min-width:0}
 .homework-edit-form input{display:block;width:100%;max-width:100%;min-width:0;margin-top:5px;box-sizing:border-box}
-\n/* ===== v7.7.26-test4 — Ödev formu iOS tarih görünümü ===== */
+\n/* ===== v7.7.26-test5 — Ödev formu iOS tarih görünümü ===== */
 .homework-create-form .homework-date-field,
 .homework-edit-form .homework-date-field{display:block;min-width:0!important;overflow:visible!important}
 .homework-date-shell{position:relative;display:block;width:100%;height:44px;margin-top:5px;box-sizing:border-box}
@@ -2086,7 +2086,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.26-test4</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.26-test5</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2244,7 +2244,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.26-test4 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.26-test5 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2554,25 +2554,26 @@ function sokEditorSync(){
 }
 function sokEditorSave(){const main=el('docAssistantDraft');if(!main)return;try{sessionStorage.setItem('sokDraft7716',main.value)}catch(e){}}
 // v7.7.24: Yerel, ücretsiz gündem metni seçenekleri. Veri ve öğretmen beyanı uydurulmaz.
+// v7.7.26-test5: ŞÖK önerileri madde numarasına değil gündem başlığından belirlenen konu kimliğine bağlıdır.
 const sokLocalTopics=[
- {keys:['açılış','yoklama'],label:'Açılış ve yoklama',core:'Toplantının gündemi ve izlenecek çalışma sırası katılımcıların değerlendirmesine sunulmuştur.'},
- {keys:['veli','aile','ziyaret'],label:'Veli iletişimi',core:'Öğrencilerin gelişiminin izlenmesinde okul ve aile arasındaki iletişimin sürdürülmesi üzerinde durulmuştur.'},
- {keys:['kılık','kıyafet'],label:'Kılık ve kıyafet',core:'Okulun kılık ve kıyafet kurallarının öğrencilere açıklanması ve uygulamada tutarlı bir yaklaşım izlenmesi ele alınmıştır.'},
- {keys:['sınıf değişik','şube değişik'],label:'Sınıf değişiklikleri',core:'Sınıf değişikliği taleplerinin öğrencilerin eğitim süreci ve okulun imkânları dikkate alınarak değerlendirilmesi görüşülmüştür.'},
- {keys:['maarif','öğretim model'],label:'Türkiye Yüzyılı Maarif Modeli',core:'Öğretim programının öngördüğü beceri ve değerlerin derslerdeki etkinliklerle ilişkilendirilmesi ele alınmıştır.'},
- {keys:['başarı','akademik','sınav sonuç'],label:'Akademik başarı',core:'Öğrencilerin öğrenme ihtiyaçlarının ders bazında izlenmesi ve gerekli destek çalışmalarının planlanması görüşülmüştür.'},
- {keys:['program','derslerin yürüt'],label:'Öğretim programları',core:'Derslerin öğretim programlarıyla uyumlu yürütülmesi ve öğrenme sürecinin düzenli olarak değerlendirilmesi ele alınmıştır.'},
- {keys:['sınıf geç','sınıf tekrar'],label:'Sınıf geçme',core:'Öğrencilerin dönem içindeki gelişimlerinin ilgili mevzuat ve ölçme değerlendirme sonuçları çerçevesinde izlenmesi görüşülmüştür.'},
- {keys:['özel eğitim','kaynaştır','bep'],label:'Özel eğitim',core:'Öğrenme ihtiyaçları farklılaşan öğrenciler için uygun eğitim ortamları ve destekleyici uygulamalar üzerinde durulmuştur.'},
- {keys:['laboratuvar','kaynak','birim'],label:'Eğitim kaynakları',core:'Eğitim ortamlarının ve kaynaklarının derslerin amaçlarına uygun ve güvenli kullanılması değerlendirilmiştir.'},
- {keys:['ortak sınav'],label:'Ortak sınavlar',core:'Ortak sınavların kapsamı, uygulanması ve sonuçlarının öğretim sürecine yansıtılması üzerinde durulmuştur.'},
- {keys:['bilimsel','sosyal','kültürel','sportif','gezi','yarışma'],label:'Etkinlikler',core:'Öğrencilerin ilgi ve yeteneklerini destekleyecek etkinliklerin eğitim öğretim süreciyle ilişkilendirilmesi ele alınmıştır.'},
- {keys:['değerler'],label:'Değerler eğitimi',core:'Değerler eğitiminin ders içi ve ders dışı etkinliklerle desteklenmesine yönelik uygulamalar görüşülmüştür.'},
- {keys:['iş sağlığı','iş güvenliği','güvenlik'],label:'İş sağlığı ve güvenliği',core:'Eğitim öğretim faaliyetlerinde güvenli ortamın korunması ve gerekli tedbirlerin düzenli izlenmesi değerlendirilmiştir.'},
- {keys:['devamsız','devam durumu'],label:'Devamsızlık',core:'Devam durumunun okulun resmî kayıtları üzerinden takip edilmesi ve gerekli hâllerde ailelerle iletişim kurulması üzerinde durulmuştur.'},
- {keys:['proje'],label:'Okul projeleri',core:'Okulda yürütülen projelerin eğitim hedefleriyle ilişkisi ve öğrenci katılımını destekleyen yönleri ele alınmıştır.'},
- {keys:['dilek','temenni','kapanış'],label:'Dilek ve temenniler',core:'Katılımcıların ek görüş ve önerilerini paylaşmalarına imkân verilmesi üzerinde durulmuştur.'},
- {keys:['dijital','teknoloji','internet'],label:'Dijital araçlar',core:'Dijital araçların bilinçli, güvenli ve öğrenmeyi destekleyecek biçimde kullanılmasına yönelik çalışmalar ele alınmıştır.'}
+ {id:'opening',keys:['açılış','yoklama'],label:'Açılış ve yoklama',core:'Toplantının gündemi ve izlenecek çalışma sırası katılımcıların değerlendirmesine sunulmuştur.'},
+ {id:'parent_contact',keys:['veli','aile','ziyaret'],label:'Veli iletişimi',core:'Öğrencilerin gelişiminin izlenmesinde okul ve aile arasındaki iletişimin sürdürülmesi üzerinde durulmuştur.'},
+ {id:'dress',keys:['kılık','kıyafet'],label:'Kılık ve kıyafet',core:'Okulun kılık ve kıyafet kurallarının öğrencilere açıklanması ve uygulamada tutarlı bir yaklaşım izlenmesi ele alınmıştır.'},
+ {id:'class_change',keys:['sınıf değişik','şube değişik'],label:'Sınıf değişiklikleri',core:'Sınıf değişikliği taleplerinin öğrencilerin eğitim süreci ve okulun imkânları dikkate alınarak değerlendirilmesi görüşülmüştür.'},
+ {id:'maarif',keys:['maarif','öğretim model'],label:'Türkiye Yüzyılı Maarif Modeli',core:'Öğretim programının öngördüğü beceri ve değerlerin derslerdeki etkinliklerle ilişkilendirilmesi ele alınmıştır.'},
+ {id:'academic',keys:['başarı','akademik','sınav sonuç'],label:'Akademik başarı',core:'Öğrencilerin öğrenme ihtiyaçlarının ders bazında izlenmesi ve gerekli destek çalışmalarının planlanması görüşülmüştür.'},
+ {id:'curriculum',keys:['program','derslerin yürüt'],label:'Öğretim programları',core:'Derslerin öğretim programlarıyla uyumlu yürütülmesi ve öğrenme sürecinin düzenli olarak değerlendirilmesi ele alınmıştır.'},
+ {id:'promotion',keys:['sınıf geç','sınıf tekrar'],label:'Sınıf geçme',core:'Öğrencilerin dönem içindeki gelişimlerinin ilgili mevzuat ve ölçme değerlendirme sonuçları çerçevesinde izlenmesi görüşülmüştür.'},
+ {id:'special_education',keys:['özel eğitim','kaynaştır','bep'],label:'Özel eğitim',core:'Öğrenme ihtiyaçları farklılaşan öğrenciler için uygun eğitim ortamları ve destekleyici uygulamalar üzerinde durulmuştur.'},
+ {id:'resources',keys:['laboratuvar','kaynak','birim'],label:'Eğitim kaynakları',core:'Eğitim ortamlarının ve kaynaklarının derslerin amaçlarına uygun ve güvenli kullanılması değerlendirilmiştir.'},
+ {id:'common_exams',keys:['ortak sınav'],label:'Ortak sınavlar',core:'Ortak sınavların kapsamı, uygulanması ve sonuçlarının öğretim sürecine yansıtılması üzerinde durulmuştur.'},
+ {id:'activities',keys:['bilimsel','sosyal','kültürel','sportif','gezi','yarışma'],label:'Etkinlikler',core:'Öğrencilerin ilgi ve yeteneklerini destekleyecek etkinliklerin eğitim öğretim süreciyle ilişkilendirilmesi ele alınmıştır.'},
+ {id:'values',keys:['değerler'],label:'Değerler eğitimi',core:'Değerler eğitiminin ders içi ve ders dışı etkinliklerle desteklenmesine yönelik uygulamalar görüşülmüştür.'},
+ {id:'safety',keys:['iş sağlığı','iş güvenliği','güvenlik'],label:'İş sağlığı ve güvenliği',core:'Eğitim öğretim faaliyetlerinde güvenli ortamın korunması ve gerekli tedbirlerin düzenli izlenmesi değerlendirilmiştir.'},
+ {id:'attendance',keys:['devamsız','devam durumu'],label:'Devamsızlık',core:'Devam durumunun okulun resmî kayıtları üzerinden takip edilmesi ve gerekli hâllerde ailelerle iletişim kurulması üzerinde durulmuştur.'},
+ {id:'projects',keys:['proje'],label:'Okul projeleri',core:'Okulda yürütülen projelerin eğitim hedefleriyle ilişkisi ve öğrenci katılımını destekleyen yönleri ele alınmıştır.'},
+ {id:'closing',keys:['dilek','temenni','kapanış'],label:'Dilek ve temenniler',core:'Katılımcıların ek görüş ve önerilerini paylaşmalarına imkân verilmesi üzerinde durulmuştur.'},
+ {id:'digital',keys:['dijital','teknoloji','internet'],label:'Dijital araçlar',core:'Dijital araçların bilinçli, güvenli ve öğrenmeyi destekleyecek biçimde kullanılmasına yönelik çalışmalar ele alınmıştır.'}
 ];
 const sokLocalIntros=['Gündem maddesi kapsamında,','İlgili konu ele alınırken,','Bu başlık altında,','Yapılan değerlendirmede,'];
 const sokLocalEndings=['Uygulamanın öğrencilerin ihtiyaçlarına göre sürdürülmesi üzerinde durulmuştur.','Konuya ilişkin çalışmaların öğretmenler arasında eş güdüm içinde yürütülmesi görüşülmüştür.','Gerekli görülen hususların toplantı sonrasında takip edilmesi değerlendirilmiştir.'];
@@ -2644,9 +2645,9 @@ function sokLocalPropose(no){
  const topic=sokLocalMatch(title),saved=sokLocalLibrary().filter(x=>sokLocalNorm(x.title)===sokLocalNorm(title));
  const original=(row.dataset.originalText||area.value).trim();let candidates=[];
  if(topic){
-  if(topic.label==='Akademik başarı'&&original){
+  if(topic.id==='academic'&&original){
    // Gerçek sayısal veri içeren üç paragrafı olduğu gibi koruyup anlatımını dönüştür.
-   // v7.7.26-test4: Güvenli genişletme — yalnızca 6. gündem maddesi için 12 alternatif.
+   // v7.7.26-test5: Güvenli genişletme — yalnızca 6. gündem maddesi için 12 alternatif.
    // Sayısal veriler ve mevcut akademik değerlendirme korunur; sadece anlatım biçimi değişir.
    const academicClosings=[
     'Elde edilen verilerin öğrenci gelişimini izlemek amacıyla birlikte değerlendirilmesi üzerinde durulmuştur.',
@@ -2812,7 +2813,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.26-test4 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.26-test5 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -5983,7 +5984,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.26-test4",
+    appVersion:"v7.7.26-test5",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5995,7 +5996,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.26-test4",
+    appVersion:"v7.7.26-test5",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
