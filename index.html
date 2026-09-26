@@ -2087,7 +2087,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.31</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.32</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2245,7 +2245,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.31 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.32 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2683,10 +2683,9 @@ function sokLocalRewrite(text,variant){
  }
  return paragraphs.join('\n\n');
 }
-// v7.7.31: Gündem konusu ile katılımcı branşını eşleştirerek uygun öğretmeni doğal biçimde görüşmeye katar.
-function sokLocalDraftParticipants(){
- const text=el('docAssistantDraft')?.value||'';
- const lines=text.split(/\r?\n/); const start=lines.findIndex(x=>x.trim()==='TOPLANTI KATILIMCILARI');
+// v7.7.32: Gündem konusu ile katılımcı branşını eşleştirerek uygun öğretmeni doğal biçimde görüşmeye katar.
+function sokLocalParticipantsFromText(text){
+ const lines=String(text||'').split(/\r?\n/); const start=lines.findIndex(x=>x.trim()==='TOPLANTI KATILIMCILARI');
  if(start<0)return [];
  const out=[];
  for(let i=start+1;i<lines.length;i++){
@@ -2698,8 +2697,9 @@ function sokLocalDraftParticipants(){
  }
  return out;
 }
-function sokLocalRelevantSpeakers(title){
- const people=sokLocalDraftParticipants(),x=String(title||'');
+function sokLocalDraftParticipants(){return sokLocalParticipantsFromText(el('docAssistantDraft')?.value||'')}
+function sokLocalRelevantSpeakers(title,peopleOverride=null){
+ const people=peopleOverride||sokLocalDraftParticipants(),x=String(title||'');
  const seen=new Set(),result=[];
  const addBy=(res)=>{for(const p of people){if(res.some(re=>re.test(p.branch))){const k=p.name.toLocaleUpperCase('tr-TR');if(!seen.has(k)){seen.add(k);result.push(p)}}}};
  if(/Değerler eğitimi/.test(x))addBy([/Din Kültürü/i,/Temel Din/i,/Kur.?an/i]);
@@ -2710,7 +2710,11 @@ function sokLocalRelevantSpeakers(title){
  else if(/Okulda uygulanan projeler/.test(x))addBy([/Matematik/i,/Fen|Fizik|Kimya|Biyoloji/i,/Türk Dili|Edebiyat/i,/İngilizce/i,/Din Kültürü/i]);
  else if(/Özel eğitime|kaynaştırma/.test(x))addBy([/Rehber/i]);
  else if(/kişilik, beslenme, sağlık/.test(x))addBy([/Rehber/i,/Sağlık/i]);
- else if(/Sınıf değişiklikleri/.test(x))addBy([/Rehber/i]);
+ else if(/Sınıf değişiklikleri/.test(x))addBy([/Okul Rehber|Rehber/i,/Sınıf Rehber Öğretmeni/i]);
+ else if(/Türkiye Yüzyılı Maarif Modeli/.test(x))addBy([/Sınıf Rehber Öğretmeni/i,/Matematik/i,/Türk Dili|Edebiyat/i]);
+ else if(/Eğitim kaynakları, laboratuvar/.test(x))addBy([/Fizik/i,/Kimya/i,/Biyoloji/i,/Matematik/i]);
+ else if(/İş sağlığı ve güvenliği|Okul güvenliği/.test(x))addBy([/Sağlık/i,/Beden/i,/Sınıf Rehber Öğretmeni/i]);
+ else if(/Sınıf geçme ve sınıf tekrar/.test(x))addBy([/Sınıf Rehber Öğretmeni/i,/Okul Rehber|Rehber/i]);
  // Konuya özgü branş bulunmadıysa yalnızca rehberlik niteliğindeki başlıklarda sınıf rehber öğretmenine dön.
  if(!result.length&&/Veli ziyaretleri|Sınıf geçme|Devamsızlık|Açılış yoklama/.test(x))addBy([/Sınıf Rehber Öğretmeni/i]);
  return result;
@@ -2739,15 +2743,44 @@ function sokLocalSpeakerSentence(title,p,variant){
  for(const [re,arr] of sets)if(re.test(x))return arr[variant%arr.length];
  return `${role} ${name}, öğrencilerin eğitim sürecini desteklemek amacıyla bu başlıkta gözlenen ihtiyaçların somut örnekler üzerinden değerlendirilmesi ve gerekli çalışmaların takip edilmesi gerektiğini belirtti.`;
 }
+function sokLocalSpeakerLimit(title,variant,forDefault=false){
+ const x=String(title||'');
+ if(/Açılış yoklama|Dilek, temenniler ve kapanış/.test(x))return 0;
+ // İlk taslak öğretmen görüşü için uygun maddelerde konu genişliğine göre 1-3 öğretmen seçilir.
+ if(forDefault){
+  if(/Ortak sınav|Bilimsel, sosyal, kültürel|Okulda uygulanan projeler|Öğrenci başarı/.test(x))return 3;
+  if(/öğretim programlarına|Türkiye Yüzyılı Maarif Modeli|Eğitim kaynakları, laboratuvar/.test(x))return 2;
+  return 1;
+ }
+ // Alternatiflerde öğretmen sayısı değişir; bazı varyasyonlar tamamen genel kurul anlatımıdır.
+ if(variant%4===3)return 0;
+ if(variant%4===2)return 1;
+ if(variant%4===1)return 2;
+ return 3;
+}
 function sokLocalApplySpeaker(title,text,variant){
  const speakers=sokLocalRelevantSpeakers(title); if(!speakers.length)return text;
- const p=speakers[variant%speakers.length];
- // Zaten aynı öğretmen bu öneride doğal biçimde yer alıyorsa ikinci kez ekleme.
- if(text.toLocaleUpperCase('tr-TR').includes(p.name.toLocaleUpperCase('tr-TR')))return text;
- // 12 önerinin tamamını aynı kalıba sokma: 8 öneride branş öğretmeni görünür, 4'ü kurul anlatımı olarak kalır.
- if(variant%3===2)return text;
- const sentence=sokLocalSpeakerSentence(title,p,variant);
- return variant%2===0?`${sentence} ${text}`:`${text} ${sentence}`;
+ const limit=Math.min(3,sokLocalSpeakerLimit(title,variant,false),speakers.length); if(!limit)return text;
+ const ordered=[];for(let i=0;i<speakers.length;i++)ordered.push(speakers[(variant+i)%speakers.length]);
+ const used=ordered.filter(p=>!text.toLocaleUpperCase('tr-TR').includes(p.name.toLocaleUpperCase('tr-TR'))).slice(0,limit);
+ if(!used.length)return text;
+ const comments=used.map((p,i)=>sokLocalSpeakerSentence(title,p,variant+i)).join(' ');
+ return variant%2===0?`${comments} ${text}`:`${text} ${comments}`;
+}
+function sokDefaultTeacherRichDraft(draft){
+ const parsed=sokEditorSections(draft); if(!parsed)return draft;
+ const people=sokLocalParticipantsFromText(draft); if(!people.length)return draft;
+ const updated=parsed.items.map((item,idx)=>{
+  const speakers=sokLocalRelevantSpeakers(item.title,people);
+  const limit=Math.min(3,sokLocalSpeakerLimit(item.title,idx,true),speakers.length);
+  if(!limit)return `${item.no}. ${item.title}\n${item.text}`;
+  const upper=item.text.toLocaleUpperCase('tr-TR');
+  const chosen=speakers.filter(p=>!upper.includes(p.name.toLocaleUpperCase('tr-TR'))).slice(0,limit);
+  if(!chosen.length)return `${item.no}. ${item.title}\n${item.text}`;
+  const comments=chosen.map((p,i)=>sokLocalSpeakerSentence(item.title,p,idx+i)).join(' ');
+  return `${item.no}. ${item.title}\n${comments} ${item.text}`;
+ }).join('\n\n');
+ return draft.slice(0,parsed.start)+'GÖRÜŞMELER\n'+updated+draft.slice(parsed.end);
 }
 function sokLocalPropose(no){
  const row=sokLocalSelect(no);if(!row)return;
@@ -3093,7 +3126,7 @@ function sokEditorBeforeOutput(){sokEditorSync();sokEditorSave()}
 function generateDocumentAssistantDraft(){
   if(el('docAssistantDraft')?.value.trim()&&!confirm('Mevcut taslak yeniden oluşturulacak. Düzenlemelerinizin üzerine yazılsın mı?'))return;
   modalPushCurrent();
-  const v=docAssistantValues(),draft=buildDocumentDraft(v),label=documentAssistantTypes[v.type]?.label||"Belge Taslağı";
+  const v=docAssistantValues(); let draft=buildDocumentDraft(v); if(v.type==="sok")draft=sokDefaultTeacherRichDraft(draft); const label=documentAssistantTypes[v.type]?.label||"Belge Taslağı";
   el("modalTitle").textContent=`${documentAssistantTypes[v.type]?.icon||"📄"} ${label}`;
   const backBtn=el("modalBackBtn");
   if(backBtn){ backBtn.style.display="inline-flex"; backBtn.setAttribute("onclick","openDocumentAssistant()"); }
@@ -3201,7 +3234,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.31 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.32 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -6372,7 +6405,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.31",
+    appVersion:"v7.7.32",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -6384,7 +6417,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.31",
+    appVersion:"v7.7.32",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
