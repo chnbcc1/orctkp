@@ -2087,7 +2087,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.34</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.36</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2245,7 +2245,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.34 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.36 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2683,7 +2683,7 @@ function sokLocalRewrite(text,variant){
  }
  return paragraphs.join('\n\n');
 }
-// v7.7.34: Gündem konusu ile katılımcı branşını eşleştirerek uygun öğretmeni doğal biçimde görüşmeye katar.
+// v7.7.36: Gündem konusu ile katılımcı branşını eşleştirerek uygun öğretmeni doğal biçimde görüşmeye katar.
 function sokLocalParticipantsFromText(text){
  const lines=String(text||'').split(/\r?\n/); const start=lines.findIndex(x=>x.trim()==='TOPLANTI KATILIMCILARI');
  if(start<0)return [];
@@ -2758,25 +2758,42 @@ function sokLocalSpeakerLimit(title,variant,forDefault=false){
  if(variant%4===1)return 2;
  return 3;
 }
+// v7.7.36: Konuşmacı rotasyonu bütün uygun gündemler için merkezi çalışır.
+// Önceki taslaktan kalan öğretmen cümleleri yeni öneriye taşınmaz; her öneride konuşmacılar yeniden seçilir.
+function sokLocalBaseForSpeakerRotation(title,text){
+ const speakers=sokLocalRelevantSpeakers(title); if(!speakers.length)return String(text||'').trim();
+ let t=String(text||''); const isAcademic=/Öğrenci başarı/.test(String(title||''));
+ for(const p of speakers){
+  const name=p.name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  const re=new RegExp(`[^.!?\\n]*${name}[^.!?\\n]*[.!?]`,'giu');
+  t=t.replace(re,(sentence)=>{
+   if(isAcademic&&/Cihan\s+BACACI/i.test(p.name)&&/sınav sonuç|sınav.*bilgi|kurulun bilgisine/i.test(sentence))return sentence;
+   return '';
+  });
+ }
+ return t.replace(/[ \t]{2,}/g,' ').replace(/\n[ \t]+/g,'\n').replace(/\n{3,}/g,'\n\n').trim();
+}
 function sokLocalApplySpeaker(title,text,variant){
  const speakers=sokLocalRelevantSpeakers(title); if(!speakers.length)return text;
- const limit=Math.min(3,sokLocalSpeakerLimit(title,variant,false),speakers.length); if(!limit)return text;
- const textUpper=text.toLocaleUpperCase('tr-TR');
- const existing=speakers.filter(p=>textUpper.includes(p.name.toLocaleUpperCase('tr-TR')));
- const existingNames=new Set(existing.map(p=>p.name.toLocaleUpperCase('tr-TR')));
- const pool=speakers.filter(p=>!existingNames.has(p.name.toLocaleUpperCase('tr-TR')));
- const remaining=Math.max(0,Math.min(limit,3-existing.length));
- if(!remaining||!pool.length)return text;
- // v7.7.34: "Başka Öneri" yalnız cümleyi değil konuşmacı kombinasyonunu da değiştirir.
- // Farklı başlangıç + farklı adım, aynı ilk 2-3 öğretmenin 12 öneride tekrarlanmasını önler.
- const used=[]; const offset=(variant*2+Math.floor(variant/3))%pool.length;
- const step=pool.length>2?((variant%2)?2:1):1;
- for(let k=0;k<pool.length&&used.length<remaining;k++){
-  const p=pool[(offset+k*step)%pool.length];
+ const cleanText=sokLocalBaseForSpeakerRotation(title,text);
+ const limit=Math.min(3,sokLocalSpeakerLimit(title,variant,false),speakers.length);
+ if(!limit)return cleanText;
+ const used=[];
+ const offset=(variant*2+Math.floor(variant/3))%speakers.length;
+ let step=speakers.length>2?((variant%2)?2:1):1;
+ if(speakers.length>3&&variant%3===2)step=3;
+ for(let k=0;k<speakers.length*2&&used.length<limit;k++){
+  const p=speakers[(offset+k*step)%speakers.length];
   if(!used.some(q=>q.name.toLocaleUpperCase('tr-TR')===p.name.toLocaleUpperCase('tr-TR')))used.push(p);
  }
+ if(used.length<limit){
+  for(let k=0;k<speakers.length&&used.length<limit;k++){
+   const p=speakers[(offset+k)%speakers.length];
+   if(!used.some(q=>q.name.toLocaleUpperCase('tr-TR')===p.name.toLocaleUpperCase('tr-TR')))used.push(p);
+  }
+ }
  const comments=used.map((p,i)=>sokLocalSpeakerSentence(title,p,variant+i)).join(' ');
- return variant%2===0?`${comments} ${text}`:`${text} ${comments}`;
+ return variant%2===0?`${comments} ${cleanText}`:`${cleanText} ${comments}`;
 }
 function sokDefaultTeacherRichDraft(draft){
  const parsed=sokEditorSections(draft); if(!parsed)return draft;
@@ -2786,7 +2803,7 @@ function sokDefaultTeacherRichDraft(draft){
   const limit=Math.min(3,sokLocalSpeakerLimit(item.title,idx,true),speakers.length);
   if(!limit)return `${item.no}. ${item.title}\n${item.text}`;
   const upper=item.text.toLocaleUpperCase('tr-TR');
-  // v7.7.34: Metnin kendi içinde zaten konuşan öğretmenler de 3 kişilik toplam sınıra dahildir.
+  // v7.7.36: Metnin kendi içinde zaten konuşan öğretmenler de 3 kişilik toplam sınıra dahildir.
   const existingCount=speakers.filter(p=>upper.includes(p.name.toLocaleUpperCase('tr-TR'))).length;
   const remaining=Math.max(0,Math.min(limit,3-existingCount));
   const chosen=speakers.filter(p=>!upper.includes(p.name.toLocaleUpperCase('tr-TR'))).slice(0,remaining);
@@ -2796,6 +2813,10 @@ function sokDefaultTeacherRichDraft(draft){
  }).join('\n\n');
  return draft.slice(0,parsed.start)+'GÖRÜŞMELER\n'+updated+draft.slice(parsed.end);
 }
+
+// v7.7.36: Akademik başlık da merkezi konuşmacı rotasyon motorunu kullanır.
+function sokAcademicBaseForVariants(title,text){return sokLocalBaseForSpeakerRotation(title,text);}
+
 function sokLocalPropose(no){
  const row=sokLocalSelect(no);if(!row)return;
  const title=row.querySelector('.sok-edit-title').value.trim(),area=row.querySelector('.sok-edit-text'),panel=row.querySelector('.sok-local-panel');
@@ -2803,6 +2824,7 @@ function sokLocalPropose(no){
  const original=(row.dataset.originalText||area.value).trim();let candidates=[];
  if(topic){
   if(topic.id==='academic'&&original){
+   const academicBase=sokAcademicBaseForVariants(title,original);
    // Gerçek sayısal veri içeren üç paragrafı olduğu gibi koruyup anlatımını dönüştür.
    // v7.7.27: Güvenli genişletme — yalnızca 6. gündem maddesi için 12 alternatif.
    // Sayısal veriler ve mevcut akademik değerlendirme korunur; sadece anlatım biçimi değişir.
@@ -2821,7 +2843,7 @@ function sokLocalPropose(no){
     'Sınav ve ödev verilerinin birlikte değerlendirilerek öğrencilerin akademik gelişimlerinin takip edilmesi görüşülmüştür.'
    ];
    for(let i=0;i<12;i++){
-    const rewritten=sokLocalRewrite(original,i);
+    const rewritten=sokLocalRewrite(academicBase,i);
     const candidate=(rewritten+'\n\n'+academicClosings[i]).trim();
     candidates.push(candidate);
    }
@@ -3248,7 +3270,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.34 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.36 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -6419,7 +6441,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.34",
+    appVersion:"v7.7.36",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -6431,7 +6453,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.34",
+    appVersion:"v7.7.36",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
