@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.7.26-test5</title>
+<title>Öğrenci Takip Sistemi v7.7.26-test6</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -867,6 +867,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 
 #sokAgendaEditor{margin:12px 0;max-height:65vh;overflow:auto;padding:12px;border:1px solid var(--line,#d5deea);border-radius:12px;background:var(--card,#fff)}
 #sokAgendaEditor[hidden]{display:none!important}.sok-edit-item{padding:12px;margin-bottom:12px;border:1px solid #d5deea;border-radius:10px;background:#fff}.sok-edit-item label{display:block;margin-bottom:9px}.sok-edit-item input,.sok-edit-item textarea{display:block;width:100%;box-sizing:border-box;margin-top:6px;min-height:40px;font:inherit}.sok-edit-item textarea{min-height:115px;resize:vertical;line-height:1.45}
+.sok-edit-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}.sok-edit-head b{min-width:0}.sok-order-actions{display:flex;gap:6px;flex:none}.sok-order-actions button{width:38px;min-width:38px;height:36px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:18px}.sok-order-actions button:disabled{opacity:.35;cursor:default}
 
 /* ===== v7.7.24 — Ödev ekranı mobil görünüm düzeltmeleri ===== */
 @media(max-width:700px){
@@ -929,7 +930,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 }
 .homework-edit-form label{display:block;font-size:12px;font-weight:700;color:var(--muted);min-width:0}
 .homework-edit-form input{display:block;width:100%;max-width:100%;min-width:0;margin-top:5px;box-sizing:border-box}
-\n/* ===== v7.7.26-test5 — Ödev formu iOS tarih görünümü ===== */
+\n/* ===== v7.7.26-test6 — Ödev formu iOS tarih görünümü ===== */
 .homework-create-form .homework-date-field,
 .homework-edit-form .homework-date-field{display:block;min-width:0!important;overflow:visible!important}
 .homework-date-shell{position:relative;display:block;width:100%;height:44px;margin-top:5px;box-sizing:border-box}
@@ -2086,7 +2087,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.26-test5</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.26-test6</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2244,7 +2245,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.26-test5 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.26-test6 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2543,18 +2544,59 @@ function sokEditorSections(t){
  const items=matches.map((m,i)=>{const from=m.index+m[0].length,to=i+1<matches.length?matches[i+1].index:body.length;return {no:m[1],title:m[2],text:body.slice(from,to).trim()}});
  return {start,end,items};
 }
+function sokEditorDecisionSections(t){
+ const start=t.indexOf('\n\nALINAN KARARLAR\n');
+ if(start<0)return [];
+ const from=start+'\n\nALINAN KARARLAR\n'.length;
+ const marker='\n\nYukarıda belirtilen hususların uygulanmasına karar verilmiştir.';
+ const end=t.indexOf(marker,from),body=t.slice(from,end<0?t.length:end);
+ const matches=[...body.matchAll(/(?:^|\n)(\d+)\.\s+([^\n]+)/g)];
+ return matches.map(m=>({no:m[1],text:m[2].trim().replace(/,$/,'')}));
+}
 function sokEditorSync(){
  const main=el('docAssistantDraft'),box=el('sokAgendaEditor');if(!main||!box||box.hidden)return;
  const parsed=sokEditorSections(main.value);if(!parsed)return;
- const edits=[...box.querySelectorAll('.sok-edit-item')].map(row=>({no:row.dataset.no,title:row.querySelector('.sok-edit-title').value.trim(),text:row.querySelector('.sok-edit-text').value.trim()}));
- if(edits.length!==parsed.items.length)return;
+ const rows=[...box.querySelectorAll('.sok-edit-item')];
+ const edits=rows.map((row,i)=>({no:String(i+1),title:row.querySelector('.sok-edit-title').value.trim(),text:row.querySelector('.sok-edit-text').value.trim(),decision:(row.dataset.decision||'').trim()}));
+ if(!edits.length)return;
+ let value=main.value;
+ // Görüşmeler: ekrandaki güncel sıraya göre yeniden numaralandırılır.
+ const p=sokEditorSections(value);if(!p)return;
  const updated=edits.map(x=>`${x.no}. ${x.title}\n${x.text}`).join('\n\n');
- main.value=main.value.slice(0,parsed.start)+'GÖRÜŞMELER\n'+updated+main.value.slice(parsed.end);
- sokEditorSave();
+ value=value.slice(0,p.start)+'GÖRÜŞMELER\n'+updated+value.slice(p.end);
+ // Davet sayfasındaki gündem listesi de aynı sırayı izler.
+ const agStart=value.indexOf('GÜNDEM MADDELERİ\n'),agEnd=value.indexOf('\n\nOLUR\n',agStart);
+ if(agStart>=0&&agEnd>agStart){
+  const agendaText=edits.map(x=>`${x.no}. ${x.title.replace(/[.]+$/,'')}.`).join('\n');
+  value=value.slice(0,agStart)+'GÜNDEM MADDELERİ\n'+agendaText+value.slice(agEnd);
+ }
+ // Kararlar, ait oldukları gündem maddesiyle birlikte taşınır ve yeniden numaralanır.
+ const dStart=value.indexOf('\n\nALINAN KARARLAR\n');
+ const finalMarker='\n\nYukarıda belirtilen hususların uygulanmasına karar verilmiştir.';
+ const dEnd=value.indexOf(finalMarker,dStart>=0?dStart:0);
+ if(dStart>=0&&dEnd>dStart){
+  const decisions=edits.map(x=>`${x.no}. ${(x.decision||'').replace(/[,.]+$/,'')},`).join('\n');
+  value=value.slice(0,dStart)+'\n\nALINAN KARARLAR\n'+decisions+value.slice(dEnd);
+ }
+ main.value=value;
+ rows.forEach((row,i)=>{row.dataset.no=String(i+1);const b=row.querySelector('.sok-edit-head b');if(b)b.textContent=`${i+1}. Gündem başlığı`;row.querySelectorAll('[data-sok-no]').forEach(btn=>btn.dataset.sokNo=String(i+1));});
+ sokEditorUpdateOrderButtons();sokEditorSave();
+}
+function sokEditorUpdateOrderButtons(){
+ const rows=[...document.querySelectorAll('#sokAgendaEditor .sok-edit-item')];
+ rows.forEach((row,i)=>{const up=row.querySelector('.sok-move-up'),down=row.querySelector('.sok-move-down');if(up)up.disabled=i===0;if(down)down.disabled=i===rows.length-1;});
+}
+function sokEditorMove(no,dir){
+ const row=sokLocalSelect(no);if(!row)return;
+ const parent=row.parentElement;
+ if(dir<0){const prev=row.previousElementSibling;if(prev&&prev.classList.contains('sok-edit-item'))parent.insertBefore(row,prev);}
+ else{const next=row.nextElementSibling;if(next&&next.classList.contains('sok-edit-item'))parent.insertBefore(next,row);}
+ sokEditorSync();
+ row.scrollIntoView({block:'nearest',behavior:'smooth'});
 }
 function sokEditorSave(){const main=el('docAssistantDraft');if(!main)return;try{sessionStorage.setItem('sokDraft7716',main.value)}catch(e){}}
 // v7.7.24: Yerel, ücretsiz gündem metni seçenekleri. Veri ve öğretmen beyanı uydurulmaz.
-// v7.7.26-test5: ŞÖK önerileri madde numarasına değil gündem başlığından belirlenen konu kimliğine bağlıdır.
+// v7.7.26-test6: ŞÖK önerileri madde numarasına değil gündem başlığından belirlenen konu kimliğine bağlıdır.
 const sokLocalTopics=[
  {id:'opening',keys:['açılış','yoklama'],label:'Açılış ve yoklama',core:'Toplantının gündemi ve izlenecek çalışma sırası katılımcıların değerlendirmesine sunulmuştur.'},
  {id:'parent_contact',keys:['veli','aile','ziyaret'],label:'Veli iletişimi',core:'Öğrencilerin gelişiminin izlenmesinde okul ve aile arasındaki iletişimin sürdürülmesi üzerinde durulmuştur.'},
@@ -2647,7 +2689,7 @@ function sokLocalPropose(no){
  if(topic){
   if(topic.id==='academic'&&original){
    // Gerçek sayısal veri içeren üç paragrafı olduğu gibi koruyup anlatımını dönüştür.
-   // v7.7.26-test5: Güvenli genişletme — yalnızca 6. gündem maddesi için 12 alternatif.
+   // v7.7.26-test6: Güvenli genişletme — yalnızca 6. gündem maddesi için 12 alternatif.
    // Sayısal veriler ve mevcut akademik değerlendirme korunur; sadece anlatım biçimi değişir.
    const academicClosings=[
     'Elde edilen verilerin öğrenci gelişimini izlemek amacıyla birlikte değerlendirilmesi üzerinde durulmuştur.',
@@ -2696,8 +2738,10 @@ function sokLocalSaveFor(no){const row=sokLocalSelect(no);if(row)sokLocalSaveLib
 function sokEditorOpen(){
  const main=el('docAssistantDraft'),box=el('sokAgendaEditor');if(!main||!box)return;
  const parsed=sokEditorSections(main.value);if(!parsed)return alert('Gündem maddeleri bu taslakta bulunamadı. Metni genel düzenleme alanında değiştirebilirsiniz.');
- box.innerHTML=`<div class="tiny" style="margin-bottom:10px">Başlıkları ve görüşme metinlerini düzenleyin. Değişiklikler ana taslağa, A4 önizlemeye ve PDF/Word çıktısına aktarılır.</div>`+parsed.items.map(x=>`<div class="sok-edit-item" data-no="${esc(x.no)}"><label><b>${esc(x.no)}. Gündem başlığı</b><input class="sok-edit-title" value="${esc(x.title)}"></label><label><b>Görüşme metni</b><textarea class="sok-edit-text" rows="5" spellcheck="true">${esc(x.text)}</textarea></label><div class="modal-actions"><button type="button" class="secondary" onclick="sokLocalPropose('${esc(x.no)}')">🔄 Yeni Metin Öner</button><button type="button" class="secondary" onclick="sokLocalUndo('${esc(x.no)}')">↶ Öncekine Dön</button><button type="button" class="secondary" onclick="sokLocalSaveFor('${esc(x.no)}')">💾 Kütüphaneye Kaydet</button></div><div class="sok-local-panel" hidden></div></div>`).join('')+`<div class="modal-actions"><button type="button" onclick="sokEditorSync();sokEditorClose()">✓ Düzenlemeyi Tamamla</button><button type="button" class="secondary" onclick="sokEditorClose()">Ana Taslağa Dön</button></div>`;
- box.querySelectorAll('.sok-edit-item').forEach(row=>row.dataset.originalText=row.querySelector('.sok-edit-text').value);box.addEventListener('input',sokEditorSync);box.hidden=false;main.hidden=true;el('sokEditorToggle').textContent='📝 Gündem Düzenleyicisini Kapat';box.scrollIntoView({block:'start',behavior:'smooth'});
+ const decisions=sokEditorDecisionSections(main.value);
+ box.innerHTML=`<div class="tiny" style="margin-bottom:10px">Başlıkları ve görüşme metinlerini düzenleyin. ↑ ↓ düğmeleriyle gündem sırasını değiştirebilirsiniz. Numara, görüşme ve kararlar birlikte taşınır.</div>`+parsed.items.map(x=>`<div class="sok-edit-item" data-no="${esc(x.no)}"><div class="sok-edit-head"><b>${esc(x.no)}. Gündem başlığı</b><div class="sok-order-actions"><button type="button" class="secondary sok-move-up" title="Yukarı taşı" aria-label="Yukarı taşı" onclick="sokEditorMove(this.closest('.sok-edit-item').dataset.no,-1)">↑</button><button type="button" class="secondary sok-move-down" title="Aşağı taşı" aria-label="Aşağı taşı" onclick="sokEditorMove(this.closest('.sok-edit-item').dataset.no,1)">↓</button></div></div><label><input class="sok-edit-title" value="${esc(x.title)}"></label><label><b>Görüşme metni</b><textarea class="sok-edit-text" rows="5" spellcheck="true">${esc(x.text)}</textarea></label><div class="modal-actions"><button type="button" class="secondary" onclick="sokLocalPropose(this.closest('.sok-edit-item').dataset.no)">🔄 Yeni Metin Öner</button><button type="button" class="secondary" onclick="sokLocalUndo(this.closest('.sok-edit-item').dataset.no)">↶ Öncekine Dön</button><button type="button" class="secondary" onclick="sokLocalSaveFor(this.closest('.sok-edit-item').dataset.no)">💾 Kütüphaneye Kaydet</button></div><div class="sok-local-panel" hidden></div></div>`).join('')+`<div class="modal-actions"><button type="button" onclick="sokEditorSync();sokEditorClose()">✓ Düzenlemeyi Tamamla</button><button type="button" class="secondary" onclick="sokEditorClose()">Ana Taslağa Dön</button></div>`;
+ box.querySelectorAll('.sok-edit-item').forEach((row,i)=>{row.dataset.originalText=row.querySelector('.sok-edit-text').value;row.dataset.decision=decisions[i]?.text||'';});
+ box.addEventListener('input',sokEditorSync);box.hidden=false;main.hidden=true;el('sokEditorToggle').textContent='📝 Gündem Düzenleyicisini Kapat';sokEditorUpdateOrderButtons();box.scrollIntoView({block:'start',behavior:'smooth'});
 }
 function sokEditorClose(){const box=el('sokAgendaEditor'),main=el('docAssistantDraft');if(box&&!box.hidden)sokEditorSync();if(box)box.hidden=true;if(main)main.hidden=false;const btn=el('sokEditorToggle');if(btn)btn.textContent='📝 Gündem Metinlerini Düzenle';}
 function sokEditorToggle(){const box=el('sokAgendaEditor');if(box?.hidden)sokEditorOpen();else sokEditorClose()}
@@ -2813,7 +2857,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.26-test5 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.26-test6 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -5984,7 +6028,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.26-test5",
+    appVersion:"v7.7.26-test6",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -5996,7 +6040,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.26-test5",
+    appVersion:"v7.7.26-test6",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
