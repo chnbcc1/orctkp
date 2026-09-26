@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.7.26-test7</title>
+<title>Öğrenci Takip Sistemi</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -945,7 +945,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Öğrenci Takip">
+<meta name="apple-mobile-web-app-title" content="Öğrenci Takip Sistemi">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
@@ -2087,7 +2087,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.27</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.28</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2711,6 +2711,66 @@ function sokLocalPropose(no){
     candidates.push(candidate);
    }
 
+  }else if(topic.id==='curriculum'){
+   const v=[
+    'Derslerin öğretim programlarında yer alan öğrenme çıktıları doğrultusunda yürütülmesi, yıllık planlarla sınıf içi uygulamalar arasında uyum sağlanması görüşülmüştür.',
+    'Öğretim programlarının öngördüğü kazanım ve becerilerin ders sürecine dengeli biçimde yansıtılması, konu ilerleyişinin planlanan takvime göre izlenmesi değerlendirilmiştir.',
+    'Derslerin işlenişinde öğretim programı, yıllık plan ve öğrencilerin hazırbulunuşluk düzeyinin birlikte dikkate alınmasının önemi üzerinde durulmuştur.',
+    'Öğrenme çıktılarının yalnızca konu aktarımıyla sınırlı kalmadan uygun etkinlik, uygulama ve ölçme çalışmalarıyla desteklenmesi görüşülmüştür.',
+    'Yıllık planlarda öngörülen ders akışının sınıfların gelişim durumu dikkate alınarak düzenli takip edilmesi ve oluşabilecek eksiklerin zamanında tamamlanması ele alınmıştır.',
+    'Öğretim programının amaçları doğrultusunda öğrencilerin bilgi, beceri ve tutum gelişimlerini birlikte destekleyen ders uygulamalarına yer verilmesi değerlendirilmiştir.',
+    'Dersler arasında program bütünlüğünün korunması, öğretmenlerin öğrenme çıktılarının gerçekleşme durumunu düzenli olarak gözden geçirmesi görüşülmüştür.',
+    'Öğretim sürecinde programda belirtilen yöntem ve ölçme yaklaşımlarından yararlanılması, uygulamaların sınıfın ihtiyaçlarına göre çeşitlendirilmesi üzerinde durulmuştur.',
+    'Programın öngördüğü öğrenme çıktılarının öğrenciler tarafından ne ölçüde kazanıldığının izlenmesi ve ihtiyaç duyulan alanlarda destekleyici çalışmalar yapılması ele alınmıştır.',
+    'Derslerin yıllık planlara uygun ilerlemesinin yanında öğrencilerin öğrenme hızlarının da gözetilmesi, gerektiğinde pekiştirme çalışmalarına zaman ayrılması görüşülmüştür.',
+    'Öğretim programlarının uygulanmasında ortak hedeflerin korunması ve sınıf içi çalışmaların öğrencilerin aktif katılımını destekleyecek biçimde planlanması değerlendirilmiştir.',
+    'Derslerin program ve planlarla uyumlu yürütülmesine devam edilmesi, süreç içinde ortaya çıkan öğrenme ihtiyaçlarının öğretim çalışmalarına yansıtılması üzerinde durulmuştur.'
+   ]; candidates.push(...v);
+  }else if(topic.id==='promotion'){
+   const v=[
+    'Öğrencilerin sınıf geçme ve sınıf tekrarı açısından durumlarının ilgili mevzuat, ders başarıları ve dönem içindeki gelişimleri doğrultusunda düzenli izlenmesi görüşülmüştür.',
+    'Sınıf geçme sürecinde öğrencilerin yalnızca mevcut notlarının değil, dönem boyunca gösterdikleri akademik gelişimin de takip edilmesinin önemi üzerinde durulmuştur.',
+    'Başarı durumu risk taşıyan öğrencilerin erken belirlenmesi, ders bazındaki eksiklerinin izlenmesi ve gerekli destek çalışmalarının zamanında planlanması değerlendirilmiştir.',
+    'Sınıf tekrarı riski bulunan öğrencilerin durumlarının dönem sonu beklenmeden takip edilmesi ve ilgili öğretmenler arasında bilgi paylaşımının sürdürülmesi görüşülmüştür.',
+    'Öğrencilerin sınıf geçme durumları değerlendirilirken yürürlükteki esaslara uygun hareket edilmesi ve akademik kayıtların düzenli takip edilmesi ele alınmıştır.',
+    'Ders başarılarında belirgin güçlük yaşayan öğrencilerin gelişimlerinin izlenmesi, ihtiyaç hâlinde öğrenci ve veliyle görüşülerek destek sürecinin güçlendirilmesi üzerinde durulmuştur.',
+    'Sınıf geçme ve tekrar açısından izlenmesi gereken öğrencilerin ders bazında durumlarının belirlenmesi ve öğretmenler arasında koordineli takip yapılması değerlendirilmiştir.',
+    'Öğrencilerin başarısız oldukları derslerdeki öğrenme eksiklerinin belirlenmesi ve sınıf tekrarı riskini azaltmaya yönelik eğitimsel desteklerin planlanması görüşülmüştür.',
+    'Akademik açıdan risk taşıyan öğrencilerin devam eden süreçteki gelişimlerinin kayıtlar üzerinden izlenmesi ve gerekli durumlarda rehberlik desteğinden yararlanılması ele alınmıştır.',
+    'Sınıf geçme değerlendirmelerinde öğrenciler arasında eşit ve mevzuata uygun bir yaklaşımın korunması, kararların güncel akademik verilere dayandırılması üzerinde durulmuştur.',
+    'Öğrencilerin dönem içindeki başarı değişimlerinin takip edilmesi, gerileme görülen derslerde nedenlerin belirlenerek uygun destek çalışmalarına yönelinmesi görüşülmüştür.',
+    'Sınıf geçme ve sınıf tekrarıyla ilgili süreçlerin düzenli izlenmesi, risk görülen öğrenciler için öğretmen, öğrenci ve gerektiğinde veli iş birliğinin sürdürülmesi değerlendirilmiştir.'
+   ]; candidates.push(...v);
+  }else if(topic.id==='resources'){
+   const v=[
+    'Eğitim kaynakları, laboratuvarlar ve diğer okul birimlerinin ders amaçlarına uygun, planlı ve güvenli biçimde kullanılması görüşülmüştür.',
+    'Laboratuvar ve ortak kullanım alanlarından yararlanırken güvenlik kurallarının öğrencilere önceden açıklanması ve öğretmen gözetiminin sürdürülmesi üzerinde durulmuştur.',
+    'Okulun mevcut eğitim araçlarının derslerde daha verimli kullanılabilmesi için ihtiyaçların önceden belirlenmesi ve kullanımın planlanması değerlendirilmiştir.',
+    'Ders materyalleri ile okulun ortak eğitim alanlarının öğrencilerin aktif öğrenmesini destekleyecek biçimde kullanılması, kullanım sonrasında düzenin korunması ele alınmıştır.',
+    'Laboratuvar çalışmalarında araç ve gereçlerin amacına uygun kullanılması, olası risklere karşı gerekli tedbirlerin etkinlik öncesinde alınması görüşülmüştür.',
+    'Eğitim kaynaklarının sınıflar arasında dengeli ve erişilebilir biçimde kullanılmasının öğretim sürecine katkısı değerlendirilmiş, planlı kullanımın önemi vurgulanmıştır.',
+    'Kütüphane, laboratuvar ve benzeri okul birimlerinden yararlanmanın derslerin öğrenme çıktılarıyla ilişkilendirilmesi ve öğrencilerin sorumluluk bilinciyle hareket etmesi üzerinde durulmuştur.',
+    'Ortak kullanım alanlarında güvenlik, temizlik ve araç gereçlerin korunmasına ilişkin kuralların öğrencilere hatırlatılması görüşülmüştür.',
+    'Eğitim araçlarının kullanımında öğrencilerin yaş ve hazırbulunuşluk düzeylerine uygun uygulamalar seçilmesi, riskli durumlarda gerekli gözetimin sağlanması değerlendirilmiştir.',
+    'Okul kaynaklarının ders sürecinde etkili kullanılabilmesi için öğretmenler arasında planlama yapılması ve ihtiyaç duyulan materyallerin zamanında hazırlanması ele alınmıştır.',
+    'Laboratuvar ve diğer eğitim birimlerinde yapılacak çalışmaların önceden planlanması, güvenli kullanım ilkelerinin dersin doğal bir parçası hâline getirilmesi görüşülmüştür.',
+    'Eğitim ortamları ile araç gereçlerin verimli kullanılmasına devam edilmesi, öğrencilerin hem güvenlik hem de ortak malzemeyi koruma konusunda bilinçlendirilmesi değerlendirilmiştir.'
+   ]; candidates.push(...v);
+  }else if(topic.id==='common_exams'){
+   const v=[
+    'Ortak sınavların kapsamı, uygulanması ve değerlendirilmesinde ilgili esaslara uygun hareket edilmesi, öğrencilerin sınav süreci hakkında zamanında bilgilendirilmesi görüşülmüştür.',
+    'Ortak sınavların öğretim programındaki öğrenme çıktılarıyla uyumlu yürütülmesi ve sonuçların öğrencilerin öğrenme eksiklerini belirlemede kullanılması değerlendirilmiştir.',
+    'Sınav uygulamalarında sınıflar arasında ölçme ve değerlendirme birliğinin korunması, sınav güvenliği ve uygulama kurallarına dikkat edilmesi üzerinde durulmuştur.',
+    'Ortak sınav sonuçlarının yalnızca puanlama amacıyla değil, öğretim sürecinin güçlü ve geliştirilmesi gereken yönlerini belirlemek amacıyla da incelenmesi görüşülmüştür.',
+    'Öğrencilerin ortak sınavlara hazırlanırken program kapsamındaki konulara dengeli biçimde çalışmasının desteklenmesi ve sınav takviminin düzenli takip edilmesi ele alınmıştır.',
+    'Ortak sınavların uygulanmasında öğrencilere eşit koşullar sağlanması, ölçme araçlarının belirlenen kapsam ve esaslarla uyumlu olması değerlendirilmiştir.',
+    'Sınav sonrasında ortaya çıkan öğrenme eksiklerinin derslerde ele alınması ve gerekli görülen konularda pekiştirme çalışmalarına yer verilmesi üzerinde durulmuştur.',
+    'Ortak sınav sonuçlarının ders öğretmenlerince birlikte değerlendirilmesi, sınıf ve öğrenci düzeyindeki ihtiyaçların belirlenerek öğretim planına yansıtılması görüşülmüştür.',
+    'Ölçme ve değerlendirme sürecinde geçerlik, güvenilirlik ve öğrencilere yönelik açık bilgilendirme ilkelerinin gözetilmesi ele alınmıştır.',
+    'Ortak sınavların öğrencilerin programdaki öğrenme çıktılarına ulaşma düzeyini izleyen bir araç olarak kullanılması ve sonuçların gelişim odaklı değerlendirilmesi görüşülmüştür.',
+    'Sınav uygulamalarında belirlenen süre, kapsam ve değerlendirme ölçütlerine uyulması, uygulama sırasında ortaya çıkabilecek sorunların ortak biçimde çözülmesi değerlendirilmiştir.',
+    'Ortak sınavlardan elde edilen sonuçların sonraki ders planlamalarına veri sağlaması, ihtiyaç duyulan öğrenciler için destekleyici çalışmaların belirlenmesi üzerinde durulmuştur.'
+   ]; candidates.push(...v);
   }else if(topic.id==='dress'){
    const v=[
     'Öğrencilerin kılık ve kıyafet konusunda okul kurallarına uygun hareket etmelerinin eğitim ortamındaki düzen ve aidiyet duygusuna katkısı değerlendirilmiştir.',
