@@ -2087,7 +2087,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.33</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.34</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2245,7 +2245,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.33 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.34 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2445,7 +2445,7 @@ function sokRoleTitle(branch){
  const b=String(branch||"").trim();
  if(!b)return "Öğretmen";
  if(/Öğretmeni|Rehber Öğretmeni|Müdür/i.test(b))return b;
- if(/Matematik|İngilizce|Arapça|Biyoloji|Coğrafya|Fizik|Kimya|Tarih/i.test(b))return `${b} Öğretmeni`;
+ if(/Matematik|İngilizce|Arapça|Biyoloji|Coğrafya|Fizik|Kimya|Tarih|Türk Dili|Edebiyat/i.test(b))return `${b} Öğretmeni`;
  if(/Din Kültürü/i.test(b))return "Din Kültürü ve Ahlak Bilgisi Öğretmeni";
  if(/Beden/i.test(b))return /Öğretmeni/i.test(b)?b:"Beden Eğitimi Öğretmeni";
  if(/Temel Din/i.test(b))return /Öğretmeni/i.test(b)?b:"Temel Din Bilgileri Öğretmeni";
@@ -2683,7 +2683,7 @@ function sokLocalRewrite(text,variant){
  }
  return paragraphs.join('\n\n');
 }
-// v7.7.33: Gündem konusu ile katılımcı branşını eşleştirerek uygun öğretmeni doğal biçimde görüşmeye katar.
+// v7.7.34: Gündem konusu ile katılımcı branşını eşleştirerek uygun öğretmeni doğal biçimde görüşmeye katar.
 function sokLocalParticipantsFromText(text){
  const lines=String(text||'').split(/\r?\n/); const start=lines.findIndex(x=>x.trim()==='TOPLANTI KATILIMCILARI');
  if(start<0)return [];
@@ -2761,12 +2761,20 @@ function sokLocalSpeakerLimit(title,variant,forDefault=false){
 function sokLocalApplySpeaker(title,text,variant){
  const speakers=sokLocalRelevantSpeakers(title); if(!speakers.length)return text;
  const limit=Math.min(3,sokLocalSpeakerLimit(title,variant,false),speakers.length); if(!limit)return text;
- const ordered=[];for(let i=0;i<speakers.length;i++)ordered.push(speakers[(variant+i)%speakers.length]);
  const textUpper=text.toLocaleUpperCase('tr-TR');
- const existingCount=speakers.filter(p=>textUpper.includes(p.name.toLocaleUpperCase('tr-TR'))).length;
- const remaining=Math.max(0,Math.min(limit,3-existingCount));
- const used=ordered.filter(p=>!textUpper.includes(p.name.toLocaleUpperCase('tr-TR'))).slice(0,remaining);
- if(!used.length)return text;
+ const existing=speakers.filter(p=>textUpper.includes(p.name.toLocaleUpperCase('tr-TR')));
+ const existingNames=new Set(existing.map(p=>p.name.toLocaleUpperCase('tr-TR')));
+ const pool=speakers.filter(p=>!existingNames.has(p.name.toLocaleUpperCase('tr-TR')));
+ const remaining=Math.max(0,Math.min(limit,3-existing.length));
+ if(!remaining||!pool.length)return text;
+ // v7.7.34: "Başka Öneri" yalnız cümleyi değil konuşmacı kombinasyonunu da değiştirir.
+ // Farklı başlangıç + farklı adım, aynı ilk 2-3 öğretmenin 12 öneride tekrarlanmasını önler.
+ const used=[]; const offset=(variant*2+Math.floor(variant/3))%pool.length;
+ const step=pool.length>2?((variant%2)?2:1):1;
+ for(let k=0;k<pool.length&&used.length<remaining;k++){
+  const p=pool[(offset+k*step)%pool.length];
+  if(!used.some(q=>q.name.toLocaleUpperCase('tr-TR')===p.name.toLocaleUpperCase('tr-TR')))used.push(p);
+ }
  const comments=used.map((p,i)=>sokLocalSpeakerSentence(title,p,variant+i)).join(' ');
  return variant%2===0?`${comments} ${text}`:`${text} ${comments}`;
 }
@@ -2778,7 +2786,7 @@ function sokDefaultTeacherRichDraft(draft){
   const limit=Math.min(3,sokLocalSpeakerLimit(item.title,idx,true),speakers.length);
   if(!limit)return `${item.no}. ${item.title}\n${item.text}`;
   const upper=item.text.toLocaleUpperCase('tr-TR');
-  // v7.7.33: Metnin kendi içinde zaten konuşan öğretmenler de 3 kişilik toplam sınıra dahildir.
+  // v7.7.34: Metnin kendi içinde zaten konuşan öğretmenler de 3 kişilik toplam sınıra dahildir.
   const existingCount=speakers.filter(p=>upper.includes(p.name.toLocaleUpperCase('tr-TR'))).length;
   const remaining=Math.max(0,Math.min(limit,3-existingCount));
   const chosen=speakers.filter(p=>!upper.includes(p.name.toLocaleUpperCase('tr-TR'))).slice(0,remaining);
@@ -3240,7 +3248,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.33 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.34 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -6411,7 +6419,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.33",
+    appVersion:"v7.7.34",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -6423,7 +6431,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.33",
+    appVersion:"v7.7.34",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
