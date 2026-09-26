@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi v7.7.26-test6</title>
+<title>Öğrenci Takip Sistemi v7.7.26-test7</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -2711,8 +2711,43 @@ function sokLocalPropose(no){
     candidates.push(candidate);
    }
 
+  }else if(topic.id==='parent_contact'){
+   // Veli iletişimi: 12 gerçek paragraf kuruluşu. Kayıtlı görüşme verisi varsa değiştirilmeden korunur.
+   const factual=original&&/\d/.test(original)?original.trim():'';
+   const parentVariants=[
+    'Öğrencilerin gelişiminin düzenli izlenebilmesi için okul-aile iletişiminin sürekliliği ele alınmış; ihtiyaç duyulan öğrencilerin velileriyle planlı görüşmeler yapılmasının yararlı olacağı değerlendirilmiştir.',
+    'Sınıf rehberlik çalışmaları kapsamında velilerle kurulacak iletişimin öğrencilerin akademik ve sosyal gelişimine katkısı görüşülmüş, gerekli durumlarda veli ziyaretlerinin planlanması üzerinde durulmuştur.',
+    'Öğrencilerin okul sürecinin ailelerle iş birliği içinde takip edilmesi değerlendirilmiş; öğretmen, öğrenci ve veli arasındaki iletişimin zamanında kurulmasının önemi vurgulanmıştır.',
+    'Veli görüşmelerinin yalnızca sorun ortaya çıktığında değil, öğrencinin gelişimini destekleyen düzenli bir iletişim aracı olarak yürütülmesi gerektiği ifade edilmiştir.',
+    'Öğrencilerin ihtiyaçlarının erken fark edilebilmesi amacıyla velilerle karşılıklı bilgi paylaşımının sürdürülmesi ve gerekli görülen durumlarda yüz yüze görüşme yapılması ele alınmıştır.',
+    'Okul ile aile arasında kurulacak düzenli iletişimin öğrencilerin ders çalışma alışkanlıkları ve sorumluluklarını destekleyebileceği değerlendirilmiş, veli iş birliğinin güçlendirilmesi görüşülmüştür.',
+    'Velilerden alınan bilgilerin öğrencilerin okul içindeki gözlemleriyle birlikte değerlendirilmesinin rehberlik çalışmalarına katkı sağlayacağı üzerinde durulmuştur.',
+    'Öğrencilerin akademik, sosyal veya davranışsal açıdan desteğe ihtiyaç duyduğu durumlarda velilerle gecikmeden iletişime geçilmesi ve sürecin birlikte takip edilmesi görüşülmüştür.',
+    'Veli iletişiminde açık, düzenli ve çözüm odaklı bir yaklaşım benimsenmesi; görüşmelerde öğrencinin gelişimini destekleyecek ortak adımların belirlenmesi değerlendirilmiştir.',
+    'Sınıfın genel durumu dikkate alınarak ihtiyaç duyulan öğrenciler için veli görüşmesi veya veli ziyareti planlanması, yapılan görüşmelerin takip sürecine yansıtılması ele alınmıştır.',
+    'Ailelerin öğrencilerin eğitim sürecine katılımını artıracak iletişim yolları değerlendirilmiş; öğretmen ve velilerin öğrenci gelişimine ilişkin gözlemlerini karşılıklı paylaşmasının önemi belirtilmiştir.',
+    'Öğrencilerin gelişiminin bütüncül biçimde izlenebilmesi için okulda yapılan gözlemler ile aileden alınan bilgilerin birlikte değerlendirilmesi ve veli iletişiminin sürdürülmesi görüşülmüştür.'
+   ];
+   parentVariants.forEach((v,i)=>candidates.push(factual?(i%3===0?factual+'\n\n'+v:i%3===1?v+'\n\n'+factual:v+' '+factual):v));
+  }else if(topic.id==='activities'){
+   // Bilimsel/sosyal/kültürel/sportif etkinlikler: anlamı koruyan 12 belirgin farklı anlatım.
+   const activityVariants=[
+    'Öğrencilerin bilimsel, sosyal, kültürel ve sportif etkinliklere katılımının ilgi ve yeteneklerini geliştirmedeki katkısı değerlendirilmiş; okul imkânları doğrultusunda katılımın desteklenmesi görüşülmüştür.',
+    'Ders dışı etkinliklerin öğrencilerin kendilerini ifade etme, sorumluluk alma ve birlikte çalışma becerilerine katkısı üzerinde durulmuş; uygun yarışma ve etkinliklerin öğrencilere duyurulması ele alınmıştır.',
+    'Öğrencilerin yalnızca akademik yönden değil sosyal ve kültürel açıdan da gelişmelerini desteklemek amacıyla yapılabilecek etkinlikler değerlendirilmiştir.',
+    'Bilimsel çalışmalar, yarışmalar, geziler ve sportif faaliyetlerin öğrencilerin ilgi alanları dikkate alınarak planlanması ve gönüllü katılımın teşvik edilmesi görüşülmüştür.',
+    'Okul içinde ve dışında gerçekleştirilebilecek sosyal, kültürel ve sportif çalışmaların eğitim öğretim süreciyle uyumlu biçimde yürütülmesi üzerinde durulmuştur.',
+    'Öğrencilerin yeteneklerini fark etmelerine imkân sağlayacak bilimsel ve sanatsal etkinliklerin artırılması, uygun öğrencilerin yarışma ve proje çalışmalarına yönlendirilmesi değerlendirilmiştir.',
+    'Topluma hizmet, öğrenci kulübü ve sosyal sorumluluk çalışmalarının öğrencilerde aidiyet ve sorumluluk bilincini geliştirecek biçimde yürütülmesi görüşülmüştür.',
+    'Sınıfın ve okulun imkânları göz önünde bulundurularak uygulanabilir gezi, yarışma ve etkinliklerin belirlenmesi; öğrenci güvenliği ve eğitim amaçlarının birlikte gözetilmesi ele alınmıştır.',
+    'Sportif ve kültürel faaliyetlere katılımın öğrencilerin sosyal ilişkilerine ve okul motivasyonuna katkısı değerlendirilmiş, farklı ilgi alanlarına hitap eden çalışmalar yapılması üzerinde durulmuştur.',
+    'Bilimsel merakı destekleyen çalışmalar ile sosyal ve kültürel etkinliklerin dengeli biçimde planlanmasının öğrencilerin çok yönlü gelişimine katkı sağlayacağı ifade edilmiştir.',
+    'Öğrencilerin etkinliklere yalnızca katılımcı olarak değil, planlama ve görev alma süreçlerinde de sorumluluk üstlenmelerinin desteklenmesi görüşülmüştür.',
+    'Yıl içinde yapılabilecek yarışma, gezi, kulüp, proje ve sportif faaliyetlerin öğrencilerin ihtiyaçları ve okul şartları doğrultusunda planlanması; katılımın düzenli takip edilmesi değerlendirilmiştir.'
+   ];
+   candidates.push(...activityVariants);
   }else{
-   // Tanımlı diğer başlıklarda özgün metin yerine konuya ait kontrollü alternatifler.
+   // Diğer başlıklar şimdilik mevcut güvenli 12'li yapıyı kullanır.
    const lead=['Toplantıda','Gündem kapsamında','İlgili başlıkta','Kurul görüşmelerinde'];
    const endings=['Konuya ilişkin uygulamaların öğretmenler arasında eş güdümle yürütülmesi ele alınmıştır.','Çalışmaların ihtiyaçlar doğrultusunda sürdürülmesi görüşülmüştür.','Uygulamaların süreç içinde gözden geçirilmesi üzerinde durulmuştur.'];
    for(let i=0;i<12;i++){
