@@ -2087,7 +2087,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.28</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.29</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2245,7 +2245,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.27 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.29 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2614,6 +2614,8 @@ const sokLocalTopics=[
  {id:'safety',keys:['iş sağlığı','iş güvenliği','güvenlik'],label:'İş sağlığı ve güvenliği',core:'Eğitim öğretim faaliyetlerinde güvenli ortamın korunması ve gerekli tedbirlerin düzenli izlenmesi değerlendirilmiştir.'},
  {id:'attendance',keys:['devamsız','devam durumu'],label:'Devamsızlık',core:'Devam durumunun okulun resmî kayıtları üzerinden takip edilmesi ve gerekli hâllerde ailelerle iletişim kurulması üzerinde durulmuştur.'},
  {id:'projects',keys:['proje'],label:'Okul projeleri',core:'Okulda yürütülen projelerin eğitim hedefleriyle ilişkisi ve öğrenci katılımını destekleyen yönleri ele alınmıştır.'},
+ {id:'prior_decisions',keys:['bir önceki dönemde alınan karar','önceki dönemde alınan karar'],label:'Önceki dönem kararları',core:'Bir önceki dönemde alınan kararların uygulanma durumu ve devam eden çalışmalar değerlendirilmiştir.'},
+ {id:'wellbeing',keys:['kişilik','beslenme','sağlık','sosyal ilişkiler'],label:'Kişisel ve sosyal gelişim',core:'Öğrencilerin kişisel, sosyal ve sağlıklı yaşam becerilerini destekleyen çalışmalar değerlendirilmiştir.'},
  {id:'closing',keys:['dilek','temenni','kapanış'],label:'Dilek ve temenniler',core:'Katılımcıların ek görüş ve önerilerini paylaşmalarına imkân verilmesi üzerinde durulmuştur.'},
  {id:'digital',keys:['dijital','teknoloji','internet'],label:'Dijital araçlar',core:'Dijital araçların bilinçli, güvenli ve öğrenmeyi destekleyecek biçimde kullanılmasına yönelik çalışmalar ele alınmıştır.'}
 ];
@@ -2846,6 +2848,111 @@ function sokLocalPropose(no){
     'Kültürel mirasın ve ortak değerlerin öğrencilerin yaş düzeyine uygun örneklerle ele alınması, geçmiş ile bugün arasında anlamlı bağlar kurulması görüşülmüştür.',
     'Değerler eğitimi çalışmalarının öğrencilerin ihtiyaçları ve okulun sosyal çevresi dikkate alınarak somut, uygulanabilir ve katılımcı etkinliklerle desteklenmesi değerlendirilmiştir.'
    ]; candidates.push(...v);
+  }else if(topic.id==='opening'){
+   candidates.push(...[
+    'Sınıf rehber öğretmeni başkanlığında toplantı açılmış, katılımcıların yoklaması yapıldıktan sonra gündem maddelerinin görüşülmesine geçilmiştir.',
+    'Toplantının açılışı yapılarak hazır bulunan öğretmenler belirlenmiş ve gündemin sırasıyla ele alınmasına başlanmıştır.',
+    'Katılımcı öğretmenlerin yoklaması tamamlanmış, toplantının amacı ve gündem başlıkları hatırlatılarak görüşmelere geçilmiştir.',
+    'Toplantı sınıf rehber öğretmeni tarafından açılmış; katılım durumu kontrol edildikten sonra gündem maddeleri kurulun değerlendirmesine sunulmuştur.',
+    'Açılışın ardından toplantıya katılan öğretmenlerin yoklaması alınmış ve belirlenen gündem doğrultusunda görüşmeler başlatılmıştır.',
+    'Toplantının başlangıcında katılımcılar tespit edilmiş, gündem maddelerinin sırası ve görüşme süreci hakkında kısa bilgilendirme yapılmıştır.',
+    'Sınıf öğretmenler kurulu toplantısı açılmış, yoklama işlemlerinin tamamlanmasının ardından gündemde yer alan konuların değerlendirilmesine geçilmiştir.',
+    'Hazır bulunan öğretmenlerin katılımıyla toplantı başlatılmış; yoklama sonrasında gündem başlıkları sırasıyla görüşmeye açılmıştır.',
+    'Toplantı açılarak katılımcı listesi kontrol edilmiş, gündemin kapsamı belirtildikten sonra maddelerin görüşülmesine başlanmıştır.',
+    'Kurul üyelerinin yoklaması yapılıp toplantı yeterliliği görüldükten sonra gündem maddeleri üzerinde görüş alışverişine geçilmiştir.',
+    'Toplantının açılışında katılımcı öğretmenler belirlenmiş ve görüşülecek konuların gündemdeki sıralama doğrultusunda ele alınması benimsenmiştir.',
+    'Açılış ve yoklama işlemleri tamamlanmış, toplantının çalışma düzeni belirlenerek ilk gündem maddesinden itibaren değerlendirmelere başlanmıştır.'
+   ]);
+  }else if(topic.id==='safety'){
+   candidates.push(...[
+    'Eğitim öğretim faaliyetlerinde öğrenci ve personel güvenliğinin korunması için sınıf ve okul ortamlarında alınması gereken tedbirler değerlendirilmiştir.',
+    'Okul ortamında karşılaşılabilecek güvenlik risklerinin önceden fark edilmesi, gerekli durumların okul yönetimine bildirilmesi ve öğrencilerin güvenli davranışlar konusunda bilgilendirilmesi görüşülmüştür.',
+    'Derslik, koridor ve ortak kullanım alanlarında iş sağlığı ve güvenliği kurallarına uyulmasının önemi üzerinde durulmuş, risk oluşturan durumların gecikmeden bildirilmesi ele alınmıştır.',
+    'Eğitim faaliyetlerinin güvenli biçimde yürütülebilmesi için öğretmen gözetimi, düzenli kontrol ve öğrencilerin kurallara uygun davranmasının birlikte değerlendirilmesi gerektiği ifade edilmiştir.',
+    'Okul içindeki fiziksel ortamların güvenli kullanımına ilişkin tedbirler ele alınmış, öğrencilerin yaş düzeylerine uygun güvenlik bilgilendirmelerinin sürdürülmesi görüşülmüştür.',
+    'Öğrenci güvenliğini etkileyebilecek durumların erken tespit edilmesi ve ilgili birimlerle koordineli biçimde gerekli önlemlerin alınması üzerinde durulmuştur.',
+    'Ders ve etkinlikler sırasında kullanılacak alan ve araçların güvenlik açısından kontrol edilmesi, öğretmenlerin gerekli uyarıları etkinlik öncesinde yapması değerlendirilmiştir.',
+    'Okulun ortak alanlarında güvenli hareket etme, acil durum kurallarını bilme ve riskli davranışlardan kaçınma konusunda öğrencilerin bilinçlendirilmesi görüşülmüştür.',
+    'İş sağlığı ve güvenliği uygulamalarının yalnızca olay sonrasında değil önleyici bir yaklaşımla sürdürülmesi, tespit edilen risklerin kayıt altına alınarak yönetime iletilmesi ele alınmıştır.',
+    'Eğitim öğretim sürecinde güvenli ortamın korunmasının tüm paydaşların ortak sorumluluğu olduğu belirtilmiş, uygulanacak tedbirlerde süreklilik ve koordinasyonun önemi vurgulanmıştır.',
+    'Sınıf ve okul ortamındaki güvenlik kurallarının öğrencilere düzenli olarak hatırlatılması, tehlike oluşturabilecek durumlarda ilgili kişilere zamanında bilgi verilmesi değerlendirilmiştir.',
+    'Öğrencilerin güvenliğini ve eğitim ortamının düzenini destekleyen uygulamalar gözden geçirilmiş, gerekli önlemlerin okulun mevcut koşullarına göre sürdürülmesi görüşülmüştür.'
+   ]);
+  }else if(topic.id==='attendance'){
+   candidates.push(...[
+    'Öğrencilerin devam durumlarının okulun resmî kayıtları üzerinden düzenli izlenmesinin eğitim sürecinin sağlıklı yürütülmesi açısından önemi değerlendirilmiştir.',
+    'Devam durumunun öğrencilerin derslere katılımı ve akademik gelişimiyle ilişkisi ele alınmış, gerekli durumlarda ailelerle zamanında iletişim kurulması görüşülmüştür.',
+    'Öğrencilerin okula devamlarının ilgili resmî kayıtlar esas alınarak takip edilmesi ve dikkat gerektiren durumların rehberlik çalışmaları kapsamında değerlendirilmesi üzerinde durulmuştur.',
+    'Devamsızlık durumlarının uygulama içinden değil okulun resmî kayıtlarından izlenmesi, gerekli bilgilendirmelerin ilgili mevzuat ve okul işleyişi doğrultusunda yapılması görüşülmüştür.',
+    'Derslere düzenli katılımın öğrenme sürekliliğine katkısı değerlendirilmiş, devam konusunda sorun yaşayan öğrenciler için uygun rehberlik ve veli iletişimi yolları ele alınmıştır.',
+    'Öğrencilerin devam durumlarıyla ilgili değerlendirmelerde güncel okul kayıtlarının esas alınması ve varsayıma dayalı bilgi kullanılmaması gerektiği ifade edilmiştir.',
+    'Devamsızlığın öğrencinin öğrenme sürecinde oluşturabileceği aksaklıklar üzerinde durulmuş, devam durumunun ilgili kayıtlar üzerinden düzenli takip edilmesi değerlendirilmiştir.',
+    'Okula devam konusunda dikkat gerektiren öğrencilerin resmî veriler doğrultusunda belirlenmesi, ihtiyaç hâlinde öğrenci ve veliyle görüşme yapılması ele alınmıştır.',
+    'Devam takibinde öğretmenler ile okul yönetimi arasındaki bilgi paylaşımının önemi değerlendirilmiş, işlemlerin resmî kayıtlarla uyumlu yürütülmesi görüşülmüştür.',
+    'Öğrencilerin devam durumlarının eğitim öğretim sürecindeki gelişimleriyle birlikte ele alınması, gerekli desteklerin zamanında planlanması üzerinde durulmuştur.',
+    'Devamsızlıkla ilgili değerlendirmelerin yalnızca doğrulanmış okul kayıtlarına dayandırılması ve gerekli durumlarda rehberlik yaklaşımıyla hareket edilmesi görüşülmüştür.',
+    'Düzenli devamın öğrencilerin okul uyumu ve öğrenme sürecine katkısı vurgulanmış; takip ve bilgilendirme işlemlerinin okulun resmî sistemi üzerinden sürdürülmesi değerlendirilmiştir.'
+   ]);
+  }else if(topic.id==='projects'){
+   candidates.push(...[
+    'Okulda yürütülen projelerin öğrencilerin akademik, sosyal ve kültürel gelişimine katkısı değerlendirilmiş, ilgi ve yeteneklere uygun katılımın desteklenmesi görüşülmüştür.',
+    'Proje çalışmalarının öğrencilerin araştırma, problem çözme, iş birliği ve sorumluluk alma becerilerini geliştirecek biçimde yürütülmesi üzerinde durulmuştur.',
+    'Öğrencilerin okul projelerine katılımında gönüllülük, ilgi alanı ve yeteneklerinin dikkate alınması; görev dağılımının dengeli yapılması değerlendirilmiştir.',
+    'Yürütülen projelerin eğitim hedefleriyle ilişkisi ele alınmış, öğrencilerin süreçte aktif görev alabilecekleri çalışmaların artırılması görüşülmüştür.',
+    'Proje çalışmalarında öğrencilerin yalnızca sonuç ürününe değil araştırma, planlama ve üretim aşamalarına da katılmasının önemi vurgulanmıştır.',
+    'Okulun imkânları doğrultusunda uygulanabilir projelerin seçilmesi, çalışmaların öğrencilerin ders yükünü ve gelişim ihtiyaçlarını gözeterek planlanması ele alınmıştır.',
+    'Farklı ders ve alanlarla ilişkilendirilebilecek proje çalışmalarının öğrencilerin çok yönlü gelişimine katkısı değerlendirilmiş, uygun iş birliklerinin desteklenmesi görüşülmüştür.',
+    'Projelere katılan öğrencilerin süreç boyunca rehberlik edilmesi, görev ve sorumlulukların açık biçimde belirlenmesi üzerinde durulmuştur.',
+    'Öğrencilerin özgün fikir geliştirmelerine imkân sağlayan proje ortamlarının oluşturulması ve ortaya çıkan çalışmaların uygun biçimde paylaşılması değerlendirilmiştir.',
+    'Okulda devam eden projelerin amaç, takvim ve öğrenci katılımı bakımından izlenmesi; ihtiyaç hâlinde uygulama planlarının gözden geçirilmesi görüşülmüştür.',
+    'Proje faaliyetlerinin öğrenciler arasında iş birliği ve aidiyet duygusunu destekleyecek biçimde yürütülmesi, katılım fırsatlarının dengeli sunulması ele alınmıştır.',
+    'Öğrencilerin ilgi ve yeteneklerine uygun proje çalışmalarına yönlendirilmesi, süreçte edindikleri bilgi ve becerilerin derslerle ilişkilendirilmesi değerlendirilmiştir.'
+   ]);
+  }else if(topic.id==='prior_decisions'){
+   candidates.push(...[
+    'Bir önceki dönemde alınan kararlar gözden geçirilmiş, uygulanan çalışmalar ile devam eden hususlar kurul tarafından değerlendirilmiştir.',
+    'Önceki toplantıda karara bağlanan konuların gerçekleşme durumu ele alınmış, sürdürülecek çalışmalar ve ihtiyaç duyulan düzenlemeler görüşülmüştür.',
+    'Geçen dönemde alınan kararların uygulamaya yansıması değerlendirilmiş, sonuç alınan hususlar ile takibi devam eden konular üzerinde durulmuştur.',
+    'Bir önceki döneme ait kurul kararları incelenerek hangi çalışmaların tamamlandığı ve hangi konularda izlemeye devam edilmesi gerektiği ele alınmıştır.',
+    'Önceki kararların eğitim öğretim sürecindeki karşılığı değerlendirilmiş, gerekli görülen uygulamaların yeni dönemde de sürdürülmesi görüşülmüştür.',
+    'Daha önce belirlenen tedbir ve çalışmaların uygulanma durumu öğretmenlerin gözlemleri doğrultusunda değerlendirilmiştir.',
+    'Geçmiş toplantı kararları yeniden ele alınmış, uygulamada karşılaşılan durumlar ve devam ettirilmesi gereken çalışmalar hakkında görüş alışverişinde bulunulmuştur.',
+    'Önceki dönemde alınan kararların sonuçları gözden geçirilerek etkili bulunan uygulamaların sürdürülmesi, ihtiyaç duyulanların ise yeniden düzenlenmesi ele alınmıştır.',
+    'Kurulun daha önce aldığı kararlar üzerinden dönem içindeki gelişmeler değerlendirilmiş ve takip gerektiren hususlar belirlenmiştir.',
+    'Bir önceki döneme ilişkin kararların uygulanma düzeyi incelenmiş, öğretmenler arasında eş güdüm gerektiren konular yeniden değerlendirilmiştir.',
+    'Önceki kurul kararlarının mevcut sınıf durumuyla uyumu gözden geçirilmiş, yeni dönemde devam edecek çalışmalar üzerinde durulmuştur.',
+    'Daha önce kararlaştırılan çalışmaların gerçekleşme durumu değerlendirilerek tamamlanan, sürdürülen ve yeniden ele alınması gereken hususlar görüşülmüştür.'
+   ]);
+  }else if(topic.id==='wellbeing'){
+   candidates.push(...[
+    'Öğrencilerin kişisel gelişimleri, sağlıklı yaşam alışkanlıkları ve sosyal ilişkilerinin okul yaşamına etkisi bütüncül biçimde değerlendirilmiştir.',
+    'Öğrencilerin kendilerini ifade etme, akranlarıyla sağlıklı iletişim kurma ve sorumluluk alma becerilerini destekleyecek çalışmalar görüşülmüştür.',
+    'Beslenme, kişisel bakım ve günlük yaşam alışkanlıklarının öğrencilerin okul sürecindeki iyilik hâline katkısı üzerinde durulmuştur.',
+    'Sınıf içindeki sosyal ilişkilerin saygı, empati ve iş birliği temelinde geliştirilmesi için yapılabilecek rehberlik çalışmaları değerlendirilmiştir.',
+    'Öğrencilerin kişilik gelişimlerini destekleyen güvenli ve kapsayıcı sınıf ortamının korunması, bireysel farklılıklara saygı gösterilmesi görüşülmüştür.',
+    'Sağlıklı yaşam konusunda öğrencilerin yaş düzeylerine uygun biçimde bilinçlendirilmesi ve okul ortamında olumlu alışkanlıkların desteklenmesi ele alınmıştır.',
+    'Öğrencilerin arkadaşlık ilişkilerinde karşılaştıkları güçlüklerin uygun rehberlik yaklaşımlarıyla ele alınması ve olumlu iletişim becerilerinin güçlendirilmesi değerlendirilmiştir.',
+    'Kişisel ve sosyal gelişimin akademik süreçten ayrı düşünülmemesi, öğrencilerin ihtiyaçlarının öğretmen gözlemleriyle birlikte değerlendirilmesi üzerinde durulmuştur.',
+    'Öğrencilerin okul ortamında kendilerini güvende ve değerli hissetmelerini destekleyecek sınıf içi iletişim ve rehberlik uygulamaları görüşülmüştür.',
+    'Sağlık, beslenme ve sosyal ilişkilerle ilgili konularda öğrencilerin mahremiyetine saygı gösterilmesi ve gerekli durumlarda ilgili okul birimleriyle iş birliği yapılması ele alınmıştır.',
+    'Öğrencilerin olumlu benlik algısı, iletişim ve öz düzenleme becerilerini geliştirecek etkinliklerin eğitim süreci içinde desteklenmesi değerlendirilmiştir.',
+    'Kişisel, sosyal ve sağlıklı yaşam becerilerinin öğrencilerin yaş ve gelişim özellikleri dikkate alınarak desteklenmesi, ihtiyaçların süreç içinde izlenmesi görüşülmüştür.'
+   ]);
+  }else if(topic.id==='closing'){
+   candidates.push(...[
+    'Katılımcıların dilek ve temennileri alınmış, gündemde görüşülecek başka konu kalmadığından toplantı sona erdirilmiştir.',
+    'Gündem maddelerinin tamamlanmasının ardından öğretmenlerin ek görüş ve önerileri alınmış ve toplantı kapatılmıştır.',
+    'Katılımcılara söz verilerek dilek ve temenniler dinlenmiş, başka bir gündem bulunmadığından toplantının sona erdirilmesine geçilmiştir.',
+    'Görüşmelerin tamamlanması üzerine kurul üyelerinin eklemek istediği hususlar değerlendirilmiş ve toplantı sonlandırılmıştır.',
+    'Gündemde yer alan konuların görüşülmesinden sonra katılımcıların son değerlendirmeleri alınarak toplantı kapatılmıştır.',
+    'Öğretmenlerin dilek, öneri ve temennilerini paylaşmalarına imkân verilmiş; başka konu bulunmadığı görülerek toplantı sona erdirilmiştir.',
+    'Toplantının son bölümünde katılımcıların ek görüşleri alınmış, gündem tamamlandığı için kapanış yapılmıştır.',
+    'Gündem dışı ek bir husus olup olmadığı sorulmuş, katılımcıların değerlendirmelerinin ardından toplantı sonlandırılmıştır.',
+    'Kurul üyelerinin dilek ve temennileri dinlenmiş, görüşülecek başka madde kalmadığından toplantı kapatılmıştır.',
+    'Toplantıda ele alınan konuların genel değerlendirmesi yapıldıktan sonra katılımcıların son görüşleri alınmış ve kapanış gerçekleştirilmiştir.',
+    'Gündem maddelerinin tamamı görüşüldükten sonra öğretmenlerin önerileri kayda alınmış ve toplantının sona erdiği belirtilmiştir.',
+    'Katılımcıların son söz ve temennileri alınmış, alınan kararların takip edilmesi hatırlatılarak toplantı kapatılmıştır.'
+   ]);
   }else if(topic.id==='parent_contact'){
    // Veli iletişimi: 12 gerçek paragraf kuruluşu. Kayıtlı görüşme verisi varsa değiştirilmeden korunur.
    const factual=original&&/\d/.test(original)?original.trim():'';
@@ -3027,7 +3134,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.27 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.29 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -6198,7 +6305,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.27",
+    appVersion:"v7.7.29",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -6210,7 +6317,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.27",
+    appVersion:"v7.7.29",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
