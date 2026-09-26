@@ -2087,7 +2087,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.38</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.39</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2245,7 +2245,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.38 · ŞÖK gündem içe aktarma · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.39 · ŞÖK gündem anlamlandırma · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2270,7 +2270,7 @@ function openDocumentAssistant(){
   renderDocAgendaList();
 }
 
-// ===== v7.7.38 ŞÖK gündem girişi: tekli / toplu / PDF alan seçimi =====
+// ===== v7.7.39 ŞÖK gündem girişi: tekli / toplu / PDF alan seçimi =====
 window._docCustomAgendas=window._docCustomAgendas||[];
 function docAgendaNormalizeTitle(x){return String(x||'').replace(/^\s*\d+\s*[.)\-:]\s*/,'').replace(/^\s*[•·]\s*/,'').replace(/\s+/g,' ').replace(/[.;,]+\s*$/,'').trim()}
 function docAgendaParseBulk(text){
@@ -2283,13 +2283,22 @@ function docAgendaParseBulk(text){
  return out.filter(Boolean);
 }
 function renderDocAgendaList(){
- const box=el('docAgendaList'),cnt=el('docAgendaCount');if(!box)return;const a=window._docCustomAgendas||[];if(cnt)cnt.textContent=a.length?`${a.length} özel gündem`:'Şablon gündemi aktif';
- box.innerHTML=a.length?a.map((x,i)=>`<div style="display:grid;grid-template-columns:auto 1fr auto auto auto;gap:6px;align-items:center;margin:6px 0"><b>${i+1}.</b><input value="${esc(x)}" oninput="window._docCustomAgendas[${i}]=this.value"><button type="button" class="secondary" onclick="docAgendaMove(${i},-1)">↑</button><button type="button" class="secondary" onclick="docAgendaMove(${i},1)">↓</button><button type="button" class="danger" onclick="docAgendaDelete(${i})">Sil</button></div>`).join(''):'<div class="tiny">Özel gündem girilmedi. Taslak oluşturulduğunda dönem şablonundaki gündemler kullanılacak.</div>';
+ const box=el('docAgendaList'),cnt=el('docAgendaCount');if(!box)return;
+ window._docCustomAgendas=(window._docCustomAgendas||[]).map(docAgendaNormalizeTitle).filter(Boolean);
+ const a=window._docCustomAgendas;if(cnt)cnt.textContent=a.length?`${a.length} özel gündem`:'Şablon gündemi aktif';
+ box.innerHTML=a.length?a.map((x,i)=>`<div class="card" style="padding:8px 9px;margin:6px 0;display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:start"><b style="padding-top:7px">${i+1}.</b><div style="min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.35;padding-top:7px">${esc(x)}</div><div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end"><button type="button" class="secondary" style="padding:7px 9px" onclick="docAgendaEdit(${i})">✏️</button><button type="button" class="secondary" style="padding:7px 9px" onclick="docAgendaMove(${i},-1)">↑</button><button type="button" class="secondary" style="padding:7px 9px" onclick="docAgendaMove(${i},1)">↓</button><button type="button" class="danger" style="padding:7px 9px" onclick="docAgendaDelete(${i})">🗑️</button></div></div>`).join(''):`<div class="tiny">Özel gündem girilmedi. Taslak oluşturulduğunda dönem şablonundaki gündemler kullanılacak.</div>`;
 }
-function docAgendaAddOne(){window._docCustomAgendas.push('');renderDocAgendaList();setTimeout(()=>el('docAgendaList')?.querySelector('input:last-of-type')?.focus(),20)}
+function docAgendaPromptBox(title,value,onSave){
+ const host=el('docAgendaList');if(!host)return;el('docAgendaOnePanel')?.remove();
+ host.insertAdjacentHTML('beforebegin',`<div id="docAgendaOnePanel" class="card" style="padding:10px;margin-top:10px"><b>${esc(title)}</b><textarea id="docAgendaOneText" rows="3" style="margin-top:7px" placeholder="Gündem maddesini yazın...">${esc(value||'')}</textarea><div class="modal-actions"><button type="button" id="docAgendaOneSave">Kaydet</button><button type="button" class="secondary" onclick="el('docAgendaOnePanel').remove()">Vazgeç</button></div></div>`);
+ el('docAgendaOneSave').onclick=()=>{const v=docAgendaNormalizeTitle(el('docAgendaOneText').value);if(!v)return alert('Boş gündem maddesi eklenemez.');onSave(v);el('docAgendaOnePanel')?.remove();renderDocAgendaList()};
+ setTimeout(()=>el('docAgendaOneText')?.focus(),0);
+}
+function docAgendaAddOne(){docAgendaPromptBox('Yeni Gündem Maddesi','',v=>window._docCustomAgendas.push(v))}
+function docAgendaEdit(i){const a=window._docCustomAgendas||[];if(!a[i])return;docAgendaPromptBox('Gündem Maddesini Düzenle',a[i],v=>a[i]=v)}
 function docAgendaDelete(i){window._docCustomAgendas.splice(i,1);renderDocAgendaList()}
 function docAgendaMove(i,d){const a=window._docCustomAgendas,j=i+d;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];renderDocAgendaList()}
-function docAgendaUseTemplate(){if(window._docCustomAgendas.length&&!confirm('Özel gündemler temizlenip dönem şablonu kullanılsın mı?'))return;window._docCustomAgendas=[];renderDocAgendaList()}
+function docAgendaUseTemplate(){window._docCustomAgendas=[];renderDocAgendaList()}
 function docAgendaBulkOpen(){
  const old=document.getElementById('docAgendaBulkPanel');if(old){old.remove();return}const host=el('docAgendaList');if(!host)return;
  host.insertAdjacentHTML('beforebegin',`<div id="docAgendaBulkPanel" class="card" style="padding:10px;margin-top:10px"><b>📋 Toplu Gündem Ekle</b><div class="tiny" style="margin:5px 0">1., 2., 3. / 1) / 1- biçimleri algılanır. Bir madde birkaç satıra taşarsa sonraki numaraya kadar aynı madde kabul edilir.</div><textarea id="docAgendaBulkText" rows="8" placeholder="1. Açılış ve yoklama\n2. Öğrenci başarı durumlarının değerlendirilmesi\n3. Ortak sınavların görüşülmesi"></textarea><div class="modal-actions"><button type="button" onclick="docAgendaBulkPreview()">Önizle</button><button type="button" class="secondary" onclick="el('docAgendaBulkPanel').remove()">Vazgeç</button></div><div id="docAgendaBulkPreview"></div></div>`);
@@ -2445,12 +2454,26 @@ function documentSmartAcademicSummary(academic,homework,parentMeetings){
  return {discussion,decision};
 }
 function sokAgendaNarrative(title,academic,homework,parentMeetings){
- const x=String(title||"");
+ const originalTitle=String(title||""); const x=sokSemanticTitle(originalTitle);
  if(/Öğrenci başarı durumlarının incelenmesi/.test(x)){
   const smart=documentSmartAcademicSummary(academic,homework,parentMeetings);
   if(smart)return smart;
  }
  if(/Veli ziyaretleri/.test(x)&&parentMeetings)return {discussion:parentMeetings.discussion,decision:parentMeetings.decision};
+ if(/Mevzuat ve yönetmelik/.test(x))return {discussion:'Gündemde belirtilen yönetmelik maddesi kurulun bilgisine sunulmuş, hükmün Şube Öğretmenler Kurulu çalışmalarına ilişkin yönleri üzerinde durulmuştur.',decision:'İlgili mevzuat hükmünün eğitim öğretim çalışmalarında dikkate alınmasına ve uygulamaların mevzuata uygun yürütülmesine karar verilmiştir.'};
+ if(/Sınıfın genel durumu/.test(x))return {discussion:'Sınıfın genel yapısı, öğrencilerin bireysel özellikleri, sınıf içi iletişimleri ve eğitim sürecine katılımları birlikte değerlendirilmiştir.',decision:'Öğrencilerin bireysel farklılıklarının gözetilmesine, sınıf içi uyum ve gelişimlerinin düzenli olarak izlenmesine karar verilmiştir.'};
+ if(/Okula uyum/.test(x))return {discussion:'Öğrencilerin yeni okul ortamına, sınıf düzenine, öğretmenlerine ve arkadaş çevresine uyum süreçleri değerlendirilmiştir.',decision:'Uyum güçlüğü gözlenen öğrencilerin sınıf rehber öğretmeni tarafından izlenmesine ve gerekli durumlarda veli ile okulun ilgili birimleriyle iş birliği kurulmasına karar verilmiştir.'};
+ if(/Öğrenci sağlığı/.test(x))return {discussion:'Öğrencilerin sağlık durumlarının derslere katılım ve okul yaşamına etkisi değerlendirilmiş; ihtiyaç hâlinde aileyle iletişim kurulmasının önemi üzerinde durulmuştur.',decision:'Öğrencilerin sağlıkla ilgili eğitim sürecini etkileyen durumlarının mahremiyet gözetilerek takip edilmesine ve gerekli hâllerde veli ile okul yönetimiyle iletişim kurulmasına karar verilmiştir.'};
+ if(/Sosyal ve ekonomik destek/.test(x))return {discussion:'Ekonomik açıdan desteğe ihtiyaç duyabilecek öğrencilerin durumlarının öğrenci mahremiyeti korunarak belirlenmesi ve mevcut destek imkânlarına yönlendirilmesi görüşülmüştür.',decision:'Desteğe ihtiyaç duyduğu belirlenen öğrencilerin mahremiyetleri gözetilerek okul yönetimi ve ilgili destek mekanizmalarıyla koordinasyon kurulmasına karar verilmiştir.'};
+ if(/Ders çalışma becerileri/.test(x))return {discussion:'Öğrencilerin planlı çalışma, zaman yönetimi, düzenli tekrar ve soru çözme alışkanlıkları değerlendirilmiş; verimli ders çalışma konusunda rehberlik yapılmasının yararlı olacağı belirtilmiştir.',decision:'Öğrencilere verimli ders çalışma ve zaman yönetimi konusunda rehberlik yapılmasına, ihtiyaç duyan öğrencilerin çalışma alışkanlıklarının takip edilmesine karar verilmiştir.'};
+ if(/Aile ve rehberlik/.test(x))return {discussion:'Ailevi sorunların öğrencilerin derslere katılımı, okul uyumu ve duygusal durumları üzerindeki olası etkileri öğrenci mahremiyeti gözetilerek değerlendirilmiştir.',decision:'Ailevi sorunlardan etkilendiği gözlenen öğrencilerin mahremiyetleri korunarak desteklenmesine ve gerekli durumlarda veli ile okulun rehberlik imkânlarından yararlanılmasına karar verilmiştir.'};
+ if(/Beslenme ve sağlıklı yaşam/.test(x))return {discussion:'Düzenli ve dengeli beslenmenin öğrencilerin günlük enerjisi, derse dikkati ve sağlıklı gelişimi açısından önemi üzerinde durulmuştur.',decision:'Öğrencilerin sağlıklı ve düzenli beslenme konusunda bilinçlendirilmesine ve ihtiyaç görülen durumlarda velilerle iş birliği kurulmasına karar verilmiştir.'};
+ if(/Zararlı alışkanlıklardan korunma/.test(x))return {discussion:'Öğrencilerin zararlı alışkanlıkların olumsuz etkileri konusunda yaş düzeylerine uygun biçimde bilinçlendirilmesi ve koruyucu rehberlik çalışmalarının önemi değerlendirilmiştir.',decision:'Zararlı alışkanlıklardan korunmaya yönelik bilinçlendirme ve koruyucu rehberlik çalışmalarının sürdürülmesine karar verilmiştir.'};
+ if(/Temizlik ve düzen/.test(x))return {discussion:'Kişisel temizlik, öz bakım, sınıf düzeni ve okul kurallarına uyumun öğrencilerin ortak yaşam sorumluluğunun bir parçası olduğu değerlendirilmiştir.',decision:'Öğrencilerin kişisel temizlik, öz bakım ve sınıf düzenine ilişkin sorumluluklarının düzenli olarak hatırlatılmasına ve takip edilmesine karar verilmiştir.'};
+ if(/Performans, proje ve ödevler/.test(x))return {discussion:'Performans, proje ve ders ödevlerinin öğrencilerin öğrenmelerini pekiştirecek, sorumluluk geliştirecek ve düzeylerine uygun olacak biçimde planlanması ile takibi görüşülmüştür.',decision:'Performans, proje ve ders ödevlerinin öğrencilerin düzeylerine uygun verilmesine, zamanında geri bildirim sağlanmasına ve eksik çalışmaların takip edilmesine karar verilmiştir.'};
+ if(/Mesleki yönlendirme/.test(x))return {discussion:'Öğrencilerin ilgi, yetenek ve eğitim hedeflerini tanımaları; farklı meslek alanları hakkında doğru bilgi edinmeleri ve kariyer farkındalığı geliştirmeleri üzerinde durulmuştur.',decision:'Öğrencilerin ilgi ve yeteneklerini tanımalarını destekleyen mesleki yönlendirme çalışmalarının yürütülmesine ve uygun bilgilendirmelerin yapılmasına karar verilmiştir.'};
+ if(/Öğretmen-öğrenci-veli ilişkileri/.test(x))return {discussion:'Öğretmen, öğrenci ve veli arasındaki iletişimin öğrencinin akademik ve sosyal gelişimini destekleyecek biçimde açık, düzenli ve çözüm odaklı yürütülmesi değerlendirilmiştir.',decision:'Öğretmen-öğrenci-veli iletişiminin düzenli sürdürülmesine ve ihtiyaç hâlinde öğrenci gelişimine yönelik ortak takip yapılmasına karar verilmiştir.'};
+ if(/Akademik risk ve önlemler/.test(x))return {discussion:'Başarı güçlüğü yaşayan öğrencilerin durumları; öğrenme eksikleri, çalışma alışkanlıkları, derse katılım ve ihtiyaç duydukları destekler açısından değerlendirilmiştir.',decision:'Başarı güçlüğü yaşayan öğrencilerin nedenlerinin öğrenci bazında izlenmesine, eksik öğrenmelere yönelik destekleyici çalışmalar yapılmasına ve gerekli durumlarda veli iş birliği kurulmasına karar verilmiştir.'};
  const rules=[
   [/Açılış yoklama/,"Toplantı, sınıf rehber öğretmeni başkanlığında açılmış; katılımcı öğretmenlerin yoklaması yapılarak gündem maddelerinin görüşülmesine geçilmiştir.","Toplantının mevcut katılımcılarla yürütülmesine ve gündem maddelerinin sırasıyla görüşülmesine karar verilmiştir."],
   [/Bir önceki dönemde alınan kararların değerlendirilmesi/,"Bir önceki dönemde alınan kararlar gözden geçirilmiş, uygulama durumu ve devam ettirilmesi gereken çalışmalar değerlendirilmiştir.","Önceki dönemde alınan ve uygulanmasına devam edilmesi gereken kararların takip edilmesine karar verilmiştir."],
@@ -2495,7 +2518,7 @@ function sokFindSpeaker(v,patterns,excludeNames=[]){
  return null;
 }
 function sokSpeakerPlan(title,v){
- const x=String(title||""), plan=[];
+ const x=sokSemanticTitle(title), plan=[];
  const add=(patterns)=>{const p=sokFindSpeaker(v,patterns,plan.map(q=>q.name));if(p)plan.push(p)};
  if(/Öğrenci başarı/.test(x)){add([/Matematik/i,/Sınıf Rehber/i]);add([/Sınıf Rehber/i,/Rehber/i]);}
  else if(/Ortak sınav/.test(x)){add([/Matematik/i,/Türk Dili|Edebiyat/i,/Sınıf Rehber/i]);}
@@ -2654,12 +2677,27 @@ const sokLocalTopics=[
  {id:'prior_decisions',keys:['bir önceki dönemde alınan karar','önceki dönemde alınan karar'],label:'Önceki dönem kararları',core:'Bir önceki dönemde alınan kararların uygulanma durumu ve devam eden çalışmalar değerlendirilmiştir.'},
  {id:'wellbeing',keys:['kişilik','beslenme','sağlık','sosyal ilişkiler'],label:'Kişisel ve sosyal gelişim',core:'Öğrencilerin kişisel, sosyal ve sağlıklı yaşam becerilerini destekleyen çalışmalar değerlendirilmiştir.'},
  {id:'closing',keys:['dilek','temenni','kapanış'],label:'Dilek ve temenniler',core:'Katılımcıların ek görüş ve önerilerini paylaşmalarına imkân verilmesi üzerinde durulmuştur.'},
- {id:'digital',keys:['dijital','teknoloji','internet'],label:'Dijital araçlar',core:'Dijital araçların bilinçli, güvenli ve öğrenmeyi destekleyecek biçimde kullanılmasına yönelik çalışmalar ele alınmıştır.'}
+ {id:'digital',keys:['dijital','teknoloji','internet'],label:'Dijital araçlar',core:'Dijital araçların bilinçli, güvenli ve öğrenmeyi destekleyecek biçimde kullanılmasına yönelik çalışmalar ele alınmıştır.'},
+ {id:'regulation',keys:['yönetmelik','110 madde','110. madde'],label:'Mevzuat ve yönetmelik',core:'Gündemde belirtilen mevzuat hükmü kurulun bilgisine sunularak uygulamada dikkat edilmesi gereken hususlar değerlendirilmiştir.'},
+ {id:'class_profile',keys:['sınıfın genel durumu','kişilik özellik'],label:'Sınıfın genel durumu',core:'Sınıfın genel yapısı, öğrencilerin bireysel özellikleri, sınıf içi ilişkileri ve eğitim sürecini etkileyen ihtiyaçlar birlikte değerlendirilmiştir.'},
+ {id:'adaptation',keys:['adaptasyon','uyum','yeni okul'],label:'Okula uyum',core:'Öğrencilerin yeni okul ortamına, sınıf düzenine ve eğitim sürecine uyumlarını destekleyecek çalışmalar değerlendirilmiştir.'},
+ {id:'health',keys:['sağlık durum','sağlıklı yaşam'],label:'Öğrenci sağlığı',core:'Öğrencilerin sağlık durumlarının eğitim sürecine etkisi ve ihtiyaç hâlinde aile ile okul yönetimi arasında kurulacak iletişim ele alınmıştır.'},
+ {id:'financial_support',keys:['maddi durum','ekonomik durum','maddi imk'],label:'Sosyal ve ekonomik destek',core:'Ekonomik açıdan desteğe ihtiyaç duyabilecek öğrencilerin mahremiyetleri gözetilerek belirlenmesi ve uygun okul desteklerine yönlendirilmesi değerlendirilmiştir.'},
+ {id:'study_skills',keys:['verimli ders çalışma','çalışma yöntem','çalışma alışkan'],label:'Ders çalışma becerileri',core:'Öğrencilerin planlı çalışma, zaman yönetimi, tekrar ve soru çözme alışkanlıklarını geliştirecek rehberlik çalışmaları görüşülmüştür.'},
+ {id:'family_support',keys:['ailevi problem','aile sorun','ailevi sorun'],label:'Aile ve rehberlik',core:'Ailevi sorunların öğrencinin eğitim sürecine olası etkileri, öğrenci mahremiyeti gözetilerek destek ve rehberlik açısından değerlendirilmiştir.'},
+ {id:'nutrition',keys:['beslenme'],label:'Beslenme ve sağlıklı yaşam',core:'Düzenli ve dengeli beslenme alışkanlıklarının öğrencilerin günlük yaşamı, dikkat ve okul performansı üzerindeki önemi değerlendirilmiştir.'},
+ {id:'harmful_habits',keys:['zararlı alışkanlık','bağımlılık'],label:'Zararlı alışkanlıklardan korunma',core:'Öğrencilerin zararlı alışkanlıklar konusunda yaş düzeylerine uygun biçimde bilinçlendirilmesi ve koruyucu rehberlik çalışmalarının sürdürülmesi görüşülmüştür.'},
+ {id:'cleanliness',keys:['temizlik','düzen','öz bakım'],label:'Temizlik ve düzen',core:'Öğrencilerin kişisel temizlik, öz bakım ve okul düzenine ilişkin sorumluluklarının desteklenmesi değerlendirilmiştir.'},
+ {id:'homework_project',keys:['performans','ders ödev','ödevleri','proje ve'],label:'Performans, proje ve ödevler',core:'Performans, proje ve ders ödevlerinin öğrencinin öğrenme sürecini destekleyecek biçimde planlanması, takip edilmesi ve geri bildirimle geliştirilmesi görüşülmüştür.'},
+ {id:'career',keys:['mesleki yön','meslek seçim','kariyer'],label:'Mesleki yönlendirme',core:'Öğrencilerin ilgi, yetenek ve eğitim hedeflerini tanımalarına yardımcı olacak mesleki yönlendirme ve kariyer farkındalığı çalışmaları ele alınmıştır.'},
+ {id:'student_parent_teacher',keys:['öğretmen öğrenci veli','öğrenci veli iliş'],label:'Öğretmen-öğrenci-veli ilişkileri',core:'Öğrencinin gelişimini desteklemek amacıyla öğretmen, öğrenci ve veli arasındaki iletişimin açık, düzenli ve çözüm odaklı sürdürülmesi değerlendirilmiştir.'},
+ {id:'academic_risk',keys:['başarısızlık','başarıyı artır','alınacak önlem'],label:'Akademik risk ve önlemler',core:'Başarı güçlüğü yaşayan öğrencilerin nedenlerinin ders, çalışma alışkanlığı ve öğrenme ihtiyacı açısından değerlendirilerek uygun destek tedbirlerinin planlanması görüşülmüştür.'}
 ];
 const sokLocalIntros=['Gündem maddesi kapsamında,','İlgili konu ele alınırken,','Bu başlık altında,','Yapılan değerlendirmede,'];
 const sokLocalEndings=['Uygulamanın öğrencilerin ihtiyaçlarına göre sürdürülmesi üzerinde durulmuştur.','Konuya ilişkin çalışmaların öğretmenler arasında eş güdüm içinde yürütülmesi görüşülmüştür.','Gerekli görülen hususların toplantı sonrasında takip edilmesi değerlendirilmiştir.'];
 function sokLocalNorm(t){return String(t||'').toLocaleLowerCase('tr-TR').replace(/[^a-zçğıöşü0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
 function sokLocalMatch(title){const q=sokLocalNorm(title);let best=null,score=0;for(const t of sokLocalTopics){const n=t.keys.filter(k=>q.includes(sokLocalNorm(k))).length;if(n>score){best=t;score=n}}return score?best:null}
+function sokSemanticTitle(title){const t=sokLocalMatch(title);return t?t.label:String(title||'')}
 // v7.7.37: Gündem başlığı düzenlense veya sıra değişse de konu kimliği korunur.
 function sokLocalTopicById(id){return sokLocalTopics.find(t=>t.id===String(id||''))||null}
 function sokAgendaTopicIdsLoad(){try{const a=JSON.parse(sessionStorage.getItem('sokAgendaTopicIds7737')||'[]');return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -2740,7 +2778,7 @@ function sokLocalParticipantsFromText(text){
 }
 function sokLocalDraftParticipants(){return sokLocalParticipantsFromText(el('docAssistantDraft')?.value||'')}
 function sokLocalRelevantSpeakers(title,peopleOverride=null){
- const people=peopleOverride||sokLocalDraftParticipants(),x=String(title||'');
+ const people=peopleOverride||sokLocalDraftParticipants(),x=sokSemanticTitle(title);
  const seen=new Set(),result=[];
  const addBy=(res)=>{for(const p of people){if(res.some(re=>re.test(p.branch))){const k=p.name.toLocaleUpperCase('tr-TR');if(!seen.has(k)){seen.add(k);result.push(p)}}}};
  if(/Değerler eğitimi/.test(x))addBy([/Din Kültürü/i,/Temel Din/i,/Kur.?an/i]);
@@ -2756,12 +2794,19 @@ function sokLocalRelevantSpeakers(title,peopleOverride=null){
  else if(/Eğitim kaynakları, laboratuvar/.test(x))addBy([/Fizik/i,/Kimya/i,/Biyoloji/i,/Matematik/i]);
  else if(/İş sağlığı ve güvenliği|Okul güvenliği/.test(x))addBy([/Sağlık/i,/Beden/i,/Sınıf Rehber Öğretmeni/i]);
  else if(/Sınıf geçme ve sınıf tekrar/.test(x))addBy([/Sınıf Rehber Öğretmeni/i,/Okul Rehber|Rehber/i]);
+ else if(/Sınıfın genel durumu|Okula uyum|Aile ve rehberlik|Ders çalışma becerileri|Mesleki yönlendirme|Öğretmen-öğrenci-veli ilişkileri/.test(x))addBy([/Sınıf Rehber Öğretmeni/i,/Rehber/i]);
+ else if(/Öğrenci sağlığı|Beslenme ve sağlıklı yaşam/.test(x))addBy([/Biyoloji/i,/Sağlık/i,/Sınıf Rehber Öğretmeni/i]);
+ else if(/Sosyal ve ekonomik destek/.test(x))addBy([/Sınıf Rehber Öğretmeni/i,/Rehber/i]);
+ else if(/Zararlı alışkanlıklardan korunma/.test(x))addBy([/Biyoloji/i,/Din Kültürü/i,/Sınıf Rehber Öğretmeni/i]);
+ else if(/Temizlik ve düzen/.test(x))addBy([/Beden/i,/Biyoloji/i,/Sınıf Rehber Öğretmeni/i]);
+ else if(/Performans, proje ve ödevler|Akademik risk ve önlemler/.test(x))addBy([/Matematik/i,/İngilizce/i,/Türk Dili|Edebiyat/i,/Fizik/i,/Kimya/i,/Biyoloji/i,/Tarih/i,/Din Kültürü/i]);
+ else if(/Mevzuat ve yönetmelik/.test(x))addBy([/Sınıf Rehber Öğretmeni/i]);
  // Konuya özgü branş bulunmadıysa yalnızca rehberlik niteliğindeki başlıklarda sınıf rehber öğretmenine dön.
  if(!result.length&&/Veli ziyaretleri|Sınıf geçme|Devamsızlık|Açılış yoklama/.test(x))addBy([/Sınıf Rehber Öğretmeni/i]);
  return result;
 }
 function sokLocalSpeakerSentence(title,p,variant){
- const role=sokRoleTitle(p.branch),name=p.name,x=String(title||'');
+ const role=sokRoleTitle(p.branch),name=p.name,x=sokSemanticTitle(title);
  const sets=[
   [/Açılış yoklama/,[`${role} ${name}, toplantının gündem doğrultusunda yürütülmesi ve katılımcı öğretmenlerin görüşlerinin sırayla alınmasının uygun olacağını belirtti.`,`${role} ${name}, toplantıda sınıfın eğitim öğretim sürecini ilgilendiren başlıkların somut öğrenci ihtiyaçları üzerinden ele alınmasını önerdi.`,`${role} ${name}, görüşmelerin gündem sırasına göre yürütülerek alınan kararların takip edilmesi gerektiğini ifade etti.`]],
   [/Veli ziyaretleri/,[`${role} ${name}, öğrencinin gelişimini desteklemek için ihtiyaç görülen durumlarda veliyle erken iletişim kurulmasının önemli olduğunu belirtti.`,`${role} ${name}, veli görüşmelerinde öğrencinin akademik durumu kadar okul uyumu ve çalışma alışkanlıklarının da birlikte ele alınması gerektiğini ifade etti.`,`${role} ${name}, okulda gözlenen ihtiyaçların aileyle paylaşılması ve gerekli durumlarda veli ziyaretinin planlanmasının yararlı olacağını belirtti.`]],
@@ -2781,16 +2826,31 @@ function sokLocalSpeakerSentence(title,p,variant){
   [/Okulda uygulanan projeler/,[`${role} ${name}, öğrencilerin ilgi ve yeteneklerine uygun projelerde görev almalarının araştırma, sorumluluk ve iş birliği becerilerini geliştireceğini belirtti.`,`${role} ${name}, proje çalışmalarında öğrencilerin yalnızca sonuç ürününe değil araştırma ve üretim sürecine aktif katılmalarının önemli olduğunu ifade etti.`,`${role} ${name}, okulda yürütülen projelerin öğrencilere duyurulması ve uygun öğrencilerin yetenekleri doğrultusunda yönlendirilmesini önerdi.`]],
   [/Dilek, temenniler ve kapanış/,[`${role} ${name}, toplantıda alınan kararların uygulama sürecinde takip edilmesinin ve ihtiyaç halinde yeniden değerlendirilmesinin yararlı olacağını belirtti.`,`${role} ${name}, öğretmenler arasındaki iletişim ve iş birliğinin öğrencilerin gelişimini destekleyecek biçimde sürdürülmesini temenni etti.`,`${role} ${name}, görüşülen konularda ortak uygulamanın korunması ve gerekli durumlarda bilgi paylaşımının sürdürülmesini önerdi.`]]
  ];
+ const semanticSets=[
+  [/Sınıfın genel durumu/,[`${role} ${name}, öğrencilerin bireysel özellikleri ve sınıf içi ilişkilerinin eğitim süreciyle birlikte değerlendirilmesi gerektiğini belirtti.`,`${role} ${name}, sınıfın genel durumunun yalnızca akademik sonuçlarla değil öğrencilerin uyum ve katılım özellikleriyle birlikte izlenmesini önerdi.`,`${role} ${name}, öğrencilerin güçlü yönleri ile destek gerektiren alanlarının gözlem ve ders içi katılım üzerinden takip edilmesinin yararlı olacağını ifade etti.`]],
+  [/Okula uyum/,[`${role} ${name}, yeni okul ortamına uyumda arkadaş ilişkileri, ders düzeni ve okul kurallarının birlikte ele alınması gerektiğini belirtti.`,`${role} ${name}, uyum güçlüğü yaşayan öğrencilerle erken dönemde görüşülmesinin ve gerektiğinde veliyle iletişim kurulmasının yararlı olacağını ifade etti.`,`${role} ${name}, öğrencilerin okula aidiyetini güçlendirecek sınıf içi iş birliği ve rehberlik çalışmalarının desteklenmesini önerdi.`]],
+  [/Öğrenci sağlığı|Beslenme ve sağlıklı yaşam/,[`${role} ${name}, sağlıklı yaşam ve düzenli beslenme alışkanlıklarının öğrencilerin dikkat, enerji ve günlük okul performansını desteklediğini belirtti.`,`${role} ${name}, sağlıkla ilgili eğitim sürecini etkileyen durumlarda öğrenci mahremiyeti gözetilerek aileyle iletişim kurulmasının önemli olduğunu ifade etti.`,`${role} ${name}, öğrencilerin sağlıklı yaşam alışkanlıkları konusunda yaş düzeylerine uygun biçimde bilinçlendirilmesini önerdi.`]],
+  [/Sosyal ve ekonomik destek/,[`${role} ${name}, ekonomik desteğe ihtiyaç duyabilecek öğrencilerin durumlarının mahremiyet gözetilerek ve öğrenciyi etiketlemeden ele alınması gerektiğini belirtti.`,`${role} ${name}, ihtiyaç sahibi öğrencilerin okulun mevcut destek imkânlarına uygun biçimde yönlendirilmesinin yararlı olacağını ifade etti.`,`${role} ${name}, öğrencilerin eğitim sürecini etkileyen maddi güçlüklerin sınıf rehberliği kapsamında dikkatle takip edilmesini önerdi.`]],
+  [/Ders çalışma becerileri/,[`${role} ${name}, öğrencilerin günlük ve haftalık çalışma planı oluşturmalarının, düzenli tekrar ve soru çözme alışkanlığı kazanmalarının önemli olduğunu belirtti.`,`${role} ${name}, verimli çalışmada uzun süre masa başında kalmaktan çok planlı çalışma, tekrar ve eksiklerin belirlenmesinin önemli olduğunu ifade etti.`,`${role} ${name}, çalışma alışkanlığı zayıf olan öğrencilerle uygulanabilir bireysel çalışma planları hazırlanmasını önerdi.`]],
+  [/Aile ve rehberlik/,[`${role} ${name}, ailevi sorunların öğrencinin okul yaşantısına yansımalarının mahremiyet ve öğrenci yararı gözetilerek değerlendirilmesi gerektiğini belirtti.`,`${role} ${name}, aile kaynaklı güçlük yaşayan öğrencilerle güvenli ve destekleyici iletişim kurulmasının önemli olduğunu ifade etti.`,`${role} ${name}, gerekli durumlarda veli ve okulun rehberlik imkânlarıyla koordineli destek sağlanmasını önerdi.`]],
+  [/Zararlı alışkanlıklardan korunma/,[`${role} ${name}, öğrencilerin zararlı alışkanlıkların etkileri konusunda korkutucu olmayan, yaş düzeyine uygun ve koruyucu bilgilerle bilinçlendirilmesi gerektiğini belirtti.`,`${role} ${name}, öğrencilerin sağlıklı seçimler yapmasını destekleyen rehberlik ve farkındalık çalışmalarının düzenli sürdürülmesini önerdi.`,`${role} ${name}, riskli davranışlara ilişkin bilgilendirmelerde öğrenci güvenliği ve mahremiyetinin gözetilmesinin önemli olduğunu ifade etti.`]],
+  [/Temizlik ve düzen/,[`${role} ${name}, kişisel temizlik ve öz bakım alışkanlıklarının öğrencilerin ortak yaşam sorumluluğunun bir parçası olarak desteklenmesi gerektiğini belirtti.`,`${role} ${name}, sınıf ve okul düzeninin korunmasında öğrencilerin sorumluluk almalarının önemli olduğunu ifade etti.`,`${role} ${name}, temizlik ve düzen kurallarının açık, tutarlı ve öğrencilerin yaş düzeyine uygun biçimde hatırlatılmasını önerdi.`]],
+  [/Performans, proje ve ödevler/,[`${role} ${name}, ödev ve proje çalışmalarının öğrencinin düzeyine uygun, amacı açık ve öğrenmeyi pekiştirecek biçimde verilmesi gerektiğini belirtti.`,`${role} ${name}, performans ve proje çalışmalarında öğrencinin yalnızca sonuç ürününün değil süreçteki emeğinin de izlenmesinin önemli olduğunu ifade etti.`,`${role} ${name}, eksik ödevlerin düzenli takip edilmesi ve öğrenciye zamanında geri bildirim verilmesini önerdi.`]],
+  [/Mesleki yönlendirme/,[`${role} ${name}, meslek seçiminde öğrencilerin ilgi ve yeteneklerini tanımalarının ve farklı eğitim yolları hakkında doğru bilgi edinmelerinin önemli olduğunu belirtti.`,`${role} ${name}, mesleki yönlendirmenin tek bir mesleğe yöneltmek yerine öğrencinin güçlü yönlerini ve hedeflerini keşfetmesini desteklemesi gerektiğini ifade etti.`,`${role} ${name}, öğrencilerin kariyer farkındalığını geliştirecek bilgilendirme ve rehberlik çalışmalarının yapılmasını önerdi.`]],
+  [/Öğretmen-öğrenci-veli ilişkileri/,[`${role} ${name}, öğretmen, öğrenci ve veli arasındaki iletişimin düzenli ve çözüm odaklı olmasının öğrenci gelişimini desteklediğini belirtti.`,`${role} ${name}, öğrenciyle ilgili güçlüklerde veli iletişiminin yalnızca sorun çıktığında değil gelişimi izlemek amacıyla da sürdürülmesinin yararlı olacağını ifade etti.`,`${role} ${name}, okul ve aile arasında ortak ve tutarlı bir yaklaşım geliştirilmesini önerdi.`]],
+  [/Akademik risk ve önlemler/,[`${role} ${name}, başarısızlığın nedenlerinin öğrenci bazında öğrenme eksikleri, çalışma alışkanlıkları ve derse katılım açısından incelenmesi gerektiğini belirtti.`,`${role} ${name}, başarı güçlüğü yaşayan öğrenciler için eksik kazanımlara yönelik destekleyici çalışmalar planlanmasını önerdi.`,`${role} ${name}, akademik riski bulunan öğrencilerin gelişiminin düzenli izlenmesi ve gerektiğinde veliyle iş birliği kurulmasının önemli olduğunu ifade etti.`]]
+ ];
+ for(const [re,arr] of semanticSets)if(re.test(x))return arr[variant%arr.length];
  for(const [re,arr] of sets)if(re.test(x))return arr[variant%arr.length];
  return `${role} ${name}, öğrencilerin eğitim sürecini desteklemek amacıyla bu başlıkta gözlenen ihtiyaçların somut örnekler üzerinden değerlendirilmesi ve gerekli çalışmaların takip edilmesi gerektiğini belirtti.`;
 }
 function sokLocalSpeakerLimit(title,variant,forDefault=false){
- const x=String(title||'');
- if(/Açılış yoklama|Dilek, temenniler ve kapanış/.test(x))return 0;
+ const x=sokSemanticTitle(title);
+ if(/Açılış|Dilek/.test(x))return 0;
  // İlk taslak öğretmen görüşü için uygun maddelerde konu genişliğine göre 1-3 öğretmen seçilir.
  if(forDefault){
-  if(/Ortak sınav|Bilimsel, sosyal, kültürel|Okulda uygulanan projeler|Öğrenci başarı/.test(x))return 3;
-  if(/öğretim programlarına|Türkiye Yüzyılı Maarif Modeli|Eğitim kaynakları, laboratuvar/.test(x))return 2;
+  if(/Ortak sınav|Etkinlikler|Okul projeleri|Akademik başarı|Akademik risk|Performans, proje|Zararlı alışkanlık/.test(x))return 3;
+  if(/Öğretim programları|Türkiye Yüzyılı Maarif Modeli|Eğitim kaynakları|Öğrenci sağlığı|Beslenme|Ders çalışma|Mesleki yönlendirme|Öğretmen-öğrenci-veli/.test(x))return 2;
   return 1;
  }
  // Alternatiflerde öğretmen sayısı değişir; bazı varyasyonlar tamamen genel kurul anlatımıdır.
@@ -3314,7 +3374,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.38 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.39 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -6490,7 +6550,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.38",
+    appVersion:"v7.7.39",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -6502,7 +6562,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.38",
+    appVersion:"v7.7.39",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
