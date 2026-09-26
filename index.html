@@ -930,7 +930,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 }
 .homework-edit-form label{display:block;font-size:12px;font-weight:700;color:var(--muted);min-width:0}
 .homework-edit-form input{display:block;width:100%;max-width:100%;min-width:0;margin-top:5px;box-sizing:border-box}
-\n/* ===== v7.7.26-test6 — Ödev formu iOS tarih görünümü ===== */
+\n/* ===== v7.7.27 — Ödev formu iOS tarih görünümü ===== */
 .homework-create-form .homework-date-field,
 .homework-edit-form .homework-date-field{display:block;min-width:0!important;overflow:visible!important}
 .homework-date-shell{position:relative;display:block;width:100%;height:44px;margin-top:5px;box-sizing:border-box}
@@ -2087,7 +2087,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.26-test6</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.27</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2245,7 +2245,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.26-test6 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.27 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2596,7 +2596,7 @@ function sokEditorMove(no,dir){
 }
 function sokEditorSave(){const main=el('docAssistantDraft');if(!main)return;try{sessionStorage.setItem('sokDraft7716',main.value)}catch(e){}}
 // v7.7.24: Yerel, ücretsiz gündem metni seçenekleri. Veri ve öğretmen beyanı uydurulmaz.
-// v7.7.26-test6: ŞÖK önerileri madde numarasına değil gündem başlığından belirlenen konu kimliğine bağlıdır.
+// v7.7.27: ŞÖK önerileri madde numarasına değil gündem başlığından belirlenen konu kimliğine bağlıdır.
 const sokLocalTopics=[
  {id:'opening',keys:['açılış','yoklama'],label:'Açılış ve yoklama',core:'Toplantının gündemi ve izlenecek çalışma sırası katılımcıların değerlendirmesine sunulmuştur.'},
  {id:'parent_contact',keys:['veli','aile','ziyaret'],label:'Veli iletişimi',core:'Öğrencilerin gelişiminin izlenmesinde okul ve aile arasındaki iletişimin sürdürülmesi üzerinde durulmuştur.'},
@@ -2689,7 +2689,7 @@ function sokLocalPropose(no){
  if(topic){
   if(topic.id==='academic'&&original){
    // Gerçek sayısal veri içeren üç paragrafı olduğu gibi koruyup anlatımını dönüştür.
-   // v7.7.26-test6: Güvenli genişletme — yalnızca 6. gündem maddesi için 12 alternatif.
+   // v7.7.27: Güvenli genişletme — yalnızca 6. gündem maddesi için 12 alternatif.
    // Sayısal veriler ve mevcut akademik değerlendirme korunur; sadece anlatım biçimi değişir.
    const academicClosings=[
     'Elde edilen verilerin öğrenci gelişimini izlemek amacıyla birlikte değerlendirilmesi üzerinde durulmuştur.',
@@ -2711,6 +2711,81 @@ function sokLocalPropose(no){
     candidates.push(candidate);
    }
 
+  }else if(topic.id==='dress'){
+   const v=[
+    'Öğrencilerin kılık ve kıyafet konusunda okul kurallarına uygun hareket etmelerinin eğitim ortamındaki düzen ve aidiyet duygusuna katkısı değerlendirilmiştir.',
+    'Kılık ve kıyafet kurallarının öğrencilere açık ve anlaşılır biçimde hatırlatılması, uygulamada tutarlı ve rehberlik edici bir yaklaşım benimsenmesi görüşülmüştür.',
+    'Öğrencilerin okul ortamına uygun, temiz ve düzenli bir görünüm sergilemelerinin kişisel sorumluluk bilinciyle ilişkilendirilmesi üzerinde durulmuştur.',
+    'Kılık ve kıyafete ilişkin kuralların yalnızca yaptırım yönüyle değil, okul kültürü ve ortak yaşam düzeninin bir parçası olarak açıklanması değerlendirilmiştir.',
+    'Öğrencilerde kılık ve kıyafet konusunda farkındalık oluşturulması, karşılaşılan durumlarda öncelikle rehberlik ve bilgilendirme yoluna gidilmesi ele alınmıştır.',
+    'Okulun kılık ve kıyafet uygulamalarında öğrenciler arasında eşitlik ve tutarlılığın korunması, gerekli hatırlatmaların uygun bir dille yapılması görüşülmüştür.',
+    'Kılık ve kıyafetle ilgili beklentilerin dönem içinde düzenli olarak hatırlatılması ve öğrencilerin kurallara uyumunun desteklenmesi üzerinde durulmuştur.',
+    'Öğrencilerin okul kurallarına uygun giyim konusunda sorumluluk almalarının desteklenmesi, ihtiyaç hâlinde velilerle iş birliği kurulması değerlendirilmiştir.',
+    'Kılık ve kıyafet kurallarına ilişkin öğrenci ve velilerin doğru bilgilendirilmesi, uygulamada yanlış anlaşılmalara yol açmayacak ortak bir yaklaşım izlenmesi görüşülmüştür.',
+    'Okul ortamında düzenli ve kurallara uygun görünümün eğitim sürecinin ciddiyetiyle ilişkisi ele alınmış, öğrencilere olumlu örnek olunmasının önemi belirtilmiştir.',
+    'Kılık ve kıyafet konusunda yaşanabilecek sorunların öğrenciyi rencide etmeden, rehberlik anlayışı içinde ve okul kuralları doğrultusunda ele alınması değerlendirilmiştir.',
+    'Öğrencilerin kılık ve kıyafet kurallarına uyumunun izlenmesi, gerekli durumlarda sınıf rehber öğretmeni ve veli iş birliğiyle çözüm geliştirilmesi görüşülmüştür.'
+   ]; candidates.push(...v);
+  }else if(topic.id==='class_change'){
+   const v=[
+    'Sınıf veya şube değişikliği taleplerinin öğrencinin eğitim süreci, uyumu ve okulun mevcut imkânları birlikte dikkate alınarak değerlendirilmesi görüşülmüştür.',
+    'Öğrencilerden ya da velilerden gelebilecek sınıf değişikliği taleplerinde gerekçelerin dikkatle incelenmesi ve eğitim sürecini olumsuz etkilemeyecek kararlar alınması üzerinde durulmuştur.',
+    'Sınıf değişikliklerinin yalnızca talep doğrultusunda değil, öğrencinin akademik ve sosyal uyumu ile sınıfların mevcut dengesi gözetilerek ele alınması değerlendirilmiştir.',
+    'Şube değişikliği gerektiren durumlarda öğrencinin görüşünün, rehberlik değerlendirmelerinin ve okul yönetiminin imkânlarının birlikte dikkate alınması görüşülmüştür.',
+    'Sınıf değişikliği taleplerinin objektif ölçütlerle değerlendirilmesi, öğrenciler arasında eşitlik ve okul düzeninin korunması üzerinde durulmuştur.',
+    'Öğrencinin sınıf ortamındaki uyumu ve eğitim ihtiyaçları açısından zorunlu görülen değişikliklerin ilgili öğretmenler ve okul yönetimiyle birlikte değerlendirilmesi ele alınmıştır.',
+    'Sınıf veya şube değişikliği sonrasında öğrencinin yeni sınıfa uyumunun izlenmesi ve gerekli rehberlik desteğinin sağlanması gerektiği ifade edilmiştir.',
+    'Değişiklik taleplerinde öğrencinin eğitim hakkı, sınıf mevcutları ve derslerin sağlıklı yürütülmesi birlikte değerlendirilerek karar verilmesi görüşülmüştür.',
+    'Sınıf değişikliğinin öğrenci üzerindeki akademik ve sosyal etkilerinin önceden değerlendirilmesi, gereksiz değişikliklerden kaçınılması üzerinde durulmuştur.',
+    'Velilerden gelen şube değişikliği taleplerinin gerekçeleriyle birlikte incelenmesi ve okulun işleyişini aksatmayacak çözümler geliştirilmesi ele alınmıştır.',
+    'Sınıf değişikliklerinde öğrencinin arkadaş ilişkileri, öğrenme ortamı ve rehberlik ihtiyaçlarının bütüncül biçimde değerlendirilmesi görüşülmüştür.',
+    'Gerekli görülen sınıf değişikliklerinin kayıt altına alınması, ilgili öğretmenlerin bilgilendirilmesi ve öğrencinin sonraki süreçte takip edilmesi üzerinde durulmuştur.'
+   ]; candidates.push(...v);
+  }else if(topic.id==='maarif'){
+   const v=[
+    'Türkiye Yüzyılı Maarif Modeli kapsamında öğrencilerin bilgi edinmenin yanında beceri, değer ve tutum geliştirmelerini destekleyecek ders uygulamaları değerlendirilmiştir.',
+    'Öğretim sürecinin Türkiye Yüzyılı Maarif Modelinin öngördüğü bütüncül eğitim anlayışı doğrultusunda yürütülmesi ve öğrenme çıktılarının ders etkinliklerine yansıtılması görüşülmüştür.',
+    'Derslerde öğrenciyi aktif kılan, düşünme ve problem çözme becerilerini geliştiren uygulamalara yer verilmesinin Maarif Modelinin amaçları açısından önemi üzerinde durulmuştur.',
+    'Türkiye Yüzyılı Maarif Modelinde yer alan değer, beceri ve eğilimlerin derslerin doğal akışı içinde öğrencilere kazandırılmasına yönelik çalışmalar ele alınmıştır.',
+    'Öğrenme süreçlerinin yalnızca konu aktarımına dayanmaması; öğrencilerin bilgiyi kullanma, ilişkilendirme ve günlük yaşama aktarma becerilerini geliştirecek biçimde planlanması değerlendirilmiştir.',
+    'Maarif Modeli doğrultusunda ölçme ve değerlendirme çalışmalarının öğrencinin gelişimini izleyen, süreç odaklı ve öğretimi destekleyen bir anlayışla yürütülmesi görüşülmüştür.',
+    'Öğrencilerin bireysel farklılıklarının dikkate alınması ve ihtiyaç duyulan durumlarda zenginleştirme ya da destekleme çalışmalarına yer verilmesi üzerinde durulmuştur.',
+    'Türkiye Yüzyılı Maarif Modelinin öngördüğü erdem-değer-eylem yaklaşımının uygun ders ve etkinliklerde doğal biçimde ilişkilendirilmesi değerlendirilmiştir.',
+    'Ders planlamalarında öğrenme çıktıları, beceriler ve öğrenci katılımının birlikte gözetilmesi; öğretmenler arasında uygulama birliğinin güçlendirilmesi görüşülmüştür.',
+    'Maarif Modelinin öğrenci merkezli yaklaşımı doğrultusunda araştırma, sorgulama, iş birliği ve üretmeye dayalı etkinliklerin artırılması ele alınmıştır.',
+    'Öğrencilerin millî, manevi ve kültürel değerlerle bağ kurmasını destekleyen çalışmaların derslerin amaçlarıyla uyumlu biçimde yürütülmesi üzerinde durulmuştur.',
+    'Türkiye Yüzyılı Maarif Modelinin uygulanmasında sınıfın hazırbulunuşluğu ve okulun imkânları dikkate alınarak gerçekçi, uygulanabilir ve öğrenci gelişimini destekleyen çalışmalar planlanması görüşülmüştür.'
+   ]; candidates.push(...v);
+  }else if(topic.id==='special_education'){
+   const v=[
+    'Özel eğitim ihtiyacı bulunan ve kaynaştırma/bütünleştirme yoluyla eğitim alan öğrencilerin bireysel ihtiyaçlarının ders süreçlerinde dikkate alınması görüşülmüştür.',
+    'Kaynaştırma öğrencilerinin akademik ve sosyal gelişimlerinin düzenli izlenmesi, gerekli uyarlamaların ilgili öğretmenler ve rehberlik servisiyle iş birliği içinde yapılması değerlendirilmiştir.',
+    'Özel eğitim ihtiyacı olan öğrenciler için erişilebilir ve destekleyici bir sınıf ortamı oluşturulmasının önemi üzerinde durulmuştur.',
+    'BEP kapsamında belirlenen hedeflerin öğrencinin gelişimine göre takip edilmesi ve ders öğretmenlerinin uygulamalarda ortak bir yaklaşım benimsemesi görüşülmüştür.',
+    'Öğrencilerin bireysel farklılıkları dikkate alınarak öğretim yöntemleri, etkinlikler ve ölçme değerlendirme süreçlerinde gerekli düzenlemelerin yapılması ele alınmıştır.',
+    'Kaynaştırma/bütünleştirme uygulamalarında öğrencinin sınıf içi katılımının artırılması ve akran ilişkilerinin desteklenmesi gerektiği değerlendirilmiştir.',
+    'Özel eğitim ihtiyacı bulunan öğrencilerin güçlü yönlerinin desteklenmesi, zorlandıkları alanlarda ise uygun eğitimsel desteğin planlanması üzerinde durulmuştur.',
+    'Rehberlik servisi, ders öğretmenleri, sınıf rehber öğretmeni ve veli arasındaki iş birliğinin öğrencinin gelişimi açısından düzenli sürdürülmesi görüşülmüştür.',
+    'Öğrencinin eğitim sürecinde ihtiyaç duyduğu uyarlamaların etiketleyici olmayan, kapsayıcı ve öğrencinin sınıfa aidiyetini güçlendiren bir anlayışla uygulanması değerlendirilmiştir.',
+    'Özel eğitim ve kaynaştırma çalışmalarında öğrencinin mahremiyetinin korunması, ihtiyaç bilgilerinin yalnızca eğitim süreci için gerekli kişilerle paylaşılması üzerinde durulmuştur.',
+    'Bireyselleştirilmiş eğitim çalışmalarının öğrencinin mevcut performansı ve gelişim hızı dikkate alınarak gözden geçirilmesi, gerektiğinde güncellenmesi görüşülmüştür.',
+    'Kaynaştırma öğrencilerinin derslere ve okul etkinliklerine etkin katılımını destekleyecek yöntemlerin belirlenmesi ve uygulama sonuçlarının düzenli takip edilmesi ele alınmıştır.'
+   ]; candidates.push(...v);
+  }else if(topic.id==='values'){
+   const v=[
+    'Değerler eğitiminin öğrencilerin günlük davranışlarına yansıyacak biçimde ders içi ve ders dışı çalışmalarla desteklenmesi görüşülmüştür.',
+    'Saygı, sorumluluk, dürüstlük, yardımlaşma ve adalet gibi değerlerin okul yaşamındaki somut davranışlarla ilişkilendirilmesi üzerinde durulmuştur.',
+    'Değerler eğitiminin yalnızca belirli gün ve haftalarla sınırlı tutulmaması, eğitim öğretim sürecinin doğal bir parçası olarak yürütülmesi değerlendirilmiştir.',
+    'Öğrencilerin millî, manevi ve kültürel değerlerle bağ kurmalarını destekleyecek etkinliklerin derslerin amaçlarıyla uyumlu biçimde planlanması görüşülmüştür.',
+    'Öğretmenlerin tutum ve davranışlarıyla öğrencilere olumlu örnek olmalarının değerler eğitiminin etkililiği açısından önemi vurgulanmıştır.',
+    'Sınıf içi iletişimde saygı, empati ve sorumluluk bilincini geliştirecek uygulamalara yer verilmesi, öğrencilerin olumlu davranışlarının desteklenmesi ele alınmıştır.',
+    'Değerlerin öğrenciler tarafından yalnızca kavramsal olarak bilinmesi değil, okul ve günlük yaşamda davranışa dönüştürülmesinin desteklenmesi değerlendirilmiştir.',
+    'Toplumsal dayanışma, yardımlaşma ve sorumluluk bilincini geliştirecek sosyal etkinliklerin değerler eğitimiyle ilişkilendirilmesi görüşülmüştür.',
+    'Öğrencilerin farklı görüşlere saygı göstermelerini ve ortak yaşam kurallarına uyumlarını destekleyecek sınıf içi çalışmalar yapılması üzerinde durulmuştur.',
+    'Değerler eğitiminde aile ve okul arasındaki tutarlılığın öğrencilerin davranış gelişimine katkısı değerlendirilmiş, gerekli durumlarda veli iş birliği yapılması ele alınmıştır.',
+    'Kültürel mirasın ve ortak değerlerin öğrencilerin yaş düzeyine uygun örneklerle ele alınması, geçmiş ile bugün arasında anlamlı bağlar kurulması görüşülmüştür.',
+    'Değerler eğitimi çalışmalarının öğrencilerin ihtiyaçları ve okulun sosyal çevresi dikkate alınarak somut, uygulanabilir ve katılımcı etkinliklerle desteklenmesi değerlendirilmiştir.'
+   ]; candidates.push(...v);
   }else if(topic.id==='parent_contact'){
    // Veli iletişimi: 12 gerçek paragraf kuruluşu. Kayıtlı görüşme verisi varsa değiştirilmeden korunur.
    const factual=original&&/\d/.test(original)?original.trim():'';
@@ -2892,7 +2967,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.26-test6 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.27 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -6063,7 +6138,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.26-test6",
+    appVersion:"v7.7.27",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -6075,7 +6150,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.26-test6",
+    appVersion:"v7.7.27",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
