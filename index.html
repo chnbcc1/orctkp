@@ -2087,7 +2087,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.41</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.42</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2245,7 +2245,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.41 · ŞÖK Anlamlandırma Motoru v2 · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.42 · ŞÖK Anlamlandırma Motoru v2 · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2270,7 +2270,7 @@ function openDocumentAssistant(){
   renderDocAgendaList();
 }
 
-// ===== v7.7.41 ŞÖK gündem girişi: tekli / toplu / PDF alan seçimi =====
+// ===== v7.7.42 ŞÖK gündem girişi: tekli / toplu / PDF alan seçimi =====
 window._docCustomAgendas=window._docCustomAgendas||[];
 function docAgendaNormalizeTitle(x){return String(x||'').replace(/^\s*\d+\s*[.)\-:]\s*/,'').replace(/^\s*[•·]\s*/,'').replace(/\s+/g,' ').replace(/[.;,]+\s*$/,'').trim()}
 function docAgendaParseBulk(text){
@@ -2478,7 +2478,7 @@ function sokAgendaNarrative(title,academic,homework,parentMeetings){
  if(/Etkinlikler/.test(x))return {discussion:'Öğrencilerin ilgi ve yeteneklerine uygun sosyal, kültürel, bilimsel ve sportif etkinliklere yönlendirilmesi; etkinliklerin öğrencilerin aktif katılım ve sorumluluk almasını destekleyecek biçimde planlanması görüşülmüştür.',decision:'Öğrencilerin ilgi ve yetenekleri doğrultusunda uygun etkinliklere yönlendirilmesine ve şube öğretmenlerinin uygulanabilir etkinliklerde öğrenci katılımını desteklemesine karar verilmiştir.'};
  if(/Dilek ve temenniler/.test(x))return {discussion:'Katılımcıların dilek, öneri ve temennileri alınmış; gündemde görüşülecek başka konu bulunup bulunmadığı değerlendirilmiştir.',decision:'Katılımcıların dilek ve temennileri alınarak gündemde görüşülecek başka konu kalmadığından toplantının sona erdirilmesine karar verilmiştir.'};
  const rules=[
-  [/Açılış yoklama/,"Toplantı, sınıf rehber öğretmeni başkanlığında açılmış; katılımcı öğretmenlerin yoklaması yapılarak gündem maddelerinin görüşülmesine geçilmiştir.","Toplantının mevcut katılımcılarla yürütülmesine ve gündem maddelerinin sırasıyla görüşülmesine karar verilmiştir."],
+  [/Açılış yoklama/,"Toplantı, sınıf rehber öğretmeni başkanlığında açılmış; katılımcı öğretmenlerin yoklaması yapılarak gündem maddelerinin görüşülmesine geçilmiştir.","Toplantının açılarak yoklamanın yapılmasına ve gündem maddelerinin sırasıyla görüşülmesine geçilmesine karar verilmiştir."],
   [/Bir önceki dönemde alınan kararların değerlendirilmesi/,"Bir önceki dönemde alınan kararlar gözden geçirilmiş, uygulama durumu ve devam ettirilmesi gereken çalışmalar değerlendirilmiştir.","Önceki dönemde alınan ve uygulanmasına devam edilmesi gereken kararların takip edilmesine karar verilmiştir."],
   [/Veli ziyaretleri/,"Öğrencilerin akademik, sosyal ve davranışsal gelişimlerinin desteklenmesinde veli iş birliğinin önemi üzerinde durulmuş; ihtiyaç duyulan durumlarda velilerle iletişim ve veli ziyaretleri değerlendirilmiştir.","İhtiyaç duyulan öğrencilerin velileriyle iletişim kurulmasına ve gerekli durumlarda veli ziyaretlerinin planlanmasına karar verilmiştir."],
   [/Kılık kıyafet/,"Öğrencilerin okulun kılık kıyafet kurallarına uyum durumları değerlendirilmiş, kurallara uyumun öğrenci ve velilerle iş birliği içinde takip edilmesi gerektiği görüşülmüştür.","Kılık kıyafet kurallarına uyumun takip edilmesine ve gerekli durumlarda öğrenci ile velilerin bilgilendirilmesine karar verilmiştir."],
@@ -2727,13 +2727,20 @@ const sokLocalTopics=[
 const sokLocalIntros=['Gündem maddesi kapsamında,','İlgili konu ele alınırken,','Bu başlık altında,','Yapılan değerlendirmede,'];
 const sokLocalEndings=['Uygulamanın öğrencilerin ihtiyaçlarına göre sürdürülmesi üzerinde durulmuştur.','Konuya ilişkin çalışmaların öğretmenler arasında eş güdüm içinde yürütülmesi görüşülmüştür.','Gerekli görülen hususların toplantı sonrasında takip edilmesi değerlendirilmiştir.'];
 function sokLocalNorm(t){return String(t||'').toLocaleLowerCase('tr-TR').replace(/[^a-zçğıöşü0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
+function sokLocalKeyHit(topic,key,q){
+ const nk=sokLocalNorm(key); if(!nk)return false;
+ // v7.7.42: 'afet' sözcüğü 'kıyafet' içinde geçtiği için yanlış afet eşleşmesini engelle.
+ // Afet anlamı yalnız bağımsız 'afet' sözcüğü veya diğer açık acil durum anahtarlarıyla oluşur.
+ if(topic?.id==='emergency'&&nk==='afet')return (` ${q} `).includes(' afet ');
+ return q.includes(nk);
+}
 function sokLocalMatch(title){
  const q=sokLocalNorm(title);let best=null,bestScore=0;
- for(const t of sokLocalTopics){let hits=0,weight=0;for(const k of t.keys){const nk=sokLocalNorm(k);if(nk&&q.includes(nk)){hits++;weight+=nk.length+nk.split(' ').length*8;}}
+ for(const t of sokLocalTopics){let hits=0,weight=0;for(const k of t.keys){const nk=sokLocalNorm(k);if(sokLocalKeyHit(t,k,q)){hits++;weight+=nk.length+nk.split(' ').length*8;}}
   if(!hits)continue;const score=hits*100+weight+(q===sokLocalNorm(t.label)?40:0);if(score>=bestScore){best=t;bestScore=score;}}
  return best;
 }
-function sokLocalMatches(title){const q=sokLocalNorm(title),out=[];for(const t of sokLocalTopics){let score=0;for(const k of t.keys){const nk=sokLocalNorm(k);if(nk&&q.includes(nk))score+=100+nk.length;}if(score)out.push({topic:t,score});}return out.sort((a,b)=>b.score-a.score).slice(0,3).map(x=>x.topic)}
+function sokLocalMatches(title){const q=sokLocalNorm(title),out=[];for(const t of sokLocalTopics){let score=0;for(const k of t.keys){const nk=sokLocalNorm(k);if(sokLocalKeyHit(t,k,q))score+=100+nk.length;}if(score)out.push({topic:t,score});}return out.sort((a,b)=>b.score-a.score).slice(0,3).map(x=>x.topic)}
 function sokSemanticTitle(title){const t=sokLocalMatch(title);return t?t.label:String(title||'')}
 // v7.7.37: Gündem başlığı düzenlense veya sıra değişse de konu kimliği korunur.
 function sokLocalTopicById(id){return sokLocalTopics.find(t=>t.id===String(id||''))||null}
@@ -3279,7 +3286,7 @@ function sokLocalPropose(no){
    ];
    candidates.push(...activityVariants);
   }else{
-   // v7.7.41: Tanınan serbest gündemler artık tek genel kalıba düşmez. Birden çok anlam ailesi birleştirilebilir.
+   // v7.7.42: Tanınan serbest gündemler artık tek genel kalıba düşmez. Birden çok anlam ailesi birleştirilebilir.
    const matches=sokLocalMatches(title), cores=(matches.length?matches:[topic]).map(t=>t.core);
    const lead=['Toplantıda','Gündem kapsamında','Kurul değerlendirmesinde','İlgili başlık ele alınırken'];
    const focus=['öğrencilerin ihtiyaçlarının somut gözlemler üzerinden izlenmesi','uygulanabilir çalışmaların öğrenci yararı gözetilerek planlanması','öğretmenler arası bilgi paylaşımının düzenli sürdürülmesi'];
@@ -3430,7 +3437,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.41 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.42 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -6606,7 +6613,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.41",
+    appVersion:"v7.7.42",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -6618,7 +6625,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.41",
+    appVersion:"v7.7.42",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
