@@ -2087,7 +2087,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.29</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.30</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2245,7 +2245,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.29 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.30 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2683,6 +2683,61 @@ function sokLocalRewrite(text,variant){
  }
  return paragraphs.join('\n\n');
 }
+// v7.7.30: Gündem konusu ile katılımcı branşını eşleştirerek uygun öğretmeni doğal biçimde görüşmeye katar.
+function sokLocalDraftParticipants(){
+ const text=el('docAssistantDraft')?.value||'';
+ const lines=text.split(/\r?\n/); const start=lines.findIndex(x=>x.trim()==='TOPLANTI KATILIMCILARI');
+ if(start<0)return [];
+ const out=[];
+ for(let i=start+1;i<lines.length;i++){
+  const x=lines[i].trim(); if(!x)continue;
+  if(x==='GÖRÜŞMELER'||x==='GÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ'||/^\d+\.\s/.test(x))break;
+  if(!x.includes(' | '))continue;
+  const a=x.split(' | ').map(y=>y.trim()); const branch=a[0]||'',name=a[1]||'';
+  if(branch&&name)out.push({name,branch});
+ }
+ return out;
+}
+function sokLocalRelevantSpeakers(title){
+ const people=sokLocalDraftParticipants(),x=String(title||'');
+ const seen=new Set(),result=[];
+ const addBy=(res)=>{for(const p of people){if(res.some(re=>re.test(p.branch))){const k=p.name.toLocaleUpperCase('tr-TR');if(!seen.has(k)){seen.add(k);result.push(p)}}}};
+ if(/Değerler eğitimi/.test(x))addBy([/Din Kültürü/i,/Temel Din/i,/Kur.?an/i]);
+ else if(/Ortak sınav/.test(x))addBy([/Matematik/i,/İngilizce/i,/Türk Dili|Edebiyat/i,/Fizik/i,/Kimya/i,/Biyoloji/i,/Tarih/i,/Coğrafya/i,/Arapça/i,/Din Kültürü/i]);
+ else if(/öğretim programlarına/.test(x))addBy([/Matematik/i,/İngilizce/i,/Türk Dili|Edebiyat/i,/Fizik/i,/Kimya/i,/Biyoloji/i,/Tarih/i,/Coğrafya/i,/Arapça/i,/Din Kültürü/i]);
+ else if(/Öğrenci başarı/.test(x))addBy([/Matematik/i,/İngilizce/i,/Türk Dili|Edebiyat/i,/Fizik/i,/Kimya/i,/Biyoloji/i,/Tarih/i,/Coğrafya/i,/Arapça/i,/Din Kültürü/i]);
+ else if(/Bilimsel, sosyal, kültürel/.test(x))addBy([/Beden/i,/Türk Dili|Edebiyat/i,/İngilizce/i,/Din Kültürü/i]);
+ else if(/Okulda uygulanan projeler/.test(x))addBy([/Matematik/i,/Fen|Fizik|Kimya|Biyoloji/i,/Türk Dili|Edebiyat/i,/İngilizce/i,/Din Kültürü/i]);
+ else if(/Özel eğitime|kaynaştırma/.test(x))addBy([/Rehber/i]);
+ else if(/kişilik, beslenme, sağlık/.test(x))addBy([/Rehber/i,/Sağlık/i]);
+ else if(/Sınıf değişiklikleri/.test(x))addBy([/Rehber/i]);
+ // Konuya özgü branş bulunmadıysa yalnızca rehberlik niteliğindeki başlıklarda sınıf rehber öğretmenine dön.
+ if(!result.length&&/Veli ziyaretleri|Sınıf geçme|Devamsızlık|Açılış yoklama/.test(x))addBy([/Sınıf Rehber Öğretmeni/i]);
+ return result;
+}
+function sokLocalSpeakerSentence(title,p,variant){
+ const role=sokRoleTitle(p.branch),name=p.name,x=String(title||'');
+ const forms={
+  values:[`${role} ${name}, değerler eğitiminin öğrencilerin günlük davranışlarına yansıyacak biçimde desteklenmesi gerektiğini ifade etti.`,`${role} ${name}, ders içi ve ders dışı değerler eğitimi çalışmalarına ilişkin görüşlerini paylaştı.`,`${role} ${name}, sorumluluk, saygı ve iş birliği gibi değerlerin eğitim süreciyle ilişkilendirilmesi üzerinde durdu.`],
+  exams:[`${role} ${name}, ortak sınavların uygulanması ve sonuçların ders sürecine yansıtılmasına ilişkin görüşlerini belirtti.`,`${role} ${name}, ortak sınav sonuçlarının öğrencilerin öğrenme eksiklerini belirlemede kullanılmasına yönelik değerlendirmelerde bulundu.`,`${role} ${name}, sınav kapsamı ile öğrenme çıktıları arasındaki uyumun korunmasının önemini vurguladı.`],
+  curriculum:[`${role} ${name}, derslerin öğretim programı ve yıllık planlarla uyumlu yürütülmesine ilişkin görüşlerini paylaştı.`,`${role} ${name}, öğrenme çıktılarının sınıf içi uygulamalara yansıtılması konusunda değerlendirmelerde bulundu.`,`${role} ${name}, programdaki öğrenme çıktılarının gerçekleşme durumunun düzenli izlenmesi gerektiğini ifade etti.`],
+  activities:[`${role} ${name}, öğrencilerin bilimsel, sosyal, kültürel ve sportif etkinliklere katılımına ilişkin görüşlerini paylaştı.`,`${role} ${name}, ders dışı etkinliklerin öğrencilerin çok yönlü gelişimine katkısını değerlendirdi.`,`${role} ${name}, öğrencilerin ilgi ve yeteneklerine uygun etkinliklere yönlendirilmesi üzerinde durdu.`],
+  projects:[`${role} ${name}, okulda yürütülen projelere öğrencilerin ilgi ve yetenekleri doğrultusunda katılımına ilişkin görüşlerini paylaştı.`,`${role} ${name}, proje çalışmalarının öğrencilerin akademik ve sosyal gelişimine katkısını değerlendirdi.`,`${role} ${name}, öğrencilerin uygun proje çalışmalarına yönlendirilmesi üzerinde durdu.`],
+  academic:[`${role} ${name}, öğrencilerin akademik gelişimlerinin ders bazında izlenmesine ilişkin değerlendirmelerde bulundu.`,`${role} ${name}, sınav sonuçlarının öğrencilerin öğrenme ihtiyaçlarını belirlemek amacıyla değerlendirilmesi gerektiğini ifade etti.`,`${role} ${name}, desteğe ihtiyaç duyan öğrencilerin gelişimlerinin düzenli takip edilmesi üzerinde durdu.`]
+ };
+ let a=/Değerler/.test(x)?forms.values:/Ortak sınav/.test(x)?forms.exams:/öğretim programlarına/.test(x)?forms.curriculum:/Bilimsel, sosyal, kültürel/.test(x)?forms.activities:/Okulda uygulanan projeler/.test(x)?forms.projects:/Öğrenci başarı/.test(x)?forms.academic:null;
+ return a?a[variant%a.length]:`${role} ${name}, gündem maddesine ilişkin görüşlerini paylaştı.`;
+}
+function sokLocalApplySpeaker(title,text,variant){
+ const speakers=sokLocalRelevantSpeakers(title); if(!speakers.length)return text;
+ const p=speakers[variant%speakers.length];
+ // Zaten aynı öğretmen bu öneride doğal biçimde yer alıyorsa ikinci kez ekleme.
+ if(text.toLocaleUpperCase('tr-TR').includes(p.name.toLocaleUpperCase('tr-TR')))return text;
+ // 12 önerinin tamamını aynı kalıba sokma: 8 öneride branş öğretmeni görünür, 4'ü kurul anlatımı olarak kalır.
+ if(variant%3===2)return text;
+ const sentence=sokLocalSpeakerSentence(title,p,variant);
+ return variant%2===0?`${sentence} ${text}`:`${text} ${sentence}`;
+}
 function sokLocalPropose(no){
  const row=sokLocalSelect(no);if(!row)return;
  const title=row.querySelector('.sok-edit-title').value.trim(),area=row.querySelector('.sok-edit-text'),panel=row.querySelector('.sok-local-panel');
@@ -3000,6 +3055,7 @@ function sokLocalPropose(no){
    }
   }
  }
+ candidates=candidates.map((x,i)=>sokLocalApplySpeaker(title,x,i));
  candidates.push(...saved.map(x=>x.text));candidates=[...new Set(candidates)];
  if(!candidates.length){panel.innerHTML='<p class="tiny">Bu başlık için güvenilir bir konu eşleşmesi bulunamadı. Kendi metninizi yazıp kütüphaneye kaydedebilirsiniz.</p>';panel.hidden=false;return}
  const prev=row.dataset.localIndex===undefined?-1:Number(row.dataset.localIndex);let next=(prev+1)%candidates.length;
@@ -3134,7 +3190,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.29 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.30 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -6305,7 +6361,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.29",
+    appVersion:"v7.7.30",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -6317,7 +6373,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.29",
+    appVersion:"v7.7.30",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
