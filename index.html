@@ -2087,7 +2087,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.36</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.38</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2245,7 +2245,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.36 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.38 · ŞÖK gündem içe aktarma · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2261,12 +2261,49 @@ function openDocumentAssistant(){
       <label>Müdür Yardımcısı<input id="docAssistantVicePrincipal" value="${esc(settings.docAssistantVicePrincipal||"")}" placeholder="Ad Soyad"></label>
       <label>Müdür<input id="docAssistantPrincipal" value="${esc(settings.docAssistantPrincipal||"")}" placeholder="Ad Soyad"></label>
     </div>
+    <div class="card" style="padding:12px;margin:12px 0"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap"><b>📋 Gündem Maddeleri</b><span id="docAgendaCount" class="tiny"></span></div><div class="tiny" style="margin:5px 0 9px">Şablon gündemini kullanabilir veya kendi gündemlerinizi tek tek, toplu metinden ya da PDF'den ekleyebilirsiniz.</div><div style="display:flex;gap:7px;flex-wrap:wrap"><button type="button" class="secondary" onclick="docAgendaAddOne()">+ Gündem Ekle</button><button type="button" class="secondary" onclick="docAgendaBulkOpen()">📋 Toplu Gündem Ekle</button><button type="button" class="secondary" onclick="docAgendaPdfOpen()">📄 PDF'den İçe Aktar</button><button type="button" class="secondary" onclick="docAgendaUseTemplate()">Şablon Gündemi</button></div><div id="docAgendaList" style="margin-top:10px"></div></div>
     <label class="doc-assistant-prompt">Belgede özellikle yer almasını istedikleriniz<textarea id="docAssistantPrompt" rows="3" placeholder="Örn. Devamsızlık, akademik başarı, sınıf disiplini ve alınacak tedbirler yer alsın."></textarea></label>
     <details class="doc-participants" id="docParticipantsDetails" ontoggle="documentParticipantsToggle(this)"><summary>👥 ŞÖK Katılımcıları / İmza Sirküsü</summary><div class="tiny" style="margin-top:7px">Öğretmen kadrosu bir kez kaydedilir; her ŞÖK'te katılacak kişileri işaretleyebilirsiniz.</div><div id="docStaffList" class="doc-staff-list"></div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:8px"><button type="button" class="secondary" onclick="addDocumentStaffRow()">+ Öğretmen Ekle</button><button type="button" class="secondary" onclick="saveDocumentStaff()">Kadroyu Kaydet</button></div></details>
     <div class="modal-actions"><button onclick="generateDocumentAssistantDraft()">✨ Taslak Oluştur</button><button class="secondary" onclick="openDocumentAssistantTemplates()">Şablonları Gör</button></div>`;
   el("modal").classList.add("open");
   renderDocumentStaff();
+  renderDocAgendaList();
 }
+
+// ===== v7.7.38 ŞÖK gündem girişi: tekli / toplu / PDF alan seçimi =====
+window._docCustomAgendas=window._docCustomAgendas||[];
+function docAgendaNormalizeTitle(x){return String(x||'').replace(/^\s*\d+\s*[.)\-:]\s*/,'').replace(/^\s*[•·]\s*/,'').replace(/\s+/g,' ').replace(/[.;,]+\s*$/,'').trim()}
+function docAgendaParseBulk(text){
+ const raw=String(text||'').replace(/\r/g,'').split('\n'),out=[];let cur='';
+ const numbered=/^\s*\d+\s*[.)\-:]\s*(.+)$/;
+ for(const line0 of raw){const line=line0.trim();if(!line)continue;const m=line.match(numbered);if(m){if(cur)out.push(docAgendaNormalizeTitle(cur));cur=m[1]}else if(cur)cur+=' '+line;else cur=line}
+ if(cur)out.push(docAgendaNormalizeTitle(cur));
+ // Numarasız yapıştırmada her dolu satırı ayrı gündem kabul et.
+ if(out.length<=1 && !raw.some(x=>numbered.test(x)))return raw.map(docAgendaNormalizeTitle).filter(Boolean);
+ return out.filter(Boolean);
+}
+function renderDocAgendaList(){
+ const box=el('docAgendaList'),cnt=el('docAgendaCount');if(!box)return;const a=window._docCustomAgendas||[];if(cnt)cnt.textContent=a.length?`${a.length} özel gündem`:'Şablon gündemi aktif';
+ box.innerHTML=a.length?a.map((x,i)=>`<div style="display:grid;grid-template-columns:auto 1fr auto auto auto;gap:6px;align-items:center;margin:6px 0"><b>${i+1}.</b><input value="${esc(x)}" oninput="window._docCustomAgendas[${i}]=this.value"><button type="button" class="secondary" onclick="docAgendaMove(${i},-1)">↑</button><button type="button" class="secondary" onclick="docAgendaMove(${i},1)">↓</button><button type="button" class="danger" onclick="docAgendaDelete(${i})">Sil</button></div>`).join(''):'<div class="tiny">Özel gündem girilmedi. Taslak oluşturulduğunda dönem şablonundaki gündemler kullanılacak.</div>';
+}
+function docAgendaAddOne(){window._docCustomAgendas.push('');renderDocAgendaList();setTimeout(()=>el('docAgendaList')?.querySelector('input:last-of-type')?.focus(),20)}
+function docAgendaDelete(i){window._docCustomAgendas.splice(i,1);renderDocAgendaList()}
+function docAgendaMove(i,d){const a=window._docCustomAgendas,j=i+d;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];renderDocAgendaList()}
+function docAgendaUseTemplate(){if(window._docCustomAgendas.length&&!confirm('Özel gündemler temizlenip dönem şablonu kullanılsın mı?'))return;window._docCustomAgendas=[];renderDocAgendaList()}
+function docAgendaBulkOpen(){
+ const old=document.getElementById('docAgendaBulkPanel');if(old){old.remove();return}const host=el('docAgendaList');if(!host)return;
+ host.insertAdjacentHTML('beforebegin',`<div id="docAgendaBulkPanel" class="card" style="padding:10px;margin-top:10px"><b>📋 Toplu Gündem Ekle</b><div class="tiny" style="margin:5px 0">1., 2., 3. / 1) / 1- biçimleri algılanır. Bir madde birkaç satıra taşarsa sonraki numaraya kadar aynı madde kabul edilir.</div><textarea id="docAgendaBulkText" rows="8" placeholder="1. Açılış ve yoklama\n2. Öğrenci başarı durumlarının değerlendirilmesi\n3. Ortak sınavların görüşülmesi"></textarea><div class="modal-actions"><button type="button" onclick="docAgendaBulkPreview()">Önizle</button><button type="button" class="secondary" onclick="el('docAgendaBulkPanel').remove()">Vazgeç</button></div><div id="docAgendaBulkPreview"></div></div>`);
+}
+function docAgendaBulkPreview(){const rows=docAgendaParseBulk(el('docAgendaBulkText')?.value||'');window._docAgendaPreview=rows;const b=el('docAgendaBulkPreview');b.innerHTML=rows.length?`<div class="notice" style="margin-top:8px"><b>${rows.length} gündem maddesi algılandı.</b></div>${rows.map((x,i)=>`<div style="display:grid;grid-template-columns:auto 1fr;gap:7px;align-items:center;margin:5px 0"><b>${i+1}.</b><input class="doc-agenda-preview-input" value="${esc(x)}"></div>`).join('')}<button type="button" class="success" style="margin-top:8px" onclick="docAgendaCommitPreview()">Gündemlere Ekle</button>`:'<div class="notice">Gündem maddesi algılanamadı.</div>'}
+function docAgendaCommitPreview(){const inputs=[...document.querySelectorAll('.doc-agenda-preview-input')];const rows=(inputs.length?inputs.map(x=>docAgendaNormalizeTitle(x.value)):window._docAgendaPreview||[]).filter(Boolean);window._docCustomAgendas.push(...rows);el('docAgendaBulkPanel')?.remove();renderDocAgendaList()}
+function docAgendaPdfOpen(){
+ window._docAgendaReturn={agendas:[...(window._docCustomAgendas||[])],form:{type:el('docAssistantType')?.value,date:el('docAssistantDate')?.value,year:el('docAssistantYear')?.value,period:el('docAssistantPeriod')?.value,school:el('docAssistantSchool')?.value,teacher:el('docAssistantTeacher')?.value,className:el('docAssistantClass')?.value,time:el('docAssistantTime')?.value,place:el('docAssistantPlace')?.value,vice:el('docAssistantVicePrincipal')?.value,principal:el('docAssistantPrincipal')?.value,prompt:el('docAssistantPrompt')?.value}};
+ openPDFRegionImport();pdfRegion.purpose='agenda';el('modalTitle').textContent="PDF'den Gündem Al";el('modalSubtitle').textContent='Gündem listesinin bulunduğu alanı seçin';const help=el('pdfSelectHelp');if(help)help.innerHTML='Önce <b>Alan Seç</b> düğmesine dokunun. Sonra yalnızca gündem maddelerinin bulunduğu alanı seçin.';const all=el('applyAllPages')?.closest('label');if(all)all.style.display='none';const btn=el('pdfReadBtn');if(btn)btn.textContent='Seçili Gündem Alanını Oku';setPDFInfo('PDF seçin; ardından gündem listesinin bulunduğu alanı işaretleyin.');
+}
+function docAgendaRestoreForm(){const r=window._docAgendaReturn;if(!r)return;window._docCustomAgendas=r.agendas||[];openDocumentAssistant();setTimeout(()=>{const f=r.form||{},set=(id,v)=>{const e=el(id);if(e&&v!=null)e.value=v};set('docAssistantType',f.type);set('docAssistantDate',f.date);set('docAssistantYear',f.year);set('docAssistantPeriod',f.period);set('docAssistantSchool',f.school);set('docAssistantTeacher',f.teacher);set('docAssistantClass',f.className);set('docAssistantTime',f.time);set('docAssistantPlace',f.place);set('docAssistantVicePrincipal',f.vice);set('docAssistantPrincipal',f.principal);set('docAssistantPrompt',f.prompt);renderDocAgendaList()},20)}
+function renderAgendaPDFResults(rows,raw){window._docAgendaPdfRows=rows;el('pdfRegionResults').innerHTML=`<b>Bulunan gündem maddeleri (${rows.length})</b><div class="tiny" style="margin:5px 0">Yanlış okunan maddeleri eklemeden önce düzeltebilirsiniz.</div>${rows.map((x,i)=>`<div style="display:grid;grid-template-columns:auto 1fr;gap:7px;align-items:center;margin:6px 0"><b>${i+1}.</b><input class="agenda-pdf-row" value="${esc(x)}"></div>`).join('')}${rows.length?'<button class="success" style="margin-top:9px" onclick="commitAgendaPDFRows()">Gündemlere Ekle</button>':''}<button class="secondary" style="margin-top:9px" onclick="docAgendaRestoreForm()">← Belge Asistanına Dön</button><details style="margin-top:8px"><summary>Ham metni göster</summary><textarea rows="5">${esc((raw||[]).join('\n'))}</textarea></details>`}
+function commitAgendaPDFRows(){const rows=[...document.querySelectorAll('.agenda-pdf-row')].map(x=>docAgendaNormalizeTitle(x.value)).filter(Boolean);const r=window._docAgendaReturn||{agendas:[]};r.agendas=[...(r.agendas||[]),...rows];window._docAgendaReturn=r;docAgendaRestoreForm()}
+
 function docDateTR(v){if(!v)return "";const [y,m,d]=v.split("-");return `${d}.${m}.${y}`}
 function getDocumentStaff(){
   if(Array.isArray(settings.docAssistantStaff)&&settings.docAssistantStaff.length)return settings.docAssistantStaff.map(x=>({name:x.name||"",branch:x.branch||"",active:x.active!==false}));
@@ -2286,7 +2323,7 @@ function docAssistantValues(){
   const v={
     type:el("docAssistantType")?.value||"zumre",date:el("docAssistantDate")?.value||localISODate(),year:el("docAssistantYear")?.value.trim()||"",period:el("docAssistantPeriod")?.value||"1",
     school:el("docAssistantSchool")?.value.trim()||"",teacher:el("docAssistantTeacher")?.value.trim()||"",className:el("docAssistantClass")?.value.trim()||"",prompt:el("docAssistantPrompt")?.value.trim()||"",participants:readDocumentStaff().filter(x=>x.active).map(x=>`${x.name} | ${x.branch}`),
-    time:el("docAssistantTime")?.value||"",place:el("docAssistantPlace")?.value.trim()||"",vicePrincipal:el("docAssistantVicePrincipal")?.value.trim()||"",principal:el("docAssistantPrincipal")?.value.trim()||""
+    agendas:(window._docCustomAgendas||[]).map(x=>String(x).trim()).filter(Boolean),time:el("docAssistantTime")?.value||"",place:el("docAssistantPlace")?.value.trim()||"",vicePrincipal:el("docAssistantVicePrincipal")?.value.trim()||"",principal:el("docAssistantPrincipal")?.value.trim()||""
   };
   settings.docAssistantTime=v.time;settings.docAssistantPlace=v.place;settings.docAssistantVicePrincipal=v.vicePrincipal;settings.docAssistantPrincipal=v.principal;saveSettings();
   return v;
@@ -2512,7 +2549,7 @@ function sokDiscussionText(v,agenda){
  return `GÖRÜŞMELER\n${discussions}\n\nALINAN KARARLAR\n${decisions}\n\nYukarıda belirtilen hususların uygulanmasına karar verilmiştir.`;
 }
 function buildSokDraft(v){
- const school=v.school||"........................................................",teacher=v.teacher||"................................",clsName=v.className||"........",date=docDateTR(v.date),agenda=v.period==="2"?sokAgenda2:sokAgenda1,no=v.period==="2"?2:1;
+ const school=v.school||"........................................................",teacher=v.teacher||"................................",clsName=v.className||"........",date=docDateTR(v.date),agenda=(v.agendas&&v.agendas.length)?v.agendas:(v.period==="2"?sokAgenda2:sokAgenda1),no=v.period==="2"?2:1;
  const participants=v.participants?.length?v.participants:[`${teacher} | Sınıf Rehber Öğretmeni`];
  const agendaText=agenda.map((x,i)=>`${i+1}. ${x}.`).join("\n");
  const discussion=sokDiscussionText(v,agenda);
@@ -2580,7 +2617,7 @@ function sokEditorSync(){
  }
  main.value=value;
  rows.forEach((row,i)=>{row.dataset.no=String(i+1);const b=row.querySelector('.sok-edit-head b');if(b)b.textContent=`${i+1}. Gündem başlığı`;row.querySelectorAll('[data-sok-no]').forEach(btn=>btn.dataset.sokNo=String(i+1));});
- sokEditorUpdateOrderButtons();sokEditorSave();
+ sokEditorUpdateOrderButtons();sokAgendaTopicIdsSave();sokEditorSave();
 }
 function sokEditorUpdateOrderButtons(){
  const rows=[...document.querySelectorAll('#sokAgendaEditor .sok-edit-item')];
@@ -2623,6 +2660,10 @@ const sokLocalIntros=['Gündem maddesi kapsamında,','İlgili konu ele alınırk
 const sokLocalEndings=['Uygulamanın öğrencilerin ihtiyaçlarına göre sürdürülmesi üzerinde durulmuştur.','Konuya ilişkin çalışmaların öğretmenler arasında eş güdüm içinde yürütülmesi görüşülmüştür.','Gerekli görülen hususların toplantı sonrasında takip edilmesi değerlendirilmiştir.'];
 function sokLocalNorm(t){return String(t||'').toLocaleLowerCase('tr-TR').replace(/[^a-zçğıöşü0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
 function sokLocalMatch(title){const q=sokLocalNorm(title);let best=null,score=0;for(const t of sokLocalTopics){const n=t.keys.filter(k=>q.includes(sokLocalNorm(k))).length;if(n>score){best=t;score=n}}return score?best:null}
+// v7.7.37: Gündem başlığı düzenlense veya sıra değişse de konu kimliği korunur.
+function sokLocalTopicById(id){return sokLocalTopics.find(t=>t.id===String(id||''))||null}
+function sokAgendaTopicIdsLoad(){try{const a=JSON.parse(sessionStorage.getItem('sokAgendaTopicIds7737')||'[]');return Array.isArray(a)?a:[]}catch(e){return []}}
+function sokAgendaTopicIdsSave(){const rows=[...document.querySelectorAll('#sokAgendaEditor .sok-edit-item')];try{sessionStorage.setItem('sokAgendaTopicIds7737',JSON.stringify(rows.map(r=>r.dataset.topicId||'')))}catch(e){}}
 function sokLocalLibrary(){try{const a=JSON.parse(localStorage.getItem('sokLocalLibrary7718')||'[]');return Array.isArray(a)?a:[]}catch(e){return []}}
 function sokLocalSaveLibrary(){const row=document.querySelector('.sok-edit-item.sok-local-active');if(!row)return;const title=row.querySelector('.sok-edit-title').value.trim(),body=row.querySelector('.sok-edit-text').value.trim();if(!title||!body)return alert('Kaydetmek için başlık ve görüşme metni girin.');const a=sokLocalLibrary();if(a.some(x=>sokLocalNorm(x.title)===sokLocalNorm(title)&&x.text===body))return alert('Bu metin kütüphanede zaten var.');a.push({title,text:body});try{localStorage.setItem('sokLocalLibrary7718',JSON.stringify(a));alert('Metin bu cihazdaki yerel kütüphaneye kaydedildi. Tam yedek almadan tarayıcı verilerini silmeyin.')}catch(e){alert('Yerel kütüphaneye kaydedilemedi.')}}
 function sokLocalSelect(no){const row=[...document.querySelectorAll('.sok-edit-item')].find(x=>x.dataset.no===String(no));if(!row)return;document.querySelectorAll('.sok-edit-item').forEach(x=>x.classList.remove('sok-local-active'));row.classList.add('sok-local-active');return row}
@@ -2683,7 +2724,7 @@ function sokLocalRewrite(text,variant){
  }
  return paragraphs.join('\n\n');
 }
-// v7.7.36: Gündem konusu ile katılımcı branşını eşleştirerek uygun öğretmeni doğal biçimde görüşmeye katar.
+// v7.7.37: Gündem konusu ile katılımcı branşını eşleştirerek uygun öğretmeni doğal biçimde görüşmeye katar.
 function sokLocalParticipantsFromText(text){
  const lines=String(text||'').split(/\r?\n/); const start=lines.findIndex(x=>x.trim()==='TOPLANTI KATILIMCILARI');
  if(start<0)return [];
@@ -2758,7 +2799,7 @@ function sokLocalSpeakerLimit(title,variant,forDefault=false){
  if(variant%4===1)return 2;
  return 3;
 }
-// v7.7.36: Konuşmacı rotasyonu bütün uygun gündemler için merkezi çalışır.
+// v7.7.37: Konuşmacı rotasyonu bütün uygun gündemler için merkezi çalışır.
 // Önceki taslaktan kalan öğretmen cümleleri yeni öneriye taşınmaz; her öneride konuşmacılar yeniden seçilir.
 function sokLocalBaseForSpeakerRotation(title,text){
  const speakers=sokLocalRelevantSpeakers(title); if(!speakers.length)return String(text||'').trim();
@@ -2803,7 +2844,7 @@ function sokDefaultTeacherRichDraft(draft){
   const limit=Math.min(3,sokLocalSpeakerLimit(item.title,idx,true),speakers.length);
   if(!limit)return `${item.no}. ${item.title}\n${item.text}`;
   const upper=item.text.toLocaleUpperCase('tr-TR');
-  // v7.7.36: Metnin kendi içinde zaten konuşan öğretmenler de 3 kişilik toplam sınıra dahildir.
+  // v7.7.37: Metnin kendi içinde zaten konuşan öğretmenler de 3 kişilik toplam sınıra dahildir.
   const existingCount=speakers.filter(p=>upper.includes(p.name.toLocaleUpperCase('tr-TR'))).length;
   const remaining=Math.max(0,Math.min(limit,3-existingCount));
   const chosen=speakers.filter(p=>!upper.includes(p.name.toLocaleUpperCase('tr-TR'))).slice(0,remaining);
@@ -2814,17 +2855,17 @@ function sokDefaultTeacherRichDraft(draft){
  return draft.slice(0,parsed.start)+'GÖRÜŞMELER\n'+updated+draft.slice(parsed.end);
 }
 
-// v7.7.36: Akademik başlık da merkezi konuşmacı rotasyon motorunu kullanır.
+// v7.7.37: Akademik başlık da merkezi konuşmacı rotasyon motorunu kullanır.
 function sokAcademicBaseForVariants(title,text){return sokLocalBaseForSpeakerRotation(title,text);}
 
 function sokLocalPropose(no){
  const row=sokLocalSelect(no);if(!row)return;
  const title=row.querySelector('.sok-edit-title').value.trim(),area=row.querySelector('.sok-edit-text'),panel=row.querySelector('.sok-local-panel');
- const topic=sokLocalMatch(title),saved=sokLocalLibrary().filter(x=>sokLocalNorm(x.title)===sokLocalNorm(title));
+ const topic=sokLocalTopicById(row.dataset.topicId)||sokLocalMatch(title),ruleTitle=row.dataset.ruleTitle||title,saved=sokLocalLibrary().filter(x=>sokLocalNorm(x.title)===sokLocalNorm(title));
  const original=(row.dataset.originalText||area.value).trim();let candidates=[];
  if(topic){
   if(topic.id==='academic'&&original){
-   const academicBase=sokAcademicBaseForVariants(title,original);
+   const academicBase=sokAcademicBaseForVariants(ruleTitle,original);
    // Gerçek sayısal veri içeren üç paragrafı olduğu gibi koruyup anlatımını dönüştür.
    // v7.7.27: Güvenli genişletme — yalnızca 6. gündem maddesi için 12 alternatif.
    // Sayısal veriler ve mevcut akademik değerlendirme korunur; sadece anlatım biçimi değişir.
@@ -3135,7 +3176,7 @@ function sokLocalPropose(no){
    }
   }
  }
- candidates=candidates.map((x,i)=>sokLocalApplySpeaker(title,x,i));
+ candidates=candidates.map((x,i)=>sokLocalApplySpeaker(ruleTitle,x,i));
  candidates.push(...saved.map(x=>x.text));candidates=[...new Set(candidates)];
  if(!candidates.length){panel.innerHTML='<p class="tiny">Bu başlık için güvenilir bir konu eşleşmesi bulunamadı. Kendi metninizi yazıp kütüphaneye kaydedebilirsiniz.</p>';panel.hidden=false;return}
  const prev=row.dataset.localIndex===undefined?-1:Number(row.dataset.localIndex);let next=(prev+1)%candidates.length;
@@ -3153,7 +3194,9 @@ function sokEditorOpen(){
  const parsed=sokEditorSections(main.value);if(!parsed)return alert('Gündem maddeleri bu taslakta bulunamadı. Metni genel düzenleme alanında değiştirebilirsiniz.');
  const decisions=sokEditorDecisionSections(main.value);
  box.innerHTML=`<div class="tiny" style="margin-bottom:10px">Başlıkları ve görüşme metinlerini düzenleyin. ↑ ↓ düğmeleriyle gündem sırasını değiştirebilirsiniz. Numara, görüşme ve kararlar birlikte taşınır.</div>`+parsed.items.map(x=>`<div class="sok-edit-item" data-no="${esc(x.no)}"><div class="sok-edit-head"><b>${esc(x.no)}. Gündem başlığı</b><div class="sok-order-actions"><button type="button" class="secondary sok-move-up" title="Yukarı taşı" aria-label="Yukarı taşı" onclick="sokEditorMove(this.closest('.sok-edit-item').dataset.no,-1)">↑</button><button type="button" class="secondary sok-move-down" title="Aşağı taşı" aria-label="Aşağı taşı" onclick="sokEditorMove(this.closest('.sok-edit-item').dataset.no,1)">↓</button></div></div><label><input class="sok-edit-title" value="${esc(x.title)}"></label><label><b>Görüşme metni</b><textarea class="sok-edit-text" rows="5" spellcheck="true">${esc(x.text)}</textarea></label><div class="modal-actions"><button type="button" class="secondary" onclick="sokLocalPropose(this.closest('.sok-edit-item').dataset.no)">🔄 Yeni Metin Öner</button><button type="button" class="secondary" onclick="sokLocalUndo(this.closest('.sok-edit-item').dataset.no)">↶ Öncekine Dön</button><button type="button" class="secondary" onclick="sokLocalSaveFor(this.closest('.sok-edit-item').dataset.no)">💾 Kütüphaneye Kaydet</button></div><div class="sok-local-panel" hidden></div></div>`).join('')+`<div class="modal-actions"><button type="button" onclick="sokEditorSync();sokEditorClose()">✓ Düzenlemeyi Tamamla</button><button type="button" class="secondary" onclick="sokEditorClose()">Ana Taslağa Dön</button></div>`;
- box.querySelectorAll('.sok-edit-item').forEach((row,i)=>{row.dataset.originalText=row.querySelector('.sok-edit-text').value;row.dataset.decision=decisions[i]?.text||'';});
+ const savedTopicIds=sokAgendaTopicIdsLoad();
+ box.querySelectorAll('.sok-edit-item').forEach((row,i)=>{const currentTitle=row.querySelector('.sok-edit-title').value;const detected=sokLocalMatch(currentTitle);const saved=sokLocalTopicById(savedTopicIds[i]);row.dataset.originalText=row.querySelector('.sok-edit-text').value;row.dataset.decision=decisions[i]?.text||'';row.dataset.topicId=(saved||detected)?.id||'';row.dataset.ruleTitle=(saved||detected)?.label||currentTitle;});
+ sokAgendaTopicIdsSave();
  box.addEventListener('input',sokEditorSync);box.hidden=false;main.hidden=true;el('sokEditorToggle').textContent='📝 Gündem Düzenleyicisini Kapat';sokEditorUpdateOrderButtons();box.scrollIntoView({block:'start',behavior:'smooth'});
 }
 function sokEditorClose(){const box=el('sokAgendaEditor'),main=el('docAssistantDraft');if(box&&!box.hidden)sokEditorSync();if(box)box.hidden=true;if(main)main.hidden=false;const btn=el('sokEditorToggle');if(btn)btn.textContent='📝 Gündem Metinlerini Düzenle';}
@@ -3161,6 +3204,7 @@ function sokEditorToggle(){const box=el('sokAgendaEditor');if(box?.hidden)sokEdi
 function sokEditorBeforeOutput(){sokEditorSync();sokEditorSave()}
 function generateDocumentAssistantDraft(){
   if(el('docAssistantDraft')?.value.trim()&&!confirm('Mevcut taslak yeniden oluşturulacak. Düzenlemelerinizin üzerine yazılsın mı?'))return;
+  try{sessionStorage.removeItem('sokAgendaTopicIds7737')}catch(e){}
   modalPushCurrent();
   const v=docAssistantValues(); let draft=buildDocumentDraft(v); if(v.type==="sok")draft=sokDefaultTeacherRichDraft(draft); const label=documentAssistantTypes[v.type]?.label||"Belge Taslağı";
   el("modalTitle").textContent=`${documentAssistantTypes[v.type]?.icon||"📄"} ${label}`;
@@ -3270,7 +3314,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.36 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.38 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -6329,6 +6373,11 @@ async function extractSelectedPDFRegion(){
         lines.push(...await textFromRegionOnPage(i,pdfRegion.rect));
       }
     }else lines=await textFromRegionOnPage(pdfRegion.pageNum,pdfRegion.rect);
+    if(pdfRegion.purpose==='agenda'){
+      let agendaRows=docAgendaParseBulk(lines.join("\n"));
+      if(!agendaRows.length){setPDFInfo("Metin katmanı bulunamadı; seçili alan için yerel OCR deneniyor…");const ocrText=await ocrSelectedRegionNative();if(ocrText)agendaRows=docAgendaParseBulk(ocrText)}
+      renderAgendaPDFResults(agendaRows,lines);setPDFInfo(`${agendaRows.length} gündem maddesi bulundu.`);return;
+    }
     let rows=parseStudentLines(lines);
     if(!rows.length){
       setPDFInfo("Metin katmanı bulunamadı; seçili alan için yerel OCR deneniyor…");
@@ -6441,7 +6490,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.36",
+    appVersion:"v7.7.38",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -6453,7 +6502,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.36",
+    appVersion:"v7.7.38",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
