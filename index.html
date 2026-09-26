@@ -2087,7 +2087,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.30</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.31</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2245,7 +2245,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.30 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.31 · ŞÖK 1./2. dönem şablonu · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2478,18 +2478,18 @@ function sokNaturalSpeakerIntro(title,p,index,total){
  const role=sokRoleTitle(p.branch), name=p.name, x=String(title||"");
  if(/Öğrenci başarı/.test(x))return index===0?`${role} ${name}, öğrencilerin sınav sonuçları ve akademik başarı durumları hakkında bilgi verdi.`:`${role} ${name}, sınıfın genel akademik takibine ilişkin değerlendirmelerini paylaştı.`;
  if(/Ortak sınav/.test(x))return `${role} ${name}, ortak sınavların uygulanması ve sonuçların değerlendirilmesine ilişkin görüşlerini belirtti.`;
- if(/öğretim programlarına/.test(x))return `${role} ${name}, derslerin öğretim programı ve yıllık planlarla uyumlu yürütülmesine ilişkin görüşlerini paylaştı.`;
- if(/Özel eğitime|kaynaştırma/.test(x))return `${role} ${name}, özel eğitim veya kaynaştırma yoluyla eğitimine devam eden öğrencilerin ihtiyaçları konusunda açıklamalarda bulundu.`;
+ if(/öğretim programlarına/.test(x))return `${role} ${name}, öğretim programındaki öğrenme çıktılarının yıllık planla uyumlu yürütülmesi ve eksik öğrenmeler için zaman ayrılması gerektiğini belirtti.`;
+ if(/Özel eğitime|kaynaştırma/.test(x))return `${role} ${name}, özel eğitim veya kaynaştırma öğrencilerinin bireysel ihtiyaçlarına uygun ders içi uyarlamaların sürdürülmesi gerektiğini belirtti.`;
  if(/Devamsızlık/.test(x))return `${role} ${name}, öğrencilerin devam durumları ve devamsızlıkların takibi hakkında bilgi verdi.`;
- if(/Bilimsel, sosyal, kültürel/.test(x))return index===0?`${role} ${name}, öğrencilerin sosyal, kültürel ve sportif etkinliklere katılımına ilişkin görüşlerini paylaştı.`:`${role} ${name}, etkinliklerin öğrencilerin gelişimine katkısı konusunda değerlendirmelerde bulundu.`;
- if(/Değerler eğitimi/.test(x))return `${role} ${name}, değerler eğitiminin ders içi ve ders dışı çalışmalarla desteklenmesine ilişkin görüşlerini paylaştı.`;
- if(/İş sağlığı ve güvenliği|Okul güvenliği/.test(x))return `${role} ${name}, okul ortamında güvenlik tedbirlerinin uygulanmasına ilişkin değerlendirmelerde bulundu.`;
+ if(/Bilimsel, sosyal, kültürel/.test(x))return index===0?`${role} ${name}, öğrencilerin ilgi ve yeteneklerine uygun sosyal, kültürel ve sportif etkinliklere yönlendirilmesinin gelişimlerini destekleyeceğini belirtti.`:`${role} ${name}, ders dışı etkinliklerde öğrencilerin sorumluluk almasının sosyal gelişimlerine katkı sağlayacağını ifade etti.`;
+ if(/Değerler eğitimi/.test(x))return `${role} ${name}, sorumluluk, saygı ve yardımlaşma gibi değerlerin öğrencilerin günlük okul yaşamında uygulayabilecekleri çalışmalarla desteklenmesi gerektiğini belirtti.`;
+ if(/İş sağlığı ve güvenliği|Okul güvenliği/.test(x))return `${role} ${name}, okul ortamında fark edilen güvenlik risklerinin gecikmeden bildirilmesi ve güvenlik kurallarının düzenli takip edilmesi gerektiğini belirtti.`;
  if(/Sınıf değişiklikleri/.test(x))return `${role} ${name}, sınıf değişikliği taleplerinin öğrenci yararı ve sınıf dengesi gözetilerek değerlendirilmesi gerektiğini ifade etti.`;
- if(/Veli ziyaretleri/.test(x))return `${role} ${name}, veli iletişimi ve ihtiyaç duyulan öğrenciler için yapılabilecek veli ziyaretleri hakkında görüşlerini paylaştı.`;
+ if(/Veli ziyaretleri/.test(x))return `${role} ${name}, ihtiyaç görülen öğrencilerde veliyle erken iletişim kurulmasının ve gerekli durumlarda veli ziyaretinin planlanmasının yararlı olacağını belirtti.`;
  if(/Sınıf geçme ve sınıf tekrar/.test(x))return `${role} ${name}, öğrencilerin akademik durumlarının sınıf geçme ve sınıf tekrarı açısından düzenli izlenmesi gerektiğini belirtti.`;
  if(/Açılış yoklama/.test(x))return `${role} ${name} başkanlığında toplantı açıldı ve katılımcıların yoklaması yapıldı.`;
- if(/Okulda uygulanan projeler/.test(x))return `${role} ${name}, okulda yürütülen projeler ve öğrencilerin bu çalışmalara katılımı hakkında değerlendirmelerde bulundu.`;
- return `${role} ${name}, konuya ilişkin görüşlerini paylaştı.`;
+ if(/Okulda uygulanan projeler/.test(x))return `${role} ${name}, öğrencilerin ilgi ve yeteneklerine uygun projelerde aktif görev almalarının araştırma ve sorumluluk becerilerini geliştireceğini belirtti.`;
+ return `${role} ${name}, öğrencilerin eğitim sürecini desteklemek için bu başlıkta belirlenen ihtiyaçların somut uygulamalarla takip edilmesi gerektiğini belirtti.`;
 }
 function sokDiscussionWithSpeaker(title,discussion,v){
  const plan=sokSpeakerPlan(title,v); if(!plan.length)return discussion;
@@ -2683,7 +2683,7 @@ function sokLocalRewrite(text,variant){
  }
  return paragraphs.join('\n\n');
 }
-// v7.7.30: Gündem konusu ile katılımcı branşını eşleştirerek uygun öğretmeni doğal biçimde görüşmeye katar.
+// v7.7.31: Gündem konusu ile katılımcı branşını eşleştirerek uygun öğretmeni doğal biçimde görüşmeye katar.
 function sokLocalDraftParticipants(){
  const text=el('docAssistantDraft')?.value||'';
  const lines=text.split(/\r?\n/); const start=lines.findIndex(x=>x.trim()==='TOPLANTI KATILIMCILARI');
@@ -2717,16 +2717,27 @@ function sokLocalRelevantSpeakers(title){
 }
 function sokLocalSpeakerSentence(title,p,variant){
  const role=sokRoleTitle(p.branch),name=p.name,x=String(title||'');
- const forms={
-  values:[`${role} ${name}, değerler eğitiminin öğrencilerin günlük davranışlarına yansıyacak biçimde desteklenmesi gerektiğini ifade etti.`,`${role} ${name}, ders içi ve ders dışı değerler eğitimi çalışmalarına ilişkin görüşlerini paylaştı.`,`${role} ${name}, sorumluluk, saygı ve iş birliği gibi değerlerin eğitim süreciyle ilişkilendirilmesi üzerinde durdu.`],
-  exams:[`${role} ${name}, ortak sınavların uygulanması ve sonuçların ders sürecine yansıtılmasına ilişkin görüşlerini belirtti.`,`${role} ${name}, ortak sınav sonuçlarının öğrencilerin öğrenme eksiklerini belirlemede kullanılmasına yönelik değerlendirmelerde bulundu.`,`${role} ${name}, sınav kapsamı ile öğrenme çıktıları arasındaki uyumun korunmasının önemini vurguladı.`],
-  curriculum:[`${role} ${name}, derslerin öğretim programı ve yıllık planlarla uyumlu yürütülmesine ilişkin görüşlerini paylaştı.`,`${role} ${name}, öğrenme çıktılarının sınıf içi uygulamalara yansıtılması konusunda değerlendirmelerde bulundu.`,`${role} ${name}, programdaki öğrenme çıktılarının gerçekleşme durumunun düzenli izlenmesi gerektiğini ifade etti.`],
-  activities:[`${role} ${name}, öğrencilerin bilimsel, sosyal, kültürel ve sportif etkinliklere katılımına ilişkin görüşlerini paylaştı.`,`${role} ${name}, ders dışı etkinliklerin öğrencilerin çok yönlü gelişimine katkısını değerlendirdi.`,`${role} ${name}, öğrencilerin ilgi ve yeteneklerine uygun etkinliklere yönlendirilmesi üzerinde durdu.`],
-  projects:[`${role} ${name}, okulda yürütülen projelere öğrencilerin ilgi ve yetenekleri doğrultusunda katılımına ilişkin görüşlerini paylaştı.`,`${role} ${name}, proje çalışmalarının öğrencilerin akademik ve sosyal gelişimine katkısını değerlendirdi.`,`${role} ${name}, öğrencilerin uygun proje çalışmalarına yönlendirilmesi üzerinde durdu.`],
-  academic:[`${role} ${name}, öğrencilerin akademik gelişimlerinin ders bazında izlenmesine ilişkin değerlendirmelerde bulundu.`,`${role} ${name}, sınav sonuçlarının öğrencilerin öğrenme ihtiyaçlarını belirlemek amacıyla değerlendirilmesi gerektiğini ifade etti.`,`${role} ${name}, desteğe ihtiyaç duyan öğrencilerin gelişimlerinin düzenli takip edilmesi üzerinde durdu.`]
- };
- let a=/Değerler/.test(x)?forms.values:/Ortak sınav/.test(x)?forms.exams:/öğretim programlarına/.test(x)?forms.curriculum:/Bilimsel, sosyal, kültürel/.test(x)?forms.activities:/Okulda uygulanan projeler/.test(x)?forms.projects:/Öğrenci başarı/.test(x)?forms.academic:null;
- return a?a[variant%a.length]:`${role} ${name}, gündem maddesine ilişkin görüşlerini paylaştı.`;
+ const sets=[
+  [/Açılış yoklama/,[`${role} ${name}, toplantının gündem doğrultusunda yürütülmesi ve katılımcı öğretmenlerin görüşlerinin sırayla alınmasının uygun olacağını belirtti.`,`${role} ${name}, toplantıda sınıfın eğitim öğretim sürecini ilgilendiren başlıkların somut öğrenci ihtiyaçları üzerinden ele alınmasını önerdi.`,`${role} ${name}, görüşmelerin gündem sırasına göre yürütülerek alınan kararların takip edilmesi gerektiğini ifade etti.`]],
+  [/Veli ziyaretleri/,[`${role} ${name}, öğrencinin gelişimini desteklemek için ihtiyaç görülen durumlarda veliyle erken iletişim kurulmasının önemli olduğunu belirtti.`,`${role} ${name}, veli görüşmelerinde öğrencinin akademik durumu kadar okul uyumu ve çalışma alışkanlıklarının da birlikte ele alınması gerektiğini ifade etti.`,`${role} ${name}, okulda gözlenen ihtiyaçların aileyle paylaşılması ve gerekli durumlarda veli ziyaretinin planlanmasının yararlı olacağını belirtti.`]],
+  [/Kılık kıyafet/,[`${role} ${name}, kılık kıyafet kurallarına uyumun öğrencilerle açık biçimde konuşulması ve tekrar eden durumlarda veli iş birliği kurulması gerektiğini belirtti.`,`${role} ${name}, kurallara uyumun cezalandırıcı bir yaklaşımdan çok düzenli bilgilendirme ve takip yoluyla desteklenmesinin uygun olacağını ifade etti.`,`${role} ${name}, öğrenciler arasında ortak uygulama sağlanması için kılık kıyafet kurallarının tutarlı biçimde takip edilmesi gerektiğini vurguladı.`]],
+  [/Sınıf değişiklikleri/,[`${role} ${name}, sınıf değişikliği taleplerinde öğrencinin arkadaş ilişkileri, sınıfa uyumu ve rehberlik ihtiyacının birlikte değerlendirilmesi gerektiğini belirtti.`,`${role} ${name}, sınıf değişikliğinin öğrencinin eğitim sürecine sağlayacağı yarar ile mevcut sınıf dengesinin birlikte gözetilmesi gerektiğini ifade etti.`,`${role} ${name}, değişiklik kararı verilmeden önce öğrencinin gerekçesinin dinlenmesi, gerekli durumlarda veli ve rehberlik birimiyle görüşülmesinin uygun olacağını belirtti.`]],
+  [/Türkiye Yüzyılı Maarif Modeli/,[`${role} ${name}, derslerde öğrencinin aktif katılımını artıran ve beceri gelişimini destekleyen uygulamalara daha fazla yer verilmesi gerektiğini belirtti.`,`${role} ${name}, öğrenme çıktılarıyla değerler eğitiminin günlük ders uygulamalarında birlikte ele alınmasının önemli olduğunu ifade etti.`,`${role} ${name}, öğrencilerin bilgi edinmenin yanında problem çözme, iletişim ve sorumluluk becerilerini geliştirecek çalışmalara yönlendirilmesini önerdi.`]],
+  [/Öğrenci başarı/,[`${role} ${name}, sınav sonuçlarının yalnızca puan olarak değil öğrencilerin eksik öğrenmelerini belirlemek amacıyla da değerlendirilmesi gerektiğini ifade etti.`,`${role} ${name}, akademik desteğe ihtiyaç duyan öğrencilerin ders bazındaki gelişimlerinin düzenli aralıklarla izlenmesini önerdi.`,`${role} ${name}, sınav sonuçları ile ödev ve sınıf içi performansın birlikte değerlendirilerek öğrencinin ihtiyaç duyduğu desteğin belirlenmesi gerektiğini vurguladı.`]],
+  [/öğretim programlarına/,[`${role} ${name}, yıllık plan ile öğretim programındaki öğrenme çıktılarının ders işlenişinde düzenli olarak karşılaştırılması gerektiğini belirtti.`,`${role} ${name}, öğrencilerde eksik kaldığı görülen öğrenme çıktıları için ders sürecinde ek çalışma ve tekrar yapılmasının uygun olacağını ifade etti.`,`${role} ${name}, programın öngördüğü becerilerin yalnızca konu anlatımıyla değil uygulama ve öğrenci etkinlikleriyle de desteklenmesi gerektiğini vurguladı.`]],
+  [/Sınıf geçme ve sınıf tekrar/,[`${role} ${name}, sınıf geçme açısından risk taşıyan öğrencilerin durumlarının dönem sonu beklenmeden düzenli biçimde takip edilmesi gerektiğini belirtti.`,`${role} ${name}, akademik riski bulunan öğrencilerle erken dönemde görüşülmesi ve gerekli durumlarda velilerin bilgilendirilmesinin önemli olduğunu ifade etti.`,`${role} ${name}, öğrencilerin ders başarılarındaki değişimin izlenerek ihtiyaç duyulan desteklerin zamanında planlanmasını önerdi.`]],
+  [/Özel eğitime|kaynaştırma/,[`${role} ${name}, özel eğitim veya kaynaştırma öğrencilerinin bireysel ihtiyaçlarına göre ders içi uyarlamalar yapılması gerektiğini belirtti.`,`${role} ${name}, öğrencinin güçlü yönleri ve destek ihtiyacı dikkate alınarak öğretmenler ile rehberlik servisinin eş güdüm içinde çalışmasının önemli olduğunu ifade etti.`,`${role} ${name}, değerlendirme ve sınıf içi etkinliklerde öğrencinin bireysel özelliklerine uygun düzenlemelerin sürdürülmesini önerdi.`]],
+  [/Eğitim kaynakları, laboratuvar/,[`${role} ${name}, laboratuvar ve eğitim kaynaklarının ders amaçlarına uygun biçimde planlanarak öğrencilerin aktif kullanımına açılmasının yararlı olacağını belirtti.`,`${role} ${name}, ortak kullanılan eğitim araçlarında güvenlik kurallarının ve kullanım sorumluluğunun öğrencilere açıkça hatırlatılması gerektiğini ifade etti.`,`${role} ${name}, okulun mevcut kaynaklarından daha verimli yararlanmak için ders öncesi planlama yapılmasını önerdi.`]],
+  [/Ortak sınav/,[`${role} ${name}, ortak sınav sonuçlarının öğrencilerin hangi öğrenme çıktılarında zorlandığını belirlemek için ders bazında incelenmesi gerektiğini ifade etti.`,`${role} ${name}, sınav kapsamının işlenen konular ve öğrenme çıktılarıyla uyumlu tutulmasının ölçme sürecinin güvenilirliği açısından önemli olduğunu belirtti.`,`${role} ${name}, sınav sonrasında yaygın yanlışların sınıfta yeniden ele alınarak eksik öğrenmeler için tamamlayıcı çalışma yapılmasını önerdi.`]],
+  [/Bilimsel, sosyal, kültürel/,[`${role} ${name}, öğrencilerin ilgi ve yeteneklerine uygun bilimsel, sosyal, kültürel veya sportif etkinliklere yönlendirilmesinin çok yönlü gelişimlerini destekleyeceğini belirtti.`,`${role} ${name}, ders dışı etkinliklerde öğrencilerin yalnızca katılımcı değil planlama ve sorumluluk alma süreçlerinde de görev üstlenmelerinin yararlı olacağını ifade etti.`,`${role} ${name}, okul imkânları doğrultusunda farklı ilgi alanlarına hitap eden etkinliklerin artırılmasını önerdi.`]],
+  [/Değerler eğitimi/,[`${role} ${name}, sorumluluk, saygı ve yardımlaşma gibi değerlerin yalnızca anlatılmaması, öğrencilerin günlük okul yaşamında uygulayabilecekleri çalışmalarla desteklenmesi gerektiğini belirtti.`,`${role} ${name}, değerler eğitiminin ders içi örnekler ve okul içi davranışlarla ilişkilendirilmesinin kalıcı öğrenmeye katkı sağlayacağını ifade etti.`,`${role} ${name}, öğrencilerin iş birliği, saygı ve sorumluluk bilincini geliştirecek görev ve etkinliklere daha fazla yer verilmesini önerdi.`]],
+  [/İş sağlığı ve güvenliği|Okul güvenliği/,[`${role} ${name}, sınıf ve ortak kullanım alanlarında fark edilen güvenlik risklerinin gecikmeden okul yönetimine bildirilmesi gerektiğini belirtti.`,`${role} ${name}, öğrencilerin güvenlik kurallarını bilmesinin yanında bu kurallara günlük okul yaşamında düzenli biçimde uymalarının takip edilmesi gerektiğini ifade etti.`,`${role} ${name}, eğitim faaliyetleri planlanırken öğrenci güvenliği açısından oluşabilecek risklerin önceden değerlendirilmesini önerdi.`]],
+  [/Devamsızlık/,[`${role} ${name}, devamsızlığın öğrencinin derslere katılımı ve akademik gelişimi üzerindeki etkisinin düzenli olarak izlenmesi gerektiğini belirtti.`,`${role} ${name}, okulun resmî devam kayıtlarında sorun görülen öğrencilerle zamanında görüşülmesi ve gerekli durumlarda velilerin bilgilendirilmesinin önemli olduğunu ifade etti.`,`${role} ${name}, devam sorunu yaşayan öğrencilerin nedenlerinin öğrenci ve veliyle görüşülerek eğitim sürecine katılımı artıracak desteklerin belirlenmesini önerdi.`]],
+  [/Okulda uygulanan projeler/,[`${role} ${name}, öğrencilerin ilgi ve yeteneklerine uygun projelerde görev almalarının araştırma, sorumluluk ve iş birliği becerilerini geliştireceğini belirtti.`,`${role} ${name}, proje çalışmalarında öğrencilerin yalnızca sonuç ürününe değil araştırma ve üretim sürecine aktif katılmalarının önemli olduğunu ifade etti.`,`${role} ${name}, okulda yürütülen projelerin öğrencilere duyurulması ve uygun öğrencilerin yetenekleri doğrultusunda yönlendirilmesini önerdi.`]],
+  [/Dilek, temenniler ve kapanış/,[`${role} ${name}, toplantıda alınan kararların uygulama sürecinde takip edilmesinin ve ihtiyaç halinde yeniden değerlendirilmesinin yararlı olacağını belirtti.`,`${role} ${name}, öğretmenler arasındaki iletişim ve iş birliğinin öğrencilerin gelişimini destekleyecek biçimde sürdürülmesini temenni etti.`,`${role} ${name}, görüşülen konularda ortak uygulamanın korunması ve gerekli durumlarda bilgi paylaşımının sürdürülmesini önerdi.`]]
+ ];
+ for(const [re,arr] of sets)if(re.test(x))return arr[variant%arr.length];
+ return `${role} ${name}, öğrencilerin eğitim sürecini desteklemek amacıyla bu başlıkta gözlenen ihtiyaçların somut örnekler üzerinden değerlendirilmesi ve gerekli çalışmaların takip edilmesi gerektiğini belirtti.`;
 }
 function sokLocalApplySpeaker(title,text,variant){
  const speakers=sokLocalRelevantSpeakers(title); if(!speakers.length)return text;
@@ -3190,7 +3201,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.30 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.31 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -6361,7 +6372,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.30",
+    appVersion:"v7.7.31",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -6373,7 +6384,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.30",
+    appVersion:"v7.7.31",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
