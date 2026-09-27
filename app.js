@@ -18,7 +18,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.58 · Zümre Görüş Motoru v2 · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.59 · Zümre Anlamlandırma Motoru v4 · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -465,7 +465,25 @@ const zumreTopics=[
 ['opening',['açılış','yoklama']],['maarif',['maarif model','türkiye yüzyılı']],['planning',['planlama','mevzuat','kuruluş amacı','çerçeve plan']],['ataturk_plan',['atatürk','yıllık plan','ders plan','çevre özellik']],['methods',['yöntem','teknik','derslerin işleniş']],['bep',['bep','özel eğitim','bireyselleştirilmiş','kaynaştırma']],['visit',['ders ziyareti','geri dönüt','geri bildirim','zümreler arası','iş birliği']],['science_tech',['akademik','bilimsel','teknolojik','teknoloji']],['materials',['araç gereç','materyal','laboratuvar','kütüphane','eğitim ortam']],['outdoor',['okul dışı','gezi','gözlem','deney','çevre imkân','araştırma']],['analysis',['sınav analiz','kazanım eksik','eylem plan','öğrenci başarısının ölçül']],['common_exam',['konu soru dağılım','dereceli puanlama','dereceleme ölçe','ortak yazılı']],['competitions',['ulusal','uluslararası','yarışma']],['enterprise',['girişimcilik','araştırma geliştirme','tasarım']],['project_perf',['proje konu','performans çalışma','ölçek']],['safety',['iş sağlığı','güvenliği']],['district_exam',['ilçe geneli','değerlendirme işlemleri']],['national_makeup',['ölçme değerlendirme merkezi','ülke ve il geneli','mazeret sınav']],['school_makeup',['okul geneli','mazeret sınav','cevap anahtarı']],['higher_skills',['karar verme','problem çözme','eleştirel düşün','sosyal ve duygusal']],['values',['millî','manevi','ahlaki','değer']],['prevention',['önleme','müdahale','yönlendirme komisyon']],['interdisciplinary',['disiplinler arası','ortak çalışma','takvime']],['literacy',['çoklu okuryazarlık','okuryazarlık']],['social_resp',['sosyal sorumluluk','topluma hizmet']],['success',['başarıyı artır','başarıyı arttır']],['resources',['mali kaynak','araç gereç','ihtiyaç duyacağı']],['absence',['devamsızlık']],['closing',['dilek','temenni','kapanış']]
 ];
 function zumreNorm(s){return String(s||'').toLocaleLowerCase('tr-TR').replace(/[^a-zçğıöşü0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
-function zumreTopicId(title){const q=zumreNorm(title);let best='general',score=0;for(const [id,keys] of zumreTopics){let s=0;for(const k of keys){const n=zumreNorm(k);if(q.includes(n))s+=100+n.length;}if(s>score){score=s;best=id}}return best}
+function zumreTopicId(title){
+ const q=zumreNorm(title);
+ // Önce anlamı dar ve ayırt edici konu aileleri: genel kelimelerin yanlış eşleşmesini önler.
+ const priority=[
+  ['closing',['dilek','temenni','kapanış']],['opening',['açılış','yoklama']],
+  ['national_makeup',['ölçme değerlendirme merkezi','ülke ve il geneli mazeret','soru ve cevap anahtarları ölçme']],
+  ['school_makeup',['okul geneli','mazeret sınav','cevap anahtarı']],['district_exam',['ilçe geneli','ortak yazılı','değerlendirme işlemleri']],
+  ['prevention',['önleme','müdahale','yönlendirme komisyon']],['safety',['iş sağlığı','iş güvenliği','güvenliği tedbir']],
+  ['competitions',['ulusal ve uluslararası','yarışma']],['enterprise',['girişimcilik','araştırma geliştirme','tasarım']],
+  ['project_perf',['proje konuları','performans çalış','ölçme değerlendirilmesine yönelik ölçek']],
+  ['resources',['mali kaynak','ihtiyaç duyulacak araç','araç gereç ve mali']],['analysis',['sınav analiz','kazanım eksik','eylem plan']],
+  ['common_exam',['konu soru dağılım','dereceli puanlama','dereceleme ölçe']],['bep',['bep','bireyselleştirilmiş','özel eğitim']],
+  ['absence',['devamsızlık']],['social_resp',['sosyal sorumluluk']],['literacy',['çoklu okuryazarlık']],['interdisciplinary',['disiplinler arası']],
+  ['higher_skills',['karar verme','problem çözme','eleştirel düşün']],['values',['millî','manevi','ahlaki']],['success',['başarıyı artır','başarıyı arttır']]
+ ];
+ for(const [id,keys] of priority){if(keys.every(k=>q.includes(zumreNorm(k)))||keys.some(k=>zumreNorm(k).length>12&&q.includes(zumreNorm(k))))return id;}
+ let best='general',score=0;for(const [id,keys] of zumreTopics){let s=0;for(const k of keys){const n=zumreNorm(k);if(q.includes(n))s+=20+n.length;}if(s>score){score=s;best=id}}
+ return score>=25?best:'general';
+}
 function zumreParticipants(v){const a=(v.participants||[]).map(x=>{const p=String(x).split('|').map(y=>y.trim());return {name:p[0],branch:p[1]||'Öğretmen'}}).filter(x=>x.name);if(!a.some(x=>zumreNorm(x.name)===zumreNorm(v.teacher)))a.unshift({name:v.teacher||'Zümre Başkanı',branch:'Zümre Başkanı'});return a}
 function zumreBranch(v){return String(v.branch||'').trim()||(()=>{const a=zumreParticipants(v).map(x=>x.branch).filter(b=>b&&!/müdür|rehber|başkan/i.test(b));return a[0]||'ilgili ders'})()}
 function zumreNarrativeBase(id,branch){const b=branch||'ilgili ders';const M={
@@ -541,7 +559,113 @@ function zumreNarrativePool(id,branch){
  `${focus[3].charAt(0).toLocaleUpperCase('tr-TR')+focus[3].slice(1)} için ihtiyaç hâlinde ek çalışma ve uyarlama yapılmasına`];
  return {discussions:[...new Set(variants)],decisions:[...new Set(decisions)]};
 }
-function zumreNarrative(id,branch,variant=0){const p=zumreNarrativePool(id,branch);return [p.discussions[variant%p.discussions.length],p.decisions[variant%p.decisions.length]]}
+function zumreNarrativePoolV3(id,branch){
+ const b=branch||'ilgili ders', old=zumreNarrativePool(id,branch);
+ const special={
+ opening:{discussions:[
+  'Toplantının amacı ve gündem sırası katılımcılarla paylaşılmış, yoklama alınarak gündem maddelerinin görüşülmesine geçilmiştir.',
+  'Zümre Başkanı toplantıyı açmış; katılım durumu ve gündem maddeleri kontrol edildikten sonra görüşmelere başlanmıştır.',
+  'Toplantının eğitim öğretim çalışmalarında ortak uygulama ve iş birliğini güçlendirme amacı hatırlatılmış, gündem üzerinde mutabakat sağlanmıştır.'
+ ],decisions:['Gündem maddelerinin belirlenen sıra doğrultusunda görüşülmesine']},
+ closing:{discussions:[
+  'Zümre Başkanı katılımcıların dilek ve önerilerini almış, görüşülen konulara katkı sunan öğretmenlere teşekkür ederek toplantıyı kapatmıştır.',
+  'Katılımcıların ek görüş ve temennileri dinlenmiş; Zümre Başkanı alınan kararların iş birliği içinde uygulanmasını dileyerek toplantıyı sona erdirmiştir.',
+  'Gündemde görüşülecek başka konu bulunmadığı görülmüş; Zümre Başkanı öğretmenlere katkıları için teşekkür etmiş ve toplantıyı kapatmıştır.'
+ ],decisions:['Katılımcıların dilek ve temennileri alınarak gündemde görüşülecek başka konu kalmadığından toplantının sona erdirilmesine']},
+ analysis:{discussions:[
+  'Sınav sonuçlarının soru ve öğrenme çıktısı bazında incelenmesi, sınıf ve öğrenci düzeyindeki eksik öğrenmelerin ayrı ayrı belirlenmesi ve sonuçların sonraki öğretim sürecine veri sağlaması gerektiği değerlendirilmiştir.',
+  'Ölçme sonuçlarından hareketle hangi öğrenme çıktılarında güçlük yaşandığının belirlenmesi; eksik öğrenmeler için konu tekrarı, ek çalışma ve izleme uygulamalarının planlanması görüşülmüştür.',
+  'Sınav analizlerinin yalnız başarı ortalamasıyla sınırlı tutulmaması, soru bazlı sonuçların ve öğrenci gelişiminin dönem boyunca karşılaştırılarak zümre içinde değerlendirilmesi gerektiği belirtilmiştir.'
+ ],decisions:[
+  'Sınavların soru ve öğrenme çıktısı bazında analiz edilmesine, eksik öğrenmelerin öğrenci ve sınıf düzeyinde belirlenmesine',
+  'Analiz sonuçlarına göre tamamlayıcı çalışmalar ve gerekli eylem planlarının hazırlanmasına, sonuçların sonraki ölçmelerle izlenmesine',
+  'Sınav analizlerinin zümre toplantılarında karşılaştırılarak öğretim sürecinde gerekli düzenlemelerin yapılmasına'
+ ]},
+ common_exam:{discussions:[
+  'Okul geneli ortak yazılıların konu-soru dağılım tablolarına uygun hazırlanması, soru kapsamı ve güçlük düzeyinde zümre birliğinin sağlanması ve puanlama ölçütlerinin sınavdan önce netleştirilmesi görüşülmüştür.',
+  'Ortak sınavlarda soru dili, kapsam geçerliği ve puanlama ölçütlerinin ortaklaştırılması; mazeret sınavlarının da aynı ölçme esaslarını koruyacak biçimde hazırlanması gerektiği değerlendirilmiştir.',
+  'Ortak yazılı ve mazeret sınavlarında kullanılacak ölçme araçlarının öğretim programındaki öğrenme çıktılarıyla uyumu ve değerlendirme sürecinde öğretmenler arası tutarlılık üzerinde durulmuştur.'
+ ],decisions:[
+  'Okul geneli ortak yazılı ve mazeret sınavlarının konu-soru dağılım tablolarına ve yürürlükteki ölçme-değerlendirme esaslarına uygun hazırlanmasına',
+  'Soru kapsamı, puanlama anahtarı ve değerlendirme ölçütlerinin zümre öğretmenlerince sınav öncesinde ortaklaştırılmasına',
+  'Mazeret sınavlarında da asıl sınavla uyumlu kapsam ve değerlendirme ölçütlerinin kullanılmasına'
+ ]},
+ competitions:{discussions:[
+  'Ulusal ve uluslararası sınav ve yarışmalardan elde edilen sonuçların yalnız derece bakımından değil, öğrencilerin problem çözme, akıl yürütme ve alan becerileri açısından değerlendirilmesi görüşülmüştür.',
+  'Yarışma ve sınav sonuçlarının güçlü ve gelişime açık alanları belirlemek için kullanılması; ilgi ve yeteneği uygun öğrencilerin hazırlık çalışmalarına yönlendirilmesi değerlendirilmiştir.',
+  'Öğrencilerin yarışmalara katılımının motivasyon, özgüven ve alan ilgisini destekleyecek biçimde planlanması; sonuçların sonraki çalışmalar için veri olarak kullanılması üzerinde durulmuştur.'
+ ],decisions:['Ulusal ve uluslararası sınav ve yarışma sonuçlarının beceri alanları bakımından değerlendirilmesine ve gerekli destek çalışmalarının planlanmasına','İlgi ve yeteneği uygun öğrencilerin yarışma ve sınavlara hazırlanmasına yönelik çalışmalar yürütülmesine','Elde edilen sonuçların sonraki hazırlık çalışmalarında veri olarak kullanılmasına']},
+ enterprise:{discussions:[
+  'Öğrencilerin günlük hayattan bir problem belirleyip çözüm geliştirmesi, fikirlerini ürüne dönüştürmesi ve süreci sunabilmesi yoluyla girişimcilik becerilerinin desteklenmesi görüşülmüştür.',
+  'Araştırma, geliştirme ve tasarım çalışmalarında öğrencilerin özgün fikir üretme, iş birliği yapma, planlama ve sonuçlarını gerekçelendirme becerilerinin birlikte geliştirilmesi değerlendirilmiştir.',
+  'Dersin yapısına uygun küçük ölçekli tasarım ve proje çalışmalarının öğrencilerin üretkenlik ve sorumluluk becerilerini geliştirecek biçimde yürütülmesi üzerinde durulmuştur.'
+ ],decisions:['Öğrencilerin problem belirleme, çözüm geliştirme ve ürün ortaya koyma süreçlerine katılacağı girişimcilik çalışmalarına yer verilmesine','Araştırma, geliştirme ve tasarım becerilerini destekleyen ders içi ve proje çalışmalarının planlanmasına','Öğrenci fikirlerinin uygulanabilir ürün veya projelere dönüştürülmesinin desteklenmesine']},
+ project_perf:{discussions:[
+  'Proje ve performans çalışmalarının dersin öğrenme çıktılarıyla uyumlu, öğrenci düzeyine uygun ve özgün üretimi teşvik edecek konulardan seçilmesi görüşülmüştür.',
+  'Proje ve performans görevlerinde süreç takibi yapılması, değerlendirme ölçütlerinin çalışma başlamadan öğrenciye açıklanması ve ürün kadar çalışma sürecinin de dikkate alınması değerlendirilmiştir.',
+  'Görevlerin öğrencilerin araştırma, problem çözme ve sunum becerilerini geliştirecek nitelikte olması; değerlendirmede ortak ve açık ölçütler kullanılması üzerinde durulmuştur.'
+ ],decisions:['Proje ve performans konularının öğretim programı ve öğrenci düzeyi dikkate alınarak belirlenmesine','Değerlendirme ölçütlerinin önceden hazırlanarak öğrencilere açıklanmasına ve süreç takibi yapılmasına','Proje ve performans çalışmalarında ortak değerlendirme ölçütlerinin kullanılmasına']},
+ safety:{discussions:[
+  'Ders, uygulama ve okul dışı etkinliklerde oluşabilecek risklerin önceden belirlenmesi; öğrencilere güvenli çalışma kurallarının hatırlatılması ve gerekli gözetim tedbirlerinin alınması görüşülmüştür.',
+  'Kullanılacak eğitim ortamı, araç ve materyaller bakımından iş sağlığı ve güvenliği tedbirlerinin etkinlik öncesinde kontrol edilmesi gerektiği değerlendirilmiştir.',
+  'Okul dışı faaliyetlerde izin, ulaşım, gözetim ve acil durum süreçlerinin önceden planlanmasının öğrenci güvenliği açısından önemi üzerinde durulmuştur.'
+ ],decisions:['Ders ve etkinliklerde risklerin önceden değerlendirilmesine ve gerekli iş sağlığı ve güvenliği tedbirlerinin alınmasına','Öğrencilere güvenli çalışma kurallarının etkinlik öncesinde hatırlatılmasına','Okul dışı faaliyetlerde izin, gözetim ve güvenlik süreçlerinin eksiksiz planlanmasına']},
+ district_exam:{discussions:[
+  'İlçe geneli ve sınıf/alan öğretmenlerince uygulanacak ortak yazılıların değerlendirme işlemlerinde ortak ölçüt kullanılması, puanlama tutarlılığının sağlanması ve sonuçların zamanında işlenmesi görüşülmüştür.',
+  'Ortak sınavların değerlendirilmesinde cevap anahtarı ve puanlama ölçütlerine bağlı kalınması; tereddütlü durumların zümre içinde ortak değerlendirilmesi gerektiği belirtilmiştir.',
+  'Değerlendirme sonuçlarının karşılaştırılabilir olması için öğretmenler arasında puanlama birliğinin korunmasının önemi üzerinde durulmuştur.'
+ ],decisions:['İlçe geneli ve sınıf/alan ortak yazılılarının ortak cevap anahtarı ve puanlama ölçütlerine göre değerlendirilmesine','Değerlendirmede tereddüt oluşturan durumların zümre içinde ortak karara bağlanmasına','Sınav değerlendirme işlemlerinin belirlenen takvim ve esaslara uygun tamamlanmasına']},
+ national_makeup:{discussions:[
+  'Soru ve cevap anahtarları ölçme değerlendirme merkezlerince hazırlanan ülke ve il geneli mazeret sınavlarında okulun görevinin sınavı belirlenen usul, tarih ve güvenlik kurallarına uygun uygulamak olduğu değerlendirilmiştir.',
+  'Merkezî olarak hazırlanan mazeret sınavlarında soru içeriğine müdahale edilmeden sınav evrakının gizliliği, sınavın usulüne uygun yürütülmesi ve sonuç işlemlerinin ilgili esaslara göre tamamlanması görüşülmüştür.',
+  'Mazeret sınavına katılacak öğrencilerin belirlenmesi, sınav ortamının hazırlanması ve uygulama sürecinde Bakanlık/ilgili birimlerce bildirilen esaslara uyulmasının önemi üzerinde durulmuştur.'
+ ],decisions:['Ülke ve il geneli mazeret sınavlarının ilgili ölçme değerlendirme birimlerince belirlenen usul ve takvime uygun uygulanmasına','Sınav evrakının gizlilik ve güvenlik kurallarına uygun korunmasına ve uygulama işlemlerinin eksiksiz yürütülmesine','Mazeret sınavına katılacak öğrencilerle ilgili işlemlerin zamanında tamamlanmasına']},
+ school_makeup:{discussions:[
+  'Okul geneli ortak yazılıların mazeret sınavlarında soru ve cevap anahtarının zümre tarafından asıl sınavın kapsamı ve güçlük düzeyiyle uyumlu biçimde hazırlanması görüşülmüştür.',
+  'Mazeret sınavının asıl sınavla aynı öğrenme çıktıları ve ortak değerlendirme anlayışını koruması; uygulama ve puanlama sürecinin zümre birliği içinde yürütülmesi değerlendirilmiştir.',
+  'Mazeret sınavı sorularında kapsam dengesi, açık soru dili ve ortak puanlama ölçütlerinin korunması üzerinde durulmuştur.'
+ ],decisions:['Okul geneli mazeret sınavı soruları ve cevap anahtarının zümre tarafından asıl sınavla uyumlu kapsamda hazırlanmasına','Mazeret sınavlarının ortak puanlama ölçütleriyle uygulanıp değerlendirilmesine','Soru ve cevap anahtarlarının sınav öncesinde zümre öğretmenlerince kontrol edilmesine']},
+ prevention:{discussions:[
+  'Önleme, müdahale ve yönlendirme çalışmalarında öğrencilerin akademik, sosyal veya davranışsal risklerinin erken fark edilmesi ve gözlemlerin ilgili komisyonla zamanında paylaşılması görüşülmüştür.',
+  'Zümre öğretmenlerinin ders sürecinde fark ettiği risk durumlarını rehberlik servisi ve ilgili okul birimleriyle koordineli biçimde ele almasının önemi değerlendirilmiştir.',
+  'Öğrenciye ilişkin yönlendirmelerin gözleme dayalı, mahremiyeti gözeten ve ilgili birimlerin görev alanına uygun biçimde yürütülmesi üzerinde durulmuştur.'
+ ],decisions:['Risk görülen durumların ilgili okul birimleri ve önleme, müdahale ve yönlendirme komisyonuyla zamanında paylaşılmasına','Öğrenciye yönelik önleme ve yönlendirme çalışmalarında rehberlik servisiyle iş birliği yapılmasına','Süreçte öğrenci mahremiyetinin ve görev sınırlarının gözetilmesine']},
+ values:{discussions:[
+  'Millî, manevi ve ahlaki değerlerin dersin doğal akışı içinde sorumluluk, dürüstlük, adalet, saygı ve iş birliği gibi davranışlarla ilişkilendirilmesi görüşülmüştür.',
+  'Değerler eğitiminin ayrı ve yapay bir etkinlik olarak değil, problem durumları, grup çalışmaları ve sınıf içi sorumluluklar üzerinden örtük öğrenmeyle desteklenmesi değerlendirilmiştir.',
+  'Ders içeriğiyle doğal bağ kurulabilen durumlarda kültürel miras ve ortak değerlerin öğrencilerin anlamlandırmasını destekleyecek biçimde ele alınması üzerinde durulmuştur.'
+ ],decisions:['Millî, manevi ve ahlaki değerlerin dersin doğal akışı ve uygun öğrenme etkinlikleri içinde desteklenmesine','Sorumluluk, dürüstlük, adalet, saygı ve iş birliği değerlerini güçlendiren sınıf içi uygulamalara yer verilmesine','Değerler eğitiminin öğrencinin davranışa dönüştürebileceği somut öğrenme ortamlarıyla desteklenmesine']},
+ resources:{discussions:[
+  'Eğitim öğretim yılı içinde yürütülecek çalışmalar için gerekli araç, gereç ve mali ihtiyaçların zorunluluk ve eğitimsel katkı bakımından önceliklendirilmesi görüşülmüştür.',
+  'Mevcut okul kaynaklarının ortak ve verimli kullanılması, temin edilmesi gereken ihtiyaçların gerekçesi ve kullanım amacıyla birlikte okul yönetimine bildirilmesi değerlendirilmiştir.',
+  'Kaynak planlamasında düşük maliyetli ve erişilebilir alternatiflerin değerlendirilmesi; mali kaynak gerektiren taleplerin faaliyet takvimiyle ilişkilendirilmesi üzerinde durulmuştur.'
+ ],decisions:['Araç, gereç ve mali kaynak ihtiyaçlarının öncelik sırasına göre belirlenerek okul yönetimine gerekçeli biçimde bildirilmesine','Mevcut kaynakların zümre içinde ortak ve verimli kullanılmasına','Faaliyetler için gerekli kaynakların uygulama takvimi dikkate alınarak önceden planlanmasına']},
+ success:{discussions:[
+  'Başarı verilerinin öğrenci bazında değerlendirilerek desteğe ihtiyaç duyulan öğrencilerin belirlenmesi; düzenli çalışma, geri bildirim ve tamamlayıcı etkinliklerle gelişimlerinin izlenmesi görüşülmüştür.',
+  'Farklı başarı düzeylerine göre destekleyici ve zenginleştirici çalışmalar planlanması, öğrencilerin motivasyonunun artırılması ve gelişimin belirli aralıklarla takip edilmesi gerektiği değerlendirilmiştir.',
+  'Başarıyı artırmada yalnız sınav sonucuna değil ders içi katılım, çalışma alışkanlığı ve öğrenme eksikliklerine birlikte bakılması; gerekli durumlarda öğrenciye özgü destek planlanması üzerinde durulmuştur.'
+ ],decisions:[
+  'Başarı verilerinin öğrenci bazında izlenmesine ve desteğe ihtiyaç duyan öğrenciler için tamamlayıcı çalışmalar planlanmasına',
+  'Farklı başarı düzeylerine uygun destekleyici ve zenginleştirici etkinliklere yer verilmesine, gelişimin belirli aralıklarla değerlendirilmesine',
+  'Öğrencilerin düzenli çalışma ve ders katılımını destekleyecek ortak zümre uygulamalarının yürütülmesine'
+ ]},
+ absence:{discussions:[
+  'Devamsızlığın öğrencilerin öğrenme sürekliliğine ve akademik gelişimine etkisi değerlendirilmiş; riskli devamsızlık örüntülerinin erken fark edilmesi ve ilgili okul birimleriyle koordinasyon kurulması gerektiği görüşülmüştür.',
+  'Sık devamsızlık yapan öğrencilerde kaçırılan öğrenmelerin belirlenmesi, gerekli bilgilendirmenin yapılması ve telafi çalışmalarının dersin imkânları ölçüsünde planlanması üzerinde durulmuştur.',
+  'Devamsızlık bilgilerinin düzenli izlenerek artış gösteren durumların gecikmeden sınıf rehber öğretmeni ve okul yönetimiyle paylaşılması gerektiği değerlendirilmiştir.'
+ ],decisions:[
+  'Devamsızlık durumlarının düzenli izlenmesine ve riskli durumların ilgili okul birimleriyle zamanında paylaşılmasına',
+  'Devamsızlık nedeniyle oluşan öğrenme eksikliklerinin belirlenerek uygun telafi ve destek çalışmalarının planlanmasına'
+ ]}
+ };
+ const sp=special[id]; if(sp)return sp;
+ // Genel kalıpların tekrarını azaltmak için eski havuzdan ana konuya özgü metni koru, mekanik 2 kalıbı çıkar.
+ const bad=['uygulamanın yalnız planlama aşamasında kalmayıp','öğretmenler uygulamada karşılaşılabilecek farklı öğrenci ihtiyaçları bakımından'];
+ const discussions=old.discussions.filter(x=>!bad.some(y=>x.includes(y)));
+ return {discussions:discussions.length?discussions:old.discussions,decisions:old.decisions};
+}
+
+function zumreNarrative(id,branch,variant=0){const p=zumreNarrativePoolV3(id,branch);return [p.discussions[variant%p.discussions.length],p.decisions[variant%p.decisions.length]]}
 function zumreHash(s){let h=2166136261;for(const c of String(s||'')){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return Math.abs(h>>>0)}
 function zumreSpeakerPlan(v,agenda){
  const people=zumreParticipants(v), president=v.teacher||people[0]?.name||'Zümre Başkanı', others=people.filter(x=>zumreNorm(x.name)!==zumreNorm(president)).map(x=>x.name);
@@ -558,9 +682,9 @@ function buildZumreDraft(v){
  const school=v.school||'........................................................',teacher=v.teacher||'................................',date=docDateTR(v.date),branch=zumreBranch(v),agenda=(v.agendas&&v.agendas.length)?v.agendas:zumreAgendaTemplate,people=zumreParticipants(v),no=v.period==='2'?2:1;
  const agendaText=agenda.map((x,i)=>`${i+1}. ${x}.`).join('\n');
  const speakerPlan=zumreSpeakerPlan(v,agenda);
- const discussions=agenda.map((title,i)=>{const id=zumreTopicId(title),pool=zumreNarrativePool(id,branch),speakers=speakerPlan[i]||[teacher],variant=zumreHash(title+String(i))%pool.discussions.length;let body=pool.discussions[variant];if(id==='opening')return `${i+1}. ${title}\nZümre Başkanı ${teacher}, toplantının açılışını yaptı. ${body}`;let text=`${speakers[0]}, ${body}`;if(speakers[1]){const v2=(variant+2)%pool.discussions.length;text+=`\n${speakers[1]}, ${pool.discussions[v2]}`;}return `${i+1}. ${title}\n${text}`}).join('\n\n');
+ const discussions=agenda.map((title,i)=>{const id=zumreTopicId(title),pool=zumreNarrativePoolV3(id,branch),speakers=speakerPlan[i]||[teacher],variant=zumreHash(title+String(i))%pool.discussions.length;let body=pool.discussions[variant];if(id==='opening')return `${i+1}. ${title}\nZümre Başkanı ${teacher}, toplantının açılışını yaptı. ${body}`;let text=`${speakers[0]}, ${body}`;if(speakers[1]){const v2=(variant+2)%pool.discussions.length;text+=`\n${speakers[1]}, ${pool.discussions[v2]}`;}return `${i+1}. ${title}\n${text}`}).join('\n\n');
  const multiIds=new Set(['bep','visit','analysis','common_exam','safety','success','resources']);
- const decisions=agenda.map((title,i)=>{const id=zumreTopicId(title),pool=zumreNarrativePool(id,branch),variant=zumreHash('karar'+title+String(i))%pool.decisions.length;let arr=[pool.decisions[variant]];if(multiIds.has(id)&&pool.decisions.length>1){const second=pool.decisions[(variant+2)%pool.decisions.length];if(second&&!arr.includes(second))arr.push(second)}return `${i+1}. ${arr.join('; ')},`}).join('\n');
+ const decisions=agenda.map((title,i)=>{const id=zumreTopicId(title),pool=zumreNarrativePoolV3(id,branch),variant=zumreHash('karar'+title+String(i))%pool.decisions.length;let arr=[pool.decisions[variant]];if(multiIds.has(id)&&pool.decisions.length>1){const second=pool.decisions[(variant+2)%pool.decisions.length];if(second&&!arr.includes(second))arr.push(second)}return `${i+1}. ${arr.join('; ')},`}).join('\n');
  const timePlace=[v.time,v.place].filter(Boolean).join(' - '), signatures=people.map(p=>`${p.name} | ${p.branch} | `).join('\n'),extra=v.prompt?`\n\nÖZEL GÜNDEM / NOTLAR\n${v.prompt}`:'';
  return `${school.toLocaleUpperCase('tr-TR')}\n${v.year} EĞİTİM-ÖĞRETİM YILI\n${branch.toLocaleUpperCase('tr-TR')} DERSİ ${v.period}. DÖNEM ZÜMRE ÖĞRETMENLER KURULU TOPLANTI TUTANAĞI\n\nToplantı No: ${no}\nToplantı Tarihi ve Yeri: ${date}${timePlace?` - ${timePlace}`:''}\nZümre Başkanı: ${teacher}\nToplantıya Katılanlar: ${people.map(p=>p.name).join(', ')}\n\nGÜNDEM MADDELERİ\n${agendaText}\n\nGÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ\n${discussions}\n\nALINAN KARARLAR\n${decisions}\n\nYukarıda belirtilen kararların uygulanmasına karar verilmiştir.${extra}\n\nİMZA SİRKÜSÜ\nADI SOYADI | BRANŞI / GÖREVİ | İMZA\n${signatures}`;
 }
@@ -1354,7 +1478,7 @@ function zumreEditorSections(text){
  const p=text.indexOf('GÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ'),q=text.indexOf('\n\nALINAN KARARLAR',p);if(p<0||q<0)return null;const body=text.slice(p+'GÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ'.length,q).trim();const re=/(?:^|\n\n)(\d+)\. ([^\n]+)\n([\s\S]*?)(?=(?:\n\n\d+\. )|$)/g;let m,items=[];while((m=re.exec(body)))items.push({no:m[1],title:m[2],text:m[3].trim()});return {items};
 }
 function zumreEditorOpen(){const main=el('docAssistantDraft'),box=el('zumreAgendaEditor');if(!main||!box)return;const p=zumreEditorSections(main.value);if(!p)return alert('Zümre gündemleri taslakta bulunamadı.');const branch=settings.docAssistantZumreBranch||'Matematik';box.innerHTML=`<div class="tiny" style="margin-bottom:10px">Her gündem için farklı görüş seçenekleri vardır. Seçenekler çevrimdışı çalışır ve aynı zümre öğretmenleri arasında konuşmacı dağılımı korunur.</div>`+p.items.map(x=>`<div class="sok-edit-item zumre-edit-item" data-no="${esc(x.no)}" data-variant="0"><b>${esc(x.no)}. ${esc(x.title)}</b><textarea class="zumre-edit-text" rows="5" spellcheck="true">${esc(x.text)}</textarea><div class="modal-actions"><button type="button" class="secondary" onclick="zumrePropose(this.closest('.zumre-edit-item'))">🔄 Başka Görüş</button><button type="button" class="secondary" onclick="zumreUndo(this.closest('.zumre-edit-item'))">↶ Öncekine Dön</button></div><div class="sok-local-panel" hidden></div></div>`).join('')+`<div class="modal-actions"><button type="button" onclick="zumreEditorApply();zumreEditorClose()">✓ Düzenlemeyi Tamamla</button><button type="button" class="secondary" onclick="zumreEditorClose()">Ana Taslağa Dön</button></div>`;box.hidden=false;main.hidden=true;el('zumreEditorToggle').textContent='📝 Zümre Düzenleyicisini Kapat';}
-function zumrePropose(row){const title=row.querySelector('b').textContent.replace(/^\d+\.\s*/,''),id=zumreTopicId(title),pool=zumreNarrativePool(id,settings.docAssistantZumreBranch||'Matematik').discussions,area=row.querySelector('.zumre-edit-text');let n=(Number(row.dataset.variant||0)+1)%pool.length;if(n===Number(row.dataset.lastAccepted||-1)&&pool.length>1)n=(n+1)%pool.length;row.dataset.variant=n;row.dataset.previous=area.value;const speaker=(area.value.match(/^([^,\n]{2,60}),\s/)||[])[1];const text=(speaker?`${speaker}, `:'')+pool[n];row.dataset.suggestion=text;const panel=row.querySelector('.sok-local-panel');panel.innerHTML=`<div class="tiny">Öneri ${n+1}/${pool.length} · Çevrimdışı</div><div class="sok-local-suggestion">${esc(text)}</div><div class="sok-local-actions"><button type="button" onclick="zumreAccept(this.closest('.zumre-edit-item'))">✓ Kabul Et</button><button type="button" class="secondary" onclick="zumrePropose(this.closest('.zumre-edit-item'))">🔄 Başka Görüş</button></div>`;panel.hidden=false;}
+function zumrePropose(row){const title=row.querySelector('b').textContent.replace(/^\d+\.\s*/,''),id=zumreTopicId(title),pool=zumreNarrativePoolV3(id,settings.docAssistantZumreBranch||'Matematik').discussions,area=row.querySelector('.zumre-edit-text');let n=(Number(row.dataset.variant||0)+1)%pool.length;if(n===Number(row.dataset.lastAccepted||-1)&&pool.length>1)n=(n+1)%pool.length;row.dataset.variant=n;row.dataset.previous=area.value;const speaker=(area.value.match(/^([^,\n]{2,60}),\s/)||[])[1];const text=(speaker?`${speaker}, `:'')+pool[n];row.dataset.suggestion=text;const panel=row.querySelector('.sok-local-panel');panel.innerHTML=`<div class="tiny">Öneri ${n+1}/${pool.length} · Çevrimdışı</div><div class="sok-local-suggestion">${esc(text)}</div><div class="sok-local-actions"><button type="button" onclick="zumreAccept(this.closest('.zumre-edit-item'))">✓ Kabul Et</button><button type="button" class="secondary" onclick="zumrePropose(this.closest('.zumre-edit-item'))">🔄 Başka Görüş</button></div>`;panel.hidden=false;}
 function zumreAccept(row){const a=row.querySelector('.zumre-edit-text');if(row.dataset.suggestion){row.dataset.previous=a.value;a.value=row.dataset.suggestion;row.dataset.lastAccepted=row.dataset.variant;row.querySelector('.sok-local-panel').hidden=true;zumreEditorApply()}}
 function zumreUndo(row){const a=row.querySelector('.zumre-edit-text');if(row.dataset.previous!==undefined){const t=a.value;a.value=row.dataset.previous;row.dataset.previous=t;zumreEditorApply()}}
 function zumreEditorApply(){const main=el('docAssistantDraft'),box=el('zumreAgendaEditor');if(!main||!box||box.hidden)return;const parsed=zumreEditorSections(main.value);if(!parsed)return;let text=main.value;for(const row of [...box.querySelectorAll('.zumre-edit-item')]){const no=row.dataset.no,item=parsed.items.find(x=>x.no===no);if(!item)continue;const old=`${no}. ${item.title}\n${item.text}`,neu=`${no}. ${item.title}\n${row.querySelector('.zumre-edit-text').value.trim()}`;text=text.replace(old,neu)}main.value=text;}
