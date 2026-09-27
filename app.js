@@ -16,29 +16,31 @@ function documentAssistantContext(){
   return {teacher:p.name||"",school:p.school||"",className:c?.name||"",year:settings.currentSchoolYear||defaultSchoolYearLabel(),period:String(currentPeriod||"1")};
 }
 function openDocumentAssistant(){
-  const x=documentAssistantContext();
+  const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.71 · Belge sınıf adı senkronizasyonu · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.72 · Belge sınıf adı senkronizasyonu · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
       <label>Belge Türü<select id="docAssistantType" onchange="documentAssistantTypeChanged()">${Object.entries(documentAssistantTypes).map(([k,v])=>`<option value="${k}">${v.icon} ${v.label}</option>`).join("")}</select></label>
-      <label>Tarih<input id="docAssistantDate" type="date" value="${localISODate()}"></label>
-      <label>Eğitim Yılı<input id="docAssistantYear" value="${esc(x.year)}"></label>
-      <label>Dönem<select id="docAssistantPeriod"><option value="1" ${x.period==="1"?"selected":""}>1. Dönem</option><option value="2" ${x.period==="2"?"selected":""}>2. Dönem</option></select></label>
-      <label>Okul<input id="docAssistantSchool" value="${esc(x.school)}" placeholder="Okul adı"></label>
-      <label>Öğretmen / Başkan<input id="docAssistantTeacher" value="${esc(x.teacher)}" placeholder="Ad Soyad"></label><label id="docZumreBranchLabel">Zümre / Branş<input id="docAssistantBranch" value="${esc(settings.docAssistantZumreBranch||"Matematik")}" placeholder="Örn. Matematik" oninput="documentZumreBranchChanged()"></label>
-      <label>Sınıf / Şube<input id="docAssistantClass" value="${esc(x.className)}" placeholder="Örn. 9/D" oninput="documentClassChangedForParticipants()"></label>
-      <label>Toplantı Saati<input id="docAssistantTime" type="time" value="${esc(settings.docAssistantTime||"")}"></label>
-      <label>Toplantı Yeri<input id="docAssistantPlace" value="${esc(settings.docAssistantPlace||"Öğretmenler Odası")}" placeholder="Örn. Öğretmenler Odası"></label>
-      <label>Müdür Yardımcısı<input id="docAssistantVicePrincipal" value="${esc(settings.docAssistantVicePrincipal||"")}" placeholder="Ad Soyad"></label>
-      <label>Müdür<input id="docAssistantPrincipal" value="${esc(settings.docAssistantPrincipal||"")}" placeholder="Ad Soyad"></label>
+      <label>Tarih<input id="docAssistantDate" type="date" value="${esc(remembered.date||localISODate())}"></label>
+      <label>Eğitim Yılı<input id="docAssistantYear" value="${esc(remembered.year||x.year)}"></label>
+      <label>Dönem<select id="docAssistantPeriod"><option value="1" ${(remembered.period||x.period)==="1"?"selected":""}>1. Dönem</option><option value="2" ${(remembered.period||x.period)==="2"?"selected":""}>2. Dönem</option></select></label>
+      <label>Okul<input id="docAssistantSchool" value="${esc(remembered.school||x.school)}" placeholder="Okul adı"></label>
+      <label>Öğretmen / Başkan<input id="docAssistantTeacher" value="${esc(remembered.teacher||x.teacher)}" placeholder="Ad Soyad"></label><label id="docZumreBranchLabel">Zümre / Branş<input id="docAssistantBranch" value="${esc(settings.docAssistantZumreBranch||"Matematik")}" placeholder="Örn. Matematik" oninput="documentZumreBranchChanged()"></label>
+      <label>Sınıf / Şube<input id="docAssistantClass" value="${esc(remembered.className||x.className)}" placeholder="Örn. 9/D" oninput="documentClassChangedForParticipants()"></label>
+      <label>Toplantı Saati<input id="docAssistantTime" type="time" value="${esc(remembered.time||settings.docAssistantTime||"")}"></label>
+      <label>Toplantı Yeri<input id="docAssistantPlace" value="${esc(remembered.place||settings.docAssistantPlace||"Öğretmenler Odası")}" placeholder="Örn. Öğretmenler Odası"></label>
+      <label>Müdür Yardımcısı<input id="docAssistantVicePrincipal" value="${esc(remembered.vicePrincipal||settings.docAssistantVicePrincipal||"")}" placeholder="Ad Soyad"></label>
+      <label>Müdür<input id="docAssistantPrincipal" value="${esc(remembered.principal||settings.docAssistantPrincipal||"")}" placeholder="Ad Soyad"></label>
     </div>
     <div class="card" style="padding:12px;margin:12px 0"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap"><b>📋 Gündem Maddeleri</b><span id="docAgendaCount" class="tiny"></span></div><div class="tiny" style="margin:5px 0 9px">Şablon gündemini kullanabilir veya kendi gündemlerinizi tek tek, toplu metinden ya da PDF'den ekleyebilirsiniz.</div><div style="display:flex;gap:7px;flex-wrap:wrap"><button type="button" class="secondary" onclick="docAgendaAddOne()">+ Gündem Ekle</button><button type="button" class="secondary" onclick="docAgendaBulkOpen()">📋 Toplu Gündem Ekle</button><button type="button" class="secondary" onclick="docAgendaPdfOpen()">📄 PDF'den İçe Aktar</button><button type="button" class="secondary" onclick="docAgendaUseTemplate()">Şablon Gündemi</button></div><div id="docAgendaList" style="margin-top:10px"></div></div>
     <label class="doc-assistant-prompt">Belgede özellikle yer almasını istedikleriniz<textarea id="docAssistantPrompt" rows="3" placeholder="Örn. Devamsızlık, akademik başarı, sınıf disiplini ve alınacak tedbirler yer alsın."></textarea></label>
     <details class="doc-participants" id="docParticipantsDetails" ontoggle="documentParticipantsToggle(this)"><summary id="docParticipantsSummary">👥 Katılımcılar / İmza Sirküsü</summary><div id="docParticipantsHelp" class="tiny" style="margin-top:7px">Katılımcı listesi belge türüne göre ayrı saklanır.</div><div id="docStaffList" class="doc-staff-list"></div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:8px"><button type="button" class="secondary" onclick="addDocumentStaffRow()">+ Öğretmen Ekle</button><button type="button" class="secondary" onclick="saveDocumentStaff()">Kadroyu Kaydet</button></div></details>
     <div class="modal-actions"><button onclick="generateDocumentAssistantDraft()">✨ Taslak Oluştur</button><button class="secondary" onclick="openDocumentAssistantTemplates()">Şablonları Gör</button></div>`;
   el("modal").classList.add("open");
+  if(el("docAssistantType")) el("docAssistantType").value=rememberedType;
+  if(el("docAssistantPrompt")) el("docAssistantPrompt").value=remembered.prompt||"";
   documentAssistantTypeChanged(true);
   renderDocAgendaList();
 }
@@ -127,7 +129,7 @@ function saveDocumentStaff(){
  settings.docAssistantStaff=rows;settings.docAssistantParticipants=rows.map(x=>`${x.name} | ${x.branch}`);saveSettings();alert("ŞÖK öğretmen kadrosu kaydedildi.")
 }
 function documentAssistantTypeChanged(initial){
- const type=documentCurrentType(),isZ=type==="zumre",isV=type==="veli";const bl=el("docZumreBranchLabel");if(bl)bl.style.display=isZ?"":"none";
+ const type=documentCurrentType(),isZ=type==="zumre",isV=type==="veli";settings.docAssistantLastType=type;saveSettings();const bl=el("docZumreBranchLabel");if(bl)bl.style.display=isZ?"":"none";
  const sum=el("docParticipantsSummary"),help=el("docParticipantsHelp"),details=el('docParticipantsDetails');if(sum)sum.textContent=isZ?"👥 Zümre Öğretmenleri / İmza Sirküsü":isV?"👥 Veli Katılımcıları / İmza Listesi":"👥 ŞÖK Katılımcıları / İmza Sirküsü";if(help)help.textContent=isZ?"Yalnız aynı zümredeki öğretmenleri ekleyin. Liste branş bazında ayrı saklanır ve sonraki zümre toplantılarında yeniden kullanılır.":isV?"Seçili sınıfın öğrenci listesi kullanılır. Katılan velileri işaretleyebilir, isterseniz veli adını yazabilirsiniz. Liste sınıf bazında bu cihazda saklanır.":"Öğretmen kadrosu bir kez kaydedilir; her ŞÖK'te katılacak kişileri işaretleyebilirsiniz.";
  const actions=details?.querySelector('div[style*="display:flex"]');if(actions)actions.innerHTML=isV?'<button type="button" class="secondary" onclick="saveDocumentStaff()">Katılımı Kaydet</button>':'<button type="button" class="secondary" onclick="addDocumentStaffRow()">+ Öğretmen Ekle</button><button type="button" class="secondary" onclick="saveDocumentStaff()">Kadroyu Kaydet</button>';
  renderDocumentStaff();
@@ -1593,6 +1595,7 @@ function generateDocumentAssistantDraft(){
   modalPushCurrent();
   const v=docAssistantValues();
   window._docAssistantLastValues={...v};
+  settings.docAssistantLastType=v.type;settings.docAssistantLastFormByType=settings.docAssistantLastFormByType||{};settings.docAssistantLastFormByType[v.type]={date:v.date,year:v.year,period:v.period,school:v.school,teacher:v.teacher,className:v.className,time:v.time,place:v.place,vicePrincipal:v.vicePrincipal,principal:v.principal,prompt:v.prompt,branch:v.branch};saveSettings();
   let draft=buildDocumentDraft(v);
   if(v.type==="sok"){
     try{
@@ -1660,7 +1663,8 @@ function printDocumentAssistantDraft(){
   const t=el("docAssistantDraft")?.value||"";if(!t.trim())return alert("Önce belge taslağı oluşturun.");
   closeDocumentPrintPreview();const sh=document.createElement('div');sh.className='doc-print-sheet';sh.innerHTML=`<div class="doc-print-toolbar"><button class="secondary" onclick="closeDocumentPrintPreview()">← Belge Asistanına Dön</button><button onclick="window.print()">🖨️ Yazdır / PDF</button></div><article class="doc-paper">${docDraftToHTML(t)}</article>`;document.body.appendChild(sh);document.body.classList.add('doc-print-open');sh.scrollTop=0;fitDocumentPreview();
 }
-function documentExportBaseName(){const liveClass=String(el("docAssistantClass")?.value||"").trim(),last=window._docAssistantLastValues||{},x=documentAssistantContext(),className=liveClass||String(last.className||"").trim()||x.className||"",date=String(last.date||localISODate()),title=(el("modalTitle")?.textContent||"Belge").replace(/[^A-Za-z0-9ÇĞİÖŞÜçğıöşü _-]+/g,"").trim();return `${title||"Belge"}_${className}_${date}`.replace(/\s+/g,"_")}
+function documentFileDate(v){const m=String(v||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?`${m[3]}-${m[2]}-${m[1]}`:String(v||"")}
+function documentExportBaseName(){const liveClass=String(el("docAssistantClass")?.value||"").trim(),last=window._docAssistantLastValues||{},x=documentAssistantContext(),className=liveClass||String(last.className||"").trim()||x.className||"",date=documentFileDate(last.date||localISODate()),title=(el("modalTitle")?.textContent||"Belge").replace(/[^A-Za-z0-9ÇĞİÖŞÜçğıöşü _-]+/g,"").trim();return `${title||"Belge"}_${className}_${date}`.replace(/\s+/g,"_")}
 function downloadDocumentBlob(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2500)}
 function openDocumentExportMenu(){
  const t=el("docAssistantDraft")?.value||"";if(!t.trim())return alert("Önce belge taslağı oluşturun.");
