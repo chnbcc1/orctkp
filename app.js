@@ -18,7 +18,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.48 · ŞÖK İşlevsel Final Düzeltme · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.53 · Sayfa Yerleşimi + Güncelleme Düzeltmesi · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
