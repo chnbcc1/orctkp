@@ -18,7 +18,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.56 · Zümre Görüş Motoru v2 · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.57 · Zümre Görüş Motoru v2 · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -552,6 +552,17 @@ function zumreSpeakerPlan(v,agenda){
    const dual=['maarif','planning','methods','bep','visit','analysis','common_exam','higher_skills','interdisciplinary','success'].includes(id) && people.length>2 && (zumreHash(title)%3===0);
    if(!dual)return [first];const second=[president,...others].filter(x=>x!==first).sort((a,b)=>(counts[a]||0)-(counts[b]||0))[0];if(second){counts[second]=(counts[second]||0)+1;return [first,second]}return [first];
  });
+}
+
+function buildZumreDraft(v){
+ const school=v.school||'........................................................',teacher=v.teacher||'................................',date=docDateTR(v.date),branch=zumreBranch(v),agenda=(v.agendas&&v.agendas.length)?v.agendas:zumreAgendaTemplate,people=zumreParticipants(v),no=v.period==='2'?2:1;
+ const agendaText=agenda.map((x,i)=>`${i+1}. ${x}.`).join('\n');
+ const speakerPlan=zumreSpeakerPlan(v,agenda);
+ const discussions=agenda.map((title,i)=>{const id=zumreTopicId(title),pool=zumreNarrativePool(id,branch),speakers=speakerPlan[i]||[teacher],variant=zumreHash(title+String(i))%pool.discussions.length;let body=pool.discussions[variant];if(id==='opening')return `${i+1}. ${title}\nZümre Başkanı ${teacher}, toplantının açılışını yaptı. ${body}`;let text=`${speakers[0]}, ${body}`;if(speakers[1]){const v2=(variant+2)%pool.discussions.length;text+=`\n${speakers[1]}, ${pool.discussions[v2]}`;}return `${i+1}. ${title}\n${text}`}).join('\n\n');
+ const multiIds=new Set(['bep','visit','analysis','common_exam','safety','success','resources']);
+ const decisions=agenda.map((title,i)=>{const id=zumreTopicId(title),pool=zumreNarrativePool(id,branch),variant=zumreHash('karar'+title+String(i))%pool.decisions.length;let arr=[pool.decisions[variant]];if(multiIds.has(id)&&pool.decisions.length>1){const second=pool.decisions[(variant+2)%pool.decisions.length];if(second&&!arr.includes(second))arr.push(second)}return `${i+1}. ${arr.join('; ')},`}).join('\n');
+ const timePlace=[v.time,v.place].filter(Boolean).join(' - '), signatures=people.map(p=>`${p.name} | ${p.branch} | `).join('\n'),extra=v.prompt?`\n\nÖZEL GÜNDEM / NOTLAR\n${v.prompt}`:'';
+ return `${school.toLocaleUpperCase('tr-TR')}\n${v.year} EĞİTİM-ÖĞRETİM YILI\n${branch.toLocaleUpperCase('tr-TR')} DERSİ ${v.period}. DÖNEM ZÜMRE ÖĞRETMENLER KURULU TOPLANTI TUTANAĞI\n\nToplantı No: ${no}\nToplantı Tarihi ve Yeri: ${date}${timePlace?` - ${timePlace}`:''}\nZümre Başkanı: ${teacher}\nToplantıya Katılanlar: ${people.map(p=>p.name).join(', ')}\n\nGÜNDEM MADDELERİ\n${agendaText}\n\nGÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ\n${discussions}\n\nALINAN KARARLAR\n${decisions}\n\nYukarıda belirtilen kararların uygulanmasına karar verilmiştir.${extra}\n\nİMZA SİRKÜSÜ\nADI SOYADI | BRANŞI / GÖREVİ | İMZA\n${signatures}`;
 }
 
 function buildDocumentDraft(v){
