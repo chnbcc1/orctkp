@@ -2006,6 +2006,12 @@ body.class-module-page-open #modal{z-index:9200!important}
 @media(max-width:600px){.doc-assistant-grid{grid-template-columns:1fr}.doc-draft-editor{min-height:52vh}.overview-shortcuts{grid-template-columns:1fr 1fr}.document-assistant-shortcut{grid-column:1/-1}}
 </style>
 <script src="./jszip.min.js"></script>
+
+<style id="v7765-duty-card-multiline">
+#profileChip .profileDutyBtn .pdText small{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;max-width:100%!important;display:flex!important;flex-direction:column!important;gap:1px!important;margin-top:3px!important;line-height:1.12!important;}
+#profileChip .profileDutyBtn .profileDutyLine{display:block!important;width:100%!important;font-size:8.6px!important;line-height:1.15!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+@media(max-width:390px){#profileChip .profileDutyBtn .profileDutyLine{font-size:8.1px!important;}}
+</style>
 </head>
 <body>
 
@@ -2087,7 +2093,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.64</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.65</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2245,7 +2251,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.64 · Sistem Navigasyon Düzeltmesi · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.65 · Sistem Navigasyon Düzeltmesi · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2926,7 +2932,7 @@ function buildZumreDraft(v){
  return `${school.toLocaleUpperCase('tr-TR')}\n${v.year} EĞİTİM-ÖĞRETİM YILI\n${branch.toLocaleUpperCase('tr-TR')} DERSİ ${v.period}. DÖNEM ZÜMRE ÖĞRETMENLER KURULU TOPLANTI TUTANAĞI\n\nToplantı No: ${no}\nToplantı Tarihi ve Yeri: ${date}${timePlace?` - ${timePlace}`:''}\nZümre Başkanı: ${teacher}\nToplantıya Katılanlar: ${people.map(p=>p.name).join(', ')}\n\nGÜNDEM MADDELERİ\n${agendaText}\n\nGÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ\n${discussions}\n\nALINAN KARARLAR\n${decisions}\n\nYukarıda belirtilen kararların uygulanmasına karar verilmiştir.${extra}\n\nİMZA SİRKÜSÜ\nADI SOYADI | BRANŞI / GÖREVİ | İMZA\n${signatures}`;
 }
 
-// ===== v7.7.64 Veli Anlamlandırma Motoru v2 =====
+// ===== v7.7.65 Veli Anlamlandırma Motoru v2 =====
 const veliAgendaFirst=['Açılış ve yoklama','Toplantının amacı','Veli-okul iş birliğinin önemi','Okul tanıtımı','Okul kuralları; giriş-çıkış, kılık kıyafet, devamsızlık, sınıf geçme, ödül-disiplin ve cep telefonu kullanımı','Ergenlik özellikleri ve iletişim','Okul-veli iletişimi; öğretmen-veli diyaloğu, veli görüşme günleri, e-Okul ve veli ziyaretleri','Verimli ders çalışma ve ödevler','Sınıfın genel başarı durumu','Dilek ve temenniler'];
 const veliAgendaLater=['Açılış ve yoklama','Toplantının amacı','Veli-okul iş birliğinin önemi','Okul kuralları ve devamsızlık durumunun hatırlatılması','Okul-veli iletişimi ve e-Okul takibi','Verimli ders çalışma ve ödevler','Sınavlar ve öğrencilerin akademik gelişiminin değerlendirilmesi','Sınıfın genel başarı durumu','Dilek ve temenniler'];
 function veliHash(x){let h=0;for(const c of String(x||''))h=(h*31+c.charCodeAt(0))>>>0;return h}
@@ -3864,7 +3870,13 @@ async function exportDocumentAssistantWord(){
  const t=el("docAssistantDraft")?.value||"";if(!t.trim())return alert("Önce belge taslağı oluşturun.");if(typeof JSZip==='undefined')return alert("Word oluşturma bileşeni yüklenemedi.");
  try{const z=new JSZip();z.file('[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>');z.folder('_rels').file('.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>');const w=z.folder('word');w.file('styles.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr></w:style></w:styles>');w.file('document.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${draftToDocxBody(t)}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="700" w:right="700" w:bottom="700" w:left="700" w:header="360" w:footer="360" w:gutter="0"/></w:sectPr></w:body></w:document>`);const blob=await z.generateAsync({type:'blob',mimeType:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});downloadDocumentBlob(blob,documentExportBaseName()+'.docx')}catch(e){console.error(e);alert("Word dosyası oluşturulamadı.")}
 }
-function printableDocumentHTML(t){return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${xmlEsc(documentExportBaseName())}</title><style>@page{size:A4;margin:12.35mm}html,body{margin:0;padding:0;background:#fff;color:#000}body{font-family:"Times New Roman",serif;font-size:12pt;line-height:1.15}p{margin:0 0 6pt;text-align:justify}.doc-school-title,.doc-title{text-align:center;font-weight:bold;margin:0 0 8pt;font-size:12pt}.doc-section{font-weight:bold;margin:9pt 0 5pt}.page-break{break-before:page;page-break-before:always}.sok-agenda-item{display:block;break-inside:avoid-page;page-break-inside:avoid;margin:0 0 7pt}.sok-agenda-item p{margin:0 0 3pt}.sok-agenda-item .sok-item-title{break-after:avoid-page;page-break-after:avoid}.sok-agenda-item .discussion-title{font-weight:bold;font-size:11.5pt;line-height:1.15}.doc-section.keep-with-next{break-after:avoid;page-break-after:avoid}table{width:100%;border-collapse:collapse;table-layout:fixed}th,td{border:1px solid #000;padding:5pt;vertical-align:top}th{text-align:left}.signature th:nth-child(1){width:38%}.signature th:nth-child(2){width:42%}.signature th:nth-child(3){width:20%}.placeholder{font-style:italic;color:#555}@media print{html,body{width:auto!important;height:auto!important;overflow:visible!important}}</style></head><body>${docDraftToHTML(t)}<script>window.addEventListener('load',()=>setTimeout(()=>window.print(),250));<\/script></body></html>`}
+function printableDocumentHTML(t){return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${xmlEsc(documentExportBaseName())}</title><style>@page{size:A4;margin:12.35mm}html,body{margin:0;padding:0;background:#fff;color:#000}body{font-family:"Times New Roman",serif;font-size:12pt;line-height:1.15}p{margin:0 0 6pt;text-align:justify}.doc-school-title,.doc-title{text-align:center;font-weight:bold;margin:0 0 8pt;font-size:12pt}.doc-section{font-weight:bold;margin:9pt 0 5pt}.page-break{break-before:page;page-break-before:always}.sok-agenda-item{display:block;break-inside:avoid-page;page-break-inside:avoid;margin:0 0 7pt}.sok-agenda-item p{margin:0 0 3pt}.sok-agenda-item .sok-item-title{break-after:avoid-page;page-break-after:avoid}.sok-agenda-item .discussion-title{font-weight:bold;font-size:11.5pt;line-height:1.15}.doc-section.keep-with-next{break-after:avoid;page-break-after:avoid}table{width:100%;border-collapse:collapse;table-layout:fixed}th,td{border:1px solid #000;padding:5pt;vertical-align:top}th{text-align:left}.signature th:nth-child(1){width:38%}.signature th:nth-child(2){width:42%}.signature th:nth-child(3){width:20%}.placeholder{font-style:italic;color:#555}@media print{html,body{width:auto!important;height:auto!important;overflow:visible!important}}</style>
+<style id="v7765-duty-card-multiline">
+#profileChip .profileDutyBtn .pdText small{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;max-width:100%!important;display:flex!important;flex-direction:column!important;gap:1px!important;margin-top:3px!important;line-height:1.12!important;}
+#profileChip .profileDutyBtn .profileDutyLine{display:block!important;width:100%!important;font-size:8.6px!important;line-height:1.15!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+@media(max-width:390px){#profileChip .profileDutyBtn .profileDutyLine{font-size:8.1px!important;}}
+</style>
+</head><body>${docDraftToHTML(t)}<script>window.addEventListener('load',()=>setTimeout(()=>window.print(),250));<\/script></body></html>`}
 function docPdfWrap(ctx,text,maxW){
  const words=String(text||'').split(/\s+/).filter(Boolean),lines=[];let line='';
  for(const w of words){const test=line?line+' '+w:w;if(ctx.measureText(test).width<=maxW||!line)line=test;else{lines.push(line);line=w}}
@@ -4818,7 +4830,14 @@ function dutyInfo(now=new Date()){
  if(upcoming.length){return{type:"next",text:`Bugün nöbetin var · ${todayText}`,entries:todays,next:upcoming[0]};}
  return{type:"done",text:`Bugünkü nöbetlerin tamamlandı · ${todayText}`,entries:todays};
 }
-function updateDutyStatus(){let x=document.getElementById("profileDutyStatus");if(x)x.textContent=dutyInfo().text}
+function updateDutyStatus(){
+ const x=document.getElementById("profileDutyStatus");if(!x)return;
+ const i=dutyInfo();
+ if(i.entries&&i.entries.length){
+  const rows=i.entries.map(e=>{const label=e.type==="boarding"?"Pansiyon":(e.place||"Okul Nöbeti");return `<span class="profileDutyLine">${esc(label)} · ${esc(e.start||"")}–${esc(e.end||"")}</span>`}).join("");
+  x.innerHTML=rows;
+ }else{x.textContent=i.text}
+}
 function saveDuty(){settings.dutySchedule=normalizeDutySchedule(settings.dutySchedule);saveSettings();updateDutyStatus()}
 function setDutyView(v){dutyView=v;openDutySchedule()}
 function dutyTabs(){return `<div class="dutyTabs"><button class="${dutyView==="all"?"active":""}" onclick="setDutyView('all')">Tümü</button><button class="${dutyView==="school"?"active":""}" onclick="setDutyView('school')">Okul</button><button class="${dutyView==="boarding"?"active":""}" onclick="setDutyView('boarding')">Pansiyon</button></div>`}

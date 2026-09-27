@@ -18,7 +18,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.64 · Sistem Navigasyon Düzeltmesi · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.65 · Sistem Navigasyon Düzeltmesi · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -719,7 +719,7 @@ function buildZumreDraft(v){
  return `${school.toLocaleUpperCase('tr-TR')}\n${v.year} EĞİTİM-ÖĞRETİM YILI\n${branch.toLocaleUpperCase('tr-TR')} DERSİ ${v.period}. DÖNEM ZÜMRE ÖĞRETMENLER KURULU TOPLANTI TUTANAĞI\n\nToplantı No: ${no}\nToplantı Tarihi ve Yeri: ${date}${timePlace?` - ${timePlace}`:''}\nZümre Başkanı: ${teacher}\nToplantıya Katılanlar: ${people.map(p=>p.name).join(', ')}\n\nGÜNDEM MADDELERİ\n${agendaText}\n\nGÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ\n${discussions}\n\nALINAN KARARLAR\n${decisions}\n\nYukarıda belirtilen kararların uygulanmasına karar verilmiştir.${extra}\n\nİMZA SİRKÜSÜ\nADI SOYADI | BRANŞI / GÖREVİ | İMZA\n${signatures}`;
 }
 
-// ===== v7.7.64 Veli Anlamlandırma Motoru v2 =====
+// ===== v7.7.65 Veli Anlamlandırma Motoru v2 =====
 const veliAgendaFirst=['Açılış ve yoklama','Toplantının amacı','Veli-okul iş birliğinin önemi','Okul tanıtımı','Okul kuralları; giriş-çıkış, kılık kıyafet, devamsızlık, sınıf geçme, ödül-disiplin ve cep telefonu kullanımı','Ergenlik özellikleri ve iletişim','Okul-veli iletişimi; öğretmen-veli diyaloğu, veli görüşme günleri, e-Okul ve veli ziyaretleri','Verimli ders çalışma ve ödevler','Sınıfın genel başarı durumu','Dilek ve temenniler'];
 const veliAgendaLater=['Açılış ve yoklama','Toplantının amacı','Veli-okul iş birliğinin önemi','Okul kuralları ve devamsızlık durumunun hatırlatılması','Okul-veli iletişimi ve e-Okul takibi','Verimli ders çalışma ve ödevler','Sınavlar ve öğrencilerin akademik gelişiminin değerlendirilmesi','Sınıfın genel başarı durumu','Dilek ve temenniler'];
 function veliHash(x){let h=0;for(const c of String(x||''))h=(h*31+c.charCodeAt(0))>>>0;return h}
@@ -2622,7 +2622,14 @@ function dutyInfo(now=new Date()){
  if(upcoming.length){return{type:"next",text:`Bugün nöbetin var · ${todayText}`,entries:todays,next:upcoming[0]};}
  return{type:"done",text:`Bugünkü nöbetlerin tamamlandı · ${todayText}`,entries:todays};
 }
-function updateDutyStatus(){let x=document.getElementById("profileDutyStatus");if(x)x.textContent=dutyInfo().text}
+function updateDutyStatus(){
+ const x=document.getElementById("profileDutyStatus");if(!x)return;
+ const i=dutyInfo();
+ if(i.entries&&i.entries.length){
+  const rows=i.entries.map(e=>{const label=e.type==="boarding"?"Pansiyon":(e.place||"Okul Nöbeti");return `<span class="profileDutyLine">${esc(label)} · ${esc(e.start||"")}–${esc(e.end||"")}</span>`}).join("");
+  x.innerHTML=rows;
+ }else{x.textContent=i.text}
+}
 function saveDuty(){settings.dutySchedule=normalizeDutySchedule(settings.dutySchedule);saveSettings();updateDutyStatus()}
 function setDutyView(v){dutyView=v;openDutySchedule()}
 function dutyTabs(){return `<div class="dutyTabs"><button class="${dutyView==="all"?"active":""}" onclick="setDutyView('all')">Tümü</button><button class="${dutyView==="school"?"active":""}" onclick="setDutyView('school')">Okul</button><button class="${dutyView==="boarding"?"active":""}" onclick="setDutyView('boarding')">Pansiyon</button></div>`}

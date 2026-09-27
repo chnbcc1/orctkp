@@ -2569,7 +2569,14 @@ function dutyInfo(now=new Date()){
  if(upcoming.length){return{type:"next",text:`Bugün nöbetin var · ${todayText}`,entries:todays,next:upcoming[0]};}
  return{type:"done",text:`Bugünkü nöbetlerin tamamlandı · ${todayText}`,entries:todays};
 }
-function updateDutyStatus(){let x=document.getElementById("profileDutyStatus");if(x)x.textContent=dutyInfo().text}
+function updateDutyStatus(){
+ const x=document.getElementById("profileDutyStatus");if(!x)return;
+ const i=dutyInfo();
+ if(i.entries&&i.entries.length){
+  const rows=i.entries.map(e=>{const label=e.type==="boarding"?"Pansiyon":(e.place||"Okul Nöbeti");return `<span class="profileDutyLine">${esc(label)} · ${esc(e.start||"")}–${esc(e.end||"")}</span>`}).join("");
+  x.innerHTML=rows;
+ }else{x.textContent=i.text}
+}
 function saveDuty(){settings.dutySchedule=normalizeDutySchedule(settings.dutySchedule);saveSettings();updateDutyStatus()}
 function setDutyView(v){dutyView=v;openDutySchedule()}
 function dutyTabs(){return `<div class="dutyTabs"><button class="${dutyView==="all"?"active":""}" onclick="setDutyView('all')">Tümü</button><button class="${dutyView==="school"?"active":""}" onclick="setDutyView('school')">Okul</button><button class="${dutyView==="boarding"?"active":""}" onclick="setDutyView('boarding')">Pansiyon</button></div>`}
