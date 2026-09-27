@@ -2012,6 +2012,49 @@ body.class-module-page-open #modal{z-index:9200!important}
 #profileChip .profileDutyBtn .profileDutyLine{display:block!important;width:100%!important;font-size:8.6px!important;line-height:1.15!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
 @media(max-width:390px){#profileChip .profileDutyBtn .profileDutyLine{font-size:8.1px!important;}}
 </style>
+
+<style id="v7766-profile-school-wrap">
+/* v7.7.66 — Uzun okul adı iki satıra sarılır; nöbet kartı sabit alanını korur */
+@media(max-width:700px){
+  #profileChip.profile-chip{
+    grid-template-columns:54px minmax(0,1fr) 244px!important;
+  }
+  #profileChip .profile-info,
+  #profileChip .profile-lines{
+    min-width:0!important;
+    width:100%!important;
+    max-width:none!important;
+  }
+  #profileChip .profile-lines b{
+    max-width:100%!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+  #profileChip .profile-lines span#headerSchoolName{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:2!important;
+    white-space:normal!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    max-width:100%!important;
+    line-height:1.22!important;
+    min-height:2.44em!important;
+    margin-top:4px!important;
+    overflow-wrap:anywhere!important;
+  }
+  #profileChip .profileDutyBtn{
+    width:244px!important;
+    min-width:244px!important;
+    max-width:244px!important;
+  }
+}
+@media(max-width:390px){
+  #profileChip.profile-chip{grid-template-columns:50px minmax(0,1fr) 205px!important;}
+  #profileChip .profileDutyBtn{width:205px!important;min-width:205px!important;max-width:205px!important;}
+}
+</style>
 </head>
 <body>
 
@@ -2093,7 +2136,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.65</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.66</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2251,7 +2294,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.65 · Sistem Navigasyon Düzeltmesi · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.66 · Sistem Navigasyon Düzeltmesi · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2932,7 +2975,7 @@ function buildZumreDraft(v){
  return `${school.toLocaleUpperCase('tr-TR')}\n${v.year} EĞİTİM-ÖĞRETİM YILI\n${branch.toLocaleUpperCase('tr-TR')} DERSİ ${v.period}. DÖNEM ZÜMRE ÖĞRETMENLER KURULU TOPLANTI TUTANAĞI\n\nToplantı No: ${no}\nToplantı Tarihi ve Yeri: ${date}${timePlace?` - ${timePlace}`:''}\nZümre Başkanı: ${teacher}\nToplantıya Katılanlar: ${people.map(p=>p.name).join(', ')}\n\nGÜNDEM MADDELERİ\n${agendaText}\n\nGÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ\n${discussions}\n\nALINAN KARARLAR\n${decisions}\n\nYukarıda belirtilen kararların uygulanmasına karar verilmiştir.${extra}\n\nİMZA SİRKÜSÜ\nADI SOYADI | BRANŞI / GÖREVİ | İMZA\n${signatures}`;
 }
 
-// ===== v7.7.65 Veli Anlamlandırma Motoru v2 =====
+// ===== v7.7.66 Veli Anlamlandırma Motoru v2 =====
 const veliAgendaFirst=['Açılış ve yoklama','Toplantının amacı','Veli-okul iş birliğinin önemi','Okul tanıtımı','Okul kuralları; giriş-çıkış, kılık kıyafet, devamsızlık, sınıf geçme, ödül-disiplin ve cep telefonu kullanımı','Ergenlik özellikleri ve iletişim','Okul-veli iletişimi; öğretmen-veli diyaloğu, veli görüşme günleri, e-Okul ve veli ziyaretleri','Verimli ders çalışma ve ödevler','Sınıfın genel başarı durumu','Dilek ve temenniler'];
 const veliAgendaLater=['Açılış ve yoklama','Toplantının amacı','Veli-okul iş birliğinin önemi','Okul kuralları ve devamsızlık durumunun hatırlatılması','Okul-veli iletişimi ve e-Okul takibi','Verimli ders çalışma ve ödevler','Sınavlar ve öğrencilerin akademik gelişiminin değerlendirilmesi','Sınıfın genel başarı durumu','Dilek ve temenniler'];
 function veliHash(x){let h=0;for(const c of String(x||''))h=(h*31+c.charCodeAt(0))>>>0;return h}
