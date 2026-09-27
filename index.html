@@ -2087,7 +2087,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.54</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.55</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2245,16 +2245,16 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.54 · Zümre Anlam Motoru v1 · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.55 · Zümre Kadrosu + Çoklu Görüş · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
-      <label>Belge Türü<select id="docAssistantType">${Object.entries(documentAssistantTypes).map(([k,v])=>`<option value="${k}">${v.icon} ${v.label}</option>`).join("")}</select></label>
+      <label>Belge Türü<select id="docAssistantType" onchange="documentAssistantTypeChanged()">${Object.entries(documentAssistantTypes).map(([k,v])=>`<option value="${k}">${v.icon} ${v.label}</option>`).join("")}</select></label>
       <label>Tarih<input id="docAssistantDate" type="date" value="${localISODate()}"></label>
       <label>Eğitim Yılı<input id="docAssistantYear" value="${esc(x.year)}"></label>
       <label>Dönem<select id="docAssistantPeriod"><option value="1" ${x.period==="1"?"selected":""}>1. Dönem</option><option value="2" ${x.period==="2"?"selected":""}>2. Dönem</option></select></label>
       <label>Okul<input id="docAssistantSchool" value="${esc(x.school)}" placeholder="Okul adı"></label>
-      <label>Öğretmen / Başkan<input id="docAssistantTeacher" value="${esc(x.teacher)}" placeholder="Ad Soyad"></label>
+      <label>Öğretmen / Başkan<input id="docAssistantTeacher" value="${esc(x.teacher)}" placeholder="Ad Soyad"></label><label id="docZumreBranchLabel">Zümre / Branş<input id="docAssistantBranch" value="${esc(settings.docAssistantZumreBranch||"Matematik")}" placeholder="Örn. Matematik" oninput="documentZumreBranchChanged()"></label>
       <label>Sınıf / Şube<input id="docAssistantClass" value="${esc(x.className)}" placeholder="Örn. 9/D"></label>
       <label>Toplantı Saati<input id="docAssistantTime" type="time" value="${esc(settings.docAssistantTime||"")}"></label>
       <label>Toplantı Yeri<input id="docAssistantPlace" value="${esc(settings.docAssistantPlace||"Öğretmenler Odası")}" placeholder="Örn. Öğretmenler Odası"></label>
@@ -2263,10 +2263,10 @@ function openDocumentAssistant(){
     </div>
     <div class="card" style="padding:12px;margin:12px 0"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap"><b>📋 Gündem Maddeleri</b><span id="docAgendaCount" class="tiny"></span></div><div class="tiny" style="margin:5px 0 9px">Şablon gündemini kullanabilir veya kendi gündemlerinizi tek tek, toplu metinden ya da PDF'den ekleyebilirsiniz.</div><div style="display:flex;gap:7px;flex-wrap:wrap"><button type="button" class="secondary" onclick="docAgendaAddOne()">+ Gündem Ekle</button><button type="button" class="secondary" onclick="docAgendaBulkOpen()">📋 Toplu Gündem Ekle</button><button type="button" class="secondary" onclick="docAgendaPdfOpen()">📄 PDF'den İçe Aktar</button><button type="button" class="secondary" onclick="docAgendaUseTemplate()">Şablon Gündemi</button></div><div id="docAgendaList" style="margin-top:10px"></div></div>
     <label class="doc-assistant-prompt">Belgede özellikle yer almasını istedikleriniz<textarea id="docAssistantPrompt" rows="3" placeholder="Örn. Devamsızlık, akademik başarı, sınıf disiplini ve alınacak tedbirler yer alsın."></textarea></label>
-    <details class="doc-participants" id="docParticipantsDetails" ontoggle="documentParticipantsToggle(this)"><summary>👥 ŞÖK Katılımcıları / İmza Sirküsü</summary><div class="tiny" style="margin-top:7px">Öğretmen kadrosu bir kez kaydedilir; her ŞÖK'te katılacak kişileri işaretleyebilirsiniz.</div><div id="docStaffList" class="doc-staff-list"></div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:8px"><button type="button" class="secondary" onclick="addDocumentStaffRow()">+ Öğretmen Ekle</button><button type="button" class="secondary" onclick="saveDocumentStaff()">Kadroyu Kaydet</button></div></details>
+    <details class="doc-participants" id="docParticipantsDetails" ontoggle="documentParticipantsToggle(this)"><summary id="docParticipantsSummary">👥 Katılımcılar / İmza Sirküsü</summary><div id="docParticipantsHelp" class="tiny" style="margin-top:7px">Katılımcı listesi belge türüne göre ayrı saklanır.</div><div id="docStaffList" class="doc-staff-list"></div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:8px"><button type="button" class="secondary" onclick="addDocumentStaffRow()">+ Öğretmen Ekle</button><button type="button" class="secondary" onclick="saveDocumentStaff()">Kadroyu Kaydet</button></div></details>
     <div class="modal-actions"><button onclick="generateDocumentAssistantDraft()">✨ Taslak Oluştur</button><button class="secondary" onclick="openDocumentAssistantTemplates()">Şablonları Gör</button></div>`;
   el("modal").classList.add("open");
-  renderDocumentStaff();
+  documentAssistantTypeChanged(true);
   renderDocAgendaList();
 }
 
@@ -2314,28 +2314,49 @@ function renderAgendaPDFResults(rows,raw){window._docAgendaPdfRows=rows;el('pdfR
 function commitAgendaPDFRows(){const rows=[...document.querySelectorAll('.agenda-pdf-row')].map(x=>docAgendaNormalizeTitle(x.value)).filter(Boolean);const r=window._docAgendaReturn||{agendas:[]};r.agendas=[...(r.agendas||[]),...rows];window._docAgendaReturn=r;docAgendaRestoreForm()}
 
 function docDateTR(v){if(!v)return "";const [y,m,d]=v.split("-");return `${d}.${m}.${y}`}
+function documentCurrentType(){return el("docAssistantType")?.value||"zumre"}
+function documentZumreKey(){return zumreNorm(el("docAssistantBranch")?.value||settings.docAssistantZumreBranch||"Matematik")||"matematik"}
 function getDocumentStaff(){
+  const type=documentCurrentType();
+  if(type==="zumre"){
+    const all=settings.docAssistantZumreStaffByBranch||{}, row=all[documentZumreKey()];
+    if(Array.isArray(row)&&row.length)return row.map(x=>({name:x.name||"",branch:x.branch||el("docAssistantBranch")?.value||"Matematik",active:x.active!==false}));
+    const x=documentAssistantContext();return [{name:x.teacher||"",branch:el("docAssistantBranch")?.value||settings.docAssistantZumreBranch||"Matematik",active:true}];
+  }
   if(Array.isArray(settings.docAssistantStaff)&&settings.docAssistantStaff.length)return settings.docAssistantStaff.map(x=>({name:x.name||"",branch:x.branch||"",active:x.active!==false}));
   const legacy=(settings.docAssistantParticipants||[]).map(x=>{const a=String(x).split("|");return {name:(a[0]||"").trim(),branch:(a[1]||"").trim(),active:true}}).filter(x=>x.name);
   return legacy;
 }
 function renderDocumentStaff(){
   const box=el("docStaffList");if(!box)return;let staff=getDocumentStaff();
-  if(!staff.length){const x=documentAssistantContext();staff=[{name:x.teacher||"",branch:"Sınıf Rehber Öğretmeni",active:true}]}
+  if(!staff.length){const x=documentAssistantContext();staff=[{name:x.teacher||"",branch:documentCurrentType()==="zumre"?(el("docAssistantBranch")?.value||"Matematik"):"Sınıf Rehber Öğretmeni",active:true}]}
   box.innerHTML=staff.map((x,i)=>`<div class="doc-staff-row"><input type="text" class="staff-name" value="${esc(x.name)}" placeholder="Ad Soyad"><input type="text" class="staff-branch" value="${esc(x.branch)}" placeholder="Branş"><label class="staff-check"><input type="checkbox" class="staff-active" ${x.active!==false?"checked":""}> Katılıyor</label><button type="button" class="danger staff-del" onclick="this.closest('.doc-staff-row').remove()">Sil</button></div>`).join("");
 }
-function addDocumentStaffRow(){const box=el("docStaffList");if(!box)return;box.insertAdjacentHTML("beforeend",`<div class="doc-staff-row"><input type="text" class="staff-name" placeholder="Ad Soyad"><input type="text" class="staff-branch" placeholder="Branş"><label class="staff-check"><input type="checkbox" class="staff-active" checked> Katılıyor</label><button type="button" class="danger staff-del" onclick="this.closest('.doc-staff-row').remove()">Sil</button></div>`);box.lastElementChild?.querySelector('.staff-name')?.focus()}
+function addDocumentStaffRow(){const box=el("docStaffList");if(!box)return;const br=documentCurrentType()==="zumre"?(el("docAssistantBranch")?.value||""):"";box.insertAdjacentHTML("beforeend",`<div class="doc-staff-row"><input type="text" class="staff-name" placeholder="Ad Soyad"><input type="text" class="staff-branch" value="${esc(br)}" placeholder="Branş"><label class="staff-check"><input type="checkbox" class="staff-active" checked> Katılıyor</label><button type="button" class="danger staff-del" onclick="this.closest('.doc-staff-row').remove()">Sil</button></div>`);box.lastElementChild?.querySelector('.staff-name')?.focus()}
 function readDocumentStaff(){return [...document.querySelectorAll("#docStaffList .doc-staff-row")].map(r=>({name:r.querySelector('.staff-name')?.value.trim()||"",branch:r.querySelector('.staff-branch')?.value.trim()||"",active:!!r.querySelector('.staff-active')?.checked})).filter(x=>x.name)}
-function saveDocumentStaff(){settings.docAssistantStaff=readDocumentStaff();settings.docAssistantParticipants=settings.docAssistantStaff.map(x=>`${x.name} | ${x.branch}`);saveSettings();alert("Öğretmen kadrosu kaydedildi.")}
+function saveDocumentStaff(){
+ const rows=readDocumentStaff(),type=documentCurrentType();
+ if(type==="zumre"){
+   const branch=(el("docAssistantBranch")?.value||"Matematik").trim();settings.docAssistantZumreBranch=branch;settings.docAssistantZumreStaffByBranch=settings.docAssistantZumreStaffByBranch||{};settings.docAssistantZumreStaffByBranch[documentZumreKey()]=rows.map(x=>({...x,branch:x.branch||branch}));
+   saveSettings();alert(`${branch} zümre öğretmenleri bu cihazda kaydedildi.`);return;
+ }
+ settings.docAssistantStaff=rows;settings.docAssistantParticipants=rows.map(x=>`${x.name} | ${x.branch}`);saveSettings();alert("ŞÖK öğretmen kadrosu kaydedildi.")
+}
+function documentAssistantTypeChanged(initial){
+ const type=documentCurrentType(),isZ=type==="zumre";const bl=el("docZumreBranchLabel");if(bl)bl.style.display=isZ?"":"none";
+ const sum=el("docParticipantsSummary"),help=el("docParticipantsHelp");if(sum)sum.textContent=isZ?"👥 Zümre Öğretmenleri / İmza Sirküsü":"👥 ŞÖK Katılımcıları / İmza Sirküsü";if(help)help.textContent=isZ?"Yalnız aynı zümredeki öğretmenleri ekleyin. Liste branş bazında ayrı saklanır ve sonraki zümre toplantılarında yeniden kullanılır.":"Öğretmen kadrosu bir kez kaydedilir; her ŞÖK'te katılacak kişileri işaretleyebilirsiniz.";
+ renderDocumentStaff();
+}
+let _zumreBranchTimer=null;function documentZumreBranchChanged(){clearTimeout(_zumreBranchTimer);_zumreBranchTimer=setTimeout(()=>{settings.docAssistantZumreBranch=el("docAssistantBranch")?.value.trim()||"Matematik";saveSettings();renderDocumentStaff()},350)}
 function documentParticipantsToggle(d){if(d.open)setTimeout(()=>d.scrollIntoView({behavior:"smooth",block:"start"}),80)}
 function docAssistantValues(){
+  const type=documentCurrentType(),branch=el("docAssistantBranch")?.value.trim()||settings.docAssistantZumreBranch||"Matematik";
   const v={
-    type:el("docAssistantType")?.value||"zumre",date:el("docAssistantDate")?.value||localISODate(),year:el("docAssistantYear")?.value.trim()||"",period:el("docAssistantPeriod")?.value||"1",
-    school:el("docAssistantSchool")?.value.trim()||"",teacher:el("docAssistantTeacher")?.value.trim()||"",className:el("docAssistantClass")?.value.trim()||"",prompt:el("docAssistantPrompt")?.value.trim()||"",participants:readDocumentStaff().filter(x=>x.active).map(x=>`${x.name} | ${x.branch}`),
+    type,date:el("docAssistantDate")?.value||localISODate(),year:el("docAssistantYear")?.value.trim()||"",period:el("docAssistantPeriod")?.value||"1",
+    school:el("docAssistantSchool")?.value.trim()||"",teacher:el("docAssistantTeacher")?.value.trim()||"",className:el("docAssistantClass")?.value.trim()||"",branch,prompt:el("docAssistantPrompt")?.value.trim()||"",participants:readDocumentStaff().filter(x=>x.active).map(x=>`${x.name} | ${type==="zumre"?(x.branch||branch):x.branch}`),
     agendas:(window._docCustomAgendas||[]).map(x=>String(x).trim()).filter(Boolean),time:el("docAssistantTime")?.value||"",place:el("docAssistantPlace")?.value.trim()||"",vicePrincipal:el("docAssistantVicePrincipal")?.value.trim()||"",principal:el("docAssistantPrincipal")?.value.trim()||""
   };
-  settings.docAssistantTime=v.time;settings.docAssistantPlace=v.place;settings.docAssistantVicePrincipal=v.vicePrincipal;settings.docAssistantPrincipal=v.principal;saveSettings();
-  return v;
+  settings.docAssistantTime=v.time;settings.docAssistantPlace=v.place;settings.docAssistantVicePrincipal=v.vicePrincipal;settings.docAssistantPrincipal=v.principal;if(type==="zumre")settings.docAssistantZumreBranch=branch;saveSettings();return v;
 }
 function saveDocumentAssistantParticipants(){saveDocumentStaff()}
 const sokAgenda1=["Açılış yoklama","Veli ziyaretleri için planlama yapılması","Kılık kıyafet kurallarına uygun gelmeyen öğrencilerin durumunun görüşülmesi","Sınıf değişiklikleri hakkında fikir alışverişinde bulunulması","Türkiye Yüzyılı Maarif Modelinin görüşülmesi","Öğrenci başarı durumlarının incelenmesi ve başarıyı artırıcı önlemlerin alınması","Derslerin öğretim programlarına uyumlu olarak yürütülmesi","Sınıf geçme ve sınıf tekrarı durumlarının görüşülmesi","Özel eğitime ihtiyacı olan/kaynaştırma yoluyla eğitimlerine devam eden öğrenciler için alınacak tedbirlerin görüşülmesi","Eğitim kaynakları, laboratuvar ve diğer birimlerden güvenli yararlanma ve planlama","Ortak sınavların görüşülmesi","Bilimsel, sosyal, kültürel ve sportif etkinlikler, yarışmalar, geziler ve topluma hizmet çalışmalarının görüşülmesi","Değerler eğitimi çalışmalarının görüşülmesi","İş sağlığı ve güvenliği tedbirleri doğrultusunda eğitim öğretim faaliyetlerinin planlanması","Devamsızlık yapan öğrencilerin durumlarının görüşülmesi","Okulda uygulanan projelerin görüşülmesi","Dilek, temenniler ve kapanış"];
@@ -2674,9 +2695,8 @@ const zumreTopics=[
 function zumreNorm(s){return String(s||'').toLocaleLowerCase('tr-TR').replace(/[^a-zçğıöşü0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
 function zumreTopicId(title){const q=zumreNorm(title);let best='general',score=0;for(const [id,keys] of zumreTopics){let s=0;for(const k of keys){const n=zumreNorm(k);if(q.includes(n))s+=100+n.length;}if(s>score){score=s;best=id}}return best}
 function zumreParticipants(v){const a=(v.participants||[]).map(x=>{const p=String(x).split('|').map(y=>y.trim());return {name:p[0],branch:p[1]||'Öğretmen'}}).filter(x=>x.name);if(!a.some(x=>zumreNorm(x.name)===zumreNorm(v.teacher)))a.unshift({name:v.teacher||'Zümre Başkanı',branch:'Zümre Başkanı'});return a}
-function zumreBranch(v){const a=zumreParticipants(v).map(x=>x.branch).filter(b=>b&&!/müdür|rehber|başkan/i.test(b));return a[0]||'ilgili ders'}
-function zumreSpeaker(v,i){const a=zumreParticipants(v);if(!a.length)return v.teacher||'Zümre Başkanı';if(i===0)return v.teacher||a[0].name;const pool=a.filter(x=>zumreNorm(x.name)!==zumreNorm(v.teacher));return (pool.length?pool[(i-1)%pool.length]:a[0]).name}
-function zumreNarrative(id,branch){const b=branch||'ilgili ders';const M={
+function zumreBranch(v){return String(v.branch||'').trim()||(()=>{const a=zumreParticipants(v).map(x=>x.branch).filter(b=>b&&!/müdür|rehber|başkan/i.test(b));return a[0]||'ilgili ders'})()}
+function zumreNarrativeBase(id,branch){const b=branch||'ilgili ders';const M={
 opening:[`Toplantı gündem maddeleri okunmuş, katılımcıların gündeme ilişkin görüş ve önerileri alınarak maddelerin görüşülmesine geçilmiştir.`,`Gündem maddelerinin görüşülmesine geçilmesine`],
 maarif:[`Türkiye Yüzyılı Maarif Modeli'nin ${b} öğretiminde kavramsal öğrenme, beceri temelli yaklaşım, günlük hayatla ilişkilendirme ve öğrencinin aktif katılımını öne çıkardığı değerlendirilmiştir. Öğrenme süreçlerinin programda öngörülen beceri ve değerlerle bütünlük içinde yürütülmesinin önemi üzerinde durulmuştur.`,`Derslerin Türkiye Yüzyılı Maarif Modeli ve yürürlükteki öğretim programı doğrultusunda planlanıp yürütülmesine`],
 planning:[`Eğitim öğretim çalışmalarının yürürlükteki mevzuat, öğretim programı, okulun amaçları ve eğitim öğretim yılı çalışma takvimiyle uyumlu yürütülmesi gerektiği değerlendirilmiştir. Planlamalarda öğrenme çıktıları, öğrenci düzeyi ve okulun imkânlarının birlikte dikkate alınması görüşülmüştür.`,`Plan ve uygulamaların ilgili mevzuat, öğretim programı ve çalışma takvimi esas alınarak hazırlanmasına`],
@@ -2707,6 +2727,15 @@ resources:[`Yıl içinde yürütülmesi planlanan faaliyetler için gerekli ara�
 absence:[`Devamsızlığın öğrenme sürekliliği ve akademik gelişim üzerindeki etkileri değerlendirilmiş; devamsızlığı artan öğrencilerin durumunun ilgili okul birimleriyle koordineli izlenmesi gerektiği belirtilmiştir.`,`Devamsızlık durumu dikkat gerektiren öğrencilerin ilgili mevzuat ve okul süreçleri doğrultusunda takip edilmesine`],
 closing:[`Gündem maddelerinin görüşülmesinin ardından katılımcıların dilek ve temennileri alınmış, iş birliği içinde verimli bir eğitim öğretim yılı yürütülmesi temennisiyle toplantı sona ermiştir.`,`Toplantıda alınan kararların zümre öğretmenlerince uygulanmasına`],
 general:[`Gündem maddesi ${b} öğretiminin amaçları, öğrenci ihtiyaçları, okul imkânları ve yürürlükteki eğitim öğretim esasları çerçevesinde değerlendirilmiş; uygulanabilir öneriler üzerinde görüş alışverişinde bulunulmuştur.`,`Gündem konusu ile ilgili çalışmaların öğretim programı ve okul imkânları doğrultusunda zümre öğretmenlerince koordineli yürütülmesine`]};return M[id]||M.general}
+function zumreNarrativePool(id,branch){
+ const base=zumreNarrativeBase(id,branch), d=base[0], k=base[1], b=branch||'ilgili ders';
+ const focus={opening:['toplantının amacı ve gündem sırası','zümre içi iş birliği ve ortak çalışma','eğitim öğretim sürecinin planlı yürütülmesi'],maarif:['öğrenme çıktıları ile beceri gelişiminin birlikte ele alınması','öğrenci merkezli ve bütüncül öğrenme yaklaşımı','değerler ile alan becerilerinin ders sürecine yansıtılması'],planning:['yıllık planlarda okul takvimi ve öğrenci ihtiyaçlarının gözetilmesi','planların öğretim programı ve mevzuatla uyumlu yürütülmesi','planlama sürecinde zümre içi ortaklığın korunması'],methods:['öğrenci katılımını artıran yöntemlerin seçilmesi','konuya göre farklı öğretim tekniklerinin kullanılması','problem çözme ve akıl yürütmeyi destekleyen uygulamalar'],bep:['bireysel farklılıklara uygun uyarlamalar','ölçme ve öğretim sürecinin öğrenci ihtiyacına göre düzenlenmesi','BEP hedeflerinin ders uygulamalarına yansıtılması'],analysis:['soru ve öğrenme çıktısı bazlı analiz','eksik öğrenmeler için tamamlayıcı çalışmalar','sınav sonuçlarının izleme verisi olarak kullanılması'],common_exam:['ortak ölçme ölçütlerinin belirlenmesi','konu-soru dağılımı ile ölçme araçlarının uyumu','sınav uygulamalarında zümre birliğinin sağlanması'],success:['öğrenci bazlı destek ve izleme','başarı verilerinden hareketle tamamlayıcı çalışma','motivasyon ve düzenli çalışma alışkanlığının desteklenmesi']}[id]||['uygulanabilir çalışmaların belirlenmesi','zümre öğretmenleri arasında ortak yaklaşım geliştirilmesi','öğrenci ihtiyaçları ve okul imkânlarının birlikte değerlendirilmesi'];
+ const variants=[d,`${b} zümresi tarafından ${focus[0]} üzerinde durulmuş; gündem konusu öğretim programının amaçları doğrultusunda değerlendirilmiştir.`, `Görüşmede ${focus[1]} öne çıkarılmış, uygulamaların zümre öğretmenleri arasında koordineli yürütülmesinin yararlı olacağı ifade edilmiştir.`, `Gündem maddesi ele alınırken ${focus[2]} değerlendirilmiş; ders uygulamalarına yansıtılabilecek somut çalışmalar üzerinde görüş alışverişinde bulunulmuştur.`];
+ const decisions=[k,`${focus[0].charAt(0).toLocaleUpperCase('tr-TR')+focus[0].slice(1)} doğrultusunda gerekli çalışmaların zümre öğretmenlerince planlanmasına`,`${focus[1].charAt(0).toLocaleUpperCase('tr-TR')+focus[1].slice(1)} ve uygulama sonuçlarının zümre içinde izlenmesine`,`${focus[2].charAt(0).toLocaleUpperCase('tr-TR')+focus[2].slice(1)} konusunda ortak uygulama esaslarının benimsenmesine`];
+ return {discussions:[...new Set(variants)],decisions:[...new Set(decisions)]};
+}
+function zumreNarrative(id,branch,variant=0){const p=zumreNarrativePool(id,branch);return [p.discussions[variant%p.discussions.length],p.decisions[variant%p.decisions.length]]}
+function zumreSpeaker(v,i){const a=zumreParticipants(v),teacher=v.teacher||a[0]?.name||'Zümre Başkanı';if(!a.length)return teacher;if(i===0)return teacher;const pool=a.filter(x=>zumreNorm(x.name)!==zumreNorm(teacher));if(!pool.length)return teacher;return pool[(i-1)%pool.length].name}
 function buildZumreDraft(v){
  const school=v.school||'........................................................',teacher=v.teacher||'................................',date=docDateTR(v.date),branch=zumreBranch(v),agenda=(v.agendas&&v.agendas.length)?v.agendas:zumreAgendaTemplate,people=zumreParticipants(v),no=v.period==='2'?2:1;
  const agendaText=agenda.map((x,i)=>`${i+1}. ${x}.`).join('\n');
@@ -3501,6 +3530,16 @@ function sokEditorOpen(){
 function sokEditorClose(){const box=el('sokAgendaEditor'),main=el('docAssistantDraft');if(box&&!box.hidden)sokEditorSync();if(box)box.hidden=true;if(main)main.hidden=false;const btn=el('sokEditorToggle');if(btn)btn.textContent='📝 Gündem Metinlerini Düzenle';}
 function sokEditorToggle(){const box=el('sokAgendaEditor');if(box?.hidden)sokEditorOpen();else sokEditorClose()}
 function sokEditorBeforeOutput(){sokEditorSync();sokEditorSave()}
+function zumreEditorSections(text){
+ const p=text.indexOf('GÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ'),q=text.indexOf('\n\nALINAN KARARLAR',p);if(p<0||q<0)return null;const body=text.slice(p+'GÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ'.length,q).trim();const re=/(?:^|\n\n)(\d+)\. ([^\n]+)\n([\s\S]*?)(?=(?:\n\n\d+\. )|$)/g;let m,items=[];while((m=re.exec(body)))items.push({no:m[1],title:m[2],text:m[3].trim()});return {items};
+}
+function zumreEditorOpen(){const main=el('docAssistantDraft'),box=el('zumreAgendaEditor');if(!main||!box)return;const p=zumreEditorSections(main.value);if(!p)return alert('Zümre gündemleri taslakta bulunamadı.');const branch=settings.docAssistantZumreBranch||'Matematik';box.innerHTML=`<div class="tiny" style="margin-bottom:10px">Her gündem için farklı görüş seçenekleri vardır. Seçenekler çevrimdışı çalışır ve aynı zümre öğretmenleri arasında konuşmacı dağılımı korunur.</div>`+p.items.map(x=>`<div class="sok-edit-item zumre-edit-item" data-no="${esc(x.no)}" data-variant="0"><b>${esc(x.no)}. ${esc(x.title)}</b><textarea class="zumre-edit-text" rows="5" spellcheck="true">${esc(x.text)}</textarea><div class="modal-actions"><button type="button" class="secondary" onclick="zumrePropose(this.closest('.zumre-edit-item'))">🔄 Başka Görüş</button><button type="button" class="secondary" onclick="zumreUndo(this.closest('.zumre-edit-item'))">↶ Öncekine Dön</button></div><div class="sok-local-panel" hidden></div></div>`).join('')+`<div class="modal-actions"><button type="button" onclick="zumreEditorApply();zumreEditorClose()">✓ Düzenlemeyi Tamamla</button><button type="button" class="secondary" onclick="zumreEditorClose()">Ana Taslağa Dön</button></div>`;box.hidden=false;main.hidden=true;el('zumreEditorToggle').textContent='📝 Zümre Düzenleyicisini Kapat';}
+function zumrePropose(row){const title=row.querySelector('b').textContent.replace(/^\d+\.\s*/,''),id=zumreTopicId(title),pool=zumreNarrativePool(id,settings.docAssistantZumreBranch||'Matematik').discussions,area=row.querySelector('.zumre-edit-text');let n=(Number(row.dataset.variant||0)+1)%pool.length;row.dataset.variant=n;row.dataset.previous=area.value;const speaker=(area.value.match(/^([^,\n]{2,60}),\s/)||[])[1];const text=(speaker?`${speaker}, `:'')+pool[n];row.dataset.suggestion=text;const panel=row.querySelector('.sok-local-panel');panel.innerHTML=`<div class="tiny">Öneri ${n+1}/${pool.length} · Çevrimdışı</div><div class="sok-local-suggestion">${esc(text)}</div><div class="sok-local-actions"><button type="button" onclick="zumreAccept(this.closest('.zumre-edit-item'))">✓ Kabul Et</button><button type="button" class="secondary" onclick="zumrePropose(this.closest('.zumre-edit-item'))">🔄 Başka Görüş</button></div>`;panel.hidden=false;}
+function zumreAccept(row){const a=row.querySelector('.zumre-edit-text');if(row.dataset.suggestion){row.dataset.previous=a.value;a.value=row.dataset.suggestion;row.querySelector('.sok-local-panel').hidden=true;zumreEditorApply()}}
+function zumreUndo(row){const a=row.querySelector('.zumre-edit-text');if(row.dataset.previous!==undefined){const t=a.value;a.value=row.dataset.previous;row.dataset.previous=t;zumreEditorApply()}}
+function zumreEditorApply(){const main=el('docAssistantDraft'),box=el('zumreAgendaEditor');if(!main||!box||box.hidden)return;const parsed=zumreEditorSections(main.value);if(!parsed)return;let text=main.value;for(const row of [...box.querySelectorAll('.zumre-edit-item')]){const no=row.dataset.no,item=parsed.items.find(x=>x.no===no);if(!item)continue;const old=`${no}. ${item.title}\n${item.text}`,neu=`${no}. ${item.title}\n${row.querySelector('.zumre-edit-text').value.trim()}`;text=text.replace(old,neu)}main.value=text;}
+function zumreEditorClose(){const b=el('zumreAgendaEditor'),m=el('docAssistantDraft');if(b&&!b.hidden)zumreEditorApply();if(b)b.hidden=true;if(m)m.hidden=false;const x=el('zumreEditorToggle');if(x)x.textContent='📝 Zümre Gündem Metinlerini Düzenle'}
+function zumreEditorToggle(){const b=el('zumreAgendaEditor');if(b?.hidden)zumreEditorOpen();else zumreEditorClose()}
 function generateDocumentAssistantDraft(){
   if(el('docAssistantDraft')?.value.trim()&&!confirm('Mevcut taslak yeniden oluşturulacak. Düzenlemelerinizin üzerine yazılsın mı?'))return;
   try{sessionStorage.removeItem('sokAgendaTopicIds7737')}catch(e){}
@@ -3520,7 +3559,7 @@ function generateDocumentAssistantDraft(){
   const backBtn=el("modalBackBtn");
   if(backBtn){ backBtn.style.display="inline-flex"; backBtn.setAttribute("onclick","openDocumentAssistant()"); }
   el("modalSubtitle").textContent="Taslak düzenlenebilir · Kaydetmeden önce içeriği kontrol edin";
-  el("modalBody").innerHTML=`<div class="doc-assistant-warning">Bu metin yerel şablondan oluşturuldu; toplantıda gerçekten görüşülen konular ve alınan kararlar öğretmen tarafından doğrulanmalıdır.</div>${v.type==="sok"?'<button type="button" class="secondary" id="sokEditorToggle" onclick="sokEditorToggle()">📝 Gündem Metinlerini Düzenle</button><div id="sokAgendaEditor" hidden></div>':''}<textarea id="docAssistantDraft" class="doc-draft-editor" spellcheck="true" oninput="sokEditorSave()">${esc(draft)}</textarea><div class="modal-actions"><button onclick="sokEditorBeforeOutput();printDocumentAssistantDraft()">👁️ A4 Önizle</button><button class="secondary" onclick="sokEditorBeforeOutput();copyDocumentAssistantDraft()">📋 Metni Kopyala</button><button class="secondary" onclick="openDocumentAssistant()">← Yeni Belge</button><button onclick="sokEditorBeforeOutput();openDocumentExportMenu()">📤 Dışa Aktar</button></div>`;
+  el("modalBody").innerHTML=`<div class="doc-assistant-warning">Bu metin yerel şablondan oluşturuldu; toplantıda gerçekten görüşülen konular ve alınan kararlar öğretmen tarafından doğrulanmalıdır.</div>${v.type==="sok"?'<button type="button" class="secondary" id="sokEditorToggle" onclick="sokEditorToggle()">📝 Gündem Metinlerini Düzenle</button><div id="sokAgendaEditor" hidden></div>':v.type==="zumre"?'<button type="button" class="secondary" id="zumreEditorToggle" onclick="zumreEditorToggle()">📝 Zümre Gündem Metinlerini Düzenle</button><div id="zumreAgendaEditor" hidden></div>':''}<textarea id="docAssistantDraft" class="doc-draft-editor" spellcheck="true" oninput="sokEditorSave()">${esc(draft)}</textarea><div class="modal-actions"><button onclick="sokEditorBeforeOutput();printDocumentAssistantDraft()">👁️ A4 Önizle</button><button class="secondary" onclick="sokEditorBeforeOutput();copyDocumentAssistantDraft()">📋 Metni Kopyala</button><button class="secondary" onclick="openDocumentAssistant()">← Yeni Belge</button><button onclick="sokEditorBeforeOutput();openDocumentExportMenu()">📤 Dışa Aktar</button></div>`;
 }
 async function copyDocumentAssistantDraft(){const t=el("docAssistantDraft")?.value||"";try{await navigator.clipboard.writeText(t);alert("Belge metni panoya kopyalandı.")}catch(e){el("docAssistantDraft")?.select();document.execCommand("copy");alert("Belge metni kopyalandı.")}}
 function docDraftToHTML(t){
