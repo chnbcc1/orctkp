@@ -2087,7 +2087,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.44</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.45</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2245,7 +2245,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.44 · ŞÖK Anlamlandırma Motoru v2 · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.45 · ŞÖK Anlamlandırma Motoru v2 · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2270,7 +2270,7 @@ function openDocumentAssistant(){
   renderDocAgendaList();
 }
 
-// ===== v7.7.44 ŞÖK gündem girişi: tekli / toplu / PDF alan seçimi =====
+// ===== v7.7.45 ŞÖK gündem girişi: tekli / toplu / PDF alan seçimi =====
 window._docCustomAgendas=window._docCustomAgendas||[];
 function docAgendaNormalizeTitle(x){return String(x||'').replace(/^\s*\d+\s*[.)\-:]\s*/,'').replace(/^\s*[•·]\s*/,'').replace(/\s+/g,' ').replace(/[.;,]+\s*$/,'').trim()}
 function docAgendaParseBulk(text){
@@ -2514,7 +2514,7 @@ function sokAgendaNarrative(title,academic,homework,parentMeetings){
  }
  return {discussion:`Yeni/özel gündem: “${originalTitle}” başlığı için hazır anlam ailesi bulunamadığından metnin toplantıda gerçekten görüşülen hususlara göre düzenlenmesi gerekir.`,decision:`Bu gündeme ilişkin kararın toplantıda alınan gerçek karara göre yazılmasına karar verilmiştir.`};
 }
-// ===== v7.7.44 Karar Motoru v3 =====
+// ===== v7.7.45 Karar Motoru v3 =====
 // Karar, gündemin anlamından somut eylem + iş birliği/sorumluluk + takip bileşenleriyle üretilir.
 function sokDecisionV3(title,matches){
  const ids=new Set((matches||[]).map(x=>x.id));
@@ -2524,6 +2524,9 @@ function sokDecisionV3(title,matches){
  if(has('assessment','remedial')) parts.push('ölçme sonuçlarından yararlanılarak eksik öğrenmelerin belirlenmesine, ihtiyaç duyan öğrenciler için ders bazında destekleyici çalışmalar planlanmasına ve gelişimin yeniden değerlendirilmesine');
  if(has('motivation')) parts.push('derse ilgisi ve katılımı düşük öğrenciler için aktif katılımı ve öğrenme isteğini destekleyen uygulamalara yer verilmesine ve gelişimin ders öğretmenlerince izlenmesine');
  if(has('peer_relations','bullying')) parts.push('akran ilişkilerinde güvenli iletişimin desteklenmesine, çatışma ve zorbalık belirtilerinin erken fark edilmesine ve gerektiğinde rehberlik desteği sağlanmasına');
+ if(has('digital_safety')) parts.push('öğrencilerin güvenli ve sorumlu internet kullanımı, kişisel bilgilerin korunması ve dijital risklerden kaçınma konusunda bilinçlendirilmesine; gerekli bilgilendirme çalışmalarının sürdürülmesine');
+ if(has('digital_balance')) parts.push('telefon, sosyal medya ve dijital araçların ders sürecini olumsuz etkilemeyecek biçimde dengeli ve eğitim amaçlı kullanılmasının desteklenmesine; öğrencilerin dikkat ve zaman yönetimi konusunda bilinçlendirilmesine');
+ if(has('active_participation')) parts.push('akademik yeterliliği yüksek olsa da sınıf içi katılımı sınırlı öğrencilerin soru sorma, görüş paylaşma, grup çalışması ve sorumluluk alma gibi yollarla aktif katılımlarının desteklenmesine ve gelişimin ders öğretmenlerince izlenmesine');
  if(has('behavior_discipline')) parts.push('sınıf ve okul kurallarının açık ve tutarlı biçimde uygulanmasına, olumlu davranışların desteklenmesine ve tekrar eden güçlüklerin eğitsel yaklaşımla takip edilmesine');
  if(has('psychosocial')) parts.push('psikososyal desteğe ihtiyaç duyduğu gözlenen öğrencilerin mahremiyetleri korunarak izlenmesine ve uygun rehberlik desteğine yönlendirilmesine');
  if(has('social_responsibility')) parts.push('öğrencilerin ilgi ve imkânlarına uygun sosyal sorumluluk ve toplum hizmeti çalışmalarına aktif katılımlarının desteklenmesine ve çalışmaların sonuçlarının değerlendirilmesine');
@@ -2551,7 +2554,7 @@ function sokDecisionV3(title,matches){
  return '';
 }
 
-// v7.7.44 Branş Uzmanlık Puanı: küçük değer daha güçlü konu-branş eşleşmesidir.
+// v7.7.45 Branş Uzmanlık Puanı: küçük değer daha güçlü konu-branş eşleşmesidir.
 function sokSpeakerExpertise(title,p){
  const x=sokSemanticTitle(title),b=String(p.branch||'');
  const isReh=/Rehber/i.test(b),isClass=/Sınıf Rehber/i.test(b);
@@ -2561,6 +2564,8 @@ function sokSpeakerExpertise(title,p){
  if(/Etkinlikler|Sosyal sorumluluk|Öğrenci kulüpleri|Yarışma, gezi/.test(x))return /Beden|Türk Dili|Edebiyat|Biyoloji|Fizik|Kimya|Matematik|Tarih/i.test(b)?1:(isClass?5:(isReh?6:8));
  if(/Okul projeleri|Özel yetenek|Bilimsel/.test(x))return /Matematik|Fizik|Kimya|Biyoloji|Türk Dili|Edebiyat/i.test(b)?0:(isReh?5:7);
  if(/BEP|Özel eğitim|Sınav kaygısı|Psikososyal|Akran|Mesleki yönlendirme|Aile ve rehberlik/.test(x))return isReh?0:(isClass?1:5);
+ if(/Dijital güvenlik|Dijital kullanım/.test(x))return /Bilişim|Teknoloji/i.test(b)?0:(isClass?3:(isReh?4:6));
+ if(/Aktif katılım/.test(x))return /Matematik|İngilizce|Türk Dili|Edebiyat|Fizik|Kimya|Biyoloji|Tarih|Coğrafya/i.test(b)?1:(isClass?3:(isReh?5:7));
  if(/Akademik|Ölçme|Eksik öğren|Performans, proje|Derse ilgi/.test(x))return /Matematik|İngilizce|Türk Dili|Edebiyat|Fizik|Kimya|Biyoloji|Tarih|Coğrafya/i.test(b)?1:(isClass?4:(isReh?5:7));
  if(/Afet|Okul güvenliği|ortak alan/.test(x))return /Beden/i.test(b)?1:(isClass?3:6);
  if(/Değerler|Zararlı alışkanlık/.test(x))return /Din Kültürü|Biyoloji/i.test(b)?1:(isReh?3:(isClass?4:7));
@@ -2748,7 +2753,9 @@ const sokLocalTopics=[
  {id:'prior_decisions',keys:['bir önceki dönemde alınan karar','önceki dönemde alınan karar'],label:'Önceki dönem kararları',core:'Bir önceki dönemde alınan kararların uygulanma durumu ve devam eden çalışmalar değerlendirilmiştir.'},
  {id:'wellbeing',keys:['kişilik','beslenme','sağlık','sosyal ilişkiler'],label:'Kişisel ve sosyal gelişim',core:'Öğrencilerin kişisel, sosyal ve sağlıklı yaşam becerilerini destekleyen çalışmalar değerlendirilmiştir.'},
  {id:'closing',keys:['dilek','temenni','kapanış'],label:'Dilek ve temenniler',core:'Katılımcıların ek görüş ve önerilerini paylaşmalarına imkân verilmesi üzerinde durulmuştur.'},
- {id:'digital',keys:['dijital','teknoloji','internet'],label:'Dijital araçlar',core:'Dijital araçların bilinçli, güvenli ve öğrenmeyi destekleyecek biçimde kullanılmasına yönelik çalışmalar ele alınmıştır.'},
+ {id:'digital_safety',keys:['güvenli internet','internet ortamında güvenli','dijital güvenlik','çevrim içi güvenlik','kişisel bilgilerin korunması','kişisel bilgi','siber güven','siber zorbalık'],label:'Dijital güvenlik ve mahremiyet',core:'Öğrencilerin internet ortamında güvenli ve sorumlu davranmaları, kişisel bilgilerini korumaları ve dijital riskler konusunda bilinçlenmeleri değerlendirilmiştir.'},
+ {id:'digital_balance',keys:['telefon','sosyal medya','ekran süresi','dijital araç kullanım','teknoloji kullanım','dijital araçların ders başarısı','dijital araçların okul yaşamı'],label:'Dijital kullanım ve denge',core:'Telefon, sosyal medya ve dijital araç kullanımının ders süreci, dikkat ve okul yaşamı üzerindeki etkileri değerlendirilmiş; eğitim amaçlı ve dengeli kullanım üzerinde durulmuştur.'},
+ {id:'digital',keys:['dijital','teknoloji','internet'],label:'Dijital araçlar',core:'Dijital araçların bilinçli ve öğrenmeyi destekleyecek biçimde kullanılmasına yönelik çalışmalar ele alınmıştır.'},
  {id:'regulation',keys:['yönetmelik','110 madde','110. madde'],label:'Mevzuat ve yönetmelik',core:'Gündemde belirtilen mevzuat hükmü kurulun bilgisine sunularak uygulamada dikkat edilmesi gereken hususlar değerlendirilmiştir.'},
  {id:'class_profile',keys:['sınıfın genel durumu','kişilik özellik'],label:'Sınıfın genel durumu',core:'Sınıfın genel yapısı, öğrencilerin bireysel özellikleri, sınıf içi ilişkileri ve eğitim sürecini etkileyen ihtiyaçlar birlikte değerlendirilmiştir.'},
  {id:'adaptation',keys:['adaptasyon','uyum','yeni okul'],label:'Okula uyum',core:'Öğrencilerin yeni okul ortamına, sınıf düzenine ve eğitim sürecine uyumlarını destekleyecek çalışmalar değerlendirilmiştir.'},
@@ -2763,6 +2770,7 @@ const sokLocalTopics=[
  {id:'career',keys:['mesleki yön','meslek seçim','kariyer'],label:'Mesleki yönlendirme',core:'Öğrencilerin ilgi, yetenek ve eğitim hedeflerini tanımalarına yardımcı olacak mesleki yönlendirme ve kariyer farkındalığı çalışmaları ele alınmıştır.'},
  {id:'student_parent_teacher',keys:['öğretmen öğrenci veli','öğrenci veli iliş'],label:'Öğretmen-öğrenci-veli ilişkileri',core:'Öğrencinin gelişimini desteklemek amacıyla öğretmen, öğrenci ve veli arasındaki iletişimin açık, düzenli ve çözüm odaklı sürdürülmesi değerlendirilmiştir.'},
  {id:'academic_risk',keys:['başarısızlık','başarıyı artır','alınacak önlem'],label:'Akademik risk ve önlemler',core:'Başarı güçlüğü yaşayan öğrencilerin nedenlerinin ders, çalışma alışkanlığı ve öğrenme ihtiyacı açısından değerlendirilerek uygun destek tedbirlerinin planlanması görüşülmüştür.'},
+ {id:'active_participation',keys:['sınıf içi etkinliklere katılımı düşük','aktif katılım','sınıf içi katılım','derse aktif katılım','başarısı yüksek ancak','başarılı ancak'],label:'Aktif katılım ve sınıf içi etkileşim',core:'Akademik olarak yeterli olduğu hâlde sınıf içi katılımı sınırlı kalan öğrencilerin kendilerini ifade etmelerini, sorumluluk almalarını ve öğrenme sürecine aktif katılmalarını destekleyecek uygulamalar değerlendirilmiştir.'},
  {id:'motivation',keys:['derse karşı ilgi','derslere karşı ilgi','motivasyon','derse katılım','öğrenme isteği'],label:'Derse ilgi ve motivasyon',core:'Öğrencilerin derse katılımını ve öğrenme isteğini etkileyen etkenler ile motivasyonu destekleyecek sınıf içi yaklaşımlar değerlendirilmiştir.'},
  {id:'peer_relations',keys:['arkadaş ilişk','akran ilişk','sosyal iliş','akran'],label:'Akran ve sosyal ilişkiler',core:'Öğrencilerin akran ilişkileri, sınıf içi iletişimleri, iş birliği ve aidiyet duygularını destekleyecek çalışmalar değerlendirilmiştir.'},
  {id:'behavior_discipline',keys:['disiplin','davranış','sınıf kuralları','okul kuralları'],label:'Davranış ve okul kuralları',core:'Olumlu öğrenci davranışlarının desteklenmesi, ortak yaşam kurallarının anlaşılması ve sorunların eğitsel yaklaşımla ele alınması görüşülmüştür.'},
@@ -2795,7 +2803,7 @@ const sokLocalEndings=['Uygulamanın öğrencilerin ihtiyaçlarına göre sürd�
 function sokLocalNorm(t){return String(t||'').toLocaleLowerCase('tr-TR').replace(/[^a-zçğıöşü0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
 function sokLocalKeyHit(topic,key,q){
  const nk=sokLocalNorm(key); if(!nk)return false;
- // v7.7.44: 'afet' sözcüğü 'kıyafet' içinde geçtiği için yanlış afet eşleşmesini engelle.
+ // v7.7.45: 'afet' sözcüğü 'kıyafet' içinde geçtiği için yanlış afet eşleşmesini engelle.
  // Afet anlamı yalnız bağımsız 'afet' sözcüğü veya diğer açık acil durum anahtarlarıyla oluşur.
  if(topic?.id==='emergency'&&nk==='afet')return (` ${q} `).includes(' afet ');
  return q.includes(nk);
@@ -2915,6 +2923,8 @@ function sokLocalRelevantSpeakers(title,peopleOverride=null){
  else if(/Temizlik ve düzen/.test(x))addBy([/Beden/i,/Biyoloji/i,/Sınıf Rehber Öğretmeni/i]);
  else if(/Performans, proje ve ödevler|Akademik risk ve önlemler/.test(x))addBy([/Matematik/i,/İngilizce/i,/Türk Dili|Edebiyat/i,/Fizik/i,/Kimya/i,/Biyoloji/i,/Tarih/i,/Din Kültürü/i]);
  else if(/Mevzuat ve yönetmelik/.test(x))addBy([/Sınıf Rehber Öğretmeni/i]);
+ else if(/Dijital güvenlik ve mahremiyet|Dijital kullanım ve denge/.test(x))addBy([/Bilişim|Teknoloji/i,/Sınıf Rehber Öğretmeni/i,/Rehber/i]);
+ else if(/Aktif katılım ve sınıf içi etkileşim/.test(x))addBy([/Matematik/i,/İngilizce/i,/Türk Dili|Edebiyat/i,/Fizik/i,/Kimya/i,/Biyoloji/i,/Tarih/i,/Coğrafya/i,/Sınıf Rehber Öğretmeni/i]);
  else if(/Derse ilgi ve motivasyon|Akran ve sosyal ilişkiler|Davranış ve okul kuralları|Akran zorbalığı ve çatışma|Psikososyal destek|Çocuk hakları ve sorumluluklar|Okul kültürü ve aidiyet/.test(x))addBy([/Sınıf Rehber Öğretmeni/i,/Rehber/i]);
  else if(/Sosyal sorumluluk ve toplum hizmeti|Öğrenci kulüpleri|Yarışma, gezi ve okul dışı etkinlikler/.test(x))addBy([/Beden/i,/Türk Dili|Edebiyat/i,/Din Kültürü/i,/Sınıf Rehber Öğretmeni/i]);
  else if(/Okuma kültürü ve kütüphane|Türkçenin doğru ve etkili kullanımı/.test(x))addBy([/Türk Dili|Edebiyat/i,/Sınıf Rehber Öğretmeni/i]);
@@ -2969,6 +2979,10 @@ function sokLocalSpeakerSentence(title,p,variant){
   [/Akademik risk ve önlemler/,[`${role} ${name}, başarısızlığın nedenlerinin öğrenci bazında öğrenme eksikleri, çalışma alışkanlıkları ve derse katılım açısından incelenmesi gerektiğini belirtti.`,`${role} ${name}, başarı güçlüğü yaşayan öğrenciler için eksik kazanımlara yönelik destekleyici çalışmalar planlanmasını önerdi.`,`${role} ${name}, akademik riski bulunan öğrencilerin gelişiminin düzenli izlenmesi ve gerektiğinde veliyle iş birliği kurulmasının önemli olduğunu ifade etti.`]],
   [/Mevzuat ve yönetmelik/,[`${role} ${name}, gündemde belirtilen mevzuat hükmünün kurul üyelerince bilinmesinin ve uygulamaların ilgili hükme uygun yürütülmesinin önemli olduğunu ifade etti.`,`${role} ${name}, yönetmelik maddesinin Şube Öğretmenler Kurulunu ilgilendiren yönlerinin dikkate alınması ve uygulamada mevzuata uygun hareket edilmesi gerektiğini belirtti.`,`${role} ${name}, ilgili mevzuat hükmünün okunarak kurulun bilgisine sunulmasını ve eğitim öğretim sürecinde hükmün gerektirdiği hususlara dikkat edilmesini önerdi.`]],
   [/Etkinlikler/,[`${role} ${name}, öğrencilerin ilgi ve yeteneklerine uygun sosyal, kültürel, bilimsel veya sportif etkinliklere yönlendirilmesinin çok yönlü gelişimlerini destekleyeceğini belirtti.`,`${role} ${name}, etkinliklerin öğrencilerin yalnızca katıldığı çalışmalar olmaktan çıkarılıp planlama ve sorumluluk alma fırsatları da sunacak biçimde düzenlenmesinin yararlı olacağını ifade etti.`,`${role} ${name}, okul imkânları ve öğrenci ilgileri dikkate alınarak uygulanabilir etkinliklerin planlanmasını ve öğrencilerin aktif katılımının desteklenmesini önerdi.`]],
+  [/Dijital güvenlik ve mahremiyet/,[`${role} ${name}, öğrencilerin kişisel bilgilerini çevrim içi ortamlarda korumaları ve güvenli internet kullanımı konusunda bilinçlendirilmelerinin önemli olduğunu belirtti.`,`${role} ${name}, dijital ortamlarda karşılaşılabilecek risklerin yaş düzeyine uygun örneklerle ele alınmasını ve sorumlu çevrim içi davranışların desteklenmesini önerdi.`,`${role} ${name}, kişisel veri ve mahremiyet konusunda öğrencilerin hangi bilgileri paylaşmamaları gerektiğini bilmelerinin önemli olduğunu ifade etti.`]],
+  [/Dijital kullanım ve denge/,[`${role} ${name}, telefon ve sosyal medya kullanımının öğrencilerin dikkatini ve çalışma düzenini olumsuz etkilememesi için dengeli kullanım alışkanlıklarının desteklenmesi gerektiğini belirtti.`,`${role} ${name}, dijital araçların ders ve öğrenme amaçlı kullanımının teşvik edilmesini, ders sürecini bölen kullanım alışkanlıklarının ise öğrenciyle birlikte değerlendirilmesini önerdi.`,`${role} ${name}, öğrencilerin ekran zamanı ve dijital araç kullanımında zaman yönetimi becerilerini geliştirmelerinin okul başarısına katkı sağlayacağını ifade etti.`]],
+  [/Aktif katılım ve sınıf içi etkileşim/,[`${role} ${name}, akademik başarısı yüksek olsa bile sınıf içi etkinliklere sınırlı katılan öğrencilerin görüşlerini ifade edebilecekleri ve sorumluluk alabilecekleri öğrenme ortamlarının oluşturulmasının önemli olduğunu belirtti.`,`${role} ${name}, öğrencilerin soru sorma, tartışmaya katılma ve grup çalışmalarında görev alma gibi farklı katılım yollarıyla desteklenmesini önerdi.`,`${role} ${name}, yalnız sınav başarısının değil öğrencinin ders içindeki etkileşim ve katılımının da izlenmesinin gelişim açısından yararlı olacağını ifade etti.`]],
+  [/Özel yetenek ve zenginleştirme/,[`${role} ${name}, üst düzey başarı veya özel yetenek gösteren öğrencilerin mevcut düzeylerinin ötesine geçebilecekleri zenginleştirilmiş görev, proje ve araştırma çalışmalarına yönlendirilmesinin önemli olduğunu belirtti.`,`${role} ${name}, güçlü yönleri belirgin öğrencilerin uygun yarışma, proje ve ileri düzey öğrenme fırsatlarıyla desteklenmesini ve gelişimlerinin düzenli izlenmesini önerdi.`,`${role} ${name}, özel yetenekli öğrenciler için yalnızca daha fazla çalışma vermek yerine ilgi alanlarına uygun derinleştirme ve üretim fırsatları sunulması gerektiğini ifade etti.`]],
   [/Derse ilgi ve motivasyon/,[`${role} ${name}, öğrencilerin derse ilgisini artırmak için katılım sağlayabilecekleri uygulamalara ve düzeylerine uygun öğrenme görevlerine yer verilmesinin önemli olduğunu belirtti.`,`${role} ${name}, derse karşı ilgisi azalan öğrencilerin nedenlerinin gözlem ve öğrenci görüşmeleriyle belirlenerek motivasyonu destekleyici çalışmalar yapılmasını önerdi.`,`${role} ${name}, öğrencilerin çaba ve gelişimlerinin fark edilmesinin, ulaşılabilir hedefler belirlenmesinin ve ders içi katılımın desteklenmesinin öğrenme isteğine katkı sağlayacağını ifade etti.`]]
  ];
  for(const [re,arr] of semanticSets)if(re.test(x))return arr[variant%arr.length];
@@ -2985,9 +2999,15 @@ function sokLocalSpeakerLimit(title,variant,forDefault=false){
  if(/Açılış|Dilek/.test(x))return 0;
  // İlk taslak öğretmen görüşü için uygun maddelerde konu genişliğine göre 1-3 öğretmen seçilir.
  if(forDefault){
-  if(/Ortak sınav|Etkinlikler|Okul projeleri|Akademik başarı|Akademik risk|Performans, proje|Zararlı alışkanlık/.test(x))return 3;
-  if(/Öğretim programları|Türkiye Yüzyılı Maarif Modeli|Eğitim kaynakları|Öğrenci sağlığı|Beslenme|Ders çalışma|Mesleki yönlendirme|Öğretmen-öğrenci-veli|BEP ve ölçme|Özel eğitim ve kaynaştırma|Sınav kaygısı|Türkçenin doğru|Okul eşyaları/.test(x))return 2;
-  return 1;
+  // v7.7.45: İlk taslakta 1 konuşmacı varsayılandır. İkinci/üçüncü konuşmacı ancak gündem gerçekten ayrı uzmanlık boyutları taşıyorsa eklenir.
+  const ms=sokLocalMatchAll(title);
+  const ids=new Set(ms.map(m=>m.id));
+  const has=(...a)=>a.some(k=>ids.has(k));
+  let dimensions=1;
+  if((has('bep_adaptation','special_education')&&has('assessment')) || (has('academic_risk')&&has('attendance','absenteeism_lateness')) || (has('school_family','student_parent_teacher')&&has('academic_risk','attendance','psychosocial')) || (has('psychosocial')&&has('assessment'))) dimensions=2;
+  if(has('activities')&&has('competitions_trips','clubs','social_responsibility')) dimensions=Math.max(dimensions,2);
+  if(has('academic_risk')&&has('attendance','absenteeism_lateness')&&has('school_family','student_parent_teacher')) dimensions=3;
+  return Math.min(3,dimensions);
  }
  // Alternatiflerde öğretmen sayısı değişir; bazı varyasyonlar tamamen genel kurul anlatımıdır.
  if(variant%4===3)return 0;
@@ -3035,7 +3055,7 @@ function sokLocalApplySpeaker(title,text,variant){
 function sokDefaultTeacherRichDraft(draft){
  const parsed=sokEditorSections(draft); if(!parsed)return draft;
  const people=sokLocalParticipantsFromText(draft); if(!people.length)return draft;
- // v7.7.44: İlk taslakta konu uygunluğu korunurken belge genelindeki konuşmacı kullanımı dengelenir.
+ // v7.7.45: İlk taslakta konu uygunluğu korunurken belge genelindeki konuşmacı kullanımı dengelenir.
  // Aynı öğretmen, güçlü bir branş gerekçesi yoksa art arda gündemlerde yeniden seçilmez.
  const usage=new Map(people.map(p=>[p.name.toLocaleUpperCase('tr-TR'),0]));
  let previousNames=new Set();
@@ -3382,7 +3402,7 @@ function sokLocalPropose(no){
    ];
    candidates.push(...activityVariants);
   }else{
-   // v7.7.44: Tanınan serbest gündemler artık tek genel kalıba düşmez. Birden çok anlam ailesi birleştirilebilir.
+   // v7.7.45: Tanınan serbest gündemler artık tek genel kalıba düşmez. Birden çok anlam ailesi birleştirilebilir.
    const matches=sokLocalMatches(title), cores=(matches.length?matches:[topic]).map(t=>t.core);
    const lead=['Toplantıda','Gündem kapsamında','Kurul değerlendirmesinde','İlgili başlık ele alınırken'];
    const focus=['öğrencilerin ihtiyaçlarının somut gözlemler üzerinden izlenmesi','uygulanabilir çalışmaların öğrenci yararı gözetilerek planlanması','öğretmenler arası bilgi paylaşımının düzenli sürdürülmesi'];
@@ -3533,7 +3553,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.44 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.45 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -6709,7 +6729,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.44",
+    appVersion:"v7.7.45",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -6721,7 +6741,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.44",
+    appVersion:"v7.7.45",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
