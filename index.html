@@ -2087,7 +2087,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.47</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.48</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2245,7 +2245,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.47 · ŞÖK İşlevsel Final Düzeltme · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.48 · ŞÖK İşlevsel Final Düzeltme · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2270,7 +2270,7 @@ function openDocumentAssistant(){
   renderDocAgendaList();
 }
 
-// ===== v7.7.47 ŞÖK gündem girişi: tekli / toplu / PDF alan seçimi =====
+// ===== v7.7.48 ŞÖK gündem girişi: tekli / toplu / PDF alan seçimi =====
 window._docCustomAgendas=window._docCustomAgendas||[];
 function docAgendaNormalizeTitle(x){return String(x||'').replace(/^\s*\d+\s*[.)\-:]\s*/,'').replace(/^\s*[•·]\s*/,'').replace(/\s+/g,' ').replace(/[.;,]+\s*$/,'').trim()}
 function docAgendaParseBulk(text){
@@ -2514,15 +2514,15 @@ function sokAgendaNarrative(title,academic,homework,parentMeetings){
  }
  return {discussion:`Yeni/özel gündem: “${originalTitle}” başlığı için hazır anlam ailesi bulunamadığından metnin toplantıda gerçekten görüşülen hususlara göre düzenlenmesi gerekir.`,decision:`Bu gündeme ilişkin kararın toplantıda alınan gerçek karara göre yazılmasına karar verilmiştir.`};
 }
-// ===== v7.7.47 Karar Motoru v3 =====
+// ===== v7.7.48 Karar Motoru v3 =====
 // Karar, gündemin anlamından somut eylem + iş birliği/sorumluluk + takip bileşenleriyle üretilir.
 function sokDecisionV3(title,matches){
  const ids=new Set((matches||[]).map(x=>x.id));
  const has=(...a)=>a.some(x=>ids.has(x));
  const parts=[];
- // v7.7.47: Açık afet/acil durum/tahliye gündemi genel davranış-güvenlik kararlarına düşmez.
+ // v7.7.48: Açık afet/acil durum/tahliye gündemi genel davranış-güvenlik kararlarına düşmez.
  if(has('emergency')) return 'acil durum ve tahliye süreçlerine ilişkin bilgilendirme ve hazırlık çalışmalarının sürdürülmesine, öğrencilerin güvenli davranışlarının uygulamalarla pekiştirilmesine ve gerekli tatbikat/hatırlatmaların ilgili birimlerce takip edilmesine karar verilmiştir.';
- // v7.7.47: Bilimsel proje/yarışma gündemi genel sosyal etkinlik kararından önce değerlendirilir.
+ // v7.7.48: Bilimsel proje/yarışma gündemi genel sosyal etkinlik kararından önce değerlendirilir.
  if(has('scientific_project')) return 'öğrencilerin ilgi ve yeteneklerine uygun bilimsel proje, araştırma ve yarışmalara yönlendirilmesine, proje geliştirme sürecinde ilgili branş öğretmenlerince rehberlik edilmesine ve çalışmaların süreç boyunca izlenmesine karar verilmiştir.';
  if(has('attendance','absenteeism_lateness')) parts.push('devam ve geç kalma durumlarının düzenli izlenmesine, nedenlerin öğrenci bazında değerlendirilmesine ve gerekli durumlarda veliyle zamanında iletişim kurulmasına');
  if(has('assessment','remedial')) parts.push('ölçme sonuçlarından yararlanılarak eksik öğrenmelerin belirlenmesine, ihtiyaç duyan öğrenciler için ders bazında destekleyici çalışmalar planlanmasına ve gelişimin yeniden değerlendirilmesine');
@@ -2558,7 +2558,7 @@ function sokDecisionV3(title,matches){
  return '';
 }
 
-// v7.7.47 Branş Uzmanlık Puanı: küçük değer daha güçlü konu-branş eşleşmesidir.
+// v7.7.48 Branş Uzmanlık Puanı: küçük değer daha güçlü konu-branş eşleşmesidir.
 function sokSpeakerExpertise(title,p){
  const x=sokSemanticTitle(title),b=String(p.branch||'');
  const isReh=/Rehber/i.test(b),isClass=/Sınıf Rehber/i.test(b);
@@ -2661,7 +2661,7 @@ function buildSokDraft(v){
  const approvalRole=v.principal?"Müdür":(v.vicePrincipal?"Müdür Yardımcısı":"Müdür / Müdür Yardımcısı");
  const vp=v.vicePrincipal||"................................";
  const principal=v.principal||"................................";
- return `${school.toLocaleUpperCase("tr-TR")} MÜDÜRLÜĞÜNE\n${v.year} Eğitim-Öğretim Yılı ${v.period}. Dönem Şube Öğretmenler Kurulu toplantısı ${inviteWhen} aşağıdaki gündem maddelerini görüşmek üzere ${clsName} Sınıfı Şube Rehber Öğretmeni ${teacher} başkanlığında toplanacaktır.\nBilgilerinize arz ederim.\n\n${teacher}\n${clsName} Sınıf Rehber Öğretmeni\n\nGÜNDEM MADDELERİ\n${agendaText}\n\nOLUR\n${date}\n${approvalName}\n${approvalRole}\n\n--- SAYFA SONU ---\n\n${school.toLocaleUpperCase("tr-TR")}\n${v.year} EĞİTİM-ÖĞRETİM YILI\n${clsName} SINIFI ${v.period}. DÖNEM ŞUBE ÖĞRETMENLER KURULU TOPLANTI TUTANAĞI\n\nTOPLANTI BİLGİLERİ\nToplantı No | ${no}\nToplantının Öğretim Yılı | ${v.year}\nToplantının Dönemi | ${v.period}. Dönem\nSınıf / Şube | ${clsName}\nToplantının Tarihi ve Yeri | ${date}${timePlace?` ${timePlace}`:""}\nSınıf Rehber Öğretmeni | ${teacher}\n\nTOPLANTI KATILIMCILARI\n${participants.map(x=>{const [n,b]=x.split("|").map(y=>(y||"").trim());return `${b||"Görev / Branş"} | ${n}`}).join("\n")}\n\n${discussion}${extra}\n\n--- SAYFA SONU ---\n\n${school.toLocaleUpperCase("tr-TR")}\n${v.year} EĞİTİM-ÖĞRETİM YILI\n${clsName} SINIFI ${v.period}. DÖNEM ŞUBE ÖĞRETMENLER KURULU TOPLANTI TUTANAĞI İMZA SİRKÜSÜ\n\nADI SOYADI | BRANŞI | İMZA\n${signatures}\n\nSINIF REHBER ÖĞRETMENİ | ${teacher}\nMÜDÜR YARDIMCISI | ${vp}\nMÜDÜR | ${principal} | ${date}`;
+ return `${school.toLocaleUpperCase("tr-TR")} MÜDÜRLÜĞÜNE\n${v.year} Eğitim-Öğretim Yılı ${v.period}. Dönem Şube Öğretmenler Kurulu toplantısı ${inviteWhen} aşağıdaki gündem maddelerini görüşmek üzere ${clsName} Sınıfı Şube Rehber Öğretmeni ${teacher} başkanlığında toplanacaktır.\nBilgilerinize arz ederim.\n\n${teacher}\n${clsName} Sınıf Rehber Öğretmeni\n\nGÜNDEM MADDELERİ\n${agendaText}\n\nOLUR\n${date}\n${approvalName}\n${approvalRole}\n\n--- SAYFA SONU ---\n\n${school.toLocaleUpperCase("tr-TR")}\n${v.year} EĞİTİM-ÖĞRETİM YILI\n${clsName} SINIFI ${v.period}. DÖNEM ŞUBE ÖĞRETMENLER KURULU TOPLANTI TUTANAĞI\n\nTOPLANTI BİLGİLERİ\nToplantı No | ${no}\nToplantının Öğretim Yılı | ${v.year}\nToplantının Dönemi | ${v.period}. Dönem\nSınıf / Şube | ${clsName}\nToplantının Tarihi ve Yeri | ${date}${timePlace?` ${timePlace}`:""}\nSınıf Rehber Öğretmeni | ${teacher}\n\nTOPLANTI KATILIMCILARI\n${participants.map(x=>{const [n,b]=x.split("|").map(y=>(y||"").trim());return `${b||"Görev / Branş"} | ${n}`}).join("\n")}\n\n${discussion}${extra}\n\n--- SAYFA SONU ---\n\n${school.toLocaleUpperCase("tr-TR")}\n${v.year} EĞİTİM-ÖĞRETİM YILI\n${clsName} SINIFI ${v.period}. DÖNEM ŞUBE ÖĞRETMENLER KURULU TOPLANTI TUTANAĞI İMZA SİRKÜSÜ\n\nADI SOYADI | BRANŞI | İMZA\n${signatures}\n\nSınıf Rehber Öğretmeni | ${teacher}\nMüdür Yardımcısı | ${vp}\nMüdür | ${principal} | ${date}`;
 }
 function buildDocumentDraft(v){
   const school=v.school||"........................................................", teacher=v.teacher||"................................", clsName=v.className||"........", date=docDateTR(v.date), extra=v.prompt?`\n\nÖZEL GÜNDEM / NOTLAR\n${v.prompt}`:"";
@@ -2808,7 +2808,7 @@ const sokLocalEndings=['Uygulamanın öğrencilerin ihtiyaçlarına göre sürd�
 function sokLocalNorm(t){return String(t||'').toLocaleLowerCase('tr-TR').replace(/[^a-zçğıöşü0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
 function sokLocalKeyHit(topic,key,q){
  const nk=sokLocalNorm(key); if(!nk)return false;
- // v7.7.47: 'afet' sözcüğü 'kıyafet' içinde geçtiği için yanlış afet eşleşmesini engelle.
+ // v7.7.48: 'afet' sözcüğü 'kıyafet' içinde geçtiği için yanlış afet eşleşmesini engelle.
  // Afet anlamı yalnız bağımsız 'afet' sözcüğü veya diğer açık acil durum anahtarlarıyla oluşur.
  if(topic?.id==='emergency'&&nk==='afet')return (` ${q} `).includes(' afet ');
  return q.includes(nk);
@@ -3006,7 +3006,7 @@ function sokLocalSpeakerLimit(title,variant,forDefault=false){
  if(/Açılış|Dilek/.test(x))return 0;
  // İlk taslak öğretmen görüşü için uygun maddelerde konu genişliğine göre 1-3 öğretmen seçilir.
  if(forDefault){
-  // v7.7.47: İlk taslakta 1 konuşmacı varsayılandır. İkinci/üçüncü konuşmacı ancak gündem gerçekten ayrı uzmanlık boyutları taşıyorsa eklenir.
+  // v7.7.48: İlk taslakta 1 konuşmacı varsayılandır. İkinci/üçüncü konuşmacı ancak gündem gerçekten ayrı uzmanlık boyutları taşıyorsa eklenir.
   const ms=sokLocalMatchAll(title);
   const ids=new Set(ms.map(m=>m.id));
   const has=(...a)=>a.some(k=>ids.has(k));
@@ -3062,7 +3062,7 @@ function sokLocalApplySpeaker(title,text,variant){
 function sokDefaultTeacherRichDraft(draft){
  const parsed=sokEditorSections(draft); if(!parsed)return draft;
  const people=sokLocalParticipantsFromText(draft); if(!people.length)return draft;
- // v7.7.47: İlk taslakta konu uygunluğu korunurken belge genelindeki konuşmacı kullanımı dengelenir.
+ // v7.7.48: İlk taslakta konu uygunluğu korunurken belge genelindeki konuşmacı kullanımı dengelenir.
  // Aynı öğretmen, güçlü bir branş gerekçesi yoksa art arda gündemlerde yeniden seçilmez.
  const usage=new Map(people.map(p=>[p.name.toLocaleUpperCase('tr-TR'),0]));
  let previousNames=new Set();
@@ -3409,7 +3409,7 @@ function sokLocalPropose(no){
    ];
    candidates.push(...activityVariants);
   }else{
-   // v7.7.47: Tanınan serbest gündemler artık tek genel kalıba düşmez. Birden çok anlam ailesi birleştirilebilir.
+   // v7.7.48: Tanınan serbest gündemler artık tek genel kalıba düşmez. Birden çok anlam ailesi birleştirilebilir.
    const matches=sokLocalMatches(title), cores=(matches.length?matches:[topic]).map(t=>t.core);
    const lead=['Toplantıda','Gündem kapsamında','Kurul değerlendirmesinde','İlgili başlık ele alınırken'];
    const focus=['öğrencilerin ihtiyaçlarının somut gözlemler üzerinden izlenmesi','uygulanabilir çalışmaların öğrenci yararı gözetilerek planlanması','öğretmenler arası bilgi paylaşımının düzenli sürdürülmesi'];
@@ -3473,11 +3473,11 @@ async function copyDocumentAssistantDraft(){const t=el("docAssistantDraft")?.val
 function docDraftToHTML(t){
  const escLine=x=>esc(x),pages=t.split(/\n--- SAYFA SONU ---\n/g);
  return pages.map((page,pi)=>{
-   const lines=page.split(/\n/);let html="",inSig=false,firstContent=true;
+   const lines=page.split(/\n/);let html="",inSig=false,firstContent=true,inDiscussions=false;
    for(let i=0;i<lines.length;i++){
      const x=lines[i].trim();if(!x){html+='<div style="height:5pt"></div>';continue}
      if(x==="ADI SOYADI | BRANŞI | İMZA"){inSig=true;html+='<table class="signature"><thead><tr><th>ADI SOYADI</th><th>BRANŞI</th><th>İMZA</th></tr></thead><tbody>';firstContent=false;continue}
-     if(inSig&&x.includes(" | ")&&!/^(SINIF REHBER ÖĞRETMENİ|MÜDÜR YARDIMCISI|MÜDÜR) \|/.test(x)){const a=x.split(" | ");html+=`<tr><td>${escLine(a[0]||"")}</td><td>${escLine(a[1]||"")}</td><td></td></tr>`;continue}
+     if(inSig&&x.includes(" | ")&&!/^(SINIF REHBER ÖĞRETMENİ|Sınıf Rehber Öğretmeni|MÜDÜR YARDIMCISI|Müdür Yardımcısı|MÜDÜR|Müdür) \|/.test(x)){const a=x.split(" | ");html+=`<tr><td>${escLine(a[0]||"")}</td><td>${escLine(a[1]||"")}</td><td></td></tr>`;continue}
      if(inSig){html+='</tbody></table>';inSig=false}
      if(x==="TOPLANTI BİLGİLERİ"){
        const rows=[];let j=i+1;while(j<lines.length&&lines[j].trim()&&lines[j].includes(" | ")){rows.push(lines[j].trim().split(" | "));j++}
@@ -3488,10 +3488,10 @@ function docDraftToHTML(t){
        html+='<div class="doc-section">Toplantı Katılımcıları</div><table class="participants-table"><thead><tr><th>Branşı / Görevi</th><th>Adı Soyadı</th></tr></thead><tbody>'+rows.map(a=>`<tr><td>${escLine(a[0])}</td><td>${escLine(a[1]||"")}</td></tr>`).join('')+'</tbody></table>';i=j-1;firstContent=false;continue
      }
      if(x==="OLUR"&&i+3<lines.length){html+=`<div class="sok-approval"><b>OLUR</b><div>${escLine(lines[i+1].trim())}</div><div>${escLine(lines[i+2].trim())}</div><b>${escLine(lines[i+3].trim())}</b></div>`;i+=3;continue}
-     if(/^SINIF REHBER ÖĞRETMENİ \|/.test(x)&&i+2<lines.length){const a=x.split(" | "),b=lines[i+1].trim().split(" | "),c=lines[i+2].trim().split(" | ");html+=`<div class="sok-final-signatures"><div class="advisor"><div>${escLine(a[1]||"")}</div><b>${escLine(a[0])}</b></div><div><div>${escLine(b[1]||"")}</div><b>${escLine(b[0])}</b></div><div>${c[2]?`<div>${escLine(c[2])}</div>`:""}<div>${escLine(c[1]||"")}</div><b>${escLine(c[0])}</b></div></div>`;i+=2;continue}
+     if(/^(SINIF REHBER ÖĞRETMENİ|Sınıf Rehber Öğretmeni) \|/.test(x)&&i+2<lines.length){const a=x.split(" | "),b=lines[i+1].trim().split(" | "),c=lines[i+2].trim().split(" | ");html+=`<div class="sok-final-signatures"><div class="advisor"><div>${escLine(a[1]||"")}</div><b>${escLine(a[0])}</b></div><div><div>${escLine(b[1]||"")}</div><b>${escLine(b[0])}</b></div><div>${c[2]?`<div>${escLine(c[2])}</div>`:""}<div>${escLine(c[1]||"")}</div><b>${escLine(c[0])}</b></div></div>`;i+=2;continue}
      if(firstContent){html+=`<div class="doc-school-title">${escLine(x)}</div>`;firstContent=false;continue}
      if(pi===0&&i>1&&lines[i+1]?.trim()&&/Sınıf Rehber Öğretmeni$/.test(lines[i+1].trim())&&!x.includes(':')){html+=`<div class="sok-invite-sign"><div>${escLine(x)}</div><b>${escLine(lines[i+1].trim())}</b></div>`;i++;continue}
-     if(/^(GÜNDEM MADDELERİ|GÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ|GÖRÜŞMELER|ALINAN KARARLAR)$/.test(x)){html+=`<div class="doc-section${x==="ALINAN KARARLAR"?" keep-with-next":""}">${escLine(x)}</div>`}
+     if(/^(GÜNDEM MADDELERİ|GÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ|GÖRÜŞMELER|ALINAN KARARLAR)$/.test(x)){inDiscussions=(x==="GÖRÜŞMELER"||x==="GÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ");html+=`<div class="doc-section${x==="ALINAN KARARLAR"?" keep-with-next":""}">${escLine(x)}</div>`}
      else if(/^\d+\.\s+/.test(x)){
        // v7.7.24: Gündem başlığı ile ona ait görüşme metninin TAMAMINI tek blokta tut.
        // Aradaki boş satırlar artık başlık-görüşme bağını koparmıyor.
@@ -3503,9 +3503,9 @@ function docDraftToHTML(t){
          j++;
        }
        if(body.length){
-         html+=`<div class="sok-agenda-item"><p class="sok-item-title">${escLine(x)}</p>${body.map(y=>`<p>${escLine(y)}</p>`).join('')}</div>`;
+         html+=`<div class="sok-agenda-item"><p class="sok-item-title${inDiscussions?" discussion-title":""}">${escLine(x)}</p>${body.map(y=>`<p>${escLine(y)}</p>`).join('')}</div>`;
          i=j-1;
-       }else html+=`<p class="sok-item-title">${escLine(x)}</p>`;
+       }else html+=`<p class="sok-item-title${inDiscussions?" discussion-title":""}">${escLine(x)}</p>`;
      }
      else if(/^(YÜKSEKOVA|.*ANADOLU.*LİSESİ|\d{4}-\d{4} EĞİTİM|.*TOPLANTI TUTANAĞI$|.*İMZA SİRKÜSÜ$)/i.test(x)){html+=`<div class="doc-title">${escLine(x)}</div>`}
      else html+=`<p>${escLine(x)}</p>`;
@@ -3531,7 +3531,7 @@ function docxParagraph(text,bold=false,center=false,italic=false,keepNext=false)
 function docxSignatureTable(rows){let trs=rows.map(a=>`<w:tr><w:tc><w:tcPr><w:tcW w:w="3200" w:type="dxa"/></w:tcPr>${docxParagraph(a[0]||'')}</w:tc><w:tc><w:tcPr><w:tcW w:w="3600" w:type="dxa"/></w:tcPr>${docxParagraph(a[1]||'')}</w:tc><w:tc><w:tcPr><w:tcW w:w="1800" w:type="dxa"/></w:tcPr>${docxParagraph('')}</w:tc></w:tr>`).join('');return `<w:tbl><w:tblPr><w:tblW w:w="8600" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="6"/><w:left w:val="single" w:sz="6"/><w:bottom w:val="single" w:sz="6"/><w:right w:val="single" w:sz="6"/><w:insideH w:val="single" w:sz="6"/><w:insideV w:val="single" w:sz="6"/></w:tblBorders></w:tblPr><w:tr><w:tc>${docxParagraph('ADI SOYADI',true)}</w:tc><w:tc>${docxParagraph('BRANŞI',true)}</w:tc><w:tc>${docxParagraph('İMZA',true)}</w:tc></w:tr>${trs}</w:tbl>`}
 function docxTwoColTable(rows,headers=null){let head=headers?`<w:tr><w:tc>${docxParagraph(headers[0],true)}</w:tc><w:tc>${docxParagraph(headers[1],true)}</w:tc></w:tr>`:'';let trs=rows.map(a=>`<w:tr><w:tc><w:tcPr><w:tcW w:w="3600" w:type="dxa"/></w:tcPr>${docxParagraph(a[0]||'',!headers)}</w:tc><w:tc><w:tcPr><w:tcW w:w="5000" w:type="dxa"/></w:tcPr>${docxParagraph(a[1]||'')}</w:tc></w:tr>`).join('');return `<w:tbl><w:tblPr><w:tblW w:w="8600" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="6"/><w:left w:val="single" w:sz="6"/><w:bottom w:val="single" w:sz="6"/><w:right w:val="single" w:sz="6"/><w:insideH w:val="single" w:sz="6"/><w:insideV w:val="single" w:sz="6"/></w:tblBorders></w:tblPr>${head}${trs}</w:tbl>`}
 function docxSignatureBlock(name,role,align='center'){const jc=align==='left'?'left':align==='right'?'right':'center';return `<w:p><w:pPr><w:jc w:val="${jc}"/><w:spacing w:before="120"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr><w:t>${xmlEsc(name)}</w:t></w:r></w:p><w:p><w:pPr><w:jc w:val="${jc}"/></w:pPr><w:r><w:rPr><w:b/><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr><w:t>${xmlEsc(role)}</w:t></w:r></w:p>`}
-function draftToDocxBody(t){const pages=t.split(/\n--- SAYFA SONU ---\n/g);let out='';pages.forEach((page,pi)=>{if(pi)out+='<w:p><w:r><w:br w:type="page"/></w:r></w:p>';const lines=page.split(/\n/);let sig=false,rows=[],firstContent=true;for(let i=0;i<lines.length;i++){const x=lines[i].trim();if(x==='ADI SOYADI | BRANŞI | İMZA'){sig=true;firstContent=false;continue}if(sig&&x.includes(' | ')&&!/^(SINIF REHBER ÖĞRETMENİ|MÜDÜR YARDIMCISI|MÜDÜR) \|/.test(x)){const a=x.split(' | ');rows.push([a[0]||'',a[1]||'']);continue}if(sig){out+=docxSignatureTable(rows);sig=false;rows=[]}if(!x){out+=docxParagraph('');continue}if(x==='TOPLANTI BİLGİLERİ'){const r=[];let j=i+1;while(j<lines.length&&lines[j].trim()&&lines[j].includes(' | ')){r.push(lines[j].trim().split(' | '));j++}out+=docxParagraph('Toplantı Bilgileri',true)+docxTwoColTable(r);i=j-1;continue}if(x==='TOPLANTI KATILIMCILARI'){const r=[];let j=i+1;while(j<lines.length&&lines[j].trim()&&lines[j].includes(' | ')){r.push(lines[j].trim().split(' | '));j++}out+=docxParagraph('Toplantı Katılımcıları',true)+docxTwoColTable(r,['Branşı / Görevi','Adı Soyadı']);i=j-1;continue}if(x==='OLUR'&&i+3<lines.length){out+=docxParagraph('OLUR',true,true)+docxParagraph(lines[i+1].trim(),false,true)+docxParagraph(lines[i+2].trim(),false,true)+docxParagraph(lines[i+3].trim(),true,true);i+=3;continue}if(/^SINIF REHBER ÖĞRETMENİ \|/.test(x)&&i+2<lines.length){const a=x.split(' | '),b=lines[i+1].trim().split(' | '),c=lines[i+2].trim().split(' | ');out+=docxSignatureBlock(a[1]||'',a[0],'center');const rightTop=c[2]?docxParagraph(c[2],false,false,false,'center'):'';out+=`<w:tbl><w:tblPr><w:tblW w:w="8600" w:type="dxa"/><w:tblBorders/></w:tblPr><w:tr><w:tc>${docxSignatureBlock(b[1]||'',b[0],'center')}</w:tc><w:tc>${rightTop}${docxSignatureBlock(c[1]||'',c[0],'center')}</w:tc></w:tr></w:tbl>`;i+=2;continue}if(firstContent){out+=docxParagraph(x,true,true,false);firstContent=false;continue}if(pi===0&&i>1&&lines[i+1]?.trim()&&/Sınıf Rehber Öğretmeni$/.test(lines[i+1].trim())&&!x.includes(':')){out+=docxSignatureBlock(x,lines[i+1].trim(),'right');i++;continue}const section=/^(GÜNDEM MADDELERİ|GÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ|GÖRÜŞMELER|ALINAN KARARLAR)$/.test(x);const title=/^(YÜKSEKOVA|.*ANADOLU.*LİSESİ|\d{4}-\d{4} EĞİTİM|.*TOPLANTI TUTANAĞI$|.*İMZA SİRKÜSÜ$)/i.test(x);const keepNext=(x==='ALINAN KARARLAR')||(/^\d+\.\s+/.test(x)&&!!lines[i+1]?.trim()&&!/^\d+\.\s+/.test(lines[i+1].trim()));out+=docxParagraph(x,section||title,title,false,keepNext)}if(sig)out+=docxSignatureTable(rows)});return out}
+function draftToDocxBody(t){const pages=t.split(/\n--- SAYFA SONU ---\n/g);let out='';pages.forEach((page,pi)=>{if(pi)out+='<w:p><w:r><w:br w:type="page"/></w:r></w:p>';const lines=page.split(/\n/);let sig=false,rows=[],firstContent=true,inDiscussions=false;for(let i=0;i<lines.length;i++){const x=lines[i].trim();if(x==='ADI SOYADI | BRANŞI | İMZA'){sig=true;firstContent=false;continue}if(sig&&x.includes(' | ')&&!/^(SINIF REHBER ÖĞRETMENİ|Sınıf Rehber Öğretmeni|MÜDÜR YARDIMCISI|Müdür Yardımcısı|MÜDÜR|Müdür) \|/.test(x)){const a=x.split(' | ');rows.push([a[0]||'',a[1]||'']);continue}if(sig){out+=docxSignatureTable(rows);sig=false;rows=[]}if(!x){out+=docxParagraph('');continue}if(x==='TOPLANTI BİLGİLERİ'){const r=[];let j=i+1;while(j<lines.length&&lines[j].trim()&&lines[j].includes(' | ')){r.push(lines[j].trim().split(' | '));j++}out+=docxParagraph('Toplantı Bilgileri',true)+docxTwoColTable(r);i=j-1;continue}if(x==='TOPLANTI KATILIMCILARI'){const r=[];let j=i+1;while(j<lines.length&&lines[j].trim()&&lines[j].includes(' | ')){r.push(lines[j].trim().split(' | '));j++}out+=docxParagraph('Toplantı Katılımcıları',true)+docxTwoColTable(r,['Branşı / Görevi','Adı Soyadı']);i=j-1;continue}if(x==='OLUR'&&i+3<lines.length){out+=docxParagraph('OLUR',true,true)+docxParagraph(lines[i+1].trim(),false,true)+docxParagraph(lines[i+2].trim(),false,true)+docxParagraph(lines[i+3].trim(),true,true);i+=3;continue}if(/^(SINIF REHBER ÖĞRETMENİ|Sınıf Rehber Öğretmeni) \|/.test(x)&&i+2<lines.length){const a=x.split(' | '),b=lines[i+1].trim().split(' | '),c=lines[i+2].trim().split(' | ');out+=docxSignatureBlock(a[1]||'',a[0],'center');const rightTop=c[2]?docxParagraph(c[2],false,false,false,'center'):'';out+=`<w:tbl><w:tblPr><w:tblW w:w="8600" w:type="dxa"/><w:tblBorders/></w:tblPr><w:tr><w:tc>${docxSignatureBlock(b[1]||'',b[0],'center')}</w:tc><w:tc>${rightTop}${docxSignatureBlock(c[1]||'',c[0],'center')}</w:tc></w:tr></w:tbl>`;i+=2;continue}if(firstContent){out+=docxParagraph(x,true,true,false);firstContent=false;continue}if(pi===0&&i>1&&lines[i+1]?.trim()&&/Sınıf Rehber Öğretmeni$/.test(lines[i+1].trim())&&!x.includes(':')){out+=docxSignatureBlock(x,lines[i+1].trim(),'right');i++;continue}const section=/^(GÜNDEM MADDELERİ|GÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ|GÖRÜŞMELER|ALINAN KARARLAR)$/.test(x);if(section)inDiscussions=(x==='GÖRÜŞMELER'||x==='GÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ');const title=/^(YÜKSEKOVA|.*ANADOLU.*LİSESİ|\d{4}-\d{4} EĞİTİM|.*TOPLANTI TUTANAĞI$|.*İMZA SİRKÜSÜ$)/i.test(x);const keepNext=(x==='ALINAN KARARLAR')||(/^\d+\.\s+/.test(x)&&!!lines[i+1]?.trim()&&!/^\d+\.\s+/.test(lines[i+1].trim()));out+=docxParagraph(x,section||title||(inDiscussions&&/^\d+\.\s+/.test(x)),title,false,keepNext)}if(sig)out+=docxSignatureTable(rows)});return out}
 async function exportDocumentAssistantWord(){
  const t=el("docAssistantDraft")?.value||"";if(!t.trim())return alert("Önce belge taslağı oluşturun.");if(typeof JSZip==='undefined')return alert("Word oluşturma bileşeni yüklenemedi.");
  try{const z=new JSZip();z.file('[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>');z.folder('_rels').file('.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>');const w=z.folder('word');w.file('styles.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr></w:style></w:styles>');w.file('document.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${draftToDocxBody(t)}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="700" w:right="700" w:bottom="700" w:left="700" w:header="360" w:footer="360" w:gutter="0"/></w:sectPr></w:body></w:document>`);const blob=await z.generateAsync({type:'blob',mimeType:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});downloadDocumentBlob(blob,documentExportBaseName()+'.docx')}catch(e){console.error(e);alert("Word dosyası oluşturulamadı.")}
@@ -3552,15 +3552,15 @@ function renderDocumentAssistantPDFCanvas(t){
  function para(text,opt={}){const b=!!opt.bold,it=!!opt.italic,sz=opt.size||28;font(b,it,sz);const width=opt.width||maxW,ls=docPdfWrap(ctx,text,width);need(ls.length*lineH+paraGap);font(b,it,sz);for(const l of ls){ctx.textAlign=opt.align||'left';const xx=opt.align==='right'?W-mx:(opt.align==='center'?W/2:(opt.x||mx));ctx.fillText(l,xx,y);y+=lineH}ctx.textAlign='left';y+=opt.gap??paraGap}
  function twoCol(rows,headers=null){const col=[mx,mx+430,W-mx],rh=48,total=(rows.length+(headers?1:0))*rh+18;need(total);font(false,false,20);ctx.strokeStyle='#111';ctx.lineWidth=2;let rr=0;if(headers){font(true,false,21);for(let c=0;c<2;c++)ctx.strokeRect(col[c],y,col[c+1]-col[c],rh);ctx.fillText(headers[0],col[0]+10,y+31);ctx.fillText(headers[1],col[1]+10,y+31);rr=1}font(false,false,20);rows.forEach((a,ri)=>{const yy=y+(ri+rr)*rh;for(let c=0;c<2;c++)ctx.strokeRect(col[c],yy,col[c+1]-col[c],rh);font(!headers&&ri>=0,false,20);ctx.fillText(a[0]||'',col[0]+10,yy+31);font(false,false,20);ctx.fillText(a[1]||'',col[1]+10,yy+31)});y+=total}
  function sigTable(rows){const col=[mx,mx+410,mx+850,W-mx],rh=52;need((rows.length+1)*rh+20);font(true,false,22);ctx.strokeStyle='#111';ctx.lineWidth=2;const headers=['ADI SOYADI','BRANŞI','İMZA'];for(let r=0;r<=rows.length;r++){const yy=y+r*rh;for(let c=0;c<3;c++)ctx.strokeRect(col[c],yy,col[c+1]-col[c],rh)}headers.forEach((h,i)=>ctx.fillText(h,col[i]+10,y+33));font(false,false,21);rows.forEach((r,ri)=>{const vals=r.split('|').map(x=>x.trim());vals.slice(0,2).forEach((v,i)=>ctx.fillText(v,col[i]+10,y+(ri+1)*rh+33))});y+=(rows.length+1)*rh+24}
- page();const raw=String(t||'').replace(/\r/g,'').split('\n');let firstContent=true,pageIndex=0;
+ page();const raw=String(t||'').replace(/\r/g,'').split('\n');let firstContent=true,pageIndex=0,inDiscussions=false;
  for(let i=0;i<raw.length;i++){let line=raw[i].trim();if(line==='--- SAYFA SONU ---'){page();firstContent=true;pageIndex++;continue}if(!line){y+=12;continue}if(firstContent){centered(line,true,25);firstContent=false;continue}
    if(line==='TOPLANTI BİLGİLERİ'){const rows=[];let j=i+1;while(j<raw.length&&raw[j].trim()&&raw[j].includes(' | ')){rows.push(raw[j].trim().split(' | '));j++}para('Toplantı Bilgileri',{bold:true});twoCol(rows);i=j-1;continue}
    if(line==='TOPLANTI KATILIMCILARI'){const rows=[];let j=i+1;while(j<raw.length&&raw[j].trim()&&raw[j].includes(' | ')){rows.push(raw[j].trim().split(' | '));j++}para('Toplantı Katılımcıları',{bold:true});twoCol(rows,['Branşı / Görevi','Adı Soyadı']);i=j-1;continue}
-   if(line==='ADI SOYADI | BRANŞI | İMZA'){const rows=[];let j=i+1;while(j<raw.length&&raw[j].trim()&&raw[j].includes('|')&&!/^(SINIF REHBER ÖĞRETMENİ|MÜDÜR YARDIMCISI|MÜDÜR) \|/.test(raw[j].trim())){rows.push(raw[j].trim());j++}sigTable(rows);i=j-1;continue}
+   if(line==='ADI SOYADI | BRANŞI | İMZA'){const rows=[];let j=i+1;while(j<raw.length&&raw[j].trim()&&raw[j].includes('|')&&!/^(SINIF REHBER ÖĞRETMENİ|Sınıf Rehber Öğretmeni|MÜDÜR YARDIMCISI|Müdür Yardımcısı|MÜDÜR|Müdür) \|/.test(raw[j].trim())){rows.push(raw[j].trim());j++}sigTable(rows);i=j-1;continue}
    if(line==='OLUR'&&i+3<raw.length){const olurH=4*(lineH+paraGap)+18;need(olurH);y=Math.max(y,H-my-olurH);centered('OLUR',true,28);centered(raw[i+1].trim(),false,27);centered(raw[i+2].trim(),false,27);centered(raw[i+3].trim(),true,27);i+=3;continue}
-   if(/^SINIF REHBER ÖĞRETMENİ \|/.test(line)&&i+2<raw.length){const a=line.split(' | '),b=raw[i+1].trim().split(' | '),c=raw[i+2].trim().split(' | ');need(240);y+=20;centered(a[1]||'',false,23);centered(a[0],true,23);y+=40;const lx=mx+maxW*.20,rx=W-mx-maxW*.20;font(false,false,23);ctx.textAlign='center';ctx.fillText(b[1]||'',lx,y);if(c[2])ctx.fillText(c[2],rx,y);y+=32;if(c[2]){ctx.fillText(c[1]||'',rx,y);y+=32}else ctx.fillText(c[1]||'',rx,y);font(true,false,23);ctx.fillText(b[0],lx,y);ctx.fillText(c[0],rx,y);ctx.textAlign='left';i+=2;continue}
+   if(/^(SINIF REHBER ÖĞRETMENİ|Sınıf Rehber Öğretmeni) \|/.test(line)&&i+2<raw.length){const a=line.split(' | '),b=raw[i+1].trim().split(' | '),c=raw[i+2].trim().split(' | ');need(240);y+=20;centered(a[1]||'',false,23);centered(a[0],true,23);y+=40;const lx=mx+maxW*.20,rx=W-mx-maxW*.20;font(false,false,23);ctx.textAlign='center';ctx.fillText(b[1]||'',lx,y);if(c[2])ctx.fillText(c[2],rx,y);y+=32;if(c[2]){ctx.fillText(c[1]||'',rx,y);y+=32}else ctx.fillText(c[1]||'',rx,y);font(true,false,23);ctx.fillText(b[0],lx,y);ctx.fillText(c[0],rx,y);ctx.textAlign='left';i+=2;continue}
    if(pageIndex===0&&i>1&&raw[i+1]?.trim()&&/Sınıf Rehber Öğretmeni$/.test(raw[i+1].trim())&&!line.includes(':')){y+=10;const bx=W-mx-(maxW*.24);font(false,false,28);ctx.textAlign='center';ctx.fillText(line,bx,y);y+=lineH;font(true,false,28);ctx.fillText(raw[i+1].trim(),bx,y);ctx.textAlign='left';y+=lineH+14;i++;continue}
-   const isSection=/^(GÜNDEM MADDELERİ|GÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ|GÖRÜŞMELER|ALINAN KARARLAR|ÖZEL GÜNDEM \/ NOTLAR)$/.test(line);const isTitle=/EĞİTİM-ÖĞRETİM YILI$/.test(line)||/TOPLANTI TUTANAĞI$/.test(line)||/İMZA SİRKÜSÜ$/.test(line);if(isTitle){centered(line,true,27);continue}if(isSection){para(line,{bold:true,size:29,gap:14});continue}para(line,{size:28,gap:10});
+   const isSection=/^(GÜNDEM MADDELERİ|GÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ|GÖRÜŞMELER|ALINAN KARARLAR|ÖZEL GÜNDEM \/ NOTLAR)$/.test(line);const isTitle=/EĞİTİM-ÖĞRETİM YILI$/.test(line)||/TOPLANTI TUTANAĞI$/.test(line)||/İMZA SİRKÜSÜ$/.test(line);if(isTitle){centered(line,true,27);continue}if(isSection){inDiscussions=(line==='GÖRÜŞMELER'||line==='GÜNDEM MADDELERİNİN GÖRÜŞÜLMESİ');para(line,{bold:true,size:29,gap:14});continue}para(line,{bold:inDiscussions&&/^\d+\.\s+/.test(line),size:28,gap:10});
  }
  const tall=document.createElement('canvas');tall.width=W;tall.height=H*pages.length;const q=tall.getContext('2d');q.fillStyle='#fff';q.fillRect(0,0,tall.width,tall.height);pages.forEach((p,i)=>q.drawImage(p,0,i*H));return tall;
 }
@@ -3570,7 +3570,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.47 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.48 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -6746,7 +6746,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.47",
+    appVersion:"v7.7.48",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -6758,7 +6758,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.47",
+    appVersion:"v7.7.48",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
