@@ -18,7 +18,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.46 · ŞÖK İşlevsel Hotfix · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.47 · ŞÖK İşlevsel Final Düzeltme · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -43,7 +43,7 @@ function openDocumentAssistant(){
   renderDocAgendaList();
 }
 
-// ===== v7.7.46 ŞÖK gündem girişi: tekli / toplu / PDF alan seçimi =====
+// ===== v7.7.47 ŞÖK gündem girişi: tekli / toplu / PDF alan seçimi =====
 window._docCustomAgendas=window._docCustomAgendas||[];
 function docAgendaNormalizeTitle(x){return String(x||'').replace(/^\s*\d+\s*[.)\-:]\s*/,'').replace(/^\s*[•·]\s*/,'').replace(/\s+/g,' ').replace(/[.;,]+\s*$/,'').trim()}
 function docAgendaParseBulk(text){
@@ -287,12 +287,16 @@ function sokAgendaNarrative(title,academic,homework,parentMeetings){
  }
  return {discussion:`Yeni/özel gündem: “${originalTitle}” başlığı için hazır anlam ailesi bulunamadığından metnin toplantıda gerçekten görüşülen hususlara göre düzenlenmesi gerekir.`,decision:`Bu gündeme ilişkin kararın toplantıda alınan gerçek karara göre yazılmasına karar verilmiştir.`};
 }
-// ===== v7.7.46 Karar Motoru v3 =====
+// ===== v7.7.47 Karar Motoru v3 =====
 // Karar, gündemin anlamından somut eylem + iş birliği/sorumluluk + takip bileşenleriyle üretilir.
 function sokDecisionV3(title,matches){
  const ids=new Set((matches||[]).map(x=>x.id));
  const has=(...a)=>a.some(x=>ids.has(x));
  const parts=[];
+ // v7.7.47: Açık afet/acil durum/tahliye gündemi genel davranış-güvenlik kararlarına düşmez.
+ if(has('emergency')) return 'acil durum ve tahliye süreçlerine ilişkin bilgilendirme ve hazırlık çalışmalarının sürdürülmesine, öğrencilerin güvenli davranışlarının uygulamalarla pekiştirilmesine ve gerekli tatbikat/hatırlatmaların ilgili birimlerce takip edilmesine karar verilmiştir.';
+ // v7.7.47: Bilimsel proje/yarışma gündemi genel sosyal etkinlik kararından önce değerlendirilir.
+ if(has('scientific_project')) return 'öğrencilerin ilgi ve yeteneklerine uygun bilimsel proje, araştırma ve yarışmalara yönlendirilmesine, proje geliştirme sürecinde ilgili branş öğretmenlerince rehberlik edilmesine ve çalışmaların süreç boyunca izlenmesine karar verilmiştir.';
  if(has('attendance','absenteeism_lateness')) parts.push('devam ve geç kalma durumlarının düzenli izlenmesine, nedenlerin öğrenci bazında değerlendirilmesine ve gerekli durumlarda veliyle zamanında iletişim kurulmasına');
  if(has('assessment','remedial')) parts.push('ölçme sonuçlarından yararlanılarak eksik öğrenmelerin belirlenmesine, ihtiyaç duyan öğrenciler için ders bazında destekleyici çalışmalar planlanmasına ve gelişimin yeniden değerlendirilmesine');
  if(has('motivation')) parts.push('derse ilgisi ve katılımı düşük öğrenciler için aktif katılımı ve öğrenme isteğini destekleyen uygulamalara yer verilmesine ve gelişimin ders öğretmenlerince izlenmesine');
@@ -327,7 +331,7 @@ function sokDecisionV3(title,matches){
  return '';
 }
 
-// v7.7.46 Branş Uzmanlık Puanı: küçük değer daha güçlü konu-branş eşleşmesidir.
+// v7.7.47 Branş Uzmanlık Puanı: küçük değer daha güçlü konu-branş eşleşmesidir.
 function sokSpeakerExpertise(title,p){
  const x=sokSemanticTitle(title),b=String(p.branch||'');
  const isReh=/Rehber/i.test(b),isClass=/Sınıf Rehber/i.test(b);
@@ -518,6 +522,7 @@ const sokLocalTopics=[
  {id:'school_stewardship',keys:['okul eşyalarını','okul eşyası','eğitim araçlarını özenli','ortak kullanım alanlarına ilişkin sorumluluk','ortak kullanım alanlarını'],label:'Okul eşyaları ve ortak alan sorumluluğu',core:'Öğrencilerin okul eşyalarını, eğitim araçlarını ve ortak kullanım alanlarını özenli kullanmaları; ortak kaynakları koruma sorumluluğu geliştirmeleri değerlendirilmiştir.'},
  {id:'resources',keys:['laboratuvar','kaynak','birim'],label:'Eğitim kaynakları',core:'Eğitim ortamlarının ve kaynaklarının derslerin amaçlarına uygun ve güvenli kullanılması değerlendirilmiştir.'},
  {id:'common_exams',keys:['ortak sınav'],label:'Ortak sınavlar',core:'Ortak sınavların kapsamı, uygulanması ve sonuçlarının öğretim sürecine yansıtılması üzerinde durulmuştur.'},
+ {id:'scientific_project',keys:['proje yarışma bilimsel','proje ve bilimsel','bilimsel çalışma','bilimsel çalışmalar','bilimsel proje','araştırma projesi','proje yarışma'],label:'Bilimsel proje, araştırma ve yarışmalar',core:'Öğrencilerin bilimsel düşünme, araştırma, üretme ve problem çözme becerilerini geliştirecek proje ve yarışmalara ilgi ve yetenekleri doğrultusunda yönlendirilmesi değerlendirilmiştir.'},
  {id:'activities',keys:['bilimsel','sosyal','kültürel','sportif','gezi','yarışma'],label:'Etkinlikler',core:'Öğrencilerin ilgi ve yeteneklerini destekleyecek etkinliklerin eğitim öğretim süreciyle ilişkilendirilmesi ele alınmıştır.'},
  {id:'values',keys:['değerler'],label:'Değerler eğitimi',core:'Değerler eğitiminin ders içi ve ders dışı etkinliklerle desteklenmesine yönelik uygulamalar görüşülmüştür.'},
  {id:'safety',keys:['iş sağlığı','iş güvenliği','güvenlik'],label:'İş sağlığı ve güvenliği',core:'Eğitim öğretim faaliyetlerinde güvenli ortamın korunması ve gerekli tedbirlerin düzenli izlenmesi değerlendirilmiştir.'},
@@ -576,7 +581,7 @@ const sokLocalEndings=['Uygulamanın öğrencilerin ihtiyaçlarına göre sürd�
 function sokLocalNorm(t){return String(t||'').toLocaleLowerCase('tr-TR').replace(/[^a-zçğıöşü0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
 function sokLocalKeyHit(topic,key,q){
  const nk=sokLocalNorm(key); if(!nk)return false;
- // v7.7.46: 'afet' sözcüğü 'kıyafet' içinde geçtiği için yanlış afet eşleşmesini engelle.
+ // v7.7.47: 'afet' sözcüğü 'kıyafet' içinde geçtiği için yanlış afet eşleşmesini engelle.
  // Afet anlamı yalnız bağımsız 'afet' sözcüğü veya diğer açık acil durum anahtarlarıyla oluşur.
  if(topic?.id==='emergency'&&nk==='afet')return (` ${q} `).includes(' afet ');
  return q.includes(nk);
@@ -680,6 +685,7 @@ function sokLocalRelevantSpeakers(title,peopleOverride=null){
  else if(/Ortak sınav/.test(x))addBy([/Matematik/i,/İngilizce/i,/Türk Dili|Edebiyat/i,/Fizik/i,/Kimya/i,/Biyoloji/i,/Tarih/i,/Coğrafya/i,/Arapça/i,/Din Kültürü/i]);
  else if(/öğretim programlarına/.test(x))addBy([/Matematik/i,/İngilizce/i,/Türk Dili|Edebiyat/i,/Fizik/i,/Kimya/i,/Biyoloji/i,/Tarih/i,/Coğrafya/i,/Arapça/i,/Din Kültürü/i]);
  else if(/Öğrenci başarı/.test(x))addBy([/Matematik/i,/İngilizce/i,/Türk Dili|Edebiyat/i,/Fizik/i,/Kimya/i,/Biyoloji/i,/Tarih/i,/Coğrafya/i,/Arapça/i,/Din Kültürü/i]);
+ else if(/Bilimsel proje, araştırma ve yarışmalar/.test(x))addBy([/Matematik/i,/Fizik/i,/Kimya/i,/Biyoloji/i,/Türk Dili|Edebiyat/i,/İngilizce/i]);
  else if(/Bilimsel, sosyal, kültürel|Etkinlikler/.test(x))addBy([/Beden/i,/Türk Dili|Edebiyat/i,/İngilizce/i,/Din Kültürü/i,/Sınıf Rehber Öğretmeni/i]);
  else if(/Okulda uygulanan projeler/.test(x))addBy([/Matematik/i,/Fen|Fizik|Kimya|Biyoloji/i,/Türk Dili|Edebiyat/i,/İngilizce/i,/Din Kültürü/i]);
  else if(/Özel eğitime|kaynaştırma/.test(x))addBy([/Rehber/i]);
@@ -733,6 +739,7 @@ function sokLocalSpeakerSentence(title,p,variant){
   [/Dilek, temenniler ve kapanış/,[`${role} ${name}, toplantıda alınan kararların uygulama sürecinde takip edilmesinin ve ihtiyaç halinde yeniden değerlendirilmesinin yararlı olacağını belirtti.`,`${role} ${name}, öğretmenler arasındaki iletişim ve iş birliğinin öğrencilerin gelişimini destekleyecek biçimde sürdürülmesini temenni etti.`,`${role} ${name}, görüşülen konularda ortak uygulamanın korunması ve gerekli durumlarda bilgi paylaşımının sürdürülmesini önerdi.`]]
  ];
  const semanticSets=[
+  [/Bilimsel proje, araştırma ve yarışmalar/,[`${role} ${name}, bilimsel proje ve yarışmaların öğrencilerin araştırma, problem çözme ve özgün ürün geliştirme becerilerini destekleyecek biçimde planlanmasının önemli olduğunu belirtti.`,`${role} ${name}, öğrencilerin ilgi ve yeteneklerine uygun proje konularına yönlendirilmesini ve araştırma sürecinde yöntem, kaynak kullanımı ve ürün geliştirme konusunda branş öğretmenlerinden rehberlik almalarını önerdi.`,`${role} ${name}, proje ve yarışmalarda yalnız sonuç ürününün değil problem belirleme, veri toplama, deneme, değerlendirme ve sunum süreçlerinin de öğrenci gelişimi açısından izlenmesi gerektiğini ifade etti.`]],
   [/BEP ve ölçme-değerlendirme uyarlamaları/,[`${role} ${name}, BEP hedefleri doğrultusunda ders içi çalışmalar ile sınav ve diğer ölçme uygulamalarının öğrencinin bireysel ihtiyaçlarına göre uyarlanmasının önemli olduğunu belirtti.`,`${role} ${name}, BEP bulunan öğrenciler için süre, soru biçimi, materyal ve geri bildirim gibi uyarlamaların öğrencinin eğitim hedefleriyle uyumlu planlanmasını önerdi.`,`${role} ${name}, BEP uygulamalarının ders öğretmenleri arasında ortak takip edilmesinin öğrencinin gelişimini daha sağlıklı değerlendirmeye yardımcı olacağını ifade etti.`]],
   [/Özel eğitim ve kaynaştırma/,[`${role} ${name}, kaynaştırma/bütünleştirme yoluyla eğitim alan öğrencilerin akademik gelişimleri kadar sınıf içi katılım ve sosyal uyumlarının da düzenli izlenmesi gerektiğini belirtti.`,`${role} ${name}, özel eğitim ihtiyacı bulunan öğrenciler için gerekli ders içi uyarlamaların bireysel farklılıklar gözetilerek yapılmasını önerdi.`,`${role} ${name}, kaynaştırma öğrencilerinin gelişiminin ders öğretmenleri, sınıf rehber öğretmeni ve rehberlik birimi arasında iş birliğiyle takip edilmesinin önemli olduğunu ifade etti.`]],
   [/Sınav kaygısı ve performans/,[`${role} ${name}, sınav kaygısı yaşayan öğrencilerin yalnız sonuç puanlarıyla değerlendirilmemesi, kaygının performansa etkisinin de göz önünde bulundurulması gerektiğini belirtti.`,`${role} ${name}, sınav öncesi planlı hazırlık, zaman yönetimi ve uygun sınav stratejilerinin öğrencilerin kaygılarını yönetmelerine yardımcı olabileceğini ifade etti.`,`${role} ${name}, yoğun sınav kaygısı gözlenen öğrencilerin rehberlik desteğine yönlendirilmesini ve gelişimlerinin takip edilmesini önerdi.`]],
@@ -772,7 +779,7 @@ function sokLocalSpeakerLimit(title,variant,forDefault=false){
  if(/Açılış|Dilek/.test(x))return 0;
  // İlk taslak öğretmen görüşü için uygun maddelerde konu genişliğine göre 1-3 öğretmen seçilir.
  if(forDefault){
-  // v7.7.46: İlk taslakta 1 konuşmacı varsayılandır. İkinci/üçüncü konuşmacı ancak gündem gerçekten ayrı uzmanlık boyutları taşıyorsa eklenir.
+  // v7.7.47: İlk taslakta 1 konuşmacı varsayılandır. İkinci/üçüncü konuşmacı ancak gündem gerçekten ayrı uzmanlık boyutları taşıyorsa eklenir.
   const ms=sokLocalMatchAll(title);
   const ids=new Set(ms.map(m=>m.id));
   const has=(...a)=>a.some(k=>ids.has(k));
@@ -828,7 +835,7 @@ function sokLocalApplySpeaker(title,text,variant){
 function sokDefaultTeacherRichDraft(draft){
  const parsed=sokEditorSections(draft); if(!parsed)return draft;
  const people=sokLocalParticipantsFromText(draft); if(!people.length)return draft;
- // v7.7.46: İlk taslakta konu uygunluğu korunurken belge genelindeki konuşmacı kullanımı dengelenir.
+ // v7.7.47: İlk taslakta konu uygunluğu korunurken belge genelindeki konuşmacı kullanımı dengelenir.
  // Aynı öğretmen, güçlü bir branş gerekçesi yoksa art arda gündemlerde yeniden seçilmez.
  const usage=new Map(people.map(p=>[p.name.toLocaleUpperCase('tr-TR'),0]));
  let previousNames=new Set();
@@ -1175,7 +1182,7 @@ function sokLocalPropose(no){
    ];
    candidates.push(...activityVariants);
   }else{
-   // v7.7.46: Tanınan serbest gündemler artık tek genel kalıba düşmez. Birden çok anlam ailesi birleştirilebilir.
+   // v7.7.47: Tanınan serbest gündemler artık tek genel kalıba düşmez. Birden çok anlam ailesi birleştirilebilir.
    const matches=sokLocalMatches(title), cores=(matches.length?matches:[topic]).map(t=>t.core);
    const lead=['Toplantıda','Gündem kapsamında','Kurul değerlendirmesinde','İlgili başlık ele alınırken'];
    const focus=['öğrencilerin ihtiyaçlarının somut gözlemler üzerinden izlenmesi','uygulanabilir çalışmaların öğrenci yararı gözetilerek planlanması','öğretmenler arası bilgi paylaşımının düzenli sürdürülmesi'];
@@ -1336,7 +1343,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.46 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.47 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -4512,7 +4519,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.46",
+    appVersion:"v7.7.47",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -4524,7 +4531,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.46",
+    appVersion:"v7.7.47",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
