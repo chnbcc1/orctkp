@@ -2087,7 +2087,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.49</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.50</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2245,7 +2245,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.49 · ŞÖK İşlevsel Final Düzeltme · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.50 · ŞÖK İşlevsel Final Düzeltme · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2270,7 +2270,7 @@ function openDocumentAssistant(){
   renderDocAgendaList();
 }
 
-// ===== v7.7.49 ŞÖK gündem girişi: tekli / toplu / PDF alan seçimi =====
+// ===== v7.7.50 ŞÖK gündem girişi: tekli / toplu / PDF alan seçimi =====
 window._docCustomAgendas=window._docCustomAgendas||[];
 function docAgendaNormalizeTitle(x){return String(x||'').replace(/^\s*\d+\s*[.)\-:]\s*/,'').replace(/^\s*[•·]\s*/,'').replace(/\s+/g,' ').replace(/[.;,]+\s*$/,'').trim()}
 function docAgendaParseBulk(text){
@@ -2512,17 +2512,18 @@ function sokAgendaNarrative(title,academic,homework,parentMeetings){
   if(!decision) decision=`${labels.join(', ')} başlıklarının birbiriyle ilişkisi gözetilerek öğrenci ihtiyaçlarına uygun somut çalışmaların belirlenmesine ve sonuçların sonraki kurul değerlendirmelerinde izlenmesine karar verilmiştir.`;
   return {discussion,decision};
  }
- return {discussion:`Yeni/özel gündem: “${originalTitle}” başlığı için hazır anlam ailesi bulunamadığından metnin toplantıda gerçekten görüşülen hususlara göre düzenlenmesi gerekir.`,decision:`Bu gündeme ilişkin kararın toplantıda alınan gerçek karara göre yazılmasına karar verilmiştir.`};
+ if(/(?:önceki|bir önceki).*(?:şube öğretmenler kurulu|şök|kurul|toplantı).*(?:karar|uygulanma|uygulama)|(?:kararların).*(?:uygulanma|uygulama).*(?:durum|değerlendir)/iu.test(originalTitle)) return {discussion:`Önceki Şube Öğretmenler Kurulu toplantısında alınan kararlar tek tek gözden geçirilmiş; uygulanan, devam eden ve tamamlanması gereken çalışmaların mevcut durumu kurul üyelerince değerlendirilmiştir.`,decision:`Önceki kurul kararlarından uygulanmasına devam edilmesi gereken çalışmaların sürdürülmesine, tamamlanmayan hususların ilgili öğretmenlerce takip edilmesine ve sonuçların sonraki kurul değerlendirmesinde yeniden gözden geçirilmesine karar verilmiştir.`};
+ return {discussion:`${originalTitle} konusu kurul üyelerince öğrencilerin eğitim sürecine, sınıf ortamına ve okul çalışmalarına etkileri bakımından değerlendirilmiş; toplantıda belirtilen görüş ve ihtiyaçlar üzerinde durulmuştur.`,decision:`${originalTitle} konusunda toplantıda yapılan değerlendirmeler doğrultusunda gerekli çalışmaların planlanmasına, ilgili öğretmenlerce takip edilmesine ve ihtiyaç hâlinde yeniden değerlendirilmesine karar verilmiştir.`};
 }
-// ===== v7.7.49 Karar Motoru v3 =====
+// ===== v7.7.50 Karar Motoru v3 =====
 // Karar, gündemin anlamından somut eylem + iş birliği/sorumluluk + takip bileşenleriyle üretilir.
 function sokDecisionV3(title,matches){
  const ids=new Set((matches||[]).map(x=>x.id));
  const has=(...a)=>a.some(x=>ids.has(x));
  const parts=[];
- // v7.7.49: Açık afet/acil durum/tahliye gündemi genel davranış-güvenlik kararlarına düşmez.
+ // v7.7.50: Açık afet/acil durum/tahliye gündemi genel davranış-güvenlik kararlarına düşmez.
  if(has('emergency')) return 'acil durum ve tahliye süreçlerine ilişkin bilgilendirme ve hazırlık çalışmalarının sürdürülmesine, öğrencilerin güvenli davranışlarının uygulamalarla pekiştirilmesine ve gerekli tatbikat/hatırlatmaların ilgili birimlerce takip edilmesine karar verilmiştir.';
- // v7.7.49: Bilimsel proje/yarışma gündemi genel sosyal etkinlik kararından önce değerlendirilir.
+ // v7.7.50: Bilimsel proje/yarışma gündemi genel sosyal etkinlik kararından önce değerlendirilir.
  if(has('scientific_project')) return 'öğrencilerin ilgi ve yeteneklerine uygun bilimsel proje, araştırma ve yarışmalara yönlendirilmesine, proje geliştirme sürecinde ilgili branş öğretmenlerince rehberlik edilmesine ve çalışmaların süreç boyunca izlenmesine karar verilmiştir.';
  if(has('attendance','absenteeism_lateness')) parts.push('devam ve geç kalma durumlarının düzenli izlenmesine, nedenlerin öğrenci bazında değerlendirilmesine ve gerekli durumlarda veliyle zamanında iletişim kurulmasına');
  if(has('assessment','remedial')) parts.push('ölçme sonuçlarından yararlanılarak eksik öğrenmelerin belirlenmesine, ihtiyaç duyan öğrenciler için ders bazında destekleyici çalışmalar planlanmasına ve gelişimin yeniden değerlendirilmesine');
@@ -2558,7 +2559,7 @@ function sokDecisionV3(title,matches){
  return '';
 }
 
-// v7.7.49 Branş Uzmanlık Puanı: küçük değer daha güçlü konu-branş eşleşmesidir.
+// v7.7.50 Branş Uzmanlık Puanı: küçük değer daha güçlü konu-branş eşleşmesidir.
 function sokSpeakerExpertise(title,p){
  const x=sokSemanticTitle(title),b=String(p.branch||'');
  const isReh=/Rehber/i.test(b),isClass=/Sınıf Rehber/i.test(b);
@@ -2808,7 +2809,7 @@ const sokLocalEndings=['Uygulamanın öğrencilerin ihtiyaçlarına göre sürd�
 function sokLocalNorm(t){return String(t||'').toLocaleLowerCase('tr-TR').replace(/[^a-zçğıöşü0-9 ]/g,' ').replace(/\s+/g,' ').trim()}
 function sokLocalKeyHit(topic,key,q){
  const nk=sokLocalNorm(key); if(!nk)return false;
- // v7.7.49: 'afet' sözcüğü 'kıyafet' içinde geçtiği için yanlış afet eşleşmesini engelle.
+ // v7.7.50: 'afet' sözcüğü 'kıyafet' içinde geçtiği için yanlış afet eşleşmesini engelle.
  // Afet anlamı yalnız bağımsız 'afet' sözcüğü veya diğer açık acil durum anahtarlarıyla oluşur.
  if(topic?.id==='emergency'&&nk==='afet')return (` ${q} `).includes(' afet ');
  return q.includes(nk);
@@ -3006,7 +3007,7 @@ function sokLocalSpeakerLimit(title,variant,forDefault=false){
  if(/Açılış|Dilek/.test(x))return 0;
  // İlk taslak öğretmen görüşü için uygun maddelerde konu genişliğine göre 1-3 öğretmen seçilir.
  if(forDefault){
-  // v7.7.49: İlk taslakta 1 konuşmacı varsayılandır. İkinci/üçüncü konuşmacı ancak gündem gerçekten ayrı uzmanlık boyutları taşıyorsa eklenir.
+  // v7.7.50: İlk taslakta 1 konuşmacı varsayılandır. İkinci/üçüncü konuşmacı ancak gündem gerçekten ayrı uzmanlık boyutları taşıyorsa eklenir.
   const ms=sokLocalMatchAll(title);
   const ids=new Set(ms.map(m=>m.id));
   const has=(...a)=>a.some(k=>ids.has(k));
@@ -3062,7 +3063,7 @@ function sokLocalApplySpeaker(title,text,variant){
 function sokDefaultTeacherRichDraft(draft){
  const parsed=sokEditorSections(draft); if(!parsed)return draft;
  const people=sokLocalParticipantsFromText(draft); if(!people.length)return draft;
- // v7.7.49: İlk taslakta konu uygunluğu korunurken belge genelindeki konuşmacı kullanımı dengelenir.
+ // v7.7.50: İlk taslakta konu uygunluğu korunurken belge genelindeki konuşmacı kullanımı dengelenir.
  // Aynı öğretmen, güçlü bir branş gerekçesi yoksa art arda gündemlerde yeniden seçilmez.
  const usage=new Map(people.map(p=>[p.name.toLocaleUpperCase('tr-TR'),0]));
  let previousNames=new Set();
@@ -3409,7 +3410,7 @@ function sokLocalPropose(no){
    ];
    candidates.push(...activityVariants);
   }else{
-   // v7.7.49: Tanınan serbest gündemler artık tek genel kalıba düşmez. Birden çok anlam ailesi birleştirilebilir.
+   // v7.7.50: Tanınan serbest gündemler artık tek genel kalıba düşmez. Birden çok anlam ailesi birleştirilebilir.
    const matches=sokLocalMatches(title), cores=(matches.length?matches:[topic]).map(t=>t.core);
    const lead=['Toplantıda','Gündem kapsamında','Kurul değerlendirmesinde','İlgili başlık ele alınırken'];
    const focus=['öğrencilerin ihtiyaçlarının somut gözlemler üzerinden izlenmesi','uygulanabilir çalışmaların öğrenci yararı gözetilerek planlanması','öğretmenler arası bilgi paylaşımının düzenli sürdürülmesi'];
@@ -3536,7 +3537,7 @@ async function exportDocumentAssistantWord(){
  const t=el("docAssistantDraft")?.value||"";if(!t.trim())return alert("Önce belge taslağı oluşturun.");if(typeof JSZip==='undefined')return alert("Word oluşturma bileşeni yüklenemedi.");
  try{const z=new JSZip();z.file('[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>');z.folder('_rels').file('.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>');const w=z.folder('word');w.file('styles.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr></w:style></w:styles>');w.file('document.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${draftToDocxBody(t)}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="700" w:right="700" w:bottom="700" w:left="700" w:header="360" w:footer="360" w:gutter="0"/></w:sectPr></w:body></w:document>`);const blob=await z.generateAsync({type:'blob',mimeType:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});downloadDocumentBlob(blob,documentExportBaseName()+'.docx')}catch(e){console.error(e);alert("Word dosyası oluşturulamadı.")}
 }
-function printableDocumentHTML(t){return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${xmlEsc(documentExportBaseName())}</title><style>@page{size:A4;margin:12.35mm}html,body{margin:0;padding:0;background:#fff;color:#000}body{font-family:"Times New Roman",serif;font-size:12pt;line-height:1.15}p{margin:0 0 6pt;text-align:justify}.doc-title{text-align:center;font-weight:bold;margin:0 0 8pt}.doc-section{font-weight:bold;margin:9pt 0 5pt}.page-break{break-before:page;page-break-before:always}.sok-agenda-item{display:block;break-inside:avoid-page;page-break-inside:avoid;margin:0 0 7pt}.sok-agenda-item p{margin:0 0 3pt}.sok-agenda-item .sok-item-title{break-after:avoid-page;page-break-after:avoid}.sok-agenda-item .discussion-title{font-weight:bold;font-size:11.5pt;line-height:1.15}.doc-section.keep-with-next{break-after:avoid;page-break-after:avoid}table{width:100%;border-collapse:collapse;table-layout:fixed}th,td{border:1px solid #000;padding:5pt;vertical-align:top}th{text-align:left}.signature th:nth-child(1){width:38%}.signature th:nth-child(2){width:42%}.signature th:nth-child(3){width:20%}.placeholder{font-style:italic;color:#555}@media print{html,body{width:auto!important;height:auto!important;overflow:visible!important}}</style></head><body>${docDraftToHTML(t)}<script>window.addEventListener('load',()=>setTimeout(()=>window.print(),250));<\/script></body></html>`}
+function printableDocumentHTML(t){return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${xmlEsc(documentExportBaseName())}</title><style>@page{size:A4;margin:12.35mm}html,body{margin:0;padding:0;background:#fff;color:#000}body{font-family:"Times New Roman",serif;font-size:12pt;line-height:1.15}p{margin:0 0 6pt;text-align:justify}.doc-school-title,.doc-title{text-align:center;font-weight:bold;margin:0 0 8pt;font-size:12pt}.doc-section{font-weight:bold;margin:9pt 0 5pt}.page-break{break-before:page;page-break-before:always}.sok-agenda-item{display:block;break-inside:avoid-page;page-break-inside:avoid;margin:0 0 7pt}.sok-agenda-item p{margin:0 0 3pt}.sok-agenda-item .sok-item-title{break-after:avoid-page;page-break-after:avoid}.sok-agenda-item .discussion-title{font-weight:bold;font-size:11.5pt;line-height:1.15}.doc-section.keep-with-next{break-after:avoid;page-break-after:avoid}table{width:100%;border-collapse:collapse;table-layout:fixed}th,td{border:1px solid #000;padding:5pt;vertical-align:top}th{text-align:left}.signature th:nth-child(1){width:38%}.signature th:nth-child(2){width:42%}.signature th:nth-child(3){width:20%}.placeholder{font-style:italic;color:#555}@media print{html,body{width:auto!important;height:auto!important;overflow:visible!important}}</style></head><body>${docDraftToHTML(t)}<script>window.addEventListener('load',()=>setTimeout(()=>window.print(),250));<\/script></body></html>`}
 function docPdfWrap(ctx,text,maxW){
  const words=String(text||'').split(/\s+/).filter(Boolean),lines=[];let line='';
  for(const w of words){const test=line?line+' '+w:w;if(ctx.measureText(test).width<=maxW||!line)line=test;else{lines.push(line);line=w}}
@@ -3553,7 +3554,7 @@ function renderDocumentAssistantPDFCanvas(t){
  function twoCol(rows,headers=null){const col=[mx,mx+430,W-mx],rh=48,total=(rows.length+(headers?1:0))*rh+18;need(total);font(false,false,20);ctx.strokeStyle='#111';ctx.lineWidth=2;let rr=0;if(headers){font(true,false,21);for(let c=0;c<2;c++)ctx.strokeRect(col[c],y,col[c+1]-col[c],rh);ctx.fillText(headers[0],col[0]+10,y+31);ctx.fillText(headers[1],col[1]+10,y+31);rr=1}font(false,false,20);rows.forEach((a,ri)=>{const yy=y+(ri+rr)*rh;for(let c=0;c<2;c++)ctx.strokeRect(col[c],yy,col[c+1]-col[c],rh);font(!headers&&ri>=0,false,20);ctx.fillText(a[0]||'',col[0]+10,yy+31);font(false,false,20);ctx.fillText(a[1]||'',col[1]+10,yy+31)});y+=total}
  function sigTable(rows){const col=[mx,mx+410,mx+850,W-mx],rh=52;need((rows.length+1)*rh+20);font(true,false,22);ctx.strokeStyle='#111';ctx.lineWidth=2;const headers=['ADI SOYADI','BRANŞI','İMZA'];for(let r=0;r<=rows.length;r++){const yy=y+r*rh;for(let c=0;c<3;c++)ctx.strokeRect(col[c],yy,col[c+1]-col[c],rh)}headers.forEach((h,i)=>ctx.fillText(h,col[i]+10,y+33));font(false,false,21);rows.forEach((r,ri)=>{const vals=r.split('|').map(x=>x.trim());vals.slice(0,2).forEach((v,i)=>ctx.fillText(v,col[i]+10,y+(ri+1)*rh+33))});y+=(rows.length+1)*rh+24}
  page();const raw=String(t||'').replace(/\r/g,'').split('\n');let firstContent=true,pageIndex=0,inDiscussions=false;
- for(let i=0;i<raw.length;i++){let line=raw[i].trim();if(line==='--- SAYFA SONU ---'){page();firstContent=true;pageIndex++;continue}if(!line){y+=12;continue}if(firstContent){centered(line,true,25);firstContent=false;continue}
+ for(let i=0;i<raw.length;i++){let line=raw[i].trim();if(line==='--- SAYFA SONU ---'){page();firstContent=true;pageIndex++;continue}if(!line){y+=12;continue}if(firstContent){centered(line,true,27);firstContent=false;continue}
    if(line==='TOPLANTI BİLGİLERİ'){const rows=[];let j=i+1;while(j<raw.length&&raw[j].trim()&&raw[j].includes(' | ')){rows.push(raw[j].trim().split(' | '));j++}para('Toplantı Bilgileri',{bold:true});twoCol(rows);i=j-1;continue}
    if(line==='TOPLANTI KATILIMCILARI'){const rows=[];let j=i+1;while(j<raw.length&&raw[j].trim()&&raw[j].includes(' | ')){rows.push(raw[j].trim().split(' | '));j++}para('Toplantı Katılımcıları',{bold:true});twoCol(rows,['Branşı / Görevi','Adı Soyadı']);i=j-1;continue}
    if(line==='ADI SOYADI | BRANŞI | İMZA'){const rows=[];let j=i+1;while(j<raw.length&&raw[j].trim()&&raw[j].includes('|')&&!/^(SINIF REHBER ÖĞRETMENİ|Sınıf Rehber Öğretmeni|MÜDÜR YARDIMCISI|Müdür Yardımcısı|MÜDÜR|Müdür) \|/.test(raw[j].trim())){rows.push(raw[j].trim());j++}sigTable(rows);i=j-1;continue}
@@ -3570,7 +3571,7 @@ async function exportDocumentAssistantPDF(){
 }
 
 function openDocumentAssistantTemplates(){
-  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.49 · ŞÖK şablonu güncellendi";
+  el("modalTitle").textContent="📚 Belge Şablonları";el("modalSubtitle").textContent="v7.7.50 · ŞÖK şablonu güncellendi";
   el("modalBody").innerHTML=`<div class="doc-template-list">${Object.values(documentAssistantTypes).map(v=>`<div class="card"><b>${v.icon} ${v.label}</b></div>`).join("")}</div><div class="tiny" style="margin-top:12px">Sonraki aşamada güvenli yapay zekâ bağlantısı eklendiğinde serbest talimatlar belge içeriğini otomatik olarak yeniden düzenleyebilecek.</div><div class="modal-actions"><button class="secondary" onclick="openDocumentAssistant()">← Belge Asistanına Dön</button></div>`;
 }
 
@@ -6746,7 +6747,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.49",
+    appVersion:"v7.7.50",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -6758,7 +6759,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.7.49",
+    appVersion:"v7.7.50",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
