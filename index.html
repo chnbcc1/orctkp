@@ -2188,7 +2188,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.68</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.70</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2346,7 +2346,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext();
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.68 · Veli Toplantı Motoru v3 · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.70 · Veli Toplantı Motoru v3 · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -3898,6 +3898,7 @@ function generateDocumentAssistantDraft(){
   try{sessionStorage.removeItem('sokAgendaTopicIds7737')}catch(e){}
   modalPushCurrent();
   const v=docAssistantValues();
+  window._docAssistantLastValues={...v};
   let draft=buildDocumentDraft(v);
   if(v.type==="sok"){
     try{
@@ -3964,7 +3965,7 @@ function printDocumentAssistantDraft(){
   const t=el("docAssistantDraft")?.value||"";if(!t.trim())return alert("Önce belge taslağı oluşturun.");
   closeDocumentPrintPreview();const sh=document.createElement('div');sh.className='doc-print-sheet';sh.innerHTML=`<div class="doc-print-toolbar"><button class="secondary" onclick="closeDocumentPrintPreview()">← Belge Asistanına Dön</button><button onclick="window.print()">🖨️ Yazdır / PDF</button></div><article class="doc-paper">${docDraftToHTML(t)}</article>`;document.body.appendChild(sh);document.body.classList.add('doc-print-open');sh.scrollTop=0;fitDocumentPreview();
 }
-function documentExportBaseName(){const x=documentAssistantContext(),title=(el("modalTitle")?.textContent||"Belge").replace(/[^A-Za-z0-9ÇĞİÖŞÜçğıöşü _-]+/g,"").trim();return `${title||"Belge"}_${x.className||""}_${localISODate()}`.replace(/\s+/g,"_")}
+function documentExportBaseName(){const liveClass=String(el("docAssistantClass")?.value||"").trim(),last=window._docAssistantLastValues||{},x=documentAssistantContext(),className=liveClass||String(last.className||"").trim()||x.className||"",date=String(last.date||localISODate()),title=(el("modalTitle")?.textContent||"Belge").replace(/[^A-Za-z0-9ÇĞİÖŞÜçğıöşü _-]+/g,"").trim();return `${title||"Belge"}_${className}_${date}`.replace(/\s+/g,"_")}
 function downloadDocumentBlob(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2500)}
 function openDocumentExportMenu(){
  const t=el("docAssistantDraft")?.value||"";if(!t.trim())return alert("Önce belge taslağı oluşturun.");
