@@ -1,4 +1,4 @@
-const CACHE_NAME = "ots-v7.7.72";
+const CACHE_NAME = "ots-v7.7.73";
 const CORE = ["./", "./index.html"];
 self.addEventListener("install", event => {
   self.skipWaiting();
