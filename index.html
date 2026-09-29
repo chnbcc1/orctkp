@@ -2196,6 +2196,35 @@ body.class-module-page-open #modal{z-index:9200!important}
   </div>
 </div>
 
+<script id="v7805-data-compat-guard">
+/* v7.8.05 — Veri uyumluluk koruması.
+   Eski sürümlerin kalıcı veri anahtarlarını DEĞİŞTİRMEZ ve PIN kurulmadan önce
+   mevcut veri deposunun bulunup bulunmadığını kullanıcıya bildirir. */
+(function(){
+  const DATA_KEY='odevTakipV1', SETTINGS_KEY='odevTakipV5Settings';
+  function inspect(){
+    let data=null, settings=null;
+    try{data=JSON.parse(localStorage.getItem(DATA_KEY)||'null')}catch(e){}
+    try{settings=JSON.parse(localStorage.getItem(SETTINGS_KEY)||'null')}catch(e){}
+    const classes=Array.isArray(data?.classes)?data.classes:[];
+    const students=classes.reduce((n,c)=>n+(Array.isArray(c?.students)?c.students.length:0),0);
+    return {hasData:!!data && classes.length>0, classes:classes.length, students, hasPin:!!settings?.pinHash};
+  }
+  function paint(){
+    const box=document.getElementById('lockInfo'); if(!box)return;
+    const x=inspect();
+    if(x.hasPin){ box.textContent='PIN ile giriş yapın. Mevcut yerel veri deposu korunuyor.'; return; }
+    if(x.hasData){
+      box.innerHTML='<b style="color:#065f46">Mevcut veriler bulundu:</b> '+x.classes+' sınıf · '+x.students+' öğrenci. Yeni PIN oluşturmak yalnızca cihaz kilidini yeniler; bu verileri silmez.';
+    }else{
+      box.innerHTML='<b style="color:#991b1b">Bu tarayıcı alanında eski veri bulunamadı.</b> Eski verileriniz önemliyse yeni PIN oluşturmadan önce elinizdeki tam yedeği yükleyin.';
+    }
+  }
+  window.__otsDataCompatibility=inspect;
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(paint,0),{once:true});else setTimeout(paint,0);
+  window.addEventListener('pageshow',()=>setTimeout(paint,0));
+})();
+</script>
 <script id="v7649-pin-boot-guard">
 /* v7.6.51 — Masaüstü + Android PIN doğrudan buton düzeltmesi.
    Ana uygulama betiğinde daha sonra bir hata oluşsa bile PIN kutusunu ilk anda görünür yapar. */
@@ -2212,7 +2241,7 @@ body.class-module-page-open #modal{z-index:9200!important}
     screen.style.display="flex";
     const st=readSettingsBoot();
     if(st.pinHash){setup.style.display="none";login.style.display="block";if(info)info.textContent="PIN ile giriş yapın."}
-    else{setup.style.display="block";login.style.display="none";if(info)info.textContent="İlk kullanım: cihaz PIN'i oluşturun."}
+    else{setup.style.display="block";login.style.display="none";if(info){const x=window.__otsDataCompatibility?.();if(x?.hasData)info.innerHTML='<b style="color:#065f46">Mevcut veriler bulundu:</b> '+x.classes+' sınıf · '+x.students+' öğrenci. Yeni PIN oluşturmak yalnızca cihaz kilidini yeniler; verileri silmez.';else info.innerHTML='<b style="color:#991b1b">Bu tarayıcı alanında eski veri bulunamadı.</b> Eski verileriniz önemliyse yeni PIN oluşturmadan önce tam yedeği yükleyin.';}}
   }
   // Ana betik yüklenemese bile masaüstünde kilit ekranı çalışabilsin.
   function unlockPinBoot(){
@@ -2251,7 +2280,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.04</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div>
+<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.05</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2409,7 +2438,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.8.04 · Ortak Konu Kimliği Motoru · çevrimdışı";
+  el("modalSubtitle").textContent="v7.8.05 · Ortak Konu Kimliği Motoru · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -8026,7 +8055,7 @@ html.app-locked,body.app-locked{overflow:hidden!important;height:100%!important;
 </script>
 
 <style id="v7803-premium-emerald-theme">
-/* v7.8.04 — Premium Emerald theme. Functional status colors intentionally preserved. */
+/* v7.8.05 — Premium Emerald theme. Functional status colors intentionally preserved. */
 :root{
   --bg:#f5f7f4;
   --card:#ffffff;
