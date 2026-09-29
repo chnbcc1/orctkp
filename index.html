@@ -2213,7 +2213,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.86</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.87</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2371,7 +2371,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.86 · Ortak Konu Kimliği Motoru · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.87 · Ortak Konu Kimliği Motoru · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -5645,32 +5645,47 @@ async function exportSeatingPlanVisualJPEG(){
 
 function rrReal(ctx,x,y,w,h,r){r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
 function realisticDesk(ctx,x,y,w,h,label,teacher=false,depth=0){
-  const scale=1-depth*.045, ww=w*scale, hh=h*scale, xx=x+(w-ww)/2, yy=y;
-  ctx.save();
-  ctx.shadowColor='rgba(60,42,25,.24)';ctx.shadowBlur=10;ctx.shadowOffsetY=6;
-  // sandalye sırtlığı
-  ctx.fillStyle=teacher?'#34383d':'#a8652d';ctx.strokeStyle=teacher?'#1f2937':'#70411f';ctx.lineWidth=2;
-  rrReal(ctx,xx+ww*.20,yy-hh*.16,ww*.60,hh*.34,8);ctx.fill();ctx.stroke();
-  // metal ayaklar
-  ctx.shadowColor='transparent';ctx.strokeStyle='#4b5563';ctx.lineWidth=Math.max(3,ww*.018);
-  [[.12,.82,.09,1.16],[.88,.82,.91,1.16],[.28,.12,.25,.78],[.72,.12,.75,.78]].forEach(q=>{ctx.beginPath();ctx.moveTo(xx+ww*q[0],yy+hh*q[1]);ctx.lineTo(xx+ww*q[2],yy+hh*q[3]);ctx.stroke()});
-  // masa tablası
-  const g=ctx.createLinearGradient(xx,yy,xx,yy+hh);g.addColorStop(0,teacher?'#c98a49':'#e0a15c');g.addColorStop(1,teacher?'#a8662f':'#bd7436');ctx.fillStyle=g;ctx.strokeStyle='#7c4a24';ctx.lineWidth=2;
-  rrReal(ctx,xx,yy,ww,hh*.66,7);ctx.fill();ctx.stroke();
-  // ön panel
-  ctx.fillStyle=teacher?'#a8662f':'#c47c3b';rrReal(ctx,xx+ww*.035,yy+hh*.56,ww*.93,hh*.25,4);ctx.fill();
+  // Referans görseldeki ahşap masa + ayrı sandalye hissi. Her öğe dinamik kalır.
+  const scale=1-depth*.07, ww=w*scale, hh=h*scale, xx=x+(w-ww)/2, yy=y+(h-hh)*.15;
+  const woodTop=ctx.createLinearGradient(xx,yy,xx,yy+hh*.58);woodTop.addColorStop(0,'#e8b36d');woodTop.addColorStop(.48,'#d8954c');woodTop.addColorStop(1,'#bd7132');
+  const woodDark=ctx.createLinearGradient(xx,yy,xx,yy+hh);woodDark.addColorStop(0,teacher?'#a96b36':'#b9793f');woodDark.addColorStop(1,teacher?'#74431f':'#7f4923');
+  ctx.save();ctx.lineJoin='round';
+  // zemine temas gölgesi
+  ctx.fillStyle='rgba(47,35,25,.13)';ctx.beginPath();ctx.ellipse(xx+ww*.50,yy+hh*1.14,ww*.46,hh*.11,0,0,Math.PI*2);ctx.fill();
+  // sandalye: masadan ayrı, arkada ve aşağı doğru ayaklı
+  ctx.shadowColor='rgba(39,29,20,.24)';ctx.shadowBlur=7;ctx.shadowOffsetY=4;
+  ctx.fillStyle=teacher?'#30343a':'#a96831';ctx.strokeStyle=teacher?'#1f2937':'#70401f';ctx.lineWidth=2;
+  rrReal(ctx,xx+ww*.25,yy-hh*.19,ww*.50,hh*.30,7);ctx.fill();ctx.stroke();
+  ctx.shadowColor='transparent';
+  // sandalye oturağı
+  ctx.fillStyle=teacher?'#3d4249':'#b77739';rrReal(ctx,xx+ww*.28,yy+hh*.55,ww*.44,hh*.18,5);ctx.fill();ctx.stroke();
+  // metal iskelet ve ayaklar
+  ctx.strokeStyle='#4b5158';ctx.lineWidth=Math.max(3,ww*.015);
+  const lines=[[.29,.66,.24,1.18],[.71,.66,.76,1.18],[.12,.57,.08,1.08],[.88,.57,.92,1.08]];
+  lines.forEach(q=>{ctx.beginPath();ctx.moveTo(xx+ww*q[0],yy+hh*q[1]);ctx.lineTo(xx+ww*q[2],yy+hh*q[3]);ctx.stroke()});
+  // masa üst tablası
+  ctx.shadowColor='rgba(55,37,21,.28)';ctx.shadowBlur=8;ctx.shadowOffsetY=5;ctx.fillStyle=woodTop;ctx.strokeStyle='#7a461f';ctx.lineWidth=2;
+  rrReal(ctx,xx,yy+hh*.04,ww,hh*.54,7);ctx.fill();ctx.stroke();ctx.shadowColor='transparent';
+  // tabla ön kalınlığı
+  ctx.fillStyle=woodDark;rrReal(ctx,xx+ww*.025,yy+hh*.49,ww*.95,hh*.18,4);ctx.fill();
+  // ahşap damarları
+  ctx.strokeStyle='rgba(112,65,28,.16)';ctx.lineWidth=1;
+  for(let k=0;k<4;k++){ctx.beginPath();ctx.moveTo(xx+ww*.08,yy+hh*(.14+k*.08));ctx.bezierCurveTo(xx+ww*.30,yy+hh*(.10+k*.08),xx+ww*.62,yy+hh*(.20+k*.06),xx+ww*.91,yy+hh*(.13+k*.08));ctx.stroke()}
+  // masa metal ayakları
+  ctx.strokeStyle='#4b5158';ctx.lineWidth=Math.max(3,ww*.016);
+  [[.10,.61,.07,1.05],[.90,.61,.93,1.05]].forEach(q=>{ctx.beginPath();ctx.moveTo(xx+ww*q[0],yy+hh*q[1]);ctx.lineTo(xx+ww*q[2],yy+hh*q[3]);ctx.stroke()});
   // isimlik
-  ctx.fillStyle='#fffaf0';ctx.strokeStyle='#d7c5a5';ctx.lineWidth=1.5;rrReal(ctx,xx+ww*.075,yy+hh*.12,ww*.85,hh*.42,5);ctx.fill();ctx.stroke();
+  ctx.shadowColor='rgba(0,0,0,.08)';ctx.shadowBlur=3;ctx.fillStyle='#fffaf0';ctx.strokeStyle='#d6c4a5';ctx.lineWidth=1.2;rrReal(ctx,xx+ww*.075,yy+hh*.13,ww*.85,hh*.31,4);ctx.fill();ctx.stroke();ctx.shadowColor='transparent';
   ctx.fillStyle=label?'#111827':'#94a3b8';
-  if(label)drawFullStudentName(ctx,label,xx+ww/2,yy+hh*.33,ww*.72,hh*.34,{maxFont:teacher?15:14,minFont:7,maxLines:3,weight:'bold',align:'center'});
-  else{ctx.font=`${Math.max(10,ww*.055)}px Arial`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('Boş',xx+ww/2,yy+hh*.33);ctx.textBaseline='alphabetic'}
+  if(label)drawFullStudentName(ctx,label,xx+ww/2,yy+hh*.285,ww*.74,hh*.26,{maxFont:teacher?15:14,minFont:7,maxLines:3,weight:'bold',align:'center'});
+  else{ctx.font=`${Math.max(9,ww*.05)}px Arial`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('Boş',xx+ww/2,yy+hh*.285);ctx.textBaseline='alphabetic'}
   ctx.restore();
 }
 async function exportSeatingPlanRealisticJPEG(){
   const c=cls();if(!c)return;cleanSeatingAssignments(c);const p=c.seatingPlan,a=p.assignments;
   const w=1600,h=1130,left=52,right=52,cv=document.createElement('canvas');cv.width=w;cv.height=h;const x=cv.getContext('2d');
   // arka duvar
-  let wall=x.createLinearGradient(0,0,0,470);wall.addColorStop(0,'#eee5d7');wall.addColorStop(1,'#f7f2e9');x.fillStyle=wall;x.fillRect(0,0,w,475);
+  let wall=x.createLinearGradient(0,0,0,470);wall.addColorStop(0,'#e8dccb');wall.addColorStop(.55,'#f4ede2');wall.addColorStop(1,'#eee6da');x.fillStyle=wall;x.fillRect(0,0,w,475);
   // yan duvarlar: pencere ve kapı ön duvarda değil, sınıfın yan yüzeylerinde
   x.fillStyle='#e7ded0';x.beginPath();x.moveTo(0,0);x.lineTo(112,72);x.lineTo(112,475);x.lineTo(0,475);x.closePath();x.fill();
   x.fillStyle='#e9dfd2';x.beginPath();x.moveTo(w,0);x.lineTo(w-112,72);x.lineTo(w-112,475);x.lineTo(w,475);x.closePath();x.fill();
@@ -5679,8 +5694,8 @@ async function exportSeatingPlanRealisticJPEG(){
   x.fillStyle='#cfe3f4';x.fillRect(0,70,88,365);x.strokeStyle='#fffdf8';x.lineWidth=9;x.beginPath();x.moveTo(43,88);x.lineTo(43,410);x.moveTo(0,185);x.lineTo(85,202);x.moveTo(0,300);x.lineTo(85,302);x.stroke();x.restore();
   const light=x.createLinearGradient(55,120,470,470);light.addColorStop(0,'rgba(255,255,255,.48)');light.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=light;x.beginPath();x.moveTo(72,145);x.lineTo(105,162);x.lineTo(510,475);x.lineTo(285,475);x.closePath();x.fill();
   // zemin ve perspektif fayanslar
-  let floor=x.createLinearGradient(0,475,0,h);floor.addColorStop(0,'#e7e2da');floor.addColorStop(1,'#cfcac3');x.fillStyle=floor;x.fillRect(0,475,w,h-475);
-  x.strokeStyle='rgba(107,114,128,.22)';x.lineWidth=1;for(let yy=505;yy<h;yy+=78){x.beginPath();x.moveTo(0,yy);x.lineTo(w,yy);x.stroke()}for(let xx=-500;xx<2200;xx+=105){x.beginPath();x.moveTo(w/2+(xx-w/2)*.18,475);x.lineTo(xx,h);x.stroke()}
+  let floor=x.createLinearGradient(0,475,0,h);floor.addColorStop(0,'#e4ddd3');floor.addColorStop(.45,'#d8d1c8');floor.addColorStop(1,'#c8c1b8');x.fillStyle=floor;x.fillRect(0,475,w,h-475);
+  x.strokeStyle='rgba(107,114,128,.22)';x.lineWidth=1;for(let yy=500,step=54;yy<h;yy+=step,step*=1.12){x.beginPath();x.moveTo(0,yy);x.lineTo(w,yy);x.stroke()}for(let xx=-500;xx<2200;xx+=105){x.beginPath();x.moveTo(w/2+(xx-w/2)*.18,475);x.lineTo(xx,h);x.stroke()}
   // süpürgelik
   x.fillStyle='#a8a29e';x.fillRect(0,456,w,20);x.fillStyle='#d6d3d1';x.fillRect(0,456,w,5);
   // başlık
@@ -5719,16 +5734,16 @@ async function exportSeatingPlanRealisticJPEG(){
 
   // Öğrenci sıraları: referans görünüm korunurken satır/sütun/öğrenci sayısına göre otomatik ölçeklenen dinamik katman.
   // Böylece 24-40 öğrenci ve farklı oturma düzenlerinde dekor sabit kalır, sıralar taşmadan yeniden yerleşir.
-  const top=520,bottom=42;
+  const top=525,bottom=34;
   const cols=Math.max(1,p.cols), rows=Math.max(1,p.rows), seats=Math.max(1,p.seatsPerDesk);
   const gridW=w-left-right, gridH=h-top-bottom;
   const gx=Math.max(28,Math.min(62,gridW*.038));
-  const gy=Math.max(14,Math.min(30,gridH/(rows*8)));
+  const gy=Math.max(10,Math.min(24,gridH/(rows*9)));
   const cellW=(gridW-(cols-1)*gx)/cols;
   const cellH=(gridH-(rows-1)*gy)/rows;
   const seatGap=Math.max(5,Math.min(10,cellW*.018));
   const sw=(cellW-(seats-1)*seatGap)/seats;
-  const baseDeskH=Math.min(cellH,Math.max(70,Math.min(116,gridH/rows*.82)));
+  const baseDeskH=Math.min(cellH,Math.max(76,Math.min(124,gridH/rows*.88)));
   for(let r=0;r<rows;r++)for(let co=0;co<cols;co++){
     const depth=rows===1?0:r/(rows-1);
     const rowScale=1-depth*.035;
