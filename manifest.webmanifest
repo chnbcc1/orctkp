@@ -1,7 +1,7 @@
 {
   "name": "MualliMate+ Öğrenci Takip Sistemi",
   "short_name": "MualliMate+",
-  "start_url": "./index.html?v=7.8.06",
+  "start_url": "./index.html?v=7.8.07",
   "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",

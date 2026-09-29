@@ -2181,6 +2181,9 @@ body.class-module-page-open #modal{z-index:9200!important}
       <p>Bu cihaz için 4-8 haneli bir PIN belirleyin.</p>
       <input id="newPin" type="password" inputmode="numeric" maxlength="8" placeholder="Yeni PIN">
       <input id="newPin2" type="password" inputmode="numeric" maxlength="8" placeholder="PIN tekrar">
+      <label class="btn secondary" style="display:block;width:100%;box-sizing:border-box;text-align:center;cursor:pointer;margin-bottom:10px;background:#fff;color:#065f46;border:1px solid #b7c9c2">Tam Yedekten Kurtar
+        <input type="file" accept=".json,application/json" hidden onchange="importRecoveryBackup(event)">
+      </label>
       <button style="width:100%" id="pinCreateBtn" type="button" onclick="return window.__pinBootSetup ? window.__pinBootSetup() : false">PIN Oluştur</button>
       <button style="width:100%;margin-top:10px;background:#fff;color:#065f46;border:1px solid #b7c9c2" id="recoveryScanBtn" type="button" onclick="return window.__otsRecoveryScan ? window.__otsRecoveryScan() : false">Eski Veriyi Tara</button>
       <div id="recoveryResult" class="tiny" style="margin-top:10px"></div>
@@ -2199,7 +2202,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </div>
 
 <script id="v7806-data-recovery-guard">
-/* v7.8.06 — Veri uyumluluk koruması.
+/* v7.8.07 — Veri uyumluluk koruması.
    Eski sürümlerin kalıcı veri anahtarlarını DEĞİŞTİRMEZ ve PIN kurulmadan önce
    mevcut veri deposunun bulunup bulunmadığını kullanıcıya bildirir. */
 (function(){
@@ -2314,7 +2317,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.06</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div>
+<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.07</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2472,7 +2475,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.8.06 · Ortak Konu Kimliği Motoru · çevrimdışı";
+  el("modalSubtitle").textContent="v7.8.07 · Ortak Konu Kimliği Motoru · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -7725,6 +7728,36 @@ function exportTransferBackup(){
   };
   downloadBlob(JSON.stringify(backup,null,2),"ogrenci_takip_CIHAZ_AKTARIM_TAM_yedegi.json","application/json")
 }
+function importRecoveryBackup(ev){
+  const f=ev.target.files&&ev.target.files[0]; if(!f)return false;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const d=JSON.parse(r.result);
+      if(!d || d.backupType!=="ogrenci-takip-tam-yedek" || !d.state || !Array.isArray(d.state.classes))
+        throw new Error("Bu dosya geçerli bir Öğrenci Takip tam yedeği değil.");
+      if(!d.state.classes.length) throw new Error("Yedekte sınıf verisi bulunamadı.");
+      const restoredState=normalize(d.state);
+      const restoredSettings=normalizeSettings(d.settings||{});
+      /* Kurtarma akışında eski cihaz PIN'ini taşımıyoruz. Veri geldikten sonra kullanıcı yeni PIN belirler. */
+      restoredSettings.pinHash="";
+      restoredState.currentClassId=restoredState.currentClassId||restoredState.classes[0]?.id||null;
+      restoredState.currentPeriod=restoredState.currentPeriod||"1";
+      const studentCount=restoredState.classes.reduce((n,c)=>n+(Array.isArray(c.students)?c.students.length:0),0);
+      if(!confirm(`Yedek doğrulandı: ${restoredState.classes.length} sınıf · ${studentCount} öğrenci${Array.isArray(d.schoolYearArchives)?` · ${d.schoolYearArchives.length} eğitim yılı arşivi`:''}. Bu verileri bu uygulamaya geri yükleyelim mi?`)) return;
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(restoredState));
+      localStorage.setItem(SETTINGS_KEY,JSON.stringify(restoredSettings));
+      if(Array.isArray(d.schoolYearArchives)) localStorage.setItem(SCHOOL_ARCHIVE_KEY,JSON.stringify(d.schoolYearArchives));
+      alert("Tam yedek başarıyla kurtarıldı. Verileriniz geri geldi. Şimdi bu cihaz için yeni bir PIN belirleyebilirsiniz.");
+      location.reload();
+    }catch(e){
+      console.error(e); alert("Tam yedekten kurtarma yapılamadı: "+(e?.message||"Bilinmeyen hata"));
+    }finally{ev.target.value=""}
+  };
+  r.onerror=()=>{alert("Yedek dosyası okunamadı.");ev.target.value=""};
+  r.readAsText(f); return false;
+}
+
 function importTransferBackup(ev){
   const f=ev.target.files[0];if(!f)return;
   const r=new FileReader();
@@ -8089,7 +8122,7 @@ html.app-locked,body.app-locked{overflow:hidden!important;height:100%!important;
 </script>
 
 <style id="v7803-premium-emerald-theme">
-/* v7.8.06 — Premium Emerald theme. Functional status colors intentionally preserved. */
+/* v7.8.07 — Premium Emerald theme. Functional status colors intentionally preserved. */
 :root{
   --bg:#f5f7f4;
   --card:#ffffff;
