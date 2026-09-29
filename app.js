@@ -18,7 +18,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.76 · Veli Görüşme Motoru v4 · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.77 · Veli Görüşme Motoru v4 · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -3003,6 +3003,7 @@ function normalizeSeatingPlan(p){
   p.rows=Math.min(8,Math.max(1,Number(p.rows)||4));
   p.cols=Math.min(5,Math.max(1,Number(p.cols)||3));
   p.seatsPerDesk=Math.min(3,Math.max(1,Number(p.seatsPerDesk)||2));
+  p.teacherDeskPosition=["left","center","right"].includes(p.teacherDeskPosition)?p.teacherDeskPosition:"center";
   p.assignments=(p.assignments&&typeof p.assignments==="object")?p.assignments:{};
   return p;
 }
@@ -3171,7 +3172,7 @@ function addClass(){
   el("modalTitle").textContent="Yeni Sınıf";
   el("modalSubtitle").textContent="Sınıf bilgisi bu cihazda yerel olarak saklanır.";
   el("modalBody").innerHTML=`<div class="app-form-grid"><label class="full">Sınıf Adı<input id="newClassName" placeholder="Örn. 9/D" autocomplete="off"></label><button class="full" onclick="saveNewClass()">Sınıfı Oluştur</button></div>`;
-  el("modal").classList.add("open");setTimeout(()=>el("newClassName")?.focus(),100);
+  el("modal").classList.add("open");
 }
 function saveNewClass(){
   const n=(el("newClassName")?.value||"").trim();if(!n)return alert("Sınıf adı girin.");

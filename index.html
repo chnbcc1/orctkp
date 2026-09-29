@@ -2107,6 +2107,17 @@ body.class-module-page-open #modal{z-index:9200!important}
   }
 }
 </style>
+
+<style id="v7777-visual-fixes">
+/* v7.7.77 — mobil form taşmaları ve odak görünümü */
+#newClassName:focus{outline:none!important;box-shadow:none!important;border-color:var(--border,#d7dee8)!important}
+.doc-assistant-grid{min-width:0!important}
+.doc-assistant-grid label{min-width:0!important;max-width:100%!important;overflow:hidden}
+.doc-assistant-grid input,.doc-assistant-grid select{display:block;width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+.doc-assistant-grid input[type="date"],.doc-assistant-grid input[type="time"]{-webkit-appearance:none;appearance:none;height:46px!important;padding:9px 10px!important}
+.seating-config{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+@media(max-width:600px){.seating-config{grid-template-columns:repeat(2,minmax(0,1fr))!important}.doc-assistant-grid{overflow:hidden!important}}
+</style>
 </head>
 <body>
 
@@ -2188,7 +2199,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.76</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.77</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2226,7 +2237,7 @@ body.class-module-page-open #modal{z-index:9200!important}
     <button class="class-module-btn" onclick="openClassModule('students')"><span>👥</span><b>Öğrenciler</b><em id="statStudents">0</em></button>
     <button class="class-module-btn" onclick="openClassModule('homeworks')"><span>📚</span><b>Ödevler</b><em id="statHomeworks">0</em></button>
     <button class="class-module-btn" onclick="openClassModule('grades')"><span>📝</span><b>Notlar</b></button>
-    <button class="class-module-btn" onclick="openClassModule('trials')"><span>📊</span><b>Denemeler</b></button>
+    <button class="class-module-btn" onclick="openClassModule('trials')"><span>📊</span><b>Denemeler</b><em id="statTrials">0</em></button>
     <button class="class-module-btn" onclick="openClassModule('reports')"><span>📄</span><b>Rapor</b></button>
   </div>
   <div class="compact-stats status-only">
@@ -2346,7 +2357,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.76 · Ortak Konu Kimliği Motoru · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.77 · Ortak Konu Kimliği Motoru · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -2362,7 +2373,7 @@ function openDocumentAssistant(){
       <label>Müdür Yardımcısı<input id="docAssistantVicePrincipal" value="${esc(remembered.vicePrincipal||settings.docAssistantVicePrincipal||"")}" placeholder="Ad Soyad"></label>
       <label>Müdür<input id="docAssistantPrincipal" value="${esc(remembered.principal||settings.docAssistantPrincipal||"")}" placeholder="Ad Soyad"></label>
     </div>
-    <div class="card" style="padding:12px;margin:12px 0"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap"><b>📋 Gündem Maddeleri</b><span id="docAgendaCount" class="tiny"></span></div><div class="tiny" style="margin:5px 0 9px">Şablon gündemini kullanabilir veya kendi gündemlerinizi tek tek, toplu metinden ya da PDF'den ekleyebilirsiniz.</div><div style="display:flex;gap:7px;flex-wrap:wrap"><button type="button" class="secondary" onclick="docAgendaAddOne()">+ Gündem Ekle</button><button type="button" class="secondary" onclick="docAgendaBulkOpen()">📋 Toplu Gündem Ekle</button><button type="button" class="secondary" onclick="docAgendaPdfOpen()">📄 PDF'den İçe Aktar</button><button type="button" class="secondary" onclick="docAgendaUseTemplate()">Şablon Gündemi</button></div><div id="docAgendaList" style="margin-top:10px"></div></div>
+    <div class="card" style="padding:12px;margin:12px 0"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap"><b>📋 Gündem Maddeleri</b><span id="docAgendaCount" class="tiny"></span></div><div class="tiny" style="margin:5px 0 9px">Şablon gündemini kullanabilir veya kendi gündemlerinizi tek tek, toplu metinden ya da PDF'den ekleyebilirsiniz.</div><div style="display:flex;gap:7px;flex-wrap:wrap"><button type="button" class="secondary" onclick="docAgendaAddOne()">+ Gündem Ekle</button><button type="button" class="secondary" onclick="docAgendaBulkOpen()">📋 Toplu Gündem Ekle</button><button type="button" class="secondary" onclick="docAgendaPdfOpen()">📄 PDF'den İçe Aktar</button><button type="button" class="secondary" onclick="docAgendaUseTemplate()">Şablon Gündemi</button><button type="button" id="docAgendaClearAllBtn" class="danger" onclick="docAgendaClearAll()" style="display:none">🗑️ Tüm Gündemleri Sil</button></div><div id="docAgendaList" style="margin-top:10px"></div></div>
     <label class="doc-assistant-prompt">Belgede özellikle yer almasını istedikleriniz<textarea id="docAssistantPrompt" rows="3" placeholder="Örn. Devamsızlık, akademik başarı, sınıf disiplini ve alınacak tedbirler yer alsın."></textarea></label>
     <details class="doc-participants" id="docParticipantsDetails" ontoggle="documentParticipantsToggle(this)"><summary id="docParticipantsSummary">👥 Katılımcılar / İmza Sirküsü</summary><div id="docParticipantsHelp" class="tiny" style="margin-top:7px">Katılımcı listesi belge türüne göre ayrı saklanır.</div><div id="docStaffList" class="doc-staff-list"></div><div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:8px"><button type="button" class="secondary" onclick="addDocumentStaffRow()">+ Öğretmen Ekle</button><button type="button" class="secondary" onclick="saveDocumentStaff()">Kadroyu Kaydet</button></div></details>
     <div class="modal-actions"><button onclick="generateDocumentAssistantDraft()">✨ Taslak Oluştur</button><button class="secondary" onclick="openDocumentAssistantTemplates()">Şablonları Gör</button></div>`;
@@ -2391,7 +2402,7 @@ function renderDocAgendaList(){
  if(!Array.isArray(window._docCustomAgendaTopicIds))window._docCustomAgendaTopicIds=[];
  while(window._docCustomAgendaTopicIds.length<window._docCustomAgendas.length)window._docCustomAgendaTopicIds.push('');
  window._docCustomAgendaTopicIds.length=window._docCustomAgendas.length;
- const a=window._docCustomAgendas;if(cnt)cnt.textContent=a.length?`${a.length} özel gündem`:'Şablon gündemi aktif';
+ const a=window._docCustomAgendas;if(cnt)cnt.textContent=a.length?`${a.length} özel gündem`:'Şablon gündemi aktif';const clearBtn=el('docAgendaClearAllBtn');if(clearBtn)clearBtn.style.display=a.length?'':'none';
  box.innerHTML=a.length?a.map((x,i)=>`<div class="card" style="padding:8px 9px;margin:6px 0;display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:start"><b style="padding-top:7px">${i+1}.</b><div style="min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.35;padding-top:7px">${esc(x)}</div><div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end"><button type="button" class="secondary" style="padding:7px 9px" onclick="docAgendaEdit(${i})">✏️</button><button type="button" class="secondary" style="padding:7px 9px" onclick="docAgendaMove(${i},-1)">↑</button><button type="button" class="secondary" style="padding:7px 9px" onclick="docAgendaMove(${i},1)">↓</button><button type="button" class="danger" style="padding:7px 9px" onclick="docAgendaDelete(${i})">🗑️</button></div></div>`).join(''):`<div class="tiny">Özel gündem girilmedi. Taslak oluşturulduğunda dönem şablonundaki gündemler kullanılacak.</div>`;
 }
 function docAgendaPromptBox(title,value,onSave){
@@ -2410,6 +2421,7 @@ function docAgendaTopicId(type,title){
 function docAgendaAddOne(){docAgendaPromptBox('Yeni Gündem Maddesi','',v=>{window._docCustomAgendas.push(v);window._docCustomAgendaTopicIds=window._docCustomAgendaTopicIds||[];window._docCustomAgendaTopicIds.push(docAgendaTopicId(el('docAssistantType')?.value,v))})}
 function docAgendaEdit(i){const a=window._docCustomAgendas||[];if(!a[i])return;docAgendaPromptBox('Gündem Maddesini Düzenle',a[i],v=>{const old=a[i],ids=window._docCustomAgendaTopicIds=window._docCustomAgendaTopicIds||[],type=el('docAssistantType')?.value||'';const oldId=ids[i]||docAgendaTopicId(type,old),newId=docAgendaTopicId(type,v);const generic=(type==='zumre'&&newId==='general')||(type==='veli'&&newId==='other')||!newId;ids[i]=(newId&&!generic&&newId!==oldId)?newId:oldId;a[i]=v})}
 function docAgendaDelete(i){window._docCustomAgendas.splice(i,1);if(Array.isArray(window._docCustomAgendaTopicIds))window._docCustomAgendaTopicIds.splice(i,1);renderDocAgendaList()}
+function docAgendaClearAll(){const a=window._docCustomAgendas||[];if(!a.length)return;if(!confirm(`${a.length} gündem maddesinin tamamı silinsin mi?`))return;window._docCustomAgendas=[];window._docCustomAgendaTopicIds=[];renderDocAgendaList()}
 function docAgendaMove(i,d){const a=window._docCustomAgendas,j=i+d;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];const ids=window._docCustomAgendaTopicIds||[];[ids[i],ids[j]]=[ids[j]||'',ids[i]||''];window._docCustomAgendaTopicIds=ids;renderDocAgendaList()}
 function docAgendaUseTemplate(){window._docCustomAgendas=[];window._docCustomAgendaTopicIds=[];renderDocAgendaList()}
 function docAgendaBulkOpen(){
@@ -5367,6 +5379,7 @@ function normalizeSeatingPlan(p){
   p.rows=Math.min(8,Math.max(1,Number(p.rows)||4));
   p.cols=Math.min(5,Math.max(1,Number(p.cols)||3));
   p.seatsPerDesk=Math.min(3,Math.max(1,Number(p.seatsPerDesk)||2));
+  p.teacherDeskPosition=["left","center","right"].includes(p.teacherDeskPosition)?p.teacherDeskPosition:"center";
   p.assignments=(p.assignments&&typeof p.assignments==="object")?p.assignments:{};
   return p;
 }
@@ -5380,7 +5393,7 @@ function cleanSeatingAssignments(c){
 function openSeatingPlan(){
   const c=cls();if(!c)return;cleanSeatingAssignments(c);
   el("modalTitle").textContent="Sınıf Oturma Planı";el("modalSubtitle").textContent=c.name;
-  el("modalBody").innerHTML=`<div class="seating-config"><label>Sıra satırı<input id="seatRows" type="number" min="1" max="8" value="${c.seatingPlan.rows}" onchange="updateSeatingLayout()"></label><label>Sıra sütunu<input id="seatCols" type="number" min="1" max="5" value="${c.seatingPlan.cols}" onchange="updateSeatingLayout()"></label><label>Sıra başına öğrenci<select id="seatPerDesk" onchange="updateSeatingLayout()"><option value="1" ${c.seatingPlan.seatsPerDesk===1?'selected':''}>1</option><option value="2" ${c.seatingPlan.seatsPerDesk===2?'selected':''}>2</option><option value="3" ${c.seatingPlan.seatsPerDesk===3?'selected':''}>3</option></select></label></div><div class="tiny" style="margin-bottom:8px">Bir öğrenciyi başka dolu yere seçerseniz iki öğrencinin yeri otomatik değiştirilir.</div><div class="seating-auto-panel"><button class="secondary" onclick="autoPlaceSeatingStudents()">⚡ Otomatik Yerleştir</button><label>Karşı cinsler yan yana yerleştirilebilsin mi?<select id="seatShuffleMode"><option value="any">Evet</option><option value="same">Hayır</option></select></label><button class="secondary" onclick="shuffleSeatingStudents()">🔀 Karıştır</button><button class="ghost" onclick="openSeatingGenderEditor()">👥 Cinsiyetleri Düzenle</button></div><div class="tiny seating-rule-note">“Hayır” seçildiğinde kız ve erkek öğrenciler aynı sıraya yerleştirilmez. Cinsiyet bilgisi isimden tahmin edilmez; öğrenci bilgilerini siz belirlersiniz.</div><div id="seatingPlanHost"></div><div class="seating-actions"><button class="secondary" onclick="clearSeatingPlan()">Yerleşimi Temizle</button><button onclick="exportSeatingPlanJPEG()">Çıktı Al</button></div>`;
+  el("modalBody").innerHTML=`<div class="seating-config"><label>Sıra satırı<input id="seatRows" type="number" min="1" max="8" value="${c.seatingPlan.rows}" onchange="updateSeatingLayout()"></label><label>Sıra sütunu<input id="seatCols" type="number" min="1" max="5" value="${c.seatingPlan.cols}" onchange="updateSeatingLayout()"></label><label>Sıra başına öğrenci<select id="seatPerDesk" onchange="updateSeatingLayout()"><option value="1" ${c.seatingPlan.seatsPerDesk===1?'selected':''}>1</option><option value="2" ${c.seatingPlan.seatsPerDesk===2?'selected':''}>2</option><option value="3" ${c.seatingPlan.seatsPerDesk===3?'selected':''}>3</option></select></label><label>Öğretmen masası<select id="seatTeacherPos" onchange="updateSeatingLayout()"><option value="left" ${c.seatingPlan.teacherDeskPosition==='left'?'selected':''}>Sol</option><option value="center" ${c.seatingPlan.teacherDeskPosition==='center'?'selected':''}>Orta</option><option value="right" ${c.seatingPlan.teacherDeskPosition==='right'?'selected':''}>Sağ</option></select></label></div><div class="tiny" style="margin-bottom:8px">Bir öğrenciyi başka dolu yere seçerseniz iki öğrencinin yeri otomatik değiştirilir.</div><div class="seating-auto-panel"><button class="secondary" onclick="autoPlaceSeatingStudents()">⚡ Otomatik Yerleştir</button><label>Karşı cinsler yan yana yerleştirilebilsin mi?<select id="seatShuffleMode"><option value="any">Evet</option><option value="same">Hayır</option></select></label><button class="secondary" onclick="shuffleSeatingStudents()">🔀 Karıştır</button><button class="ghost" onclick="openSeatingGenderEditor()">👥 Cinsiyetleri Düzenle</button></div><div class="tiny seating-rule-note">“Hayır” seçildiğinde kız ve erkek öğrenciler aynı sıraya yerleştirilmez. Cinsiyet bilgisi isimden tahmin edilmez; öğrenci bilgilerini siz belirlersiniz.</div><div id="seatingPlanHost"></div><div class="seating-actions"><button class="secondary" onclick="clearSeatingPlan()">Yerleşimi Temizle</button><button onclick="exportSeatingPlanJPEG()">Çıktı Al</button></div>`;
   el("modal").classList.add("open");renderSeatingPlan();
 }
 function updateSeatingLayout(){
@@ -5388,6 +5401,7 @@ function updateSeatingLayout(){
   c.seatingPlan.rows=Math.min(8,Math.max(1,Number(el('seatRows').value)||4));
   c.seatingPlan.cols=Math.min(5,Math.max(1,Number(el('seatCols').value)||3));
   c.seatingPlan.seatsPerDesk=Math.min(3,Math.max(1,Number(el('seatPerDesk').value)||2));
+  c.seatingPlan.teacherDeskPosition=['left','center','right'].includes(el('seatTeacherPos')?.value)?el('seatTeacherPos').value:'center';
   const allowed=new Set();for(let r=0;r<c.seatingPlan.rows;r++)for(let co=0;co<c.seatingPlan.cols;co++)for(let si=0;si<c.seatingPlan.seatsPerDesk;si++)allowed.add(seatingSeatKey(r,co,si));
   Object.keys(c.seatingPlan.assignments).forEach(k=>{if(!allowed.has(k))delete c.seatingPlan.assignments[k]});
   save();renderSeatingPlan();
@@ -5404,7 +5418,8 @@ function renderSeatingPlan(){
     desks+=`<div class="seating-desk"><div class="seating-desk-title">${r+1}. SATIR · ${co+1}. SIRA</div><div class="seating-seats" style="grid-template-columns:repeat(${p.seatsPerDesk},minmax(0,1fr))">${seats}</div></div>`;
   }
   const unplaced=c.students.filter(st=>!used.has(st.id));
-  host.innerHTML=`<div class="seating-front">TAHTA</div><div class="seating-teacher">ÖĞRETMEN MASASI</div><div class="seating-grid" style="grid-template-columns:repeat(${p.cols},minmax(0,1fr))">${desks}</div><div class="seating-unplaced"><b>Yerleşmemiş öğrenciler (${unplaced.length})</b><div class="tiny" style="margin-top:4px">${unplaced.length?unplaced.map(st=>esc(seatingStudentLabel(st))).join(' · '):'Tüm öğrenciler yerleştirildi.'}</div></div>`;
+  const teacherAlign=p.teacherDeskPosition==='left'?'margin-left:0;margin-right:auto':p.teacherDeskPosition==='right'?'margin-left:auto;margin-right:0':'margin-left:auto;margin-right:auto';
+  host.innerHTML=`<div class="seating-front">TAHTA</div><div class="seating-teacher" style="${teacherAlign}">ÖĞRETMEN MASASI</div><div class="seating-grid" style="grid-template-columns:repeat(${p.cols},minmax(0,1fr))">${desks}</div><div class="seating-unplaced"><b>Yerleşmemiş öğrenciler (${unplaced.length})</b><div class="tiny" style="margin-top:4px">${unplaced.length?unplaced.map(st=>esc(seatingStudentLabel(st))).join(' · '):'Tüm öğrenciler yerleştirildi.'}</div></div>`;
 }
 function seatingManualRuleCheck(c,assignments){
   const mode=el('seatShuffleMode')?.value||'any',p=c.seatingPlan;
@@ -5516,7 +5531,8 @@ function exportSeatingPlanJPEG(){
   const cv=document.createElement('canvas');cv.width=w;cv.height=h;const x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);
   x.fillStyle='#111827';x.font='bold 34px Arial';x.fillText(`${c.name} - Sınıf Oturma Planı`,left,48);
   x.fillStyle='#eaf2ff';x.fillRect(left,76,w-left-right,48);x.fillStyle='#1e3a8a';x.font='bold 20px Arial';x.textAlign='center';x.fillText('TAHTA',w/2,107);
-  x.fillStyle='#f1f5f9';x.fillRect(w/2-135,142,270,44);x.strokeStyle='#cbd5e1';x.strokeRect(w/2-135,142,270,44);x.fillStyle='#334155';x.font='bold 16px Arial';x.fillText('ÖĞRETMEN MASASI',w/2,170);
+  const teacherDeskX=p.teacherDeskPosition==='left'?left:p.teacherDeskPosition==='right'?w-right-270:w/2-135;const teacherDeskCenter=teacherDeskX+135;
+  x.fillStyle='#f1f5f9';x.fillRect(teacherDeskX,142,270,44);x.strokeStyle='#cbd5e1';x.strokeRect(teacherDeskX,142,270,44);x.fillStyle='#334155';x.font='bold 16px Arial';x.fillText('ÖĞRETMEN MASASI',teacherDeskCenter,170);
   x.textAlign='left';
   for(let r=0;r<p.rows;r++)for(let co=0;co<p.cols;co++){
     const dx=left+co*(deskW+gap),dy=top+r*(deskH+gap);x.fillStyle='#f8fafc';x.fillRect(dx,dy,deskW,deskH);x.strokeStyle='#cbd5e1';x.strokeRect(dx,dy,deskW,deskH);
@@ -5535,7 +5551,7 @@ function addClass(){
   el("modalTitle").textContent="Yeni Sınıf";
   el("modalSubtitle").textContent="Sınıf bilgisi bu cihazda yerel olarak saklanır.";
   el("modalBody").innerHTML=`<div class="app-form-grid"><label class="full">Sınıf Adı<input id="newClassName" placeholder="Örn. 9/D" autocomplete="off"></label><button class="full" onclick="saveNewClass()">Sınıfı Oluştur</button></div>`;
-  el("modal").classList.add("open");setTimeout(()=>el("newClassName")?.focus(),100);
+  el("modal").classList.add("open");
 }
 function saveNewClass(){
   const n=(el("newClassName")?.value||"").trim();if(!n)return alert("Sınıf adı girin.");
@@ -5988,7 +6004,7 @@ function openSmartAlert(type){
   el("modal").classList.add("open");
 }
 
-function renderStats(){const c=cls(),hs=hwPeriod(c);let points=0,den=0,missing=0;c.students.forEach(s=>hs.forEach(h=>{const v=status(c,s.id,h.id);if(v!=="excused"&&v!=="pending"){den++;if(v==="done")points++;else if(v==="partial")points+=.5;if(v==="missing")missing++}}));const rate=den?Math.round(points*100/den):0;el("statStudents").textContent=c.students.length;el("statHomeworks").textContent=hs.length;el("statRate").textContent="%"+rate;el("statMissing").textContent=missing;const bar=el("classCompletionBar");if(bar)bar.style.width=rate+"%"}
+function renderStats(){const c=cls(),hs=hwPeriod(c);let points=0,den=0,missing=0;c.students.forEach(s=>hs.forEach(h=>{const v=status(c,s.id,h.id);if(v!=="excused"&&v!=="pending"){den++;if(v==="done")points++;else if(v==="partial")points+=.5;if(v==="missing")missing++}}));const rate=den?Math.round(points*100/den):0;el("statStudents").textContent=c.students.length;el("statHomeworks").textContent=hs.length;const st=el("statTrials");if(st)st.textContent=(c.trials||[]).length;el("statRate").textContent="%"+rate;el("statMissing").textContent=missing;const bar=el("classCompletionBar");if(bar)bar.style.width=rate+"%"}
 function openMissingStudents(){
   const c=cls(); if(!c)return;
   const hs=hwPeriod(c);
