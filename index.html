@@ -941,7 +941,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 .homework-edit-form #editHomeworkName:focus{outline:none!important;box-shadow:none!important;border-color:var(--border)!important}
 
 
-/* v7.7.81 — iPhone/Safari mavi odak çerçevesini uygulama genelinde kaldır */
+/* v7.7.82 — iPhone/Safari mavi odak çerçevesini uygulama genelinde kaldır */
 input:focus, select:focus, textarea:focus, button:focus,
 input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible{
   outline:none!important;
@@ -2123,7 +2123,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </style>
 
 <style id="v7777-visual-fixes">
-/* v7.7.81 — mobil form taşmaları ve odak görünümü */
+/* v7.7.82 — mobil form taşmaları ve odak görünümü */
 #newClassName:focus{outline:none!important;box-shadow:none!important;border-color:var(--border,#d7dee8)!important}
 .doc-assistant-grid{min-width:0!important}
 .doc-assistant-grid label{min-width:0!important;max-width:100%!important;overflow:hidden}
@@ -2213,7 +2213,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.81</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.82</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2371,7 +2371,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.81 · Ortak Konu Kimliği Motoru · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.82 · Ortak Konu Kimliği Motoru · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -5408,7 +5408,7 @@ function cleanSeatingAssignments(c){
 function openSeatingPlan(){
   const c=cls();if(!c)return;cleanSeatingAssignments(c);
   el("modalTitle").textContent="Sınıf Oturma Planı";el("modalSubtitle").textContent=c.name;
-  el("modalBody").innerHTML=`<div class="seating-config"><label>Sıra satırı<input id="seatRows" type="number" min="1" max="8" value="${c.seatingPlan.rows}" onchange="updateSeatingLayout()"></label><label>Sıra sütunu<input id="seatCols" type="number" min="1" max="5" value="${c.seatingPlan.cols}" onchange="updateSeatingLayout()"></label><label>Sıra başına öğrenci<select id="seatPerDesk" onchange="updateSeatingLayout()"><option value="1" ${c.seatingPlan.seatsPerDesk===1?'selected':''}>1</option><option value="2" ${c.seatingPlan.seatsPerDesk===2?'selected':''}>2</option><option value="3" ${c.seatingPlan.seatsPerDesk===3?'selected':''}>3</option></select></label><label>Öğretmen masası<select id="seatTeacherPos" onchange="updateSeatingLayout()"><option value="left" ${c.seatingPlan.teacherDeskPosition==='left'?'selected':''}>Sol</option><option value="center" ${c.seatingPlan.teacherDeskPosition==='center'?'selected':''}>Orta</option><option value="right" ${c.seatingPlan.teacherDeskPosition==='right'?'selected':''}>Sağ</option></select></label><label>Çıktı görünümü<select id="seatOutputStyle" onchange="updateSeatingLayout()"><option value="classic" ${c.seatingPlan.outputStyle==='classic'?'selected':''}>Klasik</option><option value="visual" ${c.seatingPlan.outputStyle==='visual'?'selected':''}>Görsel Sınıf</option></select></label></div><div class="tiny" style="margin-bottom:8px">Bir öğrenciyi başka dolu yere seçerseniz iki öğrencinin yeri otomatik değiştirilir.</div><div class="seating-auto-panel"><button class="secondary" onclick="autoPlaceSeatingStudents()">⚡ Otomatik Yerleştir</button><label>Karşı cinsler yan yana yerleştirilebilsin mi?<select id="seatShuffleMode"><option value="any">Evet</option><option value="same">Hayır</option></select></label><button class="secondary" onclick="shuffleSeatingStudents()">🔀 Karıştır</button><button class="ghost" onclick="openSeatingGenderEditor()">👥 Cinsiyetleri Düzenle</button></div><div class="tiny seating-rule-note">“Hayır” seçildiğinde kız ve erkek öğrenciler aynı sıraya yerleştirilmez. Cinsiyet bilgisi isimden tahmin edilmez; öğrenci bilgilerini siz belirlersiniz.</div><div id="seatingPlanHost"></div><div class="seating-actions"><button class="secondary" onclick="clearSeatingPlan()">Yerleşimi Temizle</button><button onclick="exportSeatingPlanJPEG()">Çıktı Al</button></div>`;
+  el("modalBody").innerHTML=`<div class="seating-config"><label>Sıra satırı<input id="seatRows" type="number" min="1" max="8" value="${c.seatingPlan.rows}" onchange="updateSeatingLayout()"></label><label>Sıra sütunu<input id="seatCols" type="number" min="1" max="5" value="${c.seatingPlan.cols}" onchange="updateSeatingLayout()"></label><label>Sıra başına öğrenci<select id="seatPerDesk" onchange="updateSeatingLayout()"><option value="1" ${c.seatingPlan.seatsPerDesk===1?'selected':''}>1</option><option value="2" ${c.seatingPlan.seatsPerDesk===2?'selected':''}>2</option><option value="3" ${c.seatingPlan.seatsPerDesk===3?'selected':''}>3</option></select></label><label>Öğretmen masası<select id="seatTeacherPos" onchange="updateSeatingLayout()"><option value="left" ${c.seatingPlan.teacherDeskPosition==='left'?'selected':''}>Sol</option><option value="center" ${c.seatingPlan.teacherDeskPosition==='center'?'selected':''}>Orta</option><option value="right" ${c.seatingPlan.teacherDeskPosition==='right'?'selected':''}>Sağ</option></select></label><label>Çıktı görünümü<select id="seatOutputStyle" onchange="updateSeatingLayout()"><option value="classic" ${c.seatingPlan.outputStyle==='classic'?'selected':''}>Klasik</option><option value="visual" ${c.seatingPlan.outputStyle==='visual'?'selected':''}>Görsel Sınıf</option><option value="realistic" ${c.seatingPlan.outputStyle==='realistic'?'selected':''}>Gerçekçi Sınıf</option></select></label></div><div class="tiny" style="margin-bottom:8px">Bir öğrenciyi başka dolu yere seçerseniz iki öğrencinin yeri otomatik değiştirilir.</div><div class="seating-auto-panel"><button class="secondary" onclick="autoPlaceSeatingStudents()">⚡ Otomatik Yerleştir</button><label>Karşı cinsler yan yana yerleştirilebilsin mi?<select id="seatShuffleMode"><option value="any">Evet</option><option value="same">Hayır</option></select></label><button class="secondary" onclick="shuffleSeatingStudents()">🔀 Karıştır</button><button class="ghost" onclick="openSeatingGenderEditor()">👥 Cinsiyetleri Düzenle</button></div><div class="tiny seating-rule-note">“Hayır” seçildiğinde kız ve erkek öğrenciler aynı sıraya yerleştirilmez. Cinsiyet bilgisi isimden tahmin edilmez; öğrenci bilgilerini siz belirlersiniz.</div><div id="seatingPlanHost"></div><div class="seating-actions"><button class="secondary" onclick="clearSeatingPlan()">Yerleşimi Temizle</button><button onclick="exportSeatingPlanJPEG()">Çıktı Al</button></div>`;
   el("modal").classList.add("open");renderSeatingPlan();
 }
 function updateSeatingLayout(){
@@ -5555,7 +5555,7 @@ async function exportSeatingPlanClassicJPEG(){
   const cv=document.createElement('canvas');cv.width=w;cv.height=h;const x=cv.getContext('2d');
   x.fillStyle='#fff';x.fillRect(0,0,w,h);
 
-  // v7.7.81 — Kullanıcının onayladığı üst düzen:
+  // v7.7.82 — Kullanıcının onayladığı üst düzen:
   // sol başlık/okul/yıl + ortada gerçek üçlü millî levha.
   x.textAlign='left';
   x.fillStyle='#111827';x.font='bold 34px Arial';
@@ -5642,9 +5642,43 @@ async function exportSeatingPlanVisualJPEG(){
   }
   x.textAlign='left';downloadCanvas(cv,`${safe(c.name)}_oturma_plani_gorsel.jpg`);
 }
+
+function rrReal(ctx,x,y,w,h,r){r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function realisticDesk(ctx,x,y,w,h,label,teacher=false){
+  ctx.fillStyle='#9a632f';rrReal(ctx,x+w*.18,y-h*.13,w*.64,h*.28,9);ctx.fill();
+  ctx.fillStyle='#475569';ctx.fillRect(x+w*.12,y+h*.78,w*.045,h*.28);ctx.fillRect(x+w*.84,y+h*.78,w*.045,h*.28);
+  ctx.fillStyle=teacher?'#b97938':'#c98b48';ctx.strokeStyle='#8a5a2b';ctx.lineWidth=2;rrReal(ctx,x,y,w,h,9);ctx.fill();ctx.stroke();
+  ctx.fillStyle='#fffaf0';ctx.strokeStyle='#d8c8aa';ctx.lineWidth=1;rrReal(ctx,x+w*.07,y+h*.18,w*.86,h*.58,5);ctx.fill();ctx.stroke();
+  ctx.fillStyle=label?'#111827':'#94a3b8';
+  if(label)drawFullStudentName(ctx,label,x+w/2,y+h*.49,w*.73,h*.46,{maxFont:teacher?15:14,minFont:7,maxLines:3,weight:'bold',align:'center'});
+  else{ctx.font='13px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('Boş',x+w/2,y+h*.49);ctx.textBaseline='alphabetic'}
+}
+async function exportSeatingPlanRealisticJPEG(){
+  const c=cls();if(!c)return;cleanSeatingAssignments(c);const p=c.seatingPlan,a=p.assignments;
+  const w=1600,h=1130,left=48,right=48,cv=document.createElement('canvas');cv.width=w;cv.height=h;const x=cv.getContext('2d');
+  x.fillStyle='#f4ecdf';x.fillRect(0,0,w,470);x.fillStyle='#e8e3da';x.fillRect(0,470,w,h-470);
+  x.strokeStyle='rgba(100,116,139,.18)';x.lineWidth=1;
+  for(let yy=520;yy<h;yy+=72){x.beginPath();x.moveTo(0,yy);x.lineTo(w,yy);x.stroke()}
+  for(let xx=0;xx<=w;xx+=120){x.beginPath();x.moveTo(w/2+(xx-w/2)*.34,470);x.lineTo(xx,h);x.stroke()}
+  x.textAlign='left';x.fillStyle='#111827';x.font='bold 31px Arial';x.fillText(`${c.name} - Sınıf Oturma Planı`,left,48);
+  const school=(settings.profile?.school||'').trim();if(school){x.fillStyle='#475569';x.font='20px Arial';x.fillText(school,left,78)}
+  const sy=settings.currentSchoolYear||defaultSchoolYearLabel();x.fillStyle='#64748b';x.font='18px Arial';x.fillText(`${sy} Eğitim Öğretim Yılı`,left,105);
+  try{const panel=await loadCanvasImage(CLASS_NATIONAL_PANEL_IMAGE);const ph=165,pw=Math.round(panel.width*(ph/panel.height));x.drawImage(panel,(w-pw)/2,8,pw,ph)}catch(e){}
+  const bw=620,bh=130,bx=(w-bw)/2,by=188;
+  x.fillStyle='#8b5e34';rrReal(x,bx-8,by-8,bw+16,bh+16,8);x.fill();
+  x.fillStyle='#315c4c';rrReal(x,bx,by,bw,bh,4);x.fill();x.fillStyle='#f8fafc';x.font='bold 25px Arial';x.textAlign='center';x.fillText('SINIF TAHTASI',w/2,by+75);
+  x.fillStyle='#9b6a3d';x.fillRect(55,170,115,230);x.fillStyle='#6b4427';x.font='bold 12px Arial';x.fillText('DOLAP',112,190);
+  x.strokeStyle='#8b5e34';x.lineWidth=8;x.strokeRect(w-130,155,76,245);
+  const tw=300,th=72,tx=p.teacherDeskPosition==='right'?w-right-tw:p.teacherDeskPosition==='center'?(w-tw)/2:left;
+  realisticDesk(x,tx,350,tw,th,'ÖĞRETMEN MASASI',true);
+  const top=505,bottom=55,gx=18,gy=26,gridW=w-left-right,gridH=h-top-bottom,dw=(gridW-(p.cols-1)*gx)/p.cols,dh=(gridH-(p.rows-1)*gy)/p.rows;
+  for(let r=0;r<p.rows;r++)for(let co=0;co<p.cols;co++){const dx=left+co*(dw+gx),dy=top+r*(dh+gy),sw=dw/p.seatsPerDesk;for(let si=0;si<p.seatsPerDesk;si++){const sid=a[seatingSeatKey(r,co,si)],st=c.students.find(z=>z.id===sid);realisticDesk(x,dx+si*sw+4,dy,sw-8,dh,st?st.name:'',false)}}
+  downloadCanvas(cv,`${safe(c.name)}_oturma_plani_gercekci.jpg`);
+}
 async function exportSeatingPlanJPEG(){
   const c=cls();if(!c)return;cleanSeatingAssignments(c);
   if(c.seatingPlan.outputStyle==='visual')return exportSeatingPlanVisualJPEG();
+  if(c.seatingPlan.outputStyle==='realistic')return exportSeatingPlanRealisticJPEG();
   return exportSeatingPlanClassicJPEG();
 }
 
