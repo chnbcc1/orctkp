@@ -940,6 +940,20 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 .homework-create-form #newHomeworkName:focus,
 .homework-edit-form #editHomeworkName:focus{outline:none!important;box-shadow:none!important;border-color:var(--border)!important}
 
+
+/* v7.7.78 — iPhone/Safari mavi odak çerçevesini uygulama genelinde kaldır */
+input:focus, select:focus, textarea:focus, button:focus,
+input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible{
+  outline:none!important;
+  box-shadow:none!important;
+  -webkit-tap-highlight-color:transparent!important;
+}
+input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus,
+input[type="time"]:focus, input[type="tel"]:focus, input[type="search"]:focus,
+input[type="file"]:focus, select:focus, textarea:focus{
+  border-color:var(--border,#d7dee8)!important;
+}
+
 </style>
 
 <link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
@@ -2109,7 +2123,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </style>
 
 <style id="v7777-visual-fixes">
-/* v7.7.77 — mobil form taşmaları ve odak görünümü */
+/* v7.7.78 — mobil form taşmaları ve odak görünümü */
 #newClassName:focus{outline:none!important;box-shadow:none!important;border-color:var(--border,#d7dee8)!important}
 .doc-assistant-grid{min-width:0!important}
 .doc-assistant-grid label{min-width:0!important;max-width:100%!important;overflow:hidden}
@@ -2199,7 +2213,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.77</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.78</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2357,7 +2371,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.77 · Ortak Konu Kimliği Motoru · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.78 · Ortak Konu Kimliği Motoru · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -5522,17 +5536,49 @@ function drawFullStudentName(ctx,name,cx,cy,maxWidth,maxHeight,{maxFont=14,minFo
   }
   const start=cy-(lines.length-1)*lh/2;lines.forEach((ln,i)=>ctx.fillText(ln,cx,start+i*lh));ctx.textBaseline='alphabetic';
 }
+function drawClassNationalPanel(x,w,left,right){
+  // v7.7.78 — Sınıf levhası: İstiklâl Marşı · Atatürk · Gençliğe Hitabe
+  const y=68,h=126,total=w-left-right,panelW=total*0.24,centerW=total*0.32,gap=10;
+  const centerX=left+(total-centerW)/2, leftX=centerX-gap-panelW, rightX=centerX+centerW+gap;
+  function frame(px,pw,title){
+    x.fillStyle='#f8fafc';x.fillRect(px,y,pw,h);x.strokeStyle='#64748b';x.lineWidth=2;x.strokeRect(px,y,pw,h);
+    x.fillStyle='#0f172a';x.font='bold 13px Arial';x.textAlign='center';x.fillText(title,px+pw/2,y+18);
+  }
+  frame(leftX,panelW,'İSTİKLÂL MARŞI'); frame(rightX,panelW,'GENÇLİĞE HİTABE');
+  // Küçük metin satırları, sınıf levhası görünümü.
+  x.fillStyle='#334155';x.font='8px Arial';x.textAlign='left';
+  const leftLines=['Korkma, sönmez bu şafaklarda yüzen al sancak;','Sönmeden yurdumun üstünde tüten en son ocak.','O benim milletimin yıldızıdır, parlayacak;','O benimdir, o benim milletimindir ancak.','','Çatma, kurban olayım çehreni ey nazlı hilâl!','Kahraman ırkıma bir gül... ne bu şiddet bu celâl?'];
+  leftLines.forEach((t,i)=>x.fillText(t,leftX+9,y+36+i*11));
+  const rightLines=['Ey Türk gençliği! Birinci vazifen, Türk istiklâlini,','Türk Cumhuriyetini, ilelebet muhafaza ve müdafaa etmektir.','Mevcudiyetinin ve istikbalinin yegâne temeli budur.','Bu temel, senin en kıymetli hazinendir.','','İstikbalde dahi seni bu hazineden mahrum etmek','isteyecek dâhilî ve haricî bedhahların olacaktır.'];
+  rightLines.forEach((t,i)=>x.fillText(t,rightX+9,y+36+i*11));
+
+  // Orta Atatürk panosu — kırmızı fon, ay-yıldız ve stilize portre.
+  x.fillStyle='#f8fafc';x.fillRect(centerX,y,centerW,h);x.strokeStyle='#64748b';x.lineWidth=2;x.strokeRect(centerX,y,centerW,h);
+  const cx=centerX+centerW/2;
+  x.fillStyle='#b91c1c';x.fillRect(centerX+8,y+8,centerW-16,h-30);
+  // ay
+  x.fillStyle='#fff';x.beginPath();x.arc(centerX+48,y+42,22,0,Math.PI*2);x.fill();
+  x.fillStyle='#b91c1c';x.beginPath();x.arc(centerX+56,y+38,18,0,Math.PI*2);x.fill();
+  // yıldız
+  x.fillStyle='#fff';x.font='26px Arial';x.textAlign='center';x.fillText('★',centerX+82,y+49);
+  // stilize Atatürk portresi
+  x.fillStyle='#f1d0b5';x.beginPath();x.ellipse(cx,y+43,24,29,0,0,Math.PI*2);x.fill();
+  x.fillStyle='#3f2d24';x.beginPath();x.arc(cx,y+33,24,Math.PI,Math.PI*2);x.fill();
+  x.fillStyle='#111827';x.beginPath();x.moveTo(cx-44,y+101);x.lineTo(cx-25,y+68);x.lineTo(cx+25,y+68);x.lineTo(cx+44,y+101);x.closePath();x.fill();
+  x.fillStyle='#fff';x.beginPath();x.moveTo(cx-13,y+69);x.lineTo(cx,y+91);x.lineTo(cx+13,y+69);x.closePath();x.fill();
+  x.fillStyle='#0f172a';x.font='bold 10px Arial';x.textAlign='center';x.fillText('MUSTAFA KEMAL ATATÜRK',cx,y+h-10);
+}
 function exportSeatingPlanJPEG(){
   const c=cls();if(!c)return;cleanSeatingAssignments(c);const p=c.seatingPlan,a=p.assignments;
-  // v7.7.24 — A4 yatay oranına yakın sabit tuval. Satır sayısı artsa da çıktı yatay kalır.
-  const w=1600,h=1130,left=55,right=55,top=205,bottom=70,gap=18;
+  const w=1600,h=1130,left=55,right=55,top=350,bottom=55,gap=14;
   const gridW=w-left-right,gridH=h-top-bottom;
   const deskW=(gridW-(p.cols-1)*gap)/p.cols,deskH=(gridH-(p.rows-1)*gap)/p.rows;
   const cv=document.createElement('canvas');cv.width=w;cv.height=h;const x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);
-  x.fillStyle='#111827';x.font='bold 34px Arial';x.fillText(`${c.name} - Sınıf Oturma Planı`,left,48);
-  x.fillStyle='#eaf2ff';x.fillRect(left,76,w-left-right,48);x.fillStyle='#1e3a8a';x.font='bold 20px Arial';x.textAlign='center';x.fillText('TAHTA',w/2,107);
+  x.fillStyle='#111827';x.font='bold 34px Arial';x.fillText(`${c.name} - Sınıf Oturma Planı`,left,44);
+  drawClassNationalPanel(x,w,left,right);
+  x.fillStyle='#eaf2ff';x.fillRect(left,212,w-left-right,48);x.fillStyle='#1e3a8a';x.font='bold 20px Arial';x.textAlign='center';x.fillText('TAHTA',w/2,243);
   const teacherDeskX=p.teacherDeskPosition==='left'?left:p.teacherDeskPosition==='right'?w-right-270:w/2-135;const teacherDeskCenter=teacherDeskX+135;
-  x.fillStyle='#f1f5f9';x.fillRect(teacherDeskX,142,270,44);x.strokeStyle='#cbd5e1';x.strokeRect(teacherDeskX,142,270,44);x.fillStyle='#334155';x.font='bold 16px Arial';x.fillText('ÖĞRETMEN MASASI',teacherDeskCenter,170);
+  x.fillStyle='#f1f5f9';x.fillRect(teacherDeskX,278,270,44);x.strokeStyle='#cbd5e1';x.strokeRect(teacherDeskX,278,270,44);x.fillStyle='#334155';x.font='bold 16px Arial';x.fillText('ÖĞRETMEN MASASI',teacherDeskCenter,306);
   x.textAlign='left';
   for(let r=0;r<p.rows;r++)for(let co=0;co<p.cols;co++){
     const dx=left+co*(deskW+gap),dy=top+r*(deskH+gap);x.fillStyle='#f8fafc';x.fillRect(dx,dy,deskW,deskH);x.strokeStyle='#cbd5e1';x.strokeRect(dx,dy,deskW,deskH);
