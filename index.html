@@ -2317,7 +2317,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.14</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div>
+<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.15</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4465,7 +4465,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.14";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.15";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -8154,7 +8154,11 @@ function openSafetyCenter813(){
 function exportSafetySnapshot813(i){const x=loadSafetySnapshots()[i];if(!x)return;let st=safetyParseState(x.stateRaw);download({backupType:'ogrenci-takip-guvenlik-snapshot',version:1,appVersion:APP_DATA_VERSION,createdAt:x.createdAt,reason:x.reason,state:st},'MualliMate_guvenlik_snapshot_'+String(i+1)+'.json')}
 function exportPreUpdate813(){try{const x=JSON.parse(localStorage.getItem('odevTakipPreUpdateBackupV1')||'null');if(!x)return;download({backupType:'ogrenci-takip-guncelleme-oncesi',version:1,...x},'MualliMate_guncelleme_oncesi_yedek.json')}catch(e){alert('Yedek okunamadı.')}}
 function restoreSafetySnapshot813(i){const x=loadSafetySnapshots()[i];if(!x)return;const st=safetyParseState(x.stateRaw);if(!st)return alert('Snapshot okunamadı.');const q=safetyStateStats(st);if(!confirm(`${q.classes} sınıf, ${q.students} öğrenci, ${q.homeworks} ödev ve ${q.checks} kontrol içeren bu sürüme dönülsün mü? Mevcut durum önce otomatik saklanacak.`))return;const now=localStorage.getItem(STORAGE_KEY)||'';safetyRememberRaw(now,'snapshot geri yükleme öncesi');localStorage.setItem(STORAGE_KEY,x.stateRaw);location.reload()}
-function install(){/* v7.8.14: Kurtarma ana ekrandan kaldırıldı. Veri güvenliği Eğitim Yılı ve Arşiv altında. */}
+window.openArchiveSafetyCenter814=openArchiveSafetyCenter814;
+window.exportSafetySnapshot813=exportSafetySnapshot813;
+window.exportPreUpdate813=exportPreUpdate813;
+window.restoreSafetySnapshot813=restoreSafetySnapshot813;
+function install(){/* v7.8.15: Veri Güvenliği Arşiv düğmesi global erişim düzeltmesi. */}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();window.openRecovery810=overlay;
 })();
 </script>
