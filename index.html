@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Öğrenci Takip Sistemi</title>
+<title>MualliMate+</title>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#6b7280;--primary:#1d4ed8;--danger:#dc2626;--ok:#16a34a;--warn:#d97706;--partial:#7c3aed;--border:#dbe3ef;--soft:#eef4ff}
 *{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
@@ -956,7 +956,7 @@ input[type="file"]:focus, select:focus, textarea:focus{
 
 </style>
 
-<link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#1d4ed8">
+<link rel="manifest" href="./manifest.webmanifest"><meta name="theme-color" content="#064e43">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Öğrenci Takip Sistemi">
@@ -2175,7 +2175,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <div id="lockScreen" class="lock">
   <div class="lockbox">
-    <h2>Ödev Takip Sistemi</h2>
+    <div class="premium-login-brand"><img src="./icons/icon-192.png" alt="MualliMate+"><div><h2>MualliMate+</h2><span>Öğrenci Takip Sistemi</span></div></div>
     <div id="lockInfo" class="tiny"></div>
     <div id="setupPinBox" style="display:none">
       <p>Bu cihaz için 4-8 haneli bir PIN belirleyin.</p>
@@ -2251,7 +2251,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.8.03</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.04</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2409,7 +2409,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.8.03 · Ortak Konu Kimliği Motoru · çevrimdışı";
+  el("modalSubtitle").textContent="v7.8.04 · Ortak Konu Kimliği Motoru · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -4127,7 +4127,23 @@ function printableDocumentHTML(t){return `<!doctype html><html><head><meta chars
   }
 }
 </style>
-</head><body>${docDraftToHTML(t)}<script>window.addEventListener('load',()=>setTimeout(()=>window.print(),250));<\/script></body></html>`}
+</head><body>${docDraftToHTML(t)}<script>window.addEventListener('load',()=>setTimeout(()=>window.print(),250));<\/script>
+<style id="v7804-premium-brand-system">
+:root{--emerald-950:#022c22;--emerald-900:#064e3b;--emerald-800:#065f46;--emerald-700:#047857;--gold:#d6a33b;--gold-deep:#a87518;--ivory:#fbfaf6;--cream:#f4efe3;--ink:#17211d}
+html,body{background:linear-gradient(180deg,#fbfaf6 0%,#f3f6f2 48%,#edf3ef 100%)!important;color:var(--ink)}
+header{background:linear-gradient(135deg,rgba(255,255,255,.985),rgba(249,247,239,.985))!important;border-bottom:1px solid rgba(168,117,24,.22)!important;box-shadow:0 8px 28px rgba(2,44,34,.08)!important}
+.premium-brand{display:flex!important;align-items:center;gap:10px}.premium-brand>img{width:44px;height:44px;border-radius:13px;box-shadow:0 5px 14px rgba(2,44,34,.18);flex:none}.premium-brand>div{display:flex;align-items:center;flex-wrap:wrap;gap:5px}.premium-brand strong{font-family:Georgia,serif;font-size:21px;color:#064e3b;letter-spacing:-.2px}.premium-brand small{flex-basis:100%;color:#738078!important;font-size:10px!important}
+.lock{background:radial-gradient(circle at 50% 28%,#0b6b59 0%,#064e43 32%,#022c22 100%)!important}.lockbox{border:1px solid rgba(214,163,59,.4)!important;border-radius:28px!important;padding:26px!important;box-shadow:0 30px 80px rgba(0,0,0,.28)!important;background:linear-gradient(180deg,#fff 0%,#fbfaf6 100%)!important}.premium-login-brand{display:flex;align-items:center;gap:14px;margin-bottom:18px}.premium-login-brand img{width:76px;height:76px;border-radius:22px;box-shadow:0 10px 25px rgba(2,44,34,.2)}.premium-login-brand h2{font-family:Georgia,serif;color:#064e3b;font-size:30px;margin:0!important}.premium-login-brand span{display:block;color:#7a6b4a;font-size:12px;font-weight:800;letter-spacing:.04em;margin-top:3px}
+.profile-chip{background:linear-gradient(135deg,#fff,#fbfaf5)!important;border-color:#d9e1dc!important;box-shadow:0 8px 24px rgba(2,44,34,.07)!important}.profile-avatar-fallback{background:linear-gradient(145deg,#0a7562,#064e43)!important;color:#fff!important;border:2px solid #e2c36f!important}.profileScheduleBtn{background:linear-gradient(135deg,#edf8f4,#f7fbf9)!important;border-color:#b8ddd2!important;color:#065f46!important}.profileDutyBtn{background:linear-gradient(135deg,#fff9e9,#fbf2d7)!important;border-color:#ead08c!important}
+aside{background:linear-gradient(180deg,#fbfaf6,#f4f6f3)!important}.section-title{color:#68766f!important;letter-spacing:.12em!important}.class-item,.mobile-class-nav-wrap button{transition:.18s ease}.class-item.active{background:linear-gradient(135deg,#064e43,#08715f)!important;color:#fff!important;border-color:#064e43!important;box-shadow:0 8px 18px rgba(6,78,67,.2),inset 0 0 0 1px rgba(255,255,255,.1)!important}.class-item.active .tiny{color:#e6f3ee!important}
+.compact-class-summary{background:linear-gradient(145deg,#fff,#fbfaf6)!important;border:1px solid #dbe3de!important;border-radius:22px!important;box-shadow:0 12px 34px rgba(2,44,34,.08)!important}.compact-class-head h1{color:#064e43!important}.class-top-actions button{background:linear-gradient(180deg,#fff,#faf8f1)!important;color:#064e43!important;border-color:#d7dfda!important;box-shadow:0 4px 12px rgba(2,44,34,.05)!important}.class-top-actions button:hover{border-color:#d6a33b!important}
+.class-module-btn{background:linear-gradient(180deg,#fff,#fafbf9)!important;border:1px solid #dbe3de!important;border-radius:16px!important;box-shadow:0 6px 16px rgba(2,44,34,.055)!important;transition:transform .15s ease,box-shadow .15s ease}.class-module-btn:hover{transform:translateY(-1px);box-shadow:0 9px 20px rgba(2,44,34,.09)!important}.class-module-btn span{filter:saturate(.72)}.class-module-btn b{color:#153d34!important}.class-module-btn em{color:#b27d1e!important}
+.card,.mobile-list-card,.mobile-grade-card,.mobile-matrix-card,.student-homework-card,.quick-card{border-color:#dbe3de!important;border-radius:18px!important;box-shadow:0 8px 24px rgba(2,44,34,.055)!important}.class-module-overlay{background:linear-gradient(180deg,#fbfaf6,#f3f6f2)!important}.class-module-head{background:rgba(251,250,246,.98)!important;border-bottom-color:#dbe3de!important}.class-module-head h2{color:#173c34!important}
+button:not(.danger):not(.success):not(.warn):not(.partial).primary,.btn:not(.secondary){border-radius:12px}.mobile-fixed-add-class{background:linear-gradient(135deg,#0a7562,#064e43)!important;border-color:#064e43!important}.progress{background:#e6ebe8!important}.progress>i{background:linear-gradient(90deg,#0a7b65 0%,#0a7b65 72%,#d6a33b 100%)!important}
+input,select,textarea{border-radius:12px!important;background:#fffefa!important}.badge.neutral{background:#eef3f0!important;color:#42574f!important}
+@media(max-width:700px){header{padding-top:max(10px,env(safe-area-inset-top))!important}.premium-brand>img{width:38px;height:38px;border-radius:11px}.premium-brand strong{font-size:19px}.premium-brand small{display:none}.compact-class-summary{border-radius:20px!important}.class-module-btn{border-radius:15px!important}}
+</style>
+</body></html>`}
 function docPdfWrap(ctx,text,maxW){
  const words=String(text||'').split(/\s+/).filter(Boolean),lines=[];let line='';
  for(const w of words){const test=line?line+' '+w:w;if(ctx.measureText(test).width<=maxW||!line)line=test;else{lines.push(line);line=w}}
@@ -7704,7 +7720,7 @@ migrateHomeworkImagesToIDB().then(()=>hydrateHomeworkImages()).catch(()=>{});
 <script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
   // v7.6.64-JPEG — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
   // ve aktif oturum güncelleme nedeniyle yeniden yüklenmez.
-  navigator.serviceWorker.register("./sw.js?v=7.7.99",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.8.04",{updateViaCache:"none"}).then(reg=>{
     reg.update().catch(()=>{});
     setInterval(()=>reg.update().catch(()=>{}),60*60*1000);
   }).catch(()=>{});
@@ -7931,6 +7947,22 @@ setInterval(updateDutyStatus,30000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden){try{updateProfileNextLesson()}catch(e){};try{updateDutyStatus()}catch(e){}}});
 window.addEventListener("focus",()=>{try{updateProfileNextLesson()}catch(e){};try{updateDutyStatus()}catch(e){}});
 </script>
+
+<style id="v7804-premium-brand-system">
+:root{--emerald-950:#022c22;--emerald-900:#064e3b;--emerald-800:#065f46;--emerald-700:#047857;--gold:#d6a33b;--gold-deep:#a87518;--ivory:#fbfaf6;--cream:#f4efe3;--ink:#17211d}
+html,body{background:linear-gradient(180deg,#fbfaf6 0%,#f3f6f2 48%,#edf3ef 100%)!important;color:var(--ink)}
+header{background:linear-gradient(135deg,rgba(255,255,255,.985),rgba(249,247,239,.985))!important;border-bottom:1px solid rgba(168,117,24,.22)!important;box-shadow:0 8px 28px rgba(2,44,34,.08)!important}
+.premium-brand{display:flex!important;align-items:center;gap:10px}.premium-brand>img{width:44px;height:44px;border-radius:13px;box-shadow:0 5px 14px rgba(2,44,34,.18);flex:none}.premium-brand>div{display:flex;align-items:center;flex-wrap:wrap;gap:5px}.premium-brand strong{font-family:Georgia,serif;font-size:21px;color:#064e3b;letter-spacing:-.2px}.premium-brand small{flex-basis:100%;color:#738078!important;font-size:10px!important}
+.lock{background:radial-gradient(circle at 50% 28%,#0b6b59 0%,#064e43 32%,#022c22 100%)!important}.lockbox{border:1px solid rgba(214,163,59,.4)!important;border-radius:28px!important;padding:26px!important;box-shadow:0 30px 80px rgba(0,0,0,.28)!important;background:linear-gradient(180deg,#fff 0%,#fbfaf6 100%)!important}.premium-login-brand{display:flex;align-items:center;gap:14px;margin-bottom:18px}.premium-login-brand img{width:76px;height:76px;border-radius:22px;box-shadow:0 10px 25px rgba(2,44,34,.2)}.premium-login-brand h2{font-family:Georgia,serif;color:#064e3b;font-size:30px;margin:0!important}.premium-login-brand span{display:block;color:#7a6b4a;font-size:12px;font-weight:800;letter-spacing:.04em;margin-top:3px}
+.profile-chip{background:linear-gradient(135deg,#fff,#fbfaf5)!important;border-color:#d9e1dc!important;box-shadow:0 8px 24px rgba(2,44,34,.07)!important}.profile-avatar-fallback{background:linear-gradient(145deg,#0a7562,#064e43)!important;color:#fff!important;border:2px solid #e2c36f!important}.profileScheduleBtn{background:linear-gradient(135deg,#edf8f4,#f7fbf9)!important;border-color:#b8ddd2!important;color:#065f46!important}.profileDutyBtn{background:linear-gradient(135deg,#fff9e9,#fbf2d7)!important;border-color:#ead08c!important}
+aside{background:linear-gradient(180deg,#fbfaf6,#f4f6f3)!important}.section-title{color:#68766f!important;letter-spacing:.12em!important}.class-item,.mobile-class-nav-wrap button{transition:.18s ease}.class-item.active{background:linear-gradient(135deg,#064e43,#08715f)!important;color:#fff!important;border-color:#064e43!important;box-shadow:0 8px 18px rgba(6,78,67,.2),inset 0 0 0 1px rgba(255,255,255,.1)!important}.class-item.active .tiny{color:#e6f3ee!important}
+.compact-class-summary{background:linear-gradient(145deg,#fff,#fbfaf6)!important;border:1px solid #dbe3de!important;border-radius:22px!important;box-shadow:0 12px 34px rgba(2,44,34,.08)!important}.compact-class-head h1{color:#064e43!important}.class-top-actions button{background:linear-gradient(180deg,#fff,#faf8f1)!important;color:#064e43!important;border-color:#d7dfda!important;box-shadow:0 4px 12px rgba(2,44,34,.05)!important}.class-top-actions button:hover{border-color:#d6a33b!important}
+.class-module-btn{background:linear-gradient(180deg,#fff,#fafbf9)!important;border:1px solid #dbe3de!important;border-radius:16px!important;box-shadow:0 6px 16px rgba(2,44,34,.055)!important;transition:transform .15s ease,box-shadow .15s ease}.class-module-btn:hover{transform:translateY(-1px);box-shadow:0 9px 20px rgba(2,44,34,.09)!important}.class-module-btn span{filter:saturate(.72)}.class-module-btn b{color:#153d34!important}.class-module-btn em{color:#b27d1e!important}
+.card,.mobile-list-card,.mobile-grade-card,.mobile-matrix-card,.student-homework-card,.quick-card{border-color:#dbe3de!important;border-radius:18px!important;box-shadow:0 8px 24px rgba(2,44,34,.055)!important}.class-module-overlay{background:linear-gradient(180deg,#fbfaf6,#f3f6f2)!important}.class-module-head{background:rgba(251,250,246,.98)!important;border-bottom-color:#dbe3de!important}.class-module-head h2{color:#173c34!important}
+button:not(.danger):not(.success):not(.warn):not(.partial).primary,.btn:not(.secondary){border-radius:12px}.mobile-fixed-add-class{background:linear-gradient(135deg,#0a7562,#064e43)!important;border-color:#064e43!important}.progress{background:#e6ebe8!important}.progress>i{background:linear-gradient(90deg,#0a7b65 0%,#0a7b65 72%,#d6a33b 100%)!important}
+input,select,textarea{border-radius:12px!important;background:#fffefa!important}.badge.neutral{background:#eef3f0!important;color:#42574f!important}
+@media(max-width:700px){header{padding-top:max(10px,env(safe-area-inset-top))!important}.premium-brand>img{width:38px;height:38px;border-radius:11px}.premium-brand strong{font-size:19px}.premium-brand small{display:none}.compact-class-summary{border-radius:20px!important}.class-module-btn{border-radius:15px!important}}
+</style>
 </body>
 </html><style id="v7412-lock-fullscreen-fix">
 /* v7.5.1: iPhone/PWA lock screen must fully cover app content */
@@ -7994,7 +8026,7 @@ html.app-locked,body.app-locked{overflow:hidden!important;height:100%!important;
 </script>
 
 <style id="v7803-premium-emerald-theme">
-/* v7.8.03 — Premium Emerald theme. Functional status colors intentionally preserved. */
+/* v7.8.04 — Premium Emerald theme. Functional status colors intentionally preserved. */
 :root{
   --bg:#f5f7f4;
   --card:#ffffff;

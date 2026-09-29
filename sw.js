@@ -1,5 +1,5 @@
-const CACHE_NAME = 'ots-v7.8.03';
-const APP_SHELL = ['./index.html'];
+const CACHE_NAME = 'ots-v7.8.04';
+const APP_SHELL = ['./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/apple-touch-icon.png'];
 self.addEventListener('install', event => {
   self.skipWaiting();
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)).catch(()=>{}));
