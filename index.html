@@ -2202,7 +2202,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </div>
 
 <script id="v7806-data-recovery-guard">
-/* v7.8.07 — Veri uyumluluk koruması.
+/* v7.8.08 — Veri uyumluluk koruması.
    Eski sürümlerin kalıcı veri anahtarlarını DEĞİŞTİRMEZ ve PIN kurulmadan önce
    mevcut veri deposunun bulunup bulunmadığını kullanıcıya bildirir. */
 (function(){
@@ -2317,7 +2317,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.07</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div>
+<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.08</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2475,7 +2475,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.8.07 · Ortak Konu Kimliği Motoru · çevrimdışı";
+  el("modalSubtitle").textContent="v7.8.08 · Ortak Konu Kimliği Motoru · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -4209,6 +4209,38 @@ button:not(.danger):not(.success):not(.warn):not(.partial).primary,.btn:not(.sec
 input,select,textarea{border-radius:12px!important;background:#fffefa!important}.badge.neutral{background:#eef3f0!important;color:#42574f!important}
 @media(max-width:700px){header{padding-top:max(10px,env(safe-area-inset-top))!important}.premium-brand>img{width:38px;height:38px;border-radius:11px}.premium-brand strong{font-size:19px}.premium-brand small{display:none}.compact-class-summary{border-radius:20px!important}.class-module-btn{border-radius:15px!important}}
 </style>
+
+
+<style id="v7808-recovery-center-style">
+#recoveryCenterBtn{margin-left:auto;border:1px solid #d6c07a;background:#fffdf7;color:#065f46;border-radius:14px;padding:9px 12px;font-weight:800;box-shadow:0 5px 18px #0b3b2d12;white-space:nowrap}
+#recoveryCenterOverlay{position:fixed;inset:0;z-index:999999;background:#06111dcc;display:none;align-items:flex-end;justify-content:center;padding:12px;box-sizing:border-box}
+#recoveryCenterPanel{width:min(760px,100%);max-height:88dvh;overflow:auto;background:#fff;border:1px solid #d9c98e;border-radius:24px 24px 16px 16px;padding:18px;box-sizing:border-box;box-shadow:0 25px 70px #0007;color:#10211c}
+#recoveryCenterPanel h2{margin:0 0 6px;color:#065f46}.rc-note{background:#fff8dc;border:1px solid #ead68b;border-radius:14px;padding:10px 12px;margin:10px 0;font-size:14px}.rc-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}.rc-actions button{min-height:44px}.rc-list{display:grid;gap:8px}.rc-card{border:1px solid #dbe5e1;border-radius:14px;padding:10px;background:#fbfdfc}.rc-card b{color:#064e3b}.rc-small{font-size:12px;color:#64706c;overflow-wrap:anywhere}.rc-good{color:#047857;font-weight:800}.rc-warn{color:#9a3412;font-weight:800}@media(max-width:520px){.rc-actions{grid-template-columns:1fr}#recoveryCenterPanel{padding:14px}}
+</style>
+<script id="v7808-recovery-center">
+(function(){
+ const MAIN='odevTakipV1',SET='odevTakipV5Settings',ARCH='odevTakipSchoolYearArchivesV1';
+ let lastScan=null;
+ function safeParse(v){try{return JSON.parse(v)}catch(e){return null}}
+ function isState(o){return !!(o&&typeof o==='object'&&Array.isArray(o.classes))}
+ function stateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,trials=0,meetings=0,checks=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const h of (c.homeworks||[])) checks+=Object.keys(h.checks||{}).length}return{classes:cs.length,students,homeworks,trials,meetings,checks}}
+ function candidateFrom(o,source,path){if(isState(o))return {source,path,state:o,stats:stateStats(o)};for(const k of ['state','data','appData','backup'])if(isState(o?.[k]))return{source,path:path+' → '+k,state:o[k],stats:stateStats(o[k])};return null}
+ async function idbScan(){let rows=[],names=[];try{if(indexedDB.databases)names=(await indexedDB.databases()).map(x=>x.name).filter(Boolean)}catch(e){};for(const name of names){try{const db=await new Promise((res,rej)=>{const q=indexedDB.open(name);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)});for(const store of Array.from(db.objectStoreNames)){try{const vals=await new Promise((res,rej)=>{const tx=db.transaction(store,'readonly'),os=tx.objectStore(store),q=os.getAll();q.onsuccess=()=>res(q.result||[]);q.onerror=()=>rej(q.error)});let n=0;for(const v of vals){if(n++>3000)break;let o=v;if(typeof v==='string')o=safeParse(v);const c=candidateFrom(o,'IndexedDB',name+' / '+store);if(c)rows.push(c)}}catch(e){}}db.close()}catch(e){}}return{names,rows}}
+ async function cacheScan(){let names=[];try{names=await caches.keys()}catch(e){}return names}
+ function localScan(storage,label){let rows=[],keys=[];try{for(let i=0;i<storage.length;i++){const k=storage.key(i),raw=storage.getItem(k);keys.push({key:k,bytes:(raw||'').length});const o=safeParse(raw);const c=candidateFrom(o,label,k);if(c)rows.push(c)}}catch(e){}return{keys,rows}}
+ function esc(s){return String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+ function download(obj,name){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)}
+ function ensureUI(){if(document.getElementById('recoveryCenterOverlay'))return;const ov=document.createElement('div');ov.id='recoveryCenterOverlay';ov.innerHTML=`<div id="recoveryCenterPanel"><div style="display:flex;gap:10px;align-items:center"><div><h2>🛟 Veri Kurtarma Merkezi</h2><div class="rc-small">Salt okunur tarama · v7.8.08</div></div><button class="secondary" style="margin-left:auto" onclick="window.__rcClose()">Kapat</button></div><div class="rc-note"><b>Güvenli mod:</b> Tarama hiçbir kaydı silmez, birleştirmez veya mevcut verinin üzerine yazmaz. Önce yalnızca bulduklarını raporlar.</div><div class="rc-actions"><button onclick="window.__rcScan()">🔎 Tüm Yerel Alanları Tara</button><button class="secondary" onclick="window.__rcSnapshot()">💾 Mevcut Durumu Güvenlik Kopyası Al</button></div><div id="rcResult" class="rc-list"><div class="rc-card">Tarama henüz yapılmadı.</div></div></div>`;document.body.appendChild(ov);ov.addEventListener('click',e=>{if(e.target===ov)window.__rcClose()});
+ const b=document.createElement('button');b.id='recoveryCenterBtn';b.type='button';b.textContent='🛟 Kurtarma';b.onclick=()=>{ov.style.display='flex'};const brand=document.querySelector('.brand');if(brand)brand.appendChild(b);else{b.style.position='fixed';b.style.right='12px';b.style.bottom='12px';b.style.zIndex='99990';document.body.appendChild(b)} }
+ window.__rcClose=()=>{document.getElementById('recoveryCenterOverlay').style.display='none'};
+ window.__rcSnapshot=()=>{const state=safeParse(localStorage.getItem(MAIN)||'null'),settings=safeParse(localStorage.getItem(SET)||'null'),archives=safeParse(localStorage.getItem(ARCH)||'[]');download({backupType:'ogrenci-takip-kurtarma-guvenlik-kopyasi',appVersion:'v7.8.08',exportedAt:new Date().toISOString(),state,settings,schoolYearArchives:archives},'MualliMate_v7.8.08_KURTARMA_ONCESI_GUVENLIK_KOPYASI.json')};
+ window.__rcScan=async()=>{const out=document.getElementById('rcResult');out.innerHTML='<div class="rc-card">Tarama yapılıyor…</div>';const l=localScan(localStorage,'localStorage'),s=localScan(sessionStorage,'sessionStorage'),idb=await idbScan(),cacheNames=await cacheScan();let candidates=[...l.rows,...s.rows,...idb.rows];const uniq=[];const seen=new Set();for(const c of candidates){let sig='';try{sig=JSON.stringify(c.state)}catch(e){sig=c.source+c.path}if(seen.has(sig))continue;seen.add(sig);uniq.push(c)}candidates=uniq.sort((a,b)=>(b.stats.homeworks*10000+b.stats.checks*100+b.stats.students)-(a.stats.homeworks*10000+a.stats.checks*100+a.stats.students));lastScan={at:new Date().toISOString(),localKeys:l.keys,sessionKeys:s.keys,indexedDB:idb.names,caches:cacheNames,candidates:candidates.map((c,i)=>({id:i+1,source:c.source,path:c.path,stats:c.stats,state:c.state}))};let html=`<div class="rc-card"><b>Tarama tamamlandı.</b><div class="rc-small">localStorage: ${l.keys.length} anahtar · sessionStorage: ${s.keys.length} anahtar · IndexedDB: ${idb.names.length} veritabanı · Cache: ${cacheNames.length}</div></div>`;if(!candidates.length)html+=`<div class="rc-card"><span class="rc-warn">Bu tarayıcı alanında ek öğrenci veri adayı bulunamadı.</span><div class="rc-small">Bu sonuç başka bir Safari/PWA depolama alanını okuyabildiğimiz anlamına gelmez. Eski verinin göründüğü ayrı PWA/site alanı varsa tarama orada çalıştırılmalıdır.</div></div>`;else candidates.forEach((c,i)=>{const x=c.stats;html+=`<div class="rc-card"><b>Aday ${i+1}</b> · ${esc(c.source)}<div class="rc-small">${esc(c.path)}</div><div>${x.classes} sınıf · ${x.students} öğrenci · <b>${x.homeworks} ödev</b> · ${x.checks} kontrol · ${x.trials} deneme · ${x.meetings} veli görüşmesi</div><button class="secondary" style="margin-top:8px" onclick="window.__rcExportCandidate(${i})">Bu adayı JSON olarak dışa aktar</button></div>`});html+=`<div class="rc-actions"><button class="secondary" onclick="window.__rcReport()">📄 Tarama Raporunu İndir</button></div>`;out.innerHTML=html};
+ window.__rcExportCandidate=i=>{if(!lastScan?.candidates?.[i])return;download(lastScan.candidates[i],'MualliMate_Kurtarma_Aday_'+(i+1)+'.json')};
+ window.__rcReport=()=>{if(lastScan)download(lastScan,'MualliMate_v7.8.08_Kurtarma_Tarama_Raporu.json')};
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ensureUI,{once:true});else ensureUI();window.addEventListener('pageshow',ensureUI);
+})();
+</script>
+
 </body></html>`}
 function docPdfWrap(ctx,text,maxW){
  const words=String(text||'').split(/\s+/).filter(Boolean),lines=[];let line='';
@@ -8059,6 +8091,38 @@ button:not(.danger):not(.success):not(.warn):not(.partial).primary,.btn:not(.sec
 input,select,textarea{border-radius:12px!important;background:#fffefa!important}.badge.neutral{background:#eef3f0!important;color:#42574f!important}
 @media(max-width:700px){header{padding-top:max(10px,env(safe-area-inset-top))!important}.premium-brand>img{width:38px;height:38px;border-radius:11px}.premium-brand strong{font-size:19px}.premium-brand small{display:none}.compact-class-summary{border-radius:20px!important}.class-module-btn{border-radius:15px!important}}
 </style>
+
+
+<style id="v7808-recovery-center-style">
+#recoveryCenterBtn{margin-left:auto;border:1px solid #d6c07a;background:#fffdf7;color:#065f46;border-radius:14px;padding:9px 12px;font-weight:800;box-shadow:0 5px 18px #0b3b2d12;white-space:nowrap}
+#recoveryCenterOverlay{position:fixed;inset:0;z-index:999999;background:#06111dcc;display:none;align-items:flex-end;justify-content:center;padding:12px;box-sizing:border-box}
+#recoveryCenterPanel{width:min(760px,100%);max-height:88dvh;overflow:auto;background:#fff;border:1px solid #d9c98e;border-radius:24px 24px 16px 16px;padding:18px;box-sizing:border-box;box-shadow:0 25px 70px #0007;color:#10211c}
+#recoveryCenterPanel h2{margin:0 0 6px;color:#065f46}.rc-note{background:#fff8dc;border:1px solid #ead68b;border-radius:14px;padding:10px 12px;margin:10px 0;font-size:14px}.rc-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0}.rc-actions button{min-height:44px}.rc-list{display:grid;gap:8px}.rc-card{border:1px solid #dbe5e1;border-radius:14px;padding:10px;background:#fbfdfc}.rc-card b{color:#064e3b}.rc-small{font-size:12px;color:#64706c;overflow-wrap:anywhere}.rc-good{color:#047857;font-weight:800}.rc-warn{color:#9a3412;font-weight:800}@media(max-width:520px){.rc-actions{grid-template-columns:1fr}#recoveryCenterPanel{padding:14px}}
+</style>
+<script id="v7808-recovery-center">
+(function(){
+ const MAIN='odevTakipV1',SET='odevTakipV5Settings',ARCH='odevTakipSchoolYearArchivesV1';
+ let lastScan=null;
+ function safeParse(v){try{return JSON.parse(v)}catch(e){return null}}
+ function isState(o){return !!(o&&typeof o==='object'&&Array.isArray(o.classes))}
+ function stateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,trials=0,meetings=0,checks=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const h of (c.homeworks||[])) checks+=Object.keys(h.checks||{}).length}return{classes:cs.length,students,homeworks,trials,meetings,checks}}
+ function candidateFrom(o,source,path){if(isState(o))return {source,path,state:o,stats:stateStats(o)};for(const k of ['state','data','appData','backup'])if(isState(o?.[k]))return{source,path:path+' → '+k,state:o[k],stats:stateStats(o[k])};return null}
+ async function idbScan(){let rows=[],names=[];try{if(indexedDB.databases)names=(await indexedDB.databases()).map(x=>x.name).filter(Boolean)}catch(e){};for(const name of names){try{const db=await new Promise((res,rej)=>{const q=indexedDB.open(name);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)});for(const store of Array.from(db.objectStoreNames)){try{const vals=await new Promise((res,rej)=>{const tx=db.transaction(store,'readonly'),os=tx.objectStore(store),q=os.getAll();q.onsuccess=()=>res(q.result||[]);q.onerror=()=>rej(q.error)});let n=0;for(const v of vals){if(n++>3000)break;let o=v;if(typeof v==='string')o=safeParse(v);const c=candidateFrom(o,'IndexedDB',name+' / '+store);if(c)rows.push(c)}}catch(e){}}db.close()}catch(e){}}return{names,rows}}
+ async function cacheScan(){let names=[];try{names=await caches.keys()}catch(e){}return names}
+ function localScan(storage,label){let rows=[],keys=[];try{for(let i=0;i<storage.length;i++){const k=storage.key(i),raw=storage.getItem(k);keys.push({key:k,bytes:(raw||'').length});const o=safeParse(raw);const c=candidateFrom(o,label,k);if(c)rows.push(c)}}catch(e){}return{keys,rows}}
+ function esc(s){return String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+ function download(obj,name){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)}
+ function ensureUI(){if(document.getElementById('recoveryCenterOverlay'))return;const ov=document.createElement('div');ov.id='recoveryCenterOverlay';ov.innerHTML=`<div id="recoveryCenterPanel"><div style="display:flex;gap:10px;align-items:center"><div><h2>🛟 Veri Kurtarma Merkezi</h2><div class="rc-small">Salt okunur tarama · v7.8.08</div></div><button class="secondary" style="margin-left:auto" onclick="window.__rcClose()">Kapat</button></div><div class="rc-note"><b>Güvenli mod:</b> Tarama hiçbir kaydı silmez, birleştirmez veya mevcut verinin üzerine yazmaz. Önce yalnızca bulduklarını raporlar.</div><div class="rc-actions"><button onclick="window.__rcScan()">🔎 Tüm Yerel Alanları Tara</button><button class="secondary" onclick="window.__rcSnapshot()">💾 Mevcut Durumu Güvenlik Kopyası Al</button></div><div id="rcResult" class="rc-list"><div class="rc-card">Tarama henüz yapılmadı.</div></div></div>`;document.body.appendChild(ov);ov.addEventListener('click',e=>{if(e.target===ov)window.__rcClose()});
+ const b=document.createElement('button');b.id='recoveryCenterBtn';b.type='button';b.textContent='🛟 Kurtarma';b.onclick=()=>{ov.style.display='flex'};const brand=document.querySelector('.brand');if(brand)brand.appendChild(b);else{b.style.position='fixed';b.style.right='12px';b.style.bottom='12px';b.style.zIndex='99990';document.body.appendChild(b)} }
+ window.__rcClose=()=>{document.getElementById('recoveryCenterOverlay').style.display='none'};
+ window.__rcSnapshot=()=>{const state=safeParse(localStorage.getItem(MAIN)||'null'),settings=safeParse(localStorage.getItem(SET)||'null'),archives=safeParse(localStorage.getItem(ARCH)||'[]');download({backupType:'ogrenci-takip-kurtarma-guvenlik-kopyasi',appVersion:'v7.8.08',exportedAt:new Date().toISOString(),state,settings,schoolYearArchives:archives},'MualliMate_v7.8.08_KURTARMA_ONCESI_GUVENLIK_KOPYASI.json')};
+ window.__rcScan=async()=>{const out=document.getElementById('rcResult');out.innerHTML='<div class="rc-card">Tarama yapılıyor…</div>';const l=localScan(localStorage,'localStorage'),s=localScan(sessionStorage,'sessionStorage'),idb=await idbScan(),cacheNames=await cacheScan();let candidates=[...l.rows,...s.rows,...idb.rows];const uniq=[];const seen=new Set();for(const c of candidates){let sig='';try{sig=JSON.stringify(c.state)}catch(e){sig=c.source+c.path}if(seen.has(sig))continue;seen.add(sig);uniq.push(c)}candidates=uniq.sort((a,b)=>(b.stats.homeworks*10000+b.stats.checks*100+b.stats.students)-(a.stats.homeworks*10000+a.stats.checks*100+a.stats.students));lastScan={at:new Date().toISOString(),localKeys:l.keys,sessionKeys:s.keys,indexedDB:idb.names,caches:cacheNames,candidates:candidates.map((c,i)=>({id:i+1,source:c.source,path:c.path,stats:c.stats,state:c.state}))};let html=`<div class="rc-card"><b>Tarama tamamlandı.</b><div class="rc-small">localStorage: ${l.keys.length} anahtar · sessionStorage: ${s.keys.length} anahtar · IndexedDB: ${idb.names.length} veritabanı · Cache: ${cacheNames.length}</div></div>`;if(!candidates.length)html+=`<div class="rc-card"><span class="rc-warn">Bu tarayıcı alanında ek öğrenci veri adayı bulunamadı.</span><div class="rc-small">Bu sonuç başka bir Safari/PWA depolama alanını okuyabildiğimiz anlamına gelmez. Eski verinin göründüğü ayrı PWA/site alanı varsa tarama orada çalıştırılmalıdır.</div></div>`;else candidates.forEach((c,i)=>{const x=c.stats;html+=`<div class="rc-card"><b>Aday ${i+1}</b> · ${esc(c.source)}<div class="rc-small">${esc(c.path)}</div><div>${x.classes} sınıf · ${x.students} öğrenci · <b>${x.homeworks} ödev</b> · ${x.checks} kontrol · ${x.trials} deneme · ${x.meetings} veli görüşmesi</div><button class="secondary" style="margin-top:8px" onclick="window.__rcExportCandidate(${i})">Bu adayı JSON olarak dışa aktar</button></div>`});html+=`<div class="rc-actions"><button class="secondary" onclick="window.__rcReport()">📄 Tarama Raporunu İndir</button></div>`;out.innerHTML=html};
+ window.__rcExportCandidate=i=>{if(!lastScan?.candidates?.[i])return;download(lastScan.candidates[i],'MualliMate_Kurtarma_Aday_'+(i+1)+'.json')};
+ window.__rcReport=()=>{if(lastScan)download(lastScan,'MualliMate_v7.8.08_Kurtarma_Tarama_Raporu.json')};
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ensureUI,{once:true});else ensureUI();window.addEventListener('pageshow',ensureUI);
+})();
+</script>
+
 </body>
 </html><style id="v7412-lock-fullscreen-fix">
 /* v7.5.1: iPhone/PWA lock screen must fully cover app content */
@@ -8122,7 +8186,7 @@ html.app-locked,body.app-locked{overflow:hidden!important;height:100%!important;
 </script>
 
 <style id="v7803-premium-emerald-theme">
-/* v7.8.07 — Premium Emerald theme. Functional status colors intentionally preserved. */
+/* v7.8.08 — Premium Emerald theme. Functional status colors intentionally preserved. */
 :root{
   --bg:#f5f7f4;
   --card:#ffffff;
