@@ -2213,7 +2213,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.96</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.97</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2371,7 +2371,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.96 · Ortak Konu Kimliği Motoru · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.97 · Ortak Konu Kimliği Motoru · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -5685,9 +5685,9 @@ function realisticDesk(ctx,x,y,w,h,label,teacher=false,depth=0){
 async function exportSeatingPlanRealisticJPEG(){
   const c=cls();if(!c)return;cleanSeatingAssignments(c);const p=c.seatingPlan,a=p.assignments;
   const w=1600,h=1130,left=52,right=52,cv=document.createElement('canvas');cv.width=w;cv.height=h;const x=cv.getContext('2d');
-  // v7.7.96: üç yüzeyli gerçek oda kabuğu. Ön duvar geride, yan duvarlar kameraya doğru açılır.
-  const frontL=205,frontR=w-205,wallFloorY=475,sideFloorY=555,vanishX=w/2;
-  // v7.7.96: oda kabuğu tek kaçış geometrisine göre çizilir.
+  // v7.7.97: üç yüzeyli gerçek oda kabuğu. Ön duvar geride, yan duvarlar kameraya doğru açılır.
+  const frontL=205,frontR=w-205,wallFloorY=475,leftSideFloorY=417,rightSideFloorY=555,vanishX=w/2;
+  // v7.7.97: oda kabuğu tek kaçış geometrisine göre çizilir.
   // Ön duvar daha dar; yan duvarlar gerçek birer yüzey olarak görünür.
   // Önce zemin çizilir; yan duvarlar zeminin üstüne oturtulur ki alt sınırları kaybolmasın.
   let floor=x.createLinearGradient(0,wallFloorY,0,h);floor.addColorStop(0,'#e4ddd3');floor.addColorStop(.45,'#d8d1c8');floor.addColorStop(1,'#c8c1b8');x.fillStyle=floor;x.fillRect(0,wallFloorY,w,h-wallFloorY);
@@ -5697,23 +5697,23 @@ async function exportSeatingPlanRealisticJPEG(){
   let wall=x.createLinearGradient(0,0,0,wallFloorY);wall.addColorStop(0,'#eee4d6');wall.addColorStop(.58,'#f6f0e7');wall.addColorStop(1,'#ece3d7');x.fillStyle=wall;x.fillRect(frontL,0,frontR-frontL,wallFloorY);
   let wallLight=x.createRadialGradient(520,145,30,760,235,720);wallLight.addColorStop(0,'rgba(255,255,255,.34)');wallLight.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=wallLight;x.fillRect(frontL,0,frontR-frontL,wallFloorY);
   // sol yan duvar: alt sınırı önden kameraya doğru aşağı iner.
-  let lw=x.createLinearGradient(0,0,frontL,0);lw.addColorStop(0,'#d3c5b3');lw.addColorStop(1,'#e9dfd1');x.fillStyle=lw;x.beginPath();x.moveTo(0,0);x.lineTo(frontL,0);x.lineTo(frontL,wallFloorY);x.lineTo(0,sideFloorY);x.closePath();x.fill();
+  let lw=x.createLinearGradient(0,0,frontL,0);lw.addColorStop(0,'#d3c5b3');lw.addColorStop(1,'#e9dfd1');x.fillStyle=lw;x.beginPath();x.moveTo(0,0);x.lineTo(frontL,0);x.lineTo(frontL,wallFloorY);x.lineTo(0,leftSideFloorY);x.closePath();x.fill();
   // sağ yan duvar aynı geometriyi aynalar.
-  let rw=x.createLinearGradient(frontR,0,w,0);rw.addColorStop(0,'#e8ded0');rw.addColorStop(1,'#cdbca8');x.fillStyle=rw;x.beginPath();x.moveTo(frontR,0);x.lineTo(w,0);x.lineTo(w,sideFloorY);x.lineTo(frontR,wallFloorY);x.closePath();x.fill();
+  let rw=x.createLinearGradient(frontR,0,w,0);rw.addColorStop(0,'#e8ded0');rw.addColorStop(1,'#cdbca8');x.fillStyle=rw;x.beginPath();x.moveTo(frontR,0);x.lineTo(w,0);x.lineTo(w,rightSideFloorY);x.lineTo(frontR,wallFloorY);x.closePath();x.fill();
   // köşe ve duvar-zemin birleşimleri belirgin; iki yan duvar artık ön duvardan net ayrılır.
-  x.strokeStyle='rgba(91,72,53,.34)';x.lineWidth=2.2;x.beginPath();x.moveTo(frontL,0);x.lineTo(frontL,wallFloorY);x.lineTo(0,sideFloorY);x.moveTo(frontR,0);x.lineTo(frontR,wallFloorY);x.lineTo(w,sideFloorY);x.stroke();
+  x.strokeStyle='rgba(91,72,53,.34)';x.lineWidth=2.2;x.beginPath();x.moveTo(frontL,0);x.lineTo(frontL,wallFloorY);x.lineTo(0,leftSideFloorY);x.moveTo(frontR,0);x.lineTo(frontR,wallFloorY);x.lineTo(w,rightSideFloorY);x.stroke();
   // ön duvar süpürgeliği
   x.fillStyle='#a8a29e';x.fillRect(frontL,456,frontR-frontL,20);x.fillStyle='#d6d3d1';x.fillRect(frontL,456,frontR-frontL,5);
   // yan duvar süpürgelikleri de perspektifi izler.
-  x.strokeStyle='#9d9892';x.lineWidth=15;x.beginPath();x.moveTo(0,sideFloorY-8);x.lineTo(frontL,wallFloorY-8);x.moveTo(frontR,wallFloorY-8);x.lineTo(w,sideFloorY-8);x.stroke();
-  x.strokeStyle='#d6d3d1';x.lineWidth=4;x.beginPath();x.moveTo(0,sideFloorY-16);x.lineTo(frontL,wallFloorY-16);x.moveTo(frontR,wallFloorY-16);x.lineTo(w,sideFloorY-16);x.stroke();
+  x.strokeStyle='#9d9892';x.lineWidth=15;x.beginPath();x.moveTo(0,leftSideFloorY-8);x.lineTo(frontL,wallFloorY-8);x.moveTo(frontR,wallFloorY-8);x.lineTo(w,rightSideFloorY-8);x.stroke();
+  x.strokeStyle='#d6d3d1';x.lineWidth=4;x.beginPath();x.moveTo(0,leftSideFloorY-16);x.lineTo(frontL,wallFloorY-16);x.moveTo(frontR,wallFloorY-16);x.lineTo(w,rightSideFloorY-16);x.stroke();
   // pencere tamamen sol yan duvarın içinde; dolapla çakışmaz.
   x.save();x.shadowColor='rgba(45,36,28,.20)';x.shadowBlur=6;x.shadowOffsetX=3;
-  x.fillStyle='#f5f1e9';x.beginPath();x.moveTo(10,82);x.lineTo(112,111);x.lineTo(112,397);x.lineTo(10,449);x.closePath();x.fill();
-  x.fillStyle='#bcd8eb';x.beginPath();x.moveTo(22,98);x.lineTo(99,120);x.lineTo(99,382);x.lineTo(22,426);x.closePath();x.fill();x.shadowColor='transparent';
-  x.strokeStyle='rgba(255,255,255,.94)';x.lineWidth=8;x.beginPath();x.moveTo(60,109);x.lineTo(60,405);x.moveTo(19,204);x.lineTo(102,216);x.moveTo(19,312);x.lineTo(102,310);x.stroke();
-  x.strokeStyle='rgba(91,105,112,.34)';x.lineWidth=2;x.beginPath();x.moveTo(112,111);x.lineTo(112,397);x.stroke();x.restore();
-  // v7.7.96: yapay pencere ışık huzmesi kaldırıldı.
+  x.fillStyle='#f5f1e9';x.beginPath();x.moveTo(10,82);x.lineTo(112,111);x.lineTo(112,426);x.lineTo(10,397);x.closePath();x.fill();
+  x.fillStyle='#bcd8eb';x.beginPath();x.moveTo(22,98);x.lineTo(99,120);x.lineTo(99,404);x.lineTo(22,382);x.closePath();x.fill();x.shadowColor='transparent';
+  x.strokeStyle='rgba(255,255,255,.94)';x.lineWidth=8;x.beginPath();x.moveTo(60,109);x.lineTo(60,393);x.moveTo(19,204);x.lineTo(102,216);x.moveTo(19,312);x.lineTo(102,310);x.stroke();
+  x.strokeStyle='rgba(91,105,112,.34)';x.lineWidth=2;x.beginPath();x.moveTo(112,111);x.lineTo(112,426);x.stroke();x.restore();
+  // v7.7.97: yapay pencere ışık huzmesi kaldırıldı.
   // başlık
   const titleX=frontL;x.textAlign='left';x.fillStyle='#111827';x.font='bold 31px Arial';x.fillText(`${c.name} - Sınıf Oturma Planı`,titleX,48);
   const school=(settings.profile?.school||'').trim();if(school){x.fillStyle='#374151';x.font='20px Arial';x.fillText(school,titleX,79)}
@@ -5725,7 +5725,7 @@ async function exportSeatingPlanRealisticJPEG(){
   let board=x.createLinearGradient(bx,by,bx,by+bh);board.addColorStop(0,'#244f43');board.addColorStop(1,'#315f50');x.fillStyle=board;rrReal(x,bx,by,bw,bh,2);x.fill();
   x.strokeStyle='rgba(232,240,235,.045)';x.lineWidth=1;for(let q=0;q<11;q++){x.beginPath();x.moveTo(bx+18,by+28+q*9);x.bezierCurveTo(bx+bw*.32,by+25+q*9,bx+bw*.67,by+34+q*9,bx+bw-18,by+27+q*9);x.stroke()}
   x.fillStyle='#f1f5f9';x.font='bold 25px Georgia';x.textAlign='center';x.fillText('SINIF TAHTASI',w/2,by+83);
-  // v7.7.96: kitaplığın sol kenarı ön/yan duvar birleşiminden başlar; tabanı zemine oturur ve sağ bölümü öğretmen masasının arkasında kalır.
+  // v7.7.97: kitaplığın sol kenarı ön/yan duvar birleşiminden başlar; tabanı zemine oturur ve sağ bölümü öğretmen masasının arkasında kalır.
   const cabX=frontL,cabY=178,cabW=190,cabH=270;
   x.save();x.shadowColor='rgba(53,38,25,.20)';x.shadowBlur=6;x.shadowOffsetX=3;x.shadowOffsetY=4;
   let cabWood=x.createLinearGradient(cabX,cabY,cabX+cabW,cabY);cabWood.addColorStop(0,'#8d5429');cabWood.addColorStop(.5,'#b8793d');cabWood.addColorStop(1,'#8a5027');
@@ -5741,7 +5741,7 @@ async function exportSeatingPlanRealisticJPEG(){
   x.fillStyle='#3f6b38';for(let i=0;i<8;i++){x.beginPath();x.ellipse(cabX+30+i*16,cabY-12+(i%3)*7,17,7,(i%2?-.42:.42),0,Math.PI*2);x.fill()}x.fillStyle='#7b4d2b';x.fillRect(cabX+75,cabY-4,38,12);
   // kısa ayaklar doğrudan ön duvar-zemin birleşimine basar
   x.fillStyle='#70411f';x.fillRect(cabX+18,cabY+cabH,16,wallFloorY-(cabY+cabH));x.fillRect(cabX+cabW-34,cabY+cabH,16,wallFloorY-(cabY+cabH));x.restore();
-  // v7.7.96: saat ve pano sağ köşeden uzaklaştırılıp ön duvarın içine, tahtaya doğru alındı.
+  // v7.7.97: saat ve pano sağ köşeden uzaklaştırılıp ön duvarın içine, tahtaya doğru alındı.
   const noticeX=1190,noticeY=216,noticeW=168,noticeH=132;
   x.save();x.shadowColor='rgba(58,43,29,.13)';x.shadowBlur=4;x.shadowOffsetY=2;x.fillStyle='#a97947';x.strokeStyle='#754b2b';x.lineWidth=4;x.fillRect(noticeX,noticeY,noticeW,noticeH);x.strokeRect(noticeX,noticeY,noticeW,noticeH);x.shadowColor='transparent';
   x.fillStyle='#f4efe7';const notes=[[18,18,35,39],[66,16,32,43],[112,19,34,37],[31,72,38,40],[91,70,42,42]];notes.forEach(n=>x.fillRect(noticeX+n[0],noticeY+n[1],n[2],n[3]));x.restore();
@@ -5749,7 +5749,7 @@ async function exportSeatingPlanRealisticJPEG(){
   // sağ yan duvara gömülü kapı: alt kenarı sağ duvar-zemin birleşim çizgisinin TAM üstündedir.
   x.save();
   const doorXL=1485,doorXR=1600;
-  const sideY=(xx)=>wallFloorY+(sideFloorY-wallFloorY)*((xx-frontR)/(w-frontR));
+  const sideY=(xx)=>wallFloorY+(rightSideFloorY-wallFloorY)*((xx-frontR)/(w-frontR));
   const doorBottomL=sideY(doorXL),doorBottomR=sideY(doorXR);
   x.shadowColor='rgba(50,31,18,.24)';x.shadowBlur=6;x.shadowOffsetX=-4;x.shadowOffsetY=2;
   x.fillStyle='#5e351b';x.beginPath();x.moveTo(doorXL,102);x.lineTo(doorXR,62);x.lineTo(doorXR,doorBottomR);x.lineTo(doorXL,doorBottomL);x.closePath();x.fill();
@@ -5764,7 +5764,7 @@ async function exportSeatingPlanRealisticJPEG(){
   x.restore();
   // öğretmen masası: sınıf dekorundan bağımsız dinamik katman; Sol / Orta / Sağ seçimini izler.
   const tw=320,th=88;
-  // v7.7.96: Sol konum korunur. Sağ konumda öğretmen masasının SAĞ kenarı ön duvar-sağ yan duvar ayrım çizgisine hizalanır; masa sınıf içine doğru sola uzanır.
+  // v7.7.97: Sol konum korunur. Sağ konumda öğretmen masasının SAĞ kenarı ön duvar-sağ yan duvar ayrım çizgisine hizalanır; masa sınıf içine doğru sola uzanır.
   const teacherAnchors={left:282,center:(w-tw)/2,right:frontR-tw};
   const tx=teacherAnchors[p.teacherDeskPosition]??teacherAnchors.left;
   realisticDesk(x,tx,378,tw,th,'ÖĞRETMEN MASASI',true,0);
