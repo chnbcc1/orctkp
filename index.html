@@ -2213,7 +2213,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.84</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.85</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2371,7 +2371,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.84 · Ortak Konu Kimliği Motoru · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.85 · Ortak Konu Kimliği Motoru · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -5697,10 +5697,20 @@ async function exportSeatingPlanRealisticJPEG(){
   // pano ve saat ön duvarda kalır; kapı sağ yan duvara perspektifli yerleşir
   x.fillStyle='#a97947';x.strokeStyle='#754b2b';x.lineWidth=4;x.fillRect(1250,205,155,150);x.strokeRect(1250,205,155,150);x.fillStyle='#f4efe7';for(let i=0;i<5;i++)x.fillRect(1268+(i%3)*41,224+Math.floor(i/3)*59,29,42);
   x.beginPath();x.arc(1328,128,40,0,Math.PI*2);x.fillStyle='#e7e5e4';x.fill();x.strokeStyle='#44403c';x.lineWidth=5;x.stroke();x.fillStyle='#292524';x.font='12px Arial';x.textAlign='center';x.fillText('12',1328,101);x.fillText('6',1328,159);x.beginPath();x.moveTo(1328,128);x.lineTo(1328,106);x.moveTo(1328,128);x.lineTo(1347,138);x.strokeStyle='#292524';x.lineWidth=2;x.stroke();
-  // sağ yan duvardaki kapı: trapez form perspektifi güçlendirir
-  x.fillStyle='#8f5527';x.strokeStyle='#5f371b';x.lineWidth=4;x.beginPath();x.moveTo(1510,116);x.lineTo(1600,72);x.lineTo(1600,448);x.lineTo(1510,414);x.closePath();x.fill();x.stroke();
-  x.fillStyle='#5f402b';x.beginPath();x.moveTo(1536,178);x.lineTo(1580,161);x.lineTo(1580,276);x.lineTo(1536,284);x.closePath();x.fill();x.fillStyle='#b9d6df';x.beginPath();x.moveTo(1542,184);x.lineTo(1574,172);x.lineTo(1574,268);x.lineTo(1542,274);x.closePath();x.fill();
-  x.fillStyle='#d1d5db';x.beginPath();x.arc(1525,318,4,0,Math.PI*2);x.fill();
+  // sağ yan duvardaki kapı: referanstaki gibi zemine basar; alt kenar duvar-zemin birleşimindedir
+  // Kapının altını 475 px zemin hattına kilitlemek, 'havada asılı' görünümü engeller.
+  x.save();
+  x.shadowColor='rgba(58,35,20,.20)';x.shadowBlur=5;x.shadowOffsetX=-3;x.shadowOffsetY=2;
+  x.fillStyle='#8f5527';x.strokeStyle='#5f371b';x.lineWidth=4;x.beginPath();
+  x.moveTo(1510,116);x.lineTo(1600,72);x.lineTo(1600,475);x.lineTo(1510,475);x.closePath();x.fill();x.stroke();
+  x.shadowColor='transparent';
+  // kapı kasasının zemine oturan alt eşiği
+  x.strokeStyle='#6b3d1d';x.lineWidth=5;x.beginPath();x.moveTo(1509,475);x.lineTo(1600,475);x.stroke();
+  // perspektifli cam
+  x.fillStyle='#5f402b';x.beginPath();x.moveTo(1536,178);x.lineTo(1580,161);x.lineTo(1580,276);x.lineTo(1536,284);x.closePath();x.fill();
+  x.fillStyle='#b9d6df';x.beginPath();x.moveTo(1542,184);x.lineTo(1574,172);x.lineTo(1574,268);x.lineTo(1542,274);x.closePath();x.fill();
+  x.fillStyle='#d1d5db';x.beginPath();x.arc(1525,334,4,0,Math.PI*2);x.fill();
+  x.restore();
   // öğretmen masası
   const tw=320,th=88,tx=p.teacherDeskPosition==='right'?w-right-tw:p.teacherDeskPosition==='center'?(w-tw)/2:left+55;realisticDesk(x,tx,365,tw,th,'ÖĞRETMEN MASASI',true,0);
   // öğrenci sıraları - 3 blok / perspektif
