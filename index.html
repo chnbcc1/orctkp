@@ -941,7 +941,7 @@ button.compact-stat{font:inherit;cursor:pointer}.compact-missing{border-color:#f
 .homework-edit-form #editHomeworkName:focus{outline:none!important;box-shadow:none!important;border-color:var(--border)!important}
 
 
-/* v7.7.79 — iPhone/Safari mavi odak çerçevesini uygulama genelinde kaldır */
+/* v7.7.80 — iPhone/Safari mavi odak çerçevesini uygulama genelinde kaldır */
 input:focus, select:focus, textarea:focus, button:focus,
 input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible{
   outline:none!important;
@@ -2123,7 +2123,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </style>
 
 <style id="v7777-visual-fixes">
-/* v7.7.79 — mobil form taşmaları ve odak görünümü */
+/* v7.7.80 — mobil form taşmaları ve odak görünümü */
 #newClassName:focus{outline:none!important;box-shadow:none!important;border-color:var(--border,#d7dee8)!important}
 .doc-assistant-grid{min-width:0!important}
 .doc-assistant-grid label{min-width:0!important;max-width:100%!important;overflow:hidden}
@@ -2213,7 +2213,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.79</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.80</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2371,7 +2371,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.79 · Ortak Konu Kimliği Motoru · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.80 · Ortak Konu Kimliği Motoru · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -5547,13 +5547,13 @@ function loadCanvasImage(src){
 }
 async function exportSeatingPlanJPEG(){
   const c=cls();if(!c)return;cleanSeatingAssignments(c);const p=c.seatingPlan,a=p.assignments;
-  const w=1600,h=1130,left=55,right=55,top=350,bottom=55,gap=14;
+  const w=1600,h=1130,left=55,right=55,top=380,bottom=55,gap=14;
   const gridW=w-left-right,gridH=h-top-bottom;
   const deskW=(gridW-(p.cols-1)*gap)/p.cols,deskH=(gridH-(p.rows-1)*gap)/p.rows;
   const cv=document.createElement('canvas');cv.width=w;cv.height=h;const x=cv.getContext('2d');
   x.fillStyle='#fff';x.fillRect(0,0,w,h);
 
-  // v7.7.79 — Kullanıcının onayladığı üst düzen:
+  // v7.7.80 — Kullanıcının onayladığı üst düzen:
   // sol başlık/okul/yıl + ortada gerçek üçlü millî levha.
   x.textAlign='left';
   x.fillStyle='#111827';x.font='bold 34px Arial';
@@ -5576,9 +5576,9 @@ async function exportSeatingPlanJPEG(){
 
   const teacherDeskX=p.teacherDeskPosition==='left'?left:p.teacherDeskPosition==='right'?w-right-270:w/2-135;
   const teacherDeskCenter=teacherDeskX+135;
-  x.fillStyle='#f1f5f9';x.fillRect(teacherDeskX,320,270,44);
-  x.strokeStyle='#cbd5e1';x.strokeRect(teacherDeskX,320,270,44);
-  x.fillStyle='#334155';x.font='bold 16px Arial';x.fillText('ÖĞRETMEN MASASI',teacherDeskCenter,348);
+  x.fillStyle='#f1f5f9';x.fillRect(teacherDeskX,328,270,44);
+  x.strokeStyle='#cbd5e1';x.strokeRect(teacherDeskX,328,270,44);
+  x.fillStyle='#334155';x.font='bold 16px Arial';x.fillText('ÖĞRETMEN MASASI',teacherDeskCenter,356);
   x.textAlign='left';
 
   for(let r=0;r<p.rows;r++)for(let co=0;co<p.cols;co++){
