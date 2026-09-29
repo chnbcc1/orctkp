@@ -1,7 +1,7 @@
 {
   "name": "Öğrenci Takip Sistemi",
   "short_name": "ÖTS",
-  "start_url": "./index.html?v=7.7.99",
+  "start_url": "./index.html?v=7.8.00",
   "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
