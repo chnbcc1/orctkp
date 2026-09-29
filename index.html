@@ -2182,6 +2182,8 @@ body.class-module-page-open #modal{z-index:9200!important}
       <input id="newPin" type="password" inputmode="numeric" maxlength="8" placeholder="Yeni PIN">
       <input id="newPin2" type="password" inputmode="numeric" maxlength="8" placeholder="PIN tekrar">
       <button style="width:100%" id="pinCreateBtn" type="button" onclick="return window.__pinBootSetup ? window.__pinBootSetup() : false">PIN Oluştur</button>
+      <button style="width:100%;margin-top:10px;background:#fff;color:#065f46;border:1px solid #b7c9c2" id="recoveryScanBtn" type="button" onclick="return window.__otsRecoveryScan ? window.__otsRecoveryScan() : false">Eski Veriyi Tara</button>
+      <div id="recoveryResult" class="tiny" style="margin-top:10px"></div>
     </div>
     <div id="loginPinBox" style="display:none">
       <input id="loginPin" type="password" inputmode="numeric" maxlength="8" placeholder="PIN">
@@ -2196,8 +2198,8 @@ body.class-module-page-open #modal{z-index:9200!important}
   </div>
 </div>
 
-<script id="v7805-data-compat-guard">
-/* v7.8.05 — Veri uyumluluk koruması.
+<script id="v7806-data-recovery-guard">
+/* v7.8.06 — Veri uyumluluk koruması.
    Eski sürümlerin kalıcı veri anahtarlarını DEĞİŞTİRMEZ ve PIN kurulmadan önce
    mevcut veri deposunun bulunup bulunmadığını kullanıcıya bildirir. */
 (function(){
@@ -2225,6 +2227,38 @@ body.class-module-page-open #modal{z-index:9200!important}
   window.addEventListener('pageshow',()=>setTimeout(paint,0));
 })();
 </script>
+
+<script id="v7806-recovery-scanner">
+(function(){
+ const MAIN='odevTakipV1';
+ function valid(o){return o&&typeof o==='object'&&Array.isArray(o.classes)&&o.classes.length>0}
+ function stats(o){const c=o.classes||[];return {classes:c.length,students:c.reduce((n,x)=>n+(Array.isArray(x.students)?x.students.length:0),0)}}
+ window.__otsRecoveryScan=async function(){
+   const out=document.getElementById('recoveryResult'); if(out)out.innerHTML='Tarama yapılıyor…';
+   let found=[];
+   try{
+     for(let i=0;i<localStorage.length;i++){
+       const k=localStorage.key(i); let o=null;
+       try{o=JSON.parse(localStorage.getItem(k)||'null')}catch(e){}
+       if(valid(o)) found.push({k,o,...stats(o)});
+       if(o&&typeof o==='object') for(const q of ['state','data','appData','backup']) if(valid(o[q])) found.push({k:k+' → '+q,o:o[q],...stats(o[q])});
+     }
+   }catch(e){}
+   if(found.length){
+     found.sort((a,b)=>b.students-a.students); const f=found[0];
+     if(confirm('Eski veri bulundu: '+f.classes+' sınıf · '+f.students+' öğrenci. Bu veriyi ana depoya bağlayalım mı?')){
+       try{localStorage.setItem(MAIN,JSON.stringify(f.o)); location.reload(); return false}catch(e){alert('Veri bulundu fakat ana depoya yazılamadı.');}
+     }
+   }
+   let dbs=[], cachesFound=[];
+   try{if(indexedDB.databases)dbs=(await indexedDB.databases()).map(x=>x.name).filter(Boolean)}catch(e){}
+   try{cachesFound=await caches.keys()}catch(e){}
+   if(out)out.innerHTML='<b>Bu tarayıcı alanında öğrenci verisi bulunamadı.</b><br>Görülen yerel veritabanları: '+(dbs.join(', ')||'yok')+'<br>Önbellekler: '+(cachesFound.join(', ')||'yok')+'<br><b>PIN oluşturmayın.</b> Daha önce verilerin göründüğü Ana Ekran uygulamasını/PWA’yı açın; kurtarma işlemini o depolama alanında yapacağız.';
+   return false;
+ };
+})();
+</script>
+
 <script id="v7649-pin-boot-guard">
 /* v7.6.51 — Masaüstü + Android PIN doğrudan buton düzeltmesi.
    Ana uygulama betiğinde daha sonra bir hata oluşsa bile PIN kutusunu ilk anda görünür yapar. */
@@ -2280,7 +2314,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.05</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div>
+<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.06</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2438,7 +2472,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.8.05 · Ortak Konu Kimliği Motoru · çevrimdışı";
+  el("modalSubtitle").textContent="v7.8.06 · Ortak Konu Kimliği Motoru · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -8055,7 +8089,7 @@ html.app-locked,body.app-locked{overflow:hidden!important;height:100%!important;
 </script>
 
 <style id="v7803-premium-emerald-theme">
-/* v7.8.05 — Premium Emerald theme. Functional status colors intentionally preserved. */
+/* v7.8.06 — Premium Emerald theme. Functional status colors intentionally preserved. */
 :root{
   --bg:#f5f7f4;
   --card:#ffffff;
