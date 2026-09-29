@@ -5685,12 +5685,12 @@ function realisticDesk(ctx,x,y,w,h,label,teacher=false,depth=0){
 async function exportSeatingPlanRealisticJPEG(){
   const c=cls();if(!c)return;cleanSeatingAssignments(c);const p=c.seatingPlan,a=p.assignments;
   const w=1600,h=1130,left=52,right=52,cv=document.createElement('canvas');cv.width=w;cv.height=h;const x=cv.getContext('2d');
-  // v7.7.97: üç yüzeyli gerçek oda kabuğu. Ön duvar geride, yan duvarlar kameraya doğru açılır.
+  // v7.7.98: üç yüzeyli gerçek oda kabuğu. Ön duvar geride, yan duvarlar kameraya doğru açılır.
   const frontL=205,frontR=w-205,wallFloorY=475,leftSideFloorY=417,rightSideFloorY=555,vanishX=w/2;
   // v7.7.97: oda kabuğu tek kaçış geometrisine göre çizilir.
   // Ön duvar daha dar; yan duvarlar gerçek birer yüzey olarak görünür.
   // Önce zemin çizilir; yan duvarlar zeminin üstüne oturtulur ki alt sınırları kaybolmasın.
-  let floor=x.createLinearGradient(0,wallFloorY,0,h);floor.addColorStop(0,'#e4ddd3');floor.addColorStop(.45,'#d8d1c8');floor.addColorStop(1,'#c8c1b8');x.fillStyle=floor;x.fillRect(0,wallFloorY,w,h-wallFloorY);
+  let floor=x.createLinearGradient(0,wallFloorY,0,h);floor.addColorStop(0,'#e4ddd3');floor.addColorStop(.45,'#d8d1c8');floor.addColorStop(1,'#c8c1b8');x.fillStyle=floor;x.fillRect(0,Math.min(leftSideFloorY,wallFloorY),w,h-Math.min(leftSideFloorY,wallFloorY));
   // zemin kaçış çizgileri yalnızca zemin bölgesinde kalır.
   x.strokeStyle='rgba(107,114,128,.18)';x.lineWidth=1;for(let yy=505,step=54;yy<h;yy+=step,step*=1.12){x.beginPath();x.moveTo(0,yy);x.lineTo(w,yy);x.stroke()}for(let xx=-500;xx<2200;xx+=105){x.beginPath();x.moveTo(vanishX+(xx-vanishX)*.18,wallFloorY);x.lineTo(xx,h);x.stroke()}
   // ön duvar
@@ -5709,10 +5709,13 @@ async function exportSeatingPlanRealisticJPEG(){
   x.strokeStyle='#d6d3d1';x.lineWidth=4;x.beginPath();x.moveTo(0,leftSideFloorY-16);x.lineTo(frontL,wallFloorY-16);x.moveTo(frontR,wallFloorY-16);x.lineTo(w,rightSideFloorY-16);x.stroke();
   // pencere tamamen sol yan duvarın içinde; dolapla çakışmaz.
   x.save();x.shadowColor='rgba(45,36,28,.20)';x.shadowBlur=6;x.shadowOffsetX=3;
-  x.fillStyle='#f5f1e9';x.beginPath();x.moveTo(10,82);x.lineTo(112,111);x.lineTo(112,426);x.lineTo(10,397);x.closePath();x.fill();
-  x.fillStyle='#bcd8eb';x.beginPath();x.moveTo(22,98);x.lineTo(99,120);x.lineTo(99,404);x.lineTo(22,382);x.closePath();x.fill();x.shadowColor='transparent';
-  x.strokeStyle='rgba(255,255,255,.94)';x.lineWidth=8;x.beginPath();x.moveTo(60,109);x.lineTo(60,393);x.moveTo(19,204);x.lineTo(102,216);x.moveTo(19,312);x.lineTo(102,310);x.stroke();
-  x.strokeStyle='rgba(91,105,112,.34)';x.lineWidth=2;x.beginPath();x.moveTo(112,111);x.lineTo(112,426);x.stroke();x.restore();
+  const leftWallSlope=(wallFloorY-leftSideFloorY)/frontL;
+  const winOuterBottomL=397,winOuterBottomR=winOuterBottomL+(112-10)*leftWallSlope;
+  const winInnerBottomL=382,winInnerBottomR=winInnerBottomL+(99-22)*leftWallSlope;
+  x.fillStyle='#f5f1e9';x.beginPath();x.moveTo(10,82);x.lineTo(112,111);x.lineTo(112,winOuterBottomR);x.lineTo(10,winOuterBottomL);x.closePath();x.fill();
+  x.fillStyle='#bcd8eb';x.beginPath();x.moveTo(22,98);x.lineTo(99,120);x.lineTo(99,winInnerBottomR);x.lineTo(22,winInnerBottomL);x.closePath();x.fill();x.shadowColor='transparent';
+  x.strokeStyle='rgba(255,255,255,.94)';x.lineWidth=8;x.beginPath();x.moveTo(60,109);x.lineTo(60,winInnerBottomL+(60-22)*leftWallSlope);x.moveTo(19,204);x.lineTo(102,216);x.moveTo(19,312);x.lineTo(102,310);x.stroke();
+  x.strokeStyle='rgba(91,105,112,.34)';x.lineWidth=2;x.beginPath();x.moveTo(112,111);x.lineTo(112,winOuterBottomR);x.stroke();x.restore();
   // v7.7.97: yapay pencere ışık huzmesi kaldırıldı.
   // başlık
   const titleX=frontL;x.textAlign='left';x.fillStyle='#111827';x.font='bold 31px Arial';x.fillText(`${c.name} - Sınıf Oturma Planı`,titleX,48);
