@@ -2213,7 +2213,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.85</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
+<div class="brand">Öğrenci Takip Sistemi <span class="tiny">v7.7.86</span><small>Ödev · not · dönem · PIN · çevrimdışı · masaüstü + mobil</small></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2371,7 +2371,7 @@ function documentAssistantContext(){
 function openDocumentAssistant(){
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.7.85 · Ortak Konu Kimliği Motoru · çevrimdışı";
+  el("modalSubtitle").textContent="v7.7.86 · Ortak Konu Kimliği Motoru · çevrimdışı";
   el("modalBody").innerHTML=`
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -5711,11 +5711,36 @@ async function exportSeatingPlanRealisticJPEG(){
   x.fillStyle='#b9d6df';x.beginPath();x.moveTo(1542,184);x.lineTo(1574,172);x.lineTo(1574,268);x.lineTo(1542,274);x.closePath();x.fill();
   x.fillStyle='#d1d5db';x.beginPath();x.arc(1525,334,4,0,Math.PI*2);x.fill();
   x.restore();
-  // öğretmen masası
-  const tw=320,th=88,tx=p.teacherDeskPosition==='right'?w-right-tw:p.teacherDeskPosition==='center'?(w-tw)/2:left+55;realisticDesk(x,tx,365,tw,th,'ÖĞRETMEN MASASI',true,0);
-  // öğrenci sıraları - 3 blok / perspektif
-  const top=520,bottom=50,gx=55,gy=28,gridW=w-left-right,gridH=h-top-bottom,dw=(gridW-(p.cols-1)*gx)/p.cols,dh=(gridH-(p.rows-1)*gy)/p.rows;
-  for(let r=0;r<p.rows;r++)for(let co=0;co<p.cols;co++){const perspective=r/(Math.max(1,p.rows-1)),dx=left+co*(dw+gx),dy=top+r*(dh+gy),seatGap=8,sw=(dw-(p.seatsPerDesk-1)*seatGap)/p.seatsPerDesk;for(let si=0;si<p.seatsPerDesk;si++){const sid=a[seatingSeatKey(r,co,si)],st=c.students.find(z=>z.id===sid);realisticDesk(x,dx+si*(sw+seatGap),dy,sw,dh,st?st.name:'',false,perspective)}}
+  // öğretmen masası: sınıf dekorundan bağımsız dinamik katman; Sol / Orta / Sağ seçimini izler.
+  const tw=320,th=88;
+  const teacherAnchors={left:left+55,center:(w-tw)/2,right:w-right-tw-55};
+  const tx=teacherAnchors[p.teacherDeskPosition]??teacherAnchors.left;
+  realisticDesk(x,tx,365,tw,th,'ÖĞRETMEN MASASI',true,0);
+
+  // Öğrenci sıraları: referans görünüm korunurken satır/sütun/öğrenci sayısına göre otomatik ölçeklenen dinamik katman.
+  // Böylece 24-40 öğrenci ve farklı oturma düzenlerinde dekor sabit kalır, sıralar taşmadan yeniden yerleşir.
+  const top=520,bottom=42;
+  const cols=Math.max(1,p.cols), rows=Math.max(1,p.rows), seats=Math.max(1,p.seatsPerDesk);
+  const gridW=w-left-right, gridH=h-top-bottom;
+  const gx=Math.max(28,Math.min(62,gridW*.038));
+  const gy=Math.max(14,Math.min(30,gridH/(rows*8)));
+  const cellW=(gridW-(cols-1)*gx)/cols;
+  const cellH=(gridH-(rows-1)*gy)/rows;
+  const seatGap=Math.max(5,Math.min(10,cellW*.018));
+  const sw=(cellW-(seats-1)*seatGap)/seats;
+  const baseDeskH=Math.min(cellH,Math.max(70,Math.min(116,gridH/rows*.82)));
+  for(let r=0;r<rows;r++)for(let co=0;co<cols;co++){
+    const depth=rows===1?0:r/(rows-1);
+    const rowScale=1-depth*.035;
+    const rowW=cellW*rowScale;
+    const rowX=left+co*(cellW+gx)+(cellW-rowW)/2;
+    const dy=top+r*(cellH+gy)+(cellH-baseDeskH)/2;
+    const rowSeatW=(rowW-(seats-1)*seatGap)/seats;
+    for(let si=0;si<seats;si++){
+      const sid=a[seatingSeatKey(r,co,si)],st=c.students.find(z=>z.id===sid);
+      realisticDesk(x,rowX+si*(rowSeatW+seatGap),dy,rowSeatW,baseDeskH,st?st.name:'',false,depth);
+    }
+  }
   x.textAlign='left';downloadCanvas(cv,`${safe(c.name)}_oturma_plani_gercekci.jpg`);
 }
 async function exportSeatingPlanJPEG(){
