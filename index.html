@@ -2386,7 +2386,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.44</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.45</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -8965,7 +8965,7 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
 })();
 </script>
 
-<!-- v7.8.44 — iPhone tarih, tema kontrastı ve Sınıf Kontrol Merkezi yerleşimi -->
+<!-- v7.8.45 — iPhone tarih, tema kontrastı ve Sınıf Kontrol Merkezi yerleşimi -->
 <style id="v7844-polish">
 @media(max-width:700px){
   /* Ödev ayrıntısındaki gerçek tarih alanları: iOS'un iç kontrol genişliği modalı taşırmasın. */
@@ -9011,8 +9011,76 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
 <script id="v7844-script">
 (function(){
   /* Sürüm etiketi yalnız görünüm için; veri şemasına dokunulmaz. */
-  function v(){document.querySelectorAll('.version-badge,.mm-version').forEach(function(x){if(/v7\.8\.43/.test(x.textContent||''))x.textContent=(x.textContent||'').replace('v7.8.43','v7.8.44')})}
+  function v(){document.querySelectorAll('.version-badge,.mm-version').forEach(function(x){if(/v7\.8\.43/.test(x.textContent||''))x.textContent=(x.textContent||'').replace('v7.8.43','v7.8.45')})}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',v,{once:true});else v();
   const oldRender=window.render;if(typeof oldRender==='function')window.render=function(){const r=oldRender.apply(this,arguments);setTimeout(v,0);return r};
+})();
+</script>
+
+<!-- v7.8.45 — Sınıf merkezi seçici + sabit mobil ekran -->
+<style id="v7845-class-center-fixed">
+@media(max-width:700px){
+  /* Sınıf Kontrol Merkezi ana görünümü, ana ekran gibi viewport içinde sabit kalır. */
+  html:has(body.mm-class-open:not(.class-module-page-open)){height:100%!important;overflow:hidden!important;overscroll-behavior:none!important}
+  body.mm-class-open:not(.class-module-page-open){height:100dvh!important;max-height:100dvh!important;overflow:hidden!important;overscroll-behavior:none!important;padding-bottom:0!important}
+  body.mm-class-open:not(.class-module-page-open) .layout{min-height:0!important;height:auto!important;overflow:hidden!important}
+  body.mm-class-open:not(.class-module-page-open) main{min-height:0!important;padding-bottom:4px!important;overflow:hidden!important}
+  body.mm-class-open:not(.class-module-page-open) #classView{margin-bottom:0!important;padding-bottom:0!important;overflow:hidden!important}
+  body.mm-class-open:not(.class-module-page-open) .compact-class-summary{margin-bottom:8px!important}
+  body.mm-class-open:not(.class-module-page-open) .overview-shortcuts{margin-bottom:0!important}
+
+  /* Ortadaki sınıf adı artık doğrudan sınıf seçicidir. */
+  .compact-class-head{position:relative!important}
+  #currentClassTitle{display:none!important}
+  #mmClassCenterSelect{
+    display:block!important;width:min(210px,70vw)!important;min-width:120px!important;
+    margin:0 auto 4px!important;padding:5px 38px 5px 16px!important;
+    border:0!important;border-radius:14px!important;background:#fbf6e9!important;
+    color:#075f52!important;font-size:30px!important;line-height:1.1!important;font-weight:900!important;
+    text-align:center!important;text-align-last:center!important;box-shadow:none!important;
+    outline:1px solid rgba(203,163,78,.35)!important;
+  }
+  #mmClassCenterSelect:focus{outline:2px solid #d2a84c!important}
+}
+</style>
+<script id="v7845-class-center-script">
+(function(){
+  function syncPicker(){
+    var head=document.querySelector('#classView .compact-class-head');
+    if(!head || typeof state==='undefined' || !Array.isArray(state.classes)) return;
+    var picker=document.getElementById('mmClassCenterSelect');
+    if(!picker){
+      picker=document.createElement('select');
+      picker.id='mmClassCenterSelect';
+      picker.setAttribute('aria-label','Sınıf seç');
+      var first=head.firstElementChild;
+      if(first) first.insertBefore(picker,first.firstChild); else head.insertBefore(picker,head.firstChild);
+      picker.addEventListener('change',function(){
+        var id=this.value;
+        if(!state.classes.some(function(c){return c.id===id})) return;
+        currentClassId=id;
+        state.currentClassId=id;
+        if(typeof save==='function') save();
+        if(typeof render==='function') render();
+        requestAnimationFrame(function(){window.scrollTo(0,0)});
+      });
+    }
+    var sig=state.classes.map(function(c){return c.id+'|'+c.name}).join('~');
+    if(picker.dataset.sig!==sig){
+      picker.innerHTML=state.classes.map(function(c){var o=document.createElement('option');o.value=c.id;o.textContent=c.name;return o.outerHTML}).join('');
+      picker.dataset.sig=sig;
+    }
+    picker.value=currentClassId||state.currentClassId||'';
+  }
+  function lockTop(){
+    if(document.body.classList.contains('mm-class-open') && !document.body.classList.contains('class-module-page-open')){
+      window.scrollTo(0,0);
+    }
+  }
+  function sync(){syncPicker();lockTop()}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){sync();setTimeout(sync,80)},{once:true});else{sync();setTimeout(sync,80)}
+  var oldRender=window.render;
+  if(typeof oldRender==='function')window.render=function(){var r=oldRender.apply(this,arguments);setTimeout(syncPicker,0);return r};
+  window.addEventListener('resize',function(){setTimeout(lockTop,0)},{passive:true});
 })();
 </script>
