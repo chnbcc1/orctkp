@@ -2386,7 +2386,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.51</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.52</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4589,7 +4589,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.51";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.52";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -7885,7 +7885,7 @@ function exportStudentJPEG(sid){const c=cls(),s=c.students.find(x=>x.id===sid),h
 function roundRectCanvas(ctx,x,y,w,h,r){r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
 function exportHomeworkJPEG(hid){
  const c=cls(),h=c?.homeworks?.find(x=>x.id===hid);if(!c||!h)return;
- // v7.8.51 — numarası olanlar numara sırasıyla; numarasızlar ödev kontrol listesindeki mevcut sırayla.
+ // v7.8.52 — numarası olanlar numara sırasıyla; numarasızlar ödev kontrol listesindeki mevcut sırayla.
  const students=c.students.map((st,i)=>({st,i})).sort((a,b)=>{
    const an=String(a.st.number??'').trim(),bn=String(b.st.number??'').trim();
    const ah=an!==''&&Number.isFinite(Number(an)),bh=bn!==''&&Number.isFinite(Number(bn));
@@ -7918,15 +7918,15 @@ function exportHomeworkJPEG(hid){
  const gap=12,cw=(w-2*margin-gap*4)/5,cy=178,ch=82;
  cards.forEach((a,i)=>{const cx=margin+i*(cw+gap);x.fillStyle='#fffdf8';roundRectCanvas(x,cx,cy,cw,ch,16);x.fill();x.strokeStyle='#d8cda9';x.lineWidth=1.5;x.stroke();x.fillStyle=a[2];x.font='bold 28px Arial';x.textAlign='center';x.fillText(String(a[1]),cx+cw/2,cy+35);x.fillStyle='#33443e';x.font='bold 14px Arial';x.fillText(a[0],cx+cw/2,cy+61)});x.textAlign='left';
  // Kompakt tablo: No dar, öğrenci geniş, durum öğrenci adına yakın.
- const ty=headerH+summaryH-36,tableW=w-2*margin,noW=105,statusW=245,nameW=tableW-noW-statusW;
- x.fillStyle='#e4ddc8';roundRectCanvas(x,margin,ty,tableW,tableHeadH,10);x.fill();
- x.fillStyle='#173d33';x.font='bold 17px Arial';x.fillText('NO',margin+18,ty+35);x.fillText('ÖĞRENCİ ADI SOYADI',margin+noW+18,ty+35);x.fillText('DURUM',margin+noW+nameW+22,ty+35);
- students.forEach((st,i)=>{const y=ty+tableHeadH+i*rh,v=status(c,st.id,hid);x.fillStyle=i%2?'#fffdf8':'#eef3ef';x.fillRect(margin,y,tableW,rh);x.fillStyle='#253b35';x.font='16px Arial';x.fillText(String(st.number||'—'),margin+18,y+31);drawFullStudentName(x,st.name,margin+noW+18,y+15,nameW-35,rh-4,{maxFont:16,minFont:11,maxLines:2,weight:'normal',align:'left'});
+ const ty=headerH+summaryH-36,tableW=860,tableX=(w-tableW)/2,noW=90,statusW=220,nameW=tableW-noW-statusW;
+ x.fillStyle='#e4ddc8';roundRectCanvas(x,tableX,ty,tableW,tableHeadH,10);x.fill();
+ x.fillStyle='#173d33';x.font='bold 17px Arial';x.fillText('NO',tableX+16,ty+35);x.fillText('ÖĞRENCİ ADI SOYADI',tableX+noW+16,ty+35);x.fillText('DURUM',tableX+noW+nameW+18,ty+35);
+ students.forEach((st,i)=>{const y=ty+tableHeadH+i*rh,v=status(c,st.id,hid);x.fillStyle=i%2?'#fffdf8':'#eef3ef';x.fillRect(tableX,y,tableW,rh);x.fillStyle='#253b35';x.font='16px Arial';x.fillText(String(st.number||'—'),tableX+16,y+31);drawFullStudentName(x,st.name,tableX+noW+16,y+15,nameW-28,rh-4,{maxFont:16,minFont:11,maxLines:2,weight:'normal',align:'left'});
    const label=v==='done'?'YAPTI':v==='partial'?'KISMEN':v==='excused'?'MAZERETLİ':v==='missing'?'YAPMADI':'KONTROL EDİLMEDİ';
    const col=v==='done'?'#15803d':v==='partial'?'#7c3aed':v==='excused'?'#c56a00':v==='missing'?'#c62828':'#64748b';
-   x.font='bold 14px Arial';const badgeW=Math.min(statusW-34,Math.max(104,x.measureText(label).width+30)),bx=margin+noW+nameW+18,by=y+9;
+   x.font='bold 14px Arial';const badgeW=Math.min(statusW-34,Math.max(104,x.measureText(label).width+30)),bx=tableX+noW+nameW+16,by=y+9;
    x.fillStyle=col+'18';roundRectCanvas(x,bx,by,badgeW,30,15);x.fill();x.strokeStyle=col;x.lineWidth=1;x.stroke();x.fillStyle=col;x.textAlign='center';x.fillText(label,bx+badgeW/2,by+20);x.textAlign='left';
-   x.strokeStyle='#dde5e0';x.lineWidth=1;x.beginPath();x.moveTo(margin,y+rh);x.lineTo(margin+tableW,y+rh);x.stroke()
+   x.strokeStyle='#dde5e0';x.lineWidth=1;x.beginPath();x.moveTo(tableX,y+rh);x.lineTo(tableX+tableW,y+rh);x.stroke()
  });
  const fy=ty+tableHeadH+students.length*rh+43;x.fillStyle='#52665f';x.font='15px Arial';x.fillText(`Toplam ${students.length} öğrenci  •  Kontrol edilen ${checked}  •  Tamamlanma %${rate}`,margin,fy);x.textAlign='right';x.fillStyle='#36564c';x.font='bold 15px Arial';x.fillText('MualliMate+  •  Öğrenci Takip Sistemi',w-margin,fy);x.textAlign='left';
  downloadCanvas(cv,`${safe(c.name)}_${safe(h.name)}_Odev_Kontrol_Raporu.jpg`)
@@ -8698,6 +8698,55 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(polish,100)},{once:true});else setTimeout(polish,100);
 })();
 </script>
+
+<style id="v7852-adaptive-home">
+@media(max-width:700px){
+ html.mm-home-viewport,body.mm-home-viewport{height:auto!important;max-height:none!important;overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior-y:auto!important}
+ body.mm-home-viewport .layout,body.mm-home-viewport main{overflow:visible!important}
+ body.mm-home-viewport main{padding-bottom:calc(14px + env(safe-area-inset-bottom))!important}
+ body.mm-home-viewport #mobileHomeDashboard{gap:8px!important;padding-bottom:8px!important}
+ body.mm-home-tight #mobileHomeDashboard{gap:7px!important}
+ body.mm-home-tight .mm-home-card{padding:10px!important;border-radius:17px!important}
+ body.mm-home-tight .mm-section-head{margin-bottom:5px!important}
+ body.mm-home-tight .mm-now{padding:6px 0!important}
+ body.mm-home-tight .mm-next-title{margin-top:5px!important}
+ body.mm-home-tight .mm-next-row{padding:4px 0!important;line-height:1.25!important}
+ body.mm-home-tight .mm-duty{padding:8px 10px!important}
+ body.mm-home-tight .mm-quick-grid button{padding:8px 3px!important}
+ body.mm-home-tight .mm-class-chip{padding:7px!important;min-height:60px!important}
+ body.mm-home-ultra #mobileHomeDashboard{gap:5px!important}
+ body.mm-home-ultra .mm-home-card{padding:8px 10px!important;border-radius:16px!important}
+ body.mm-home-ultra .mm-section-head{margin-bottom:3px!important}
+ body.mm-home-ultra .mm-section-head b{font-size:14px!important}
+ body.mm-home-ultra .mm-now{padding:4px 0!important}
+ body.mm-home-ultra .mm-now b{font-size:16px!important}
+ body.mm-home-ultra .mm-next-title{margin-top:3px!important}
+ body.mm-home-ultra .mm-next-row{padding:3px 0!important;font-size:11px!important}
+ body.mm-home-ultra .mm-duty-line{min-height:27px!important}
+ body.mm-home-ultra .mm-quick-grid button{padding:6px 2px!important}
+ body.mm-home-ultra .mm-quick-grid button span{font-size:18px!important;margin-bottom:2px!important}
+ body.mm-home-ultra .mm-class-chip{padding:6px!important;min-height:55px!important}
+}
+</style>
+<script id="v7852-adaptive-home-script">
+(function(){
+ let timer=0;
+ function fitHome(){
+  clearTimeout(timer);timer=setTimeout(function(){
+   if(!matchMedia('(max-width:700px)').matches)return;
+   const b=document.body,d=document.getElementById('mobileHomeDashboard');if(!d||b.classList.contains('mm-class-open'))return;
+   b.classList.remove('mm-home-tight','mm-home-ultra');
+   const vh=(window.visualViewport&&visualViewport.height)||innerHeight,top=d.getBoundingClientRect().top,available=Math.max(320,vh-top-8);
+   if(d.scrollHeight>available)b.classList.add('mm-home-tight');
+   requestAnimationFrame(function(){if(d.scrollHeight>available)b.classList.add('mm-home-ultra')});
+  },20);
+ }
+ addEventListener('resize',fitHome,{passive:true});if(window.visualViewport)visualViewport.addEventListener('resize',fitHome,{passive:true});
+ const mo=new MutationObserver(fitHome);
+ function start(){const d=document.getElementById('mobileHomeDashboard');if(d)mo.observe(d,{childList:true,subtree:true,characterData:true});fitHome();setTimeout(fitHome,150)}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
+</script>
 </body>
 </html><style id="v7412-lock-fullscreen-fix">
 /* v7.5.1: iPhone/PWA lock screen must fully cover app content */
@@ -9186,4 +9235,4 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
 }
 </style>
 
-<!-- v7.8.51 — ödev görselini IndexedDB’den kalıcı silme + profesyonel ödev kontrol raporu -->
+<!-- v7.8.52 — ödev görselini IndexedDB’den kalıcı silme + profesyonel ödev kontrol raporu -->
