@@ -1,4 +1,4 @@
-const CACHE_NAME='ots-v7.8.45-navigation-origin';
+const CACHE_NAME='ots-v7.8.46-navigation-origin';
 const APP_SHELL = ['./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/apple-touch-icon.png'];
 self.addEventListener('install', event => { self.skipWaiting(); event.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(APP_SHELL)).catch(()=>{})); });
 self.addEventListener('activate', event => { event.waitUntil(self.clients.claim()); });
