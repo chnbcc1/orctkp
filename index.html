@@ -2386,7 +2386,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.54</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.55</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4589,7 +4589,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.54";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.55";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -7885,7 +7885,7 @@ function exportStudentJPEG(sid){const c=cls(),s=c.students.find(x=>x.id===sid),h
 function roundRectCanvas(ctx,x,y,w,h,r){r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
 function exportHomeworkJPEG(hid){
  const c=cls(),h=c?.homeworks?.find(x=>x.id===hid);if(!c||!h)return;
- // v7.8.54 — numarası olanlar numara sırasıyla; numarasızlar ödev kontrol listesindeki mevcut sırayla.
+ // v7.8.55 — numarası olanlar numara sırasıyla; numarasızlar ödev kontrol listesindeki mevcut sırayla.
  const students=c.students.map((st,i)=>({st,i})).sort((a,b)=>{
    const an=String(a.st.number??'').trim(),bn=String(b.st.number??'').trim();
    const ah=an!==''&&Number.isFinite(Number(an)),bh=bn!==''&&Number.isFinite(Number(bn));
@@ -7917,7 +7917,7 @@ function exportHomeworkJPEG(hid){
  const gap=12,cw=(w-2*margin-gap*4)/5,cy=178,ch=82;
  cards.forEach((a,i)=>{const cx=margin+i*(cw+gap);x.fillStyle='#fffdf8';roundRectCanvas(x,cx,cy,cw,ch,16);x.fill();x.strokeStyle='#d8cda9';x.lineWidth=1.5;x.stroke();x.fillStyle=a[2];x.font='bold 28px Arial';x.textAlign='center';x.fillText(String(a[1]),cx+cw/2,cy+35);x.fillStyle='#33443e';x.font='bold 14px Arial';x.fillText(a[0],cx+cw/2,cy+61)});x.textAlign='left';
  // Kompakt tablo: No dar, öğrenci geniş, durum öğrenci adına daha yakın.
- const ty=headerH+summaryH-36,tableW=900,tableX=70,noW=92,statusW=250,nameW=tableW-noW-statusW;
+ const ty=headerH+summaryH-36,tableW=900,tableX=(w-tableW)/2,noW=92,statusW=250,nameW=tableW-noW-statusW;
  x.fillStyle='#e4ddc8';roundRectCanvas(x,tableX,ty,tableW,tableHeadH,10);x.fill();
  x.fillStyle='#173d33';x.font='bold 18px Arial';x.fillText('NO',tableX+16,ty+35);x.fillText('ÖĞRENCİ ADI SOYADI',tableX+noW+16,ty+35);x.fillText('DURUM',tableX+noW+nameW+12,ty+35);
  students.forEach((st,i)=>{const y=ty+tableHeadH+i*rh,v=status(c,st.id,hid);x.fillStyle=i%2?'#fffdf8':'#eef3ef';x.fillRect(tableX,y,tableW,rh);x.fillStyle='#253b35';x.font='17px Arial';x.fillText(String(st.number||'—'),tableX+16,y+31);drawFullStudentName(x,st.name,tableX+noW+16,y+15,nameW-24,rh-4,{maxFont:17,minFont:12,maxLines:2,weight:'normal',align:'left'});
@@ -9234,4 +9234,4 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
 }
 </style>
 
-<!-- v7.8.54 — ödev görselini IndexedDB’den kalıcı silme + profesyonel ödev kontrol raporu -->
+<!-- v7.8.55 — ödev görselini IndexedDB’den kalıcı silme + profesyonel ödev kontrol raporu -->
