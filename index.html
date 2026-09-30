@@ -2386,7 +2386,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.46</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.47</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -8618,7 +8618,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 
 
 
-<!-- v7.8.46 — sınıf seçici ve araç ikon hizalama -->
+<!-- v7.8.47 — sınıf seçici ve araç ikon hizalama -->
 <style id="v7846-class-center-polish">
 @media(max-width:700px){
   #mmClassCenterSelect{width:min(210px,70vw)!important;padding-left:44px!important;padding-right:44px!important;text-align:center!important;text-align-last:center!important}
@@ -8627,6 +8627,30 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   .class-top-actions .mm-tool-label{display:block!important;width:100%!important;text-align:center!important;font-size:12px!important;font-weight:800!important;line-height:1.02!important;color:#18352f!important}
 }
 </style>
+
+<!-- v7.8.47 — sınıf adı geometrik merkezleme -->
+<style id="v7847-class-picker-center">
+@media(max-width:700px){
+  .mm-class-picker-shell{position:relative!important;width:min(210px,70vw)!important;height:58px!important;margin:0 auto 4px!important;border-radius:14px!important;background:#fbf6e9!important;outline:1px solid rgba(203,163,78,.35)!important;overflow:hidden!important}
+  .mm-class-picker-label{position:absolute!important;inset:0!important;display:flex!important;align-items:center!important;justify-content:center!important;pointer-events:none!important;color:#075f52!important;font-size:30px!important;line-height:1!important;font-weight:900!important;text-align:center!important}
+  .mm-class-picker-arrow{position:absolute!important;right:22px!important;top:50%!important;transform:translateY(-50%)!important;pointer-events:none!important;color:#111!important;font-size:30px!important;line-height:.65!important;font-weight:900!important;display:flex!important;flex-direction:column!important;align-items:center!important}
+  #mmClassCenterSelect{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-width:0!important;margin:0!important;padding:0!important;opacity:0!important;cursor:pointer!important;z-index:3!important}
+  .mm-class-picker-shell:focus-within{outline:2px solid #d2a84c!important}
+}
+</style>
+<script id="v7847-class-picker-center-script">
+(function(){
+ function polish(){
+  var sel=document.getElementById('mmClassCenterSelect'); if(!sel)return;
+  var shell=sel.closest('.mm-class-picker-shell');
+  if(!shell){shell=document.createElement('div');shell.className='mm-class-picker-shell';sel.parentNode.insertBefore(shell,sel);shell.appendChild(sel);var lab=document.createElement('span');lab.className='mm-class-picker-label';shell.appendChild(lab);var ar=document.createElement('span');ar.className='mm-class-picker-arrow';ar.setAttribute('aria-hidden','true');ar.innerHTML='<span>⌃</span><span>⌄</span>';shell.appendChild(ar)}
+  var lab=shell.querySelector('.mm-class-picker-label');var opt=sel.options[sel.selectedIndex];if(lab)lab.textContent=opt?opt.textContent:'';
+  if(!sel.dataset.v7847){sel.addEventListener('change',function(){setTimeout(polish,0)});sel.dataset.v7847='1'}
+ }
+ var old=window.render;if(typeof old==='function')window.render=function(){var r=old.apply(this,arguments);setTimeout(polish,0);return r};
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(polish,100)},{once:true});else setTimeout(polish,100);
+})();
+</script>
 </body>
 </html><style id="v7412-lock-fullscreen-fix">
 /* v7.5.1: iPhone/PWA lock screen must fully cover app content */
