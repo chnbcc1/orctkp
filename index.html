@@ -2386,7 +2386,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.56</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.57</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4589,7 +4589,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.56";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.57";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -7885,7 +7885,7 @@ function exportStudentJPEG(sid){const c=cls(),s=c.students.find(x=>x.id===sid),h
 function roundRectCanvas(ctx,x,y,w,h,r){r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
 function exportHomeworkJPEG(hid){
  const c=cls(),h=c?.homeworks?.find(x=>x.id===hid);if(!c||!h)return;
- // v7.8.56 — numarası olanlar numara sırasıyla; numarasızlar ödev kontrol listesindeki mevcut sırayla.
+ // v7.8.57 — numarası olanlar numara sırasıyla; numarasızlar ödev kontrol listesindeki mevcut sırayla.
  const students=c.students.map((st,i)=>({st,i})).sort((a,b)=>{
    const an=String(a.st.number??'').trim(),bn=String(b.st.number??'').trim();
    const ah=an!==''&&Number.isFinite(Number(an)),bh=bn!==''&&Number.isFinite(Number(bn));
@@ -9235,117 +9235,63 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
 }
 </style>
 
-<!-- v7.8.56 — ödev görselini IndexedDB’den kalıcı silme + profesyonel ödev kontrol raporu -->
+<!-- v7.8.57 — güvenli PIN giriş düzeltmesi + rapor iyileştirmeleri -->
 
-
-<!-- v7.8.56 — iPhone PIN ekranı klavye/viewport kaydırma kilidi -->
-<style id="v7856-pin-viewport-lock">
+<!-- v7.8.57 — iPhone PIN ekranı güvenli kaydırma koruması; giriş mantığına dokunmaz -->
+<style id="v7857-pin-safe-lock">
 html.app-locked,body.app-locked{
   overflow:hidden!important;
   overscroll-behavior:none!important;
-  width:100%!important;
-  max-width:100%!important;
 }
-body.app-locked{
+#lockScreen.lock:not(.hidden){
   position:fixed!important;
   inset:0!important;
-  height:100dvh!important;
-  min-height:100dvh!important;
-  margin:0!important;
-}
-#lockScreen.lock{
-  top:var(--mm-lock-top,0px)!important;
-  left:var(--mm-lock-left,0px)!important;
-  right:auto!important;
-  bottom:auto!important;
-  width:var(--mm-lock-width,100vw)!important;
-  height:var(--mm-lock-height,100dvh)!important;
-  min-height:0!important;
-  max-height:var(--mm-lock-height,100dvh)!important;
+  top:0!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  width:100vw!important;
+  height:100vh!important;
+  height:100lvh!important;
+  min-height:100vh!important;
+  min-height:100lvh!important;
+  max-height:none!important;
   overflow:hidden!important;
   overscroll-behavior:none!important;
-  -webkit-overflow-scrolling:auto!important;
-  touch-action:manipulation!important;
-  box-sizing:border-box!important;
+  background:#0f172a!important;
 }
-#lockScreen .lockbox{
-  box-sizing:border-box!important;
-  max-height:calc(var(--mm-lock-height,100dvh) - 28px)!important;
-  overscroll-behavior:contain!important;
-}
-#lockScreen.mm-login-mode .lockbox{
-  overflow:hidden!important;
-  -webkit-overflow-scrolling:auto!important;
-}
-#lockScreen.mm-setup-mode .lockbox{
-  overflow:auto!important;
-  -webkit-overflow-scrolling:touch!important;
-}
-#lockScreen.mm-keyboard-open{
-  align-items:flex-start!important;
-  justify-content:center!important;
-  padding-top:max(8px,env(safe-area-inset-top))!important;
-  padding-bottom:8px!important;
-}
-#lockScreen.mm-keyboard-open .lockbox{
-  margin:0 auto!important;
-  max-height:calc(var(--mm-lock-height,100dvh) - 16px)!important;
+@media(max-width:700px){
+  #lockScreen.lock:not(.hidden) .lockbox{
+    max-height:calc(var(--mm-visible-h,100dvh) - 20px)!important;
+    overscroll-behavior:contain!important;
+  }
+  #lockScreen.lock:not(.hidden).keyboard-open{
+    align-items:flex-start!important;
+    justify-content:center!important;
+    padding-top:max(8px,env(safe-area-inset-top))!important;
+  }
 }
 </style>
-<script id="v7856-pin-viewport-lock-script">
+<script id="v7857-pin-safe-lock-script">
 (function(){
   var lock=document.getElementById('lockScreen');
   if(!lock)return;
-  function locked(){return !lock.classList.contains('hidden') && document.body.classList.contains('app-locked')}
-  function mode(){
-    var setup=document.getElementById('setupPinBox');
-    var isSetup=!!setup && getComputedStyle(setup).display!=='none';
-    lock.classList.toggle('mm-setup-mode',isSetup);
-    lock.classList.toggle('mm-login-mode',!isSetup);
+  function isLoginMode(){
+    var box=document.getElementById('loginPinBox');
+    return box && getComputedStyle(box).display!=='none';
   }
-  function resetRootScroll(){
-    if(!locked())return;
-    if(document.documentElement.scrollTop)document.documentElement.scrollTop=0;
-    if(document.body.scrollTop)document.body.scrollTop=0;
-    if(window.scrollY)window.scrollTo(0,0);
-  }
-  function syncViewport(){
-    if(!locked())return;
-    mode();
-    var vv=window.visualViewport;
-    var width=Math.max(1,Math.round(vv?vv.width:window.innerWidth));
-    var height=Math.max(1,Math.round(vv?vv.height:window.innerHeight));
-    var top=Math.max(0,Math.round(vv?vv.offsetTop:0));
-    var left=Math.max(0,Math.round(vv?vv.offsetLeft:0));
-    lock.style.setProperty('--mm-lock-width',width+'px');
-    lock.style.setProperty('--mm-lock-height',height+'px');
-    lock.style.setProperty('--mm-lock-top',top+'px');
-    lock.style.setProperty('--mm-lock-left',left+'px');
-    var layoutH=Math.max(window.innerHeight||0,document.documentElement.clientHeight||0);
-    var keyboardOpen=!!vv && (layoutH-height>120 || top>40);
-    lock.classList.toggle('mm-keyboard-open',keyboardOpen);
-    requestAnimationFrame(resetRootScroll);
-  }
-  function onFocus(e){
-    if(!locked() || !e.target.matches('#lockScreen input'))return;
-    syncViewport();
-    setTimeout(syncViewport,50);
-    setTimeout(syncViewport,250);
-  }
-  document.addEventListener('focusin',onFocus,true);
-  document.addEventListener('focusout',function(){if(locked()){setTimeout(syncViewport,60);setTimeout(syncViewport,250)}},true);
-  window.addEventListener('resize',syncViewport,{passive:true});
-  window.addEventListener('orientationchange',function(){setTimeout(syncViewport,120)},{passive:true});
-  window.addEventListener('scroll',resetRootScroll,{passive:true});
-  if(window.visualViewport){
-    visualViewport.addEventListener('resize',syncViewport,{passive:true});
-    visualViewport.addEventListener('scroll',syncViewport,{passive:true});
-  }
-  var mo=new MutationObserver(function(){if(!lock.classList.contains('hidden')){syncViewport()}else{lock.classList.remove('mm-keyboard-open','mm-login-mode','mm-setup-mode')}});
-  mo.observe(lock,{attributes:true,attributeFilter:['class']});
-  var setup=document.getElementById('setupPinBox'),login=document.getElementById('loginPinBox');
-  if(setup)mo.observe(setup,{attributes:true,attributeFilter:['style']});
-  if(login)mo.observe(login,{attributes:true,attributeFilter:['style']});
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',syncViewport,{once:true});else syncViewport();
+  function locked(){return !lock.classList.contains('hidden')}
+  // Login ekranında boş alandan sürükleyerek kök sayfanın hareket etmesini engeller.
+  // INPUT/BUTTON dokunmaları normal kalır; PIN giriş ve buton olaylarına müdahale edilmez.
+  lock.addEventListener('touchmove',function(e){
+    if(!locked()||!isLoginMode())return;
+    var t=e.target;
+    if(t && t.closest && t.closest('input,button,label'))return;
+    e.preventDefault();
+  },{passive:false});
+  window.addEventListener('scroll',function(){
+    if(locked() && isLoginMode() && window.scrollY!==0) window.scrollTo(0,0);
+  },{passive:true});
 })();
 </script>
+
