@@ -2317,7 +2317,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 </script>
 
 <header>
-<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.15</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div>
+<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.16</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4465,7 +4465,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.15";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.16";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -5809,9 +5809,10 @@ function realisticDesk(ctx,x,y,w,h,label,teacher=false,depth=0){
   ctx.strokeStyle='#4b5158';ctx.lineWidth=Math.max(3,ww*.016);
   [[.10,.61,.07,1.05],[.90,.61,.93,1.05]].forEach(q=>{ctx.beginPath();ctx.moveTo(xx+ww*q[0],yy+hh*q[1]);ctx.lineTo(xx+ww*q[2],yy+hh*q[3]);ctx.stroke()});
   // isimlik
-  ctx.shadowColor='rgba(0,0,0,.08)';ctx.shadowBlur=3;ctx.fillStyle='#fffaf0';ctx.strokeStyle='#d6c4a5';ctx.lineWidth=1.2;rrReal(ctx,xx+ww*.075,yy+hh*.13,ww*.85,hh*.31,4);ctx.fill();ctx.stroke();ctx.shadowColor='transparent';
+  ctx.shadowColor='rgba(0,0,0,.08)';ctx.shadowBlur=3;ctx.fillStyle='#fffaf0';ctx.strokeStyle='#d6c4a5';ctx.lineWidth=1.2;rrReal(ctx,xx+ww*.06,yy+hh*.105,ww*.88,hh*.36,4);ctx.fill();ctx.stroke();ctx.shadowColor='transparent';
   ctx.fillStyle=label?'#111827':'#94a3b8';
-  if(label)drawFullStudentName(ctx,label,xx+ww/2,yy+hh*.285,ww*.74,hh*.26,{maxFont:teacher?15:14,minFont:7,maxLines:3,weight:'bold',align:'center'});
+  // v7.8.16: öğrenci adları daha büyük; uzun adlar gerektiğinde iki satıra yayılır.
+  if(label)drawFullStudentName(ctx,label,xx+ww/2,yy+hh*.285,ww*.80,hh*.32,{maxFont:teacher?15:18,minFont:9,maxLines:teacher?2:2,weight:'bold',align:'center'});
   else{ctx.font=`${Math.max(9,ww*.05)}px Arial`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('Boş',xx+ww/2,yy+hh*.285);ctx.textBaseline='alphabetic'}
   ctx.restore();
 }
@@ -8158,7 +8159,7 @@ window.openArchiveSafetyCenter814=openArchiveSafetyCenter814;
 window.exportSafetySnapshot813=exportSafetySnapshot813;
 window.exportPreUpdate813=exportPreUpdate813;
 window.restoreSafetySnapshot813=restoreSafetySnapshot813;
-function install(){/* v7.8.15: Veri Güvenliği Arşiv düğmesi global erişim düzeltmesi. */}
+function install(){/* v7.8.16: Gerçekçi oturma planında öğrenci adları büyütüldü; uzun adlar iki satır kullanır. */}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();window.openRecovery810=overlay;
 })();
 </script>
