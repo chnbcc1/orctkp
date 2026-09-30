@@ -2386,7 +2386,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.43</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.44</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -8962,5 +8962,57 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
  if(window.visualViewport){visualViewport.addEventListener('resize',sync7837,{passive:true});visualViewport.addEventListener('scroll',sync7837,{passive:true})}
  addEventListener('resize',sync7837,{passive:true});
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
+</script>
+
+<!-- v7.8.44 — iPhone tarih, tema kontrastı ve Sınıf Kontrol Merkezi yerleşimi -->
+<style id="v7844-polish">
+@media(max-width:700px){
+  /* Ödev ayrıntısındaki gerçek tarih alanları: iOS'un iç kontrol genişliği modalı taşırmasın. */
+  #modalBody .form-row:has(#givenDate),#modalBody .form-row:has(#dueDate){display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:12px!important;width:100%!important;max-width:100%!important;overflow:hidden!important}
+  #modalBody .form-row:has(#givenDate)>label,#modalBody .form-row:has(#dueDate)>label{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;overflow:hidden!important}
+  #givenDate,#dueDate{display:block!important;position:relative!important;inset:auto!important;width:calc(100% - 2px)!important;max-width:calc(100% - 2px)!important;min-width:0!important;height:48px!important;margin:6px 1px 0!important;padding:10px 14px!important;box-sizing:border-box!important;-webkit-appearance:none!important;appearance:none!important;overflow:hidden!important}
+  #givenDate::-webkit-date-and-time-value,#dueDate::-webkit-date-and-time-value{text-align:center!important;min-width:0!important}
+  #givenDate::-webkit-calendar-picker-indicator,#dueDate::-webkit-calendar-picker-indicator{position:absolute!important;right:10px!important;max-width:24px!important}
+
+  /* Ayarlar: tek palet, beyaz blok yok. */
+  #modalBody .settings-grid{background:#f7f0df!important;border:1px solid #d8cda9!important;border-radius:16px!important;padding:14px!important;box-shadow:0 5px 16px rgba(7,95,82,.06)!important}
+  #modalBody .settings-grid input,#modalBody .settings-grid select,#modalBody #oldPin,#modalBody #changeNewPin{background:#fffaf0!important;color:#18352f!important;border-color:#d6c58f!important}
+  #modalBody .mm-settings-period{background:#e8f0ea!important;border-color:#c7d8cd!important}
+  #modalBody hr{border-top-color:#d9cfb3!important}
+
+  /* Rapor: tüm beyaz yüzeyleri ve soluk yazıları tema kontrastına getir. */
+  .class-module-body .report-summary-card,.class-module-body .homework-report-card,.class-module-body .report-card{background:#fbf6e9!important;border-color:#d3ddd5!important;color:#18352f!important;box-shadow:0 5px 14px rgba(7,95,82,.06)!important}
+  .class-module-body .report-summary-card span{color:#5d706a!important}.class-module-body .report-summary-card b{color:#075f52!important}
+  .class-module-body .homework-report-head b{color:#18352f!important;opacity:1!important;text-shadow:none!important}
+  .class-module-body .homework-report-stats .report-stat{color:#18352f!important}
+  .class-module-body .homework-report-stats .report-stat.done{background:#d9f2df!important;color:#126a35!important}
+  .class-module-body .homework-report-stats .report-stat.partial{background:#e9e1fb!important;color:#5d2ab5!important}
+  .class-module-body .homework-report-stats .report-stat.excused{background:#f8e6c8!important;color:#9a451f!important}
+  .class-module-body .homework-report-stats .report-stat.missing{background:#f7dada!important;color:#a32323!important}
+  .class-module-body .homework-report-stats .report-stat.pending{background:#e7ecef!important;color:#415267!important}
+
+  /* Sınıf Kontrol Merkezi: boş alanı kullan, sıkışık düğmeleri aşağı doğru yay. */
+  body.mm-class-open #mmClassHomeBar{display:none!important}
+  .compact-class-summary{padding:16px 14px!important;background:#f8f2e4!important;border:1px solid #d7c99d!important;border-radius:20px!important}
+  .compact-class-head{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:14px!important}
+  .compact-class-head>div:first-child{text-align:center!important}
+  .compact-class-head #currentClassTitle{font-size:30px!important;color:#075f52!important;margin:0!important}
+  .class-top-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;width:100%!important;order:2!important}
+  .class-top-actions button{min-height:62px!important;width:100%!important;margin:0!important;padding:10px 8px!important;border-radius:15px!important;font-size:14px!important;background:#f4ead5!important;color:#18352f!important;border:1px solid #d3bd79!important}
+  .class-module-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;margin-top:14px!important}
+  .class-module-btn{min-height:82px!important;padding:10px 8px!important;border-radius:16px!important;background:linear-gradient(180deg,#0a6b5d,#075448)!important;color:#fff!important;border:1px solid #cba34e!important}
+  .class-module-btn span{font-size:24px!important}.class-module-btn b{font-size:14px!important;color:#fff!important}.class-module-btn em{font-size:17px!important;color:#f0cf78!important}
+  .class-module-grid .class-module-btn:last-child{grid-column:1/-1!important;min-height:68px!important}
+  .compact-stats.status-only{margin-top:12px!important;gap:10px!important}.compact-stat{background:#fbf6e9!important}
+  .overview-shortcuts{margin-top:12px!important;gap:10px!important}.overview-shortcut{min-height:76px!important;background:#f4ead5!important}
+}
+</style>
+<script id="v7844-script">
+(function(){
+  /* Sürüm etiketi yalnız görünüm için; veri şemasına dokunulmaz. */
+  function v(){document.querySelectorAll('.version-badge,.mm-version').forEach(function(x){if(/v7\.8\.43/.test(x.textContent||''))x.textContent=(x.textContent||'').replace('v7.8.43','v7.8.44')})}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',v,{once:true});else v();
+  const oldRender=window.render;if(typeof oldRender==='function')window.render=function(){const r=oldRender.apply(this,arguments);setTimeout(v,0);return r};
 })();
 </script>
