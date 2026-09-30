@@ -2386,7 +2386,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.48</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.49</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4589,7 +4589,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.43";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.49";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -6242,8 +6242,8 @@ async function saveNewHomework(){
   window._newHomeworkImage="";if(save()===false){c.homeworks=c.homeworks.filter(x=>x.id!==h.id);return}closeModal();render();
 }
 function viewHomeworkImage(hid){const h=cls()?.homeworks?.find(x=>x.id===hid);if(!h?.imageData)return alert("Bu ödeve görsel eklenmemiş.");el("modalTitle").textContent=h.name;el("modalSubtitle").textContent="Ödev görseli";el("modalBody").innerHTML=`<img class="homework-view-image" src="${h.imageData}" alt="${esc(h.name)} görseli"><div class="modal-actions"><button class="secondary" onclick="openHomework('${hid}')">← Ödev Kontrolüne Dön</button></div>`;el("modal").classList.add("open")}
-function changeHomeworkImage(hid,input){const f=input?.files?.[0];if(!f)return;compressHomeworkImage(f).then(data=>{const h=cls()?.homeworks?.find(x=>x.id===hid);if(!h)return;pushUndo();h.imageData=data;save();render();openHomework(hid)}).catch(e=>alert(e?.message||"Görsel eklenemedi."))}
-function removeHomeworkImage(hid){const h=cls()?.homeworks?.find(x=>x.id===hid);if(!h?.imageData)return;if(!confirm("Bu ödevin görseli kaldırılsın mı?"))return;pushUndo();h.imageData="";save();render();openHomework(hid)}
+async function changeHomeworkImage(hid,input){const f=input?.files?.[0];if(!f)return;try{const data=await compressHomeworkImage(f),c=cls(),h=c?.homeworks?.find(x=>x.id===hid);if(!c||!h)return;pushUndo();h.imageData=data;h.imageKey=homeworkImageKey(c,h);await idbPutHomeworkImage(h.imageKey,data);if(save()===false)return;render();openHomework(hid)}catch(e){alert(e?.message||"Görsel eklenemedi.")}}
+async function removeHomeworkImage(hid){const c=cls(),h=c?.homeworks?.find(x=>x.id===hid);if(!c||!h||(!h.imageData&&!h.imageKey))return;if(!confirm("Bu ödevin görseli kaldırılsın mı?"))return;pushUndo();const keys=[h.imageKey,homeworkImageKey(c,h)].filter(Boolean);h.imageData="";h.imageKey="";try{for(const key of [...new Set(keys)])await idbDeleteHomeworkImage(key)}catch(e){console.warn("Ödev görseli cihaz deposundan silinemedi",e);alert("Görsel cihaz deposundan silinemedi. Lütfen tekrar deneyin.");return}if(save()===false)return;render();openHomework(hid)}
 function openEditHomework(hid){
   const c=cls(),h=c?.homeworks?.find(x=>x.id===hid);if(!c||!h)return;
   el("modalTitle").textContent="Ödevi Düzenle";el("modalSubtitle").textContent=`${c.name} · ${currentPeriod}. Dönem`;
@@ -7881,10 +7881,32 @@ function exportDutyMonth(){const c=cls();if(!c)return;const ym=dutyMonthValue(),
 /* Rapor */
 function safe(s){return String(s).replace(/[^\w\-ÇĞİÖŞÜçğıöşü]+/g,"_")}
 function exportStudentJPEG(sid){const c=cls(),s=c.students.find(x=>x.id===sid),hs=hwPeriod(c),w=900,rh=40,top=120,height=top+hs.length*rh+70,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 25px Arial";x.fillText(`${s.name} - Ödev Raporu`,25,35);x.font="14px Arial";x.fillStyle="#64748b";x.fillText(`${c.name} · No: ${s.number||"-"} · ${currentPeriod}. Dönem`,25,62);x.fillStyle="#eaf2ff";x.fillRect(20,82,w-40,38);x.fillStyle="#1e3a8a";x.font="bold 13px Arial";x.fillText("Ödev",30,107);x.fillText("Durum",650,107);hs.forEach((h,i)=>{const y=top+i*rh,v=status(c,sid,h.id);x.fillStyle=i%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";x.font="13px Arial";x.fillText(h.name,30,y+25);x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":v==="missing"?"#dc2626":"#64748b";x.fillText(v==="done"?"YAPTI":v==="partial"?"KISMEN":v==="excused"?"MAZERETLİ":v==="missing"?"YAPMADI":"KONTROL EDİLMEDİ",650,y+25)});downloadCanvas(cv,`${safe(c.name)}_${safe(s.name)}_rapor.jpg`)}
-function exportHomeworkJPEG(hid){const c=cls(),h=c.homeworks.find(x=>x.id===hid),students=[...c.students].sort((a,b)=>a.name.localeCompare(b.name,"tr")),w=900,rh=40,top=120,height=top+students.length*rh+70,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 25px Arial";x.fillText(`${c.name} - ${h.name}`,25,35);x.font="14px Arial";x.fillStyle="#64748b";x.fillText(`${currentPeriod}. Dönem`,25,62);students.forEach((s,i)=>{const y=top+i*rh,v=status(c,s.id,hid);x.fillStyle=i%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";drawFullStudentName(x,`${s.number? s.number+' - ':''}${s.name}`,30,y+20,590,rh-4,{maxFont:13,minFont:9,maxLines:2,weight:'normal',align:'left'});x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":v==="missing"?"#dc2626":"#64748b";x.fillText(v==="done"?"YAPTI":v==="partial"?"KISMEN":v==="excused"?"MAZERETLİ":v==="missing"?"YAPMADI":"KONTROL EDİLMEDİ",650,y+25)});downloadCanvas(cv,`${safe(c.name)}_${safe(h.name)}.jpg`)}
-function exportClassJPEG(){const c=cls(),hs=hwPeriod(c),students=[...c.students].sort((a,b)=>a.name.localeCompare(b.name,"tr"));if(!students.length)return alert("Öğrenci yok.");const left=250,cw=100,rh=38,top=125,w=Math.max(1050,left+hs.length*cw+80),height=top+students.length*rh+60,cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,w,height);x.fillStyle="#111827";x.font="bold 24px Arial";x.fillText(`${c.name} - ${currentPeriod}. Dönem Ödev Durumu`,25,36);x.fillStyle="#eaf2ff";x.fillRect(20,78,w-40,47);x.fillStyle="#1e3a8a";x.font="bold 12px Arial";x.fillText("Öğrenci",30,108);hs.forEach((h,i)=>{x.save();x.translate(left+i*cw+8,118);x.rotate(-Math.PI/5);x.fillText(h.name.slice(0,15),0,0);x.restore()});students.forEach((s,r)=>{const y=top+r*rh;x.fillStyle=r%2?"#fff":"#f8fafc";x.fillRect(20,y,w-40,rh);x.fillStyle="#111827";drawFullStudentName(x,`${s.number? s.number+' - ':''}${s.name}`,30,y+19,left-45,rh-4,{maxFont:12,minFont:8,maxLines:2,weight:'normal',align:'left'});hs.forEach((h,i)=>{const v=status(c,s.id,h.id);x.fillStyle=v==="done"?"#16a34a":v==="partial"?"#7c3aed":v==="excused"?"#d97706":v==="missing"?"#dc2626":"#64748b";x.fillText(v==="done"?"✓":v==="partial"?"½":v==="excused"?"M":v==="missing"?"✕":"·",left+i*cw+35,y+24)})});downloadCanvas(cv,`${safe(c.name)}_${currentPeriod}_donem_odev.jpg`)}
-let _pendingOutput=null;
-function closeOutputPicker(){const o=document.getElementById('outputPickerOverlay');if(o)o.remove();_pendingOutput=null}
+
+function roundRectCanvas(ctx,x,y,w,h,r){r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function exportHomeworkJPEG(hid){
+ const c=cls(),h=c?.homeworks?.find(x=>x.id===hid);if(!c||!h)return;
+ const students=[...c.students].sort((a,b)=>a.name.localeCompare(b.name,"tr"));
+ const counts={done:0,partial:0,excused:0,missing:0,unchecked:0};
+ students.forEach(st=>{const v=status(c,st.id,hid);counts[v]!==undefined?counts[v]++:counts.unchecked++});
+ const checked=students.length-counts.unchecked, rate=students.length?Math.round(counts.done/students.length*100):0;
+ const w=1240, margin=70, headerH=245, summaryH=115, tableHeadH=58, rh=48, footerH=90;
+ const height=headerH+summaryH+tableHeadH+students.length*rh+footerH;
+ const cv=document.createElement("canvas");cv.width=w;cv.height=height;const x=cv.getContext("2d");
+ x.fillStyle="#f7f4ea";x.fillRect(0,0,w,height);
+ x.fillStyle="#064e3b";x.fillRect(0,0,w,155);
+ x.fillStyle="#ffffff";x.font="bold 36px Arial";x.fillText("ÖDEV KONTROL RAPORU",margin,62);
+ x.font="22px Arial";x.fillStyle="#d6b45b";x.fillText(`${c.name}  •  ${currentPeriod}. Dönem`,margin,103);
+ x.textAlign="right";x.font="bold 25px Arial";x.fillStyle="#ffffff";x.fillText(h.name,w-margin,64);x.font="18px Arial";x.fillStyle="#dbe7e2";x.fillText(`Verilme: ${formatHomeworkDateInput(h.given)||"-"}   •   Son teslim: ${formatHomeworkDateInput(h.due)||"-"}`,w-margin,103);x.textAlign="left";
+ // summary cards
+ const cards=[['Yaptı',counts.done,'#15803d'],['Kısmen',counts.partial,'#7c3aed'],['Mazeretli',counts.excused,'#c56a00'],['Yapmadı',counts.missing,'#c62828'],['Kontrol Edilmedi',counts.unchecked,'#64748b']];
+ const gap=14,cw=(w-2*margin-gap*4)/5,cy=180,ch=92;
+ cards.forEach((a,i)=>{const cx=margin+i*(cw+gap);x.fillStyle="#ffffff";roundRectCanvas(x,cx,cy,cw,ch,18);x.fill();x.strokeStyle="#dfd3ae";x.lineWidth=2;x.stroke();x.fillStyle=a[2];x.font="bold 31px Arial";x.textAlign="center";x.fillText(String(a[1]),cx+cw/2,cy+40);x.fillStyle="#33443e";x.font="bold 15px Arial";x.fillText(a[0],cx+cw/2,cy+68)});x.textAlign="left";
+ const ty=headerH+summaryH-15;
+ x.fillStyle="#e9e2cf";x.fillRect(margin,ty,w-2*margin,tableHeadH);x.fillStyle="#173d33";x.font="bold 18px Arial";x.fillText("NO",margin+20,ty+36);x.fillText("ÖĞRENCİ",margin+125,ty+36);x.fillText("DURUM",w-margin-250,ty+36);
+ students.forEach((st,i)=>{const y=ty+tableHeadH+i*rh,v=status(c,st.id,hid);x.fillStyle=i%2?"#ffffff":"#f3f6f4";x.fillRect(margin,y,w-2*margin,rh);x.fillStyle="#253b35";x.font="16px Arial";x.fillText(String(st.number||"-"),margin+20,y+31);drawFullStudentName(x,st.name,margin+125,y+15,650,rh-4,{maxFont:16,minFont:11,maxLines:2,weight:'normal',align:'left'});const label=v==="done"?"YAPTI":v==="partial"?"KISMEN":v==="excused"?"MAZERETLİ":v==="missing"?"YAPMADI":"KONTROL EDİLMEDİ";const col=v==="done"?"#15803d":v==="partial"?"#7c3aed":v==="excused"?"#c56a00":v==="missing"?"#c62828":"#64748b";x.fillStyle=col;x.font="bold 16px Arial";x.fillText(label,w-margin-250,y+31);x.strokeStyle="#e5e7eb";x.lineWidth=1;x.beginPath();x.moveTo(margin,y+rh);x.lineTo(w-margin,y+rh);x.stroke()});
+ const fy=ty+tableHeadH+students.length*rh+48;x.fillStyle="#52665f";x.font="15px Arial";x.fillText(`Toplam ${students.length} öğrenci  •  Kontrol edilen ${checked}  •  Yaptı oranı %${rate}`,margin,fy);x.textAlign="right";x.fillText("MualliMate+ • Öğrenci Takip Sistemi",w-margin,fy);x.textAlign="left";
+ downloadCanvas(cv,`${safe(c.name)}_${safe(h.name)}_Odev_Kontrol_Raporu.jpg`)
+}
 function downloadCanvas(cv,name){
  _pendingOutput={cv,name};
  let old=document.getElementById('outputPickerOverlay');if(old)old.remove();
@@ -9138,3 +9160,5 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
   body.mm-class-open:not(.class-module-page-open) .overview-shortcuts{margin-top:8px!important}
 }
 </style>
+
+<!-- v7.8.49 — ödev görselini IndexedDB’den kalıcı silme + profesyonel ödev kontrol raporu -->
