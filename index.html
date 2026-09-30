@@ -2171,7 +2171,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 }
 </style>
 <style id="v7818-mobile-premium-dashboard">
-/* v7.8.32 mobile dashboard: actual packaged MualliMate+ icon, emerald/gold, cream surfaces */
+/* v7.8.33 mobile dashboard: actual packaged MualliMate+ icon, emerald/gold, cream surfaces */
 .mm-mobile-home{display:none}
 @media(max-width:700px){
  :root{--mm-emerald:#032f2b;--mm-emerald2:#06483f;--mm-gold:#e4b85a;--mm-cream:#f5ecd9;--mm-cream2:#eadfc9}
@@ -2386,7 +2386,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.32</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.33</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4581,7 +4581,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.32";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.33";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -5975,7 +5975,7 @@ function realisticDesk(ctx,x,y,w,h,label,teacher=false,depth=0){
   // isimlik
   ctx.shadowColor='rgba(0,0,0,.08)';ctx.shadowBlur=3;ctx.fillStyle='#fffaf0';ctx.strokeStyle='#d6c4a5';ctx.lineWidth=1.2;rrReal(ctx,xx+ww*.06,yy+hh*.105,ww*.88,hh*.36,4);ctx.fill();ctx.stroke();ctx.shadowColor='transparent';
   ctx.fillStyle=label?'#111827':'#94a3b8';
-  // v7.8.32: öğrenci adları daha büyük; uzun adlar gerektiğinde iki satıra yayılır.
+  // v7.8.33: öğrenci adları daha büyük; uzun adlar gerektiğinde iki satıra yayılır.
   if(label)drawFullStudentName(ctx,label,xx+ww/2,yy+hh*.285,ww*.80,hh*.32,{maxFont:teacher?15:18,minFont:9,maxLines:teacher?2:2,weight:'bold',align:'center'});
   else{ctx.font=`${Math.max(9,ww*.05)}px Arial`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('Boş',xx+ww/2,yy+hh*.285);ctx.textBaseline='alphabetic'}
   ctx.restore();
@@ -7877,7 +7877,7 @@ async function saveOutputBlob(blob,name,type){const file=new File([blob],name,{t
 function bytesFromDataURL(u){const b=atob(u.split(',')[1]),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
 function asciiBytes(s){return new TextEncoder().encode(s)}
 function concatBytes(parts){let n=parts.reduce((a,b)=>a+b.length,0),o=new Uint8Array(n),p=0;for(const b of parts){o.set(b,p);p+=b.length}return o}
-async function downloadCanvasPDF(cv,name){/* v7.8.32: Yatay görseller A4 yatay oluşturulur ve sayfayı neredeyse tamamen doldurur. */const landscape=cv.width>cv.height;const PW=landscape?841.89:595.28,PH=landscape?595.28:841.89,M=landscape?8:28,usableW=PW-2*M,usableH=PH-2*M,sliceH=Math.max(1,Math.floor(cv.width*usableH/usableW)),images=[];for(let y=0;y<cv.height;y+=sliceH){const h=Math.min(sliceH,cv.height-y),part=document.createElement('canvas');part.width=cv.width;part.height=h;const q=part.getContext('2d');q.fillStyle='#fff';q.fillRect(0,0,part.width,part.height);q.drawImage(cv,0,y,cv.width,h,0,0,cv.width,h);images.push({w:part.width,h:part.height,data:bytesFromDataURL(part.toDataURL('image/jpeg',.92))})}
+async function downloadCanvasPDF(cv,name){/* v7.8.33: Yatay görseller A4 yatay oluşturulur ve sayfayı neredeyse tamamen doldurur. */const landscape=cv.width>cv.height;const PW=landscape?841.89:595.28,PH=landscape?595.28:841.89,M=landscape?8:28,usableW=PW-2*M,usableH=PH-2*M,sliceH=Math.max(1,Math.floor(cv.width*usableH/usableW)),images=[];for(let y=0;y<cv.height;y+=sliceH){const h=Math.min(sliceH,cv.height-y),part=document.createElement('canvas');part.width=cv.width;part.height=h;const q=part.getContext('2d');q.fillStyle='#fff';q.fillRect(0,0,part.width,part.height);q.drawImage(cv,0,y,cv.width,h,0,0,cv.width,h);images.push({w:part.width,h:part.height,data:bytesFromDataURL(part.toDataURL('image/jpeg',.92))})}
  const count=images.length,objs={},pageIds=[];for(let i=0;i<count;i++)pageIds.push(5+i*3);objs[1]=asciiBytes('<< /Type /Catalog /Pages 2 0 R >>');objs[2]=asciiBytes(`<< /Type /Pages /Count ${count} /Kids [${pageIds.map(id=>id+' 0 R').join(' ')}] >>`);images.forEach((im,i)=>{const imgId=3+i*3,contentId=4+i*3,pageId=5+i*3,scale=Math.min(usableW/im.w,usableH/im.h),dw=im.w*scale,dh=im.h*scale,x=M+(usableW-dw)/2,y=M+(usableH-dh)/2,stream=`q\n${dw.toFixed(2)} 0 0 ${dh.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm\n/Im0 Do\nQ\n`,sb=asciiBytes(stream);objs[imgId]=concatBytes([asciiBytes(`<< /Type /XObject /Subtype /Image /Width ${im.w} /Height ${im.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${im.data.length} >>\nstream\n`),im.data,asciiBytes('\nendstream')]);objs[contentId]=concatBytes([asciiBytes(`<< /Length ${sb.length} >>\nstream\n`),sb,asciiBytes('endstream')]);objs[pageId]=asciiBytes(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im0 ${imgId} 0 R >> >> /Contents ${contentId} 0 R >>`) });
  let parts=[asciiBytes('%PDF-1.4\n%âãÏÓ\n')],offsets=[0],pos=parts[0].length,max=2+count*3;for(let id=1;id<=max;id++){offsets[id]=pos;const b=concatBytes([asciiBytes(`${id} 0 obj\n`),objs[id],asciiBytes('\nendobj\n')]);parts.push(b);pos+=b.length}const xref=pos;let xs=`xref\n0 ${max+1}\n0000000000 65535 f \n`;for(let id=1;id<=max;id++)xs+=String(offsets[id]).padStart(10,'0')+' 00000 n \n';xs+=`trailer\n<< /Size ${max+1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;parts.push(asciiBytes(xs));await saveOutputBlob(new Blob(parts,{type:'application/pdf'}),name,'application/pdf')}
 function exportClassCSV(){const c=cls(),rows=[["Sınıf","Dönem","No","Öğrenci","Yaptı","Kısmen","Mazeretli","Yapmadı","Kontrol Edilmedi","Başarı %"]];c.students.forEach(s=>{const st=sstat(c,s.id);rows.push([c.name,currentPeriod,s.number,s.name,st.done,st.partial,st.excused,st.missing,st.pending,st.rate])});downloadBlob("\uFEFF"+rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(";")).join("\n"),`${safe(c.name)}_${currentPeriod}_donem_rapor.csv`,"text/csv;charset=utf-8")}
@@ -8323,7 +8323,7 @@ window.openArchiveSafetyCenter814=openArchiveSafetyCenter814;
 window.exportSafetySnapshot813=exportSafetySnapshot813;
 window.exportPreUpdate813=exportPreUpdate813;
 window.restoreSafetySnapshot813=restoreSafetySnapshot813;
-function install(){/* v7.8.32: Oturma planı PDF çıktısı A4 yatay ve sayfayı dolduracak biçimde düzeltildi. */}
+function install(){/* v7.8.33: Oturma planı PDF çıktısı A4 yatay ve sayfayı dolduracak biçimde düzeltildi. */}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();window.openRecovery810=overlay;
 })();
 </script>
@@ -8470,7 +8470,28 @@ function mmDrawerModule(id){closeMobileDrawer();document.body.classList.add('mm-
  const oldRender=window.render;if(typeof oldRender==='function')window.render=function(){migrateProfile827();const r=oldRender.apply(this,arguments);setTimeout(refresh827,0);return r};
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refresh827,{once:true});else setTimeout(refresh827,0);
 })();
-</script>\n</body>
+</script>\n<style id="v7833-home-scroll-lock">
+@media(max-width:700px){html.mm-home-no-scroll,body.mm-home-no-scroll{height:100%!important;max-height:100%!important;overflow:hidden!important;overscroll-behavior:none!important}body.mm-home-no-scroll{padding-bottom:0!important}body.mm-home-no-scroll .layout{min-height:0!important;height:auto!important}body.mm-home-no-scroll main{padding-bottom:10px!important;min-height:0!important}}
+</style>
+<script id="v7833-home-scroll-lock-script">
+(function(){
+ let raf=0;
+ function vh(){return window.visualViewport?window.visualViewport.height:window.innerHeight}
+ function fits(){
+  if(!matchMedia('(max-width:700px)').matches||document.body.classList.contains('mm-class-open'))return false;
+  const d=document.getElementById('mobileHomeDashboard'),m=d&&(d.closest('main')||document.querySelector('main')),h=document.querySelector('header');
+  if(!d||!m||!h||getComputedStyle(d).display==='none')return false;
+  const cs=getComputedStyle(m),need=h.getBoundingClientRect().height+(parseFloat(cs.paddingTop)||0)+d.getBoundingClientRect().height+(parseFloat(cs.paddingBottom)||0);
+  return need<=vh()+2;
+ }
+ function sync(){cancelAnimationFrame(raf);raf=requestAnimationFrame(function(){const on=fits();document.documentElement.classList.toggle('mm-home-no-scroll',on);document.body.classList.toggle('mm-home-no-scroll',on);if(on&&(window.scrollY||document.documentElement.scrollTop||document.body.scrollTop))window.scrollTo(0,0)})}
+ const old=window.render;if(typeof old==='function')window.render=function(){const r=old.apply(this,arguments);setTimeout(sync,0);setTimeout(sync,120);return r};
+ addEventListener('resize',sync,{passive:true});addEventListener('orientationchange',function(){setTimeout(sync,180)},{passive:true});if(window.visualViewport)visualViewport.addEventListener('resize',sync,{passive:true});
+ function start(){const d=document.getElementById('mobileHomeDashboard');if(d)new MutationObserver(function(){setTimeout(sync,0)}).observe(d,{childList:true,subtree:true,attributes:true});sync();setTimeout(sync,250)}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
+</script>
+</body>
 </html><style id="v7412-lock-fullscreen-fix">
 /* v7.5.1: iPhone/PWA lock screen must fully cover app content */
 #lockScreen.lock{
@@ -8576,7 +8597,7 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
 
 <style id="v7823-header-modal-final-fix">
 @media(max-width:700px){
-  /* v7.8.32: eski profil + dönem/yönetim satırını ana ekrandan kesin olarak kaldır */
+  /* v7.8.33: eski profil + dönem/yönetim satırını ana ekrandan kesin olarak kaldır */
   #headerControls,#headerControls.header-controls{display:none!important;height:0!important;min-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important}
   header{grid-template-columns:42px minmax(0,1fr) 46px!important;grid-template-rows:auto auto!important;gap:4px 8px!important;padding:10px 12px 8px!important;min-height:0!important}
   .premium-brand{grid-column:2!important;grid-row:1!important}
@@ -8619,7 +8640,7 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
 </script>
 <style id="v7824-profile-card-restore">
 @media(max-width:700px){
-  /* v7.8.32: Profil kartı geri geldi; yalnız yönetim satırı ana ekrandan kaldırıldı. */
+  /* v7.8.33: Profil kartı geri geldi; yalnız yönetim satırı ana ekrandan kaldırıldı. */
   header{grid-template-columns:42px minmax(0,1fr) 46px!important;grid-template-rows:auto auto!important;gap:8px!important;padding:10px 12px 10px!important}
   #mmTeacherLine{display:none!important}
   #headerControls,#headerControls.header-controls{display:block!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;overflow:visible!important;grid-column:1/-1!important;grid-row:2!important}
