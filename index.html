@@ -2171,7 +2171,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 }
 </style>
 <style id="v7818-mobile-premium-dashboard">
-/* v7.8.25 mobile dashboard: actual packaged MualliMate+ icon, emerald/gold, cream surfaces */
+/* v7.8.26 mobile dashboard: actual packaged MualliMate+ icon, emerald/gold, cream surfaces */
 .mm-mobile-home{display:none}
 @media(max-width:700px){
  :root{--mm-emerald:#032f2b;--mm-emerald2:#06483f;--mm-gold:#e4b85a;--mm-cream:#f5ecd9;--mm-cream2:#eadfc9}
@@ -2386,7 +2386,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.25</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.26</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4571,7 +4571,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.25";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.26";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -5415,9 +5415,10 @@ function renderMobileHomeDashboard(){
  const now=new Date(), mins=now.getHours()*60+now.getMinutes(), rows=mmTodayScheduleRows(now), q=scheduleNowInfo(now);
  const current=rows.find(r=>mins>=r.st&&mins<r.en), future=rows.filter(r=>r.st>mins).slice(0,3), focus=current||future[0];
  const lessons=el('mmTodayLessons'); if(lessons){
-   const main=focus?`<div class="mm-now"><div><span class="mm-time">${current?'● Şimdi':'Sıradaki'} · ${esc(focus.start)}–${esc(focus.end)}</span><b>${esc(focus.e.className||'')} ${focus.e.course?'· '+esc(focus.e.course):''}</b></div><button onclick="openQuickLesson()">Derse Git</button></div>`:`<div class="mm-now"><div><b>Bugün ders görünmüyor</b><small>Ders programını kontrol edebilirsin.</small></div><button onclick="openSchedule()">Program</button></div>`;
+   const main=focus?`<div class="mm-now"><div><span class="mm-time">${current?'● Şimdi':'Sıradaki'} · ${esc(focus.start)}–${esc(focus.end)}</span><b>${esc(focus.e.className||'')} ${focus.e.course?'· '+esc(focus.e.course):''}</b></div><button onclick="event.stopPropagation();openDailyTeacherPanel()">Derse Git</button></div>`:`<div class="mm-now"><div><b>Bugün ders görünmüyor</b><small>Ders programını kontrol edebilirsin.</small></div><button onclick="event.stopPropagation();openDailyTeacherPanel()">Ayrıntı</button></div>`;
    const next=(current?future:future.slice(1)).slice(0,2).map(r=>`<div class="mm-next-row"><span class="mm-time">${esc(r.start)}–${esc(r.end)}</span><span>${esc(r.e.className||'')} ${r.e.course?'· '+esc(r.e.course):''}</span></div>`).join('');
-   lessons.innerHTML=`<div class="mm-section-head"><b>📅 Bugünkü Dersler</b><button onclick="openSchedule()">Tüm Gün ›</button></div>${main}${next?`<div class="mm-next-title">Sonraki Dersler</div>${next}`:''}`;
+   lessons.innerHTML=`<div class="mm-section-head"><b>📅 Bugünkü Dersler</b><button onclick="event.stopPropagation();openDailyTeacherPanel()">Tüm Gün ›</button></div>${main}${next?`<div class="mm-next-title">Sonraki Dersler</div>${next}`:''}`;
+   lessons.onclick=(ev)=>{if(ev.target.closest('button'))return;openDailyTeacherPanel()}; lessons.onkeydown=(ev)=>{if((ev.key==='Enter'||ev.key===' ')&&!ev.target.closest('button')){ev.preventDefault();openDailyTeacherPanel()}};
  }
  const d=dutyInfo(now), duty=el('mmDutyCard');if(duty)duty.innerHTML=`<div class="mm-section-head"><b>🛡️ Nöbet Bilgisi</b><button onclick="openDutySchedule()">Çizelge ›</button></div><div class="mm-duty-line"><span class="mm-duty-icon">${d.type==='none'?'✓':'🛡️'}</span><div><b>${d.type==='none'?'Bugün nöbetin yok':'Bugünkü Nöbet'}</b><small>${d.type==='none'?'':esc(d.text||'')}</small></div></div>`;
  let miss=0,hw=0,tr=0,meet=0;state.classes.forEach(c=>{miss+=mmMissingForClass(c);hw+=(c.homeworks||[]).filter(h=>String(h.period||'1')===String(currentPeriod)).length;tr+=(c.trials||[]).length;meet+=(c.parentMeetings||[]).length});
@@ -5964,7 +5965,7 @@ function realisticDesk(ctx,x,y,w,h,label,teacher=false,depth=0){
   // isimlik
   ctx.shadowColor='rgba(0,0,0,.08)';ctx.shadowBlur=3;ctx.fillStyle='#fffaf0';ctx.strokeStyle='#d6c4a5';ctx.lineWidth=1.2;rrReal(ctx,xx+ww*.06,yy+hh*.105,ww*.88,hh*.36,4);ctx.fill();ctx.stroke();ctx.shadowColor='transparent';
   ctx.fillStyle=label?'#111827':'#94a3b8';
-  // v7.8.25: öğrenci adları daha büyük; uzun adlar gerektiğinde iki satıra yayılır.
+  // v7.8.26: öğrenci adları daha büyük; uzun adlar gerektiğinde iki satıra yayılır.
   if(label)drawFullStudentName(ctx,label,xx+ww/2,yy+hh*.285,ww*.80,hh*.32,{maxFont:teacher?15:18,minFont:9,maxLines:teacher?2:2,weight:'bold',align:'center'});
   else{ctx.font=`${Math.max(9,ww*.05)}px Arial`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('Boş',xx+ww/2,yy+hh*.285);ctx.textBaseline='alphabetic'}
   ctx.restore();
@@ -7866,7 +7867,7 @@ async function saveOutputBlob(blob,name,type){const file=new File([blob],name,{t
 function bytesFromDataURL(u){const b=atob(u.split(',')[1]),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
 function asciiBytes(s){return new TextEncoder().encode(s)}
 function concatBytes(parts){let n=parts.reduce((a,b)=>a+b.length,0),o=new Uint8Array(n),p=0;for(const b of parts){o.set(b,p);p+=b.length}return o}
-async function downloadCanvasPDF(cv,name){/* v7.8.25: Yatay görseller A4 yatay oluşturulur ve sayfayı neredeyse tamamen doldurur. */const landscape=cv.width>cv.height;const PW=landscape?841.89:595.28,PH=landscape?595.28:841.89,M=landscape?8:28,usableW=PW-2*M,usableH=PH-2*M,sliceH=Math.max(1,Math.floor(cv.width*usableH/usableW)),images=[];for(let y=0;y<cv.height;y+=sliceH){const h=Math.min(sliceH,cv.height-y),part=document.createElement('canvas');part.width=cv.width;part.height=h;const q=part.getContext('2d');q.fillStyle='#fff';q.fillRect(0,0,part.width,part.height);q.drawImage(cv,0,y,cv.width,h,0,0,cv.width,h);images.push({w:part.width,h:part.height,data:bytesFromDataURL(part.toDataURL('image/jpeg',.92))})}
+async function downloadCanvasPDF(cv,name){/* v7.8.26: Yatay görseller A4 yatay oluşturulur ve sayfayı neredeyse tamamen doldurur. */const landscape=cv.width>cv.height;const PW=landscape?841.89:595.28,PH=landscape?595.28:841.89,M=landscape?8:28,usableW=PW-2*M,usableH=PH-2*M,sliceH=Math.max(1,Math.floor(cv.width*usableH/usableW)),images=[];for(let y=0;y<cv.height;y+=sliceH){const h=Math.min(sliceH,cv.height-y),part=document.createElement('canvas');part.width=cv.width;part.height=h;const q=part.getContext('2d');q.fillStyle='#fff';q.fillRect(0,0,part.width,part.height);q.drawImage(cv,0,y,cv.width,h,0,0,cv.width,h);images.push({w:part.width,h:part.height,data:bytesFromDataURL(part.toDataURL('image/jpeg',.92))})}
  const count=images.length,objs={},pageIds=[];for(let i=0;i<count;i++)pageIds.push(5+i*3);objs[1]=asciiBytes('<< /Type /Catalog /Pages 2 0 R >>');objs[2]=asciiBytes(`<< /Type /Pages /Count ${count} /Kids [${pageIds.map(id=>id+' 0 R').join(' ')}] >>`);images.forEach((im,i)=>{const imgId=3+i*3,contentId=4+i*3,pageId=5+i*3,scale=Math.min(usableW/im.w,usableH/im.h),dw=im.w*scale,dh=im.h*scale,x=M+(usableW-dw)/2,y=M+(usableH-dh)/2,stream=`q\n${dw.toFixed(2)} 0 0 ${dh.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm\n/Im0 Do\nQ\n`,sb=asciiBytes(stream);objs[imgId]=concatBytes([asciiBytes(`<< /Type /XObject /Subtype /Image /Width ${im.w} /Height ${im.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${im.data.length} >>\nstream\n`),im.data,asciiBytes('\nendstream')]);objs[contentId]=concatBytes([asciiBytes(`<< /Length ${sb.length} >>\nstream\n`),sb,asciiBytes('endstream')]);objs[pageId]=asciiBytes(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im0 ${imgId} 0 R >> >> /Contents ${contentId} 0 R >>`) });
  let parts=[asciiBytes('%PDF-1.4\n%âãÏÓ\n')],offsets=[0],pos=parts[0].length,max=2+count*3;for(let id=1;id<=max;id++){offsets[id]=pos;const b=concatBytes([asciiBytes(`${id} 0 obj\n`),objs[id],asciiBytes('\nendobj\n')]);parts.push(b);pos+=b.length}const xref=pos;let xs=`xref\n0 ${max+1}\n0000000000 65535 f \n`;for(let id=1;id<=max;id++)xs+=String(offsets[id]).padStart(10,'0')+' 00000 n \n';xs+=`trailer\n<< /Size ${max+1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;parts.push(asciiBytes(xs));await saveOutputBlob(new Blob(parts,{type:'application/pdf'}),name,'application/pdf')}
 function exportClassCSV(){const c=cls(),rows=[["Sınıf","Dönem","No","Öğrenci","Yaptı","Kısmen","Mazeretli","Yapmadı","Kontrol Edilmedi","Başarı %"]];c.students.forEach(s=>{const st=sstat(c,s.id);rows.push([c.name,currentPeriod,s.number,s.name,st.done,st.partial,st.excused,st.missing,st.pending,st.rate])});downloadBlob("\uFEFF"+rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(";")).join("\n"),`${safe(c.name)}_${currentPeriod}_donem_rapor.csv`,"text/csv;charset=utf-8")}
@@ -8312,7 +8313,7 @@ window.openArchiveSafetyCenter814=openArchiveSafetyCenter814;
 window.exportSafetySnapshot813=exportSafetySnapshot813;
 window.exportPreUpdate813=exportPreUpdate813;
 window.restoreSafetySnapshot813=restoreSafetySnapshot813;
-function install(){/* v7.8.25: Oturma planı PDF çıktısı A4 yatay ve sayfayı dolduracak biçimde düzeltildi. */}
+function install(){/* v7.8.26: Oturma planı PDF çıktısı A4 yatay ve sayfayı dolduracak biçimde düzeltildi. */}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();window.openRecovery810=overlay;
 })();
 </script>
@@ -8380,6 +8381,57 @@ function mmDrawerModule(id){closeMobileDrawer();document.body.classList.add('mm-
   }
   // Mevcut ana sayfa düğmelerini de aynı güvenli dönüşe bağla.
   document.querySelectorAll('#mmBottomNav button').forEach(btn=>{if((btn.textContent||'').includes('Ana Sayfa')) btn.onclick=goHome});
+})();
+</script>
+\n<style id="v7826-profile-daily-regression-fix">
+@media(max-width:700px){
+ #profileChip .profile-lines{width:100%!important;max-width:none!important;min-width:0!important;padding-right:2px!important}
+ #profileChip .profile-lines b,#profileChip .profile-lines span{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:anywhere!important;word-break:normal!important;max-width:none!important}
+ #profileChip .profile-lines b{line-height:1.18!important}
+ #profileChip .profile-lines .mm-profile-role,#profileChip .profile-lines .mm-profile-guide{display:inline!important}
+ #profileChip .profile-lines .mm-profile-role:after{content:" · ";color:#9a7b3f}
+ #mmTodayLessons{cursor:pointer}
+}
+</style>
+<script id="v7826-daily-panel-regression-fix">
+(function(){
+ function allTodayLessonsHTML(now){
+   const rows=typeof mmTodayScheduleRows==='function'?mmTodayScheduleRows(now):[];
+   if(!rows.length)return '<p>Bugün için ders programında kayıtlı ders görünmüyor.</p>';
+   const mins=now.getHours()*60+now.getMinutes();
+   return '<div class="quick-upcoming">'+rows.map(r=>{
+     const phase=mins>=r.st&&mins<r.en?'Şimdi':mins<r.st?'Sırada':'Tamamlandı';
+     const c=typeof classByScheduleName==='function'?classByScheduleName(r.e.className||''):null;
+     const due=c&&typeof homeworkDueOn==='function'?homeworkDueOn(c,localISODate(now)):[];
+     const hw=due.length?' · '+due.length+' ödev kontrolü':' · ödev kontrolü yok';
+     return '<div class="quick-upcoming-row"><b>'+esc(r.start)+'–'+esc(r.end)+' · '+esc(r.e.className||'')+(r.e.course?' · '+esc(r.e.course):'')+'</b><small>'+phase+hw+'</small></div>';
+   }).join('')+'</div>';
+ }
+ function nextHomeworkHTML(){
+   const today=localISODate(), base=new Date(today+'T12:00:00'), rows=[];
+   (state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{
+     if(String(h.period||'1')!==String(currentPeriod)||!h.due||h.due<=today)return;
+     rows.push({c,h,days:Math.round((new Date(h.due+'T12:00:00')-base)/86400000)});
+   }));
+   rows.sort((a,b)=>a.h.due.localeCompare(b.h.due)||a.c.name.localeCompare(b.c.name,'tr'));
+   if(!rows.length)return '<p>Planlanmış sonraki ödev kontrolü görünmüyor.</p>';
+   const firstDate=rows[0].h.due, first=rows.filter(x=>x.h.due===firstDate);
+   return first.map(x=>`<div class="today-homework-row"><div><b>${esc(x.c.name)} · ${esc(x.h.name)}</b><small>${x.days===1?'Yarın':x.days+' gün sonra'} · ${esc(x.h.due)}</small></div><button class="secondary" onclick="openQuickHomework('${x.c.id}','${x.h.id}')">Aç</button></div>`).join('');
+ }
+ const original=window.openDailyTeacherPanel;
+ if(typeof original==='function')window.openDailyTeacherPanel=function(){
+   original.apply(this,arguments);
+   const body=document.getElementById('modalBody'); if(!body)return;
+   const grid=body.querySelector('.today-panel-grid'); if(!grid)return;
+   const now=new Date();
+   const lessons=document.createElement('section'); lessons.className='today-card lesson';
+   lessons.innerHTML='<div class="today-card-head"><strong>📅 Bugünün Tüm Dersleri</strong><span class="today-badge">'+(mmTodayScheduleRows(now)||[]).length+'</span></div>'+allTodayLessonsHTML(now);
+   const next=document.createElement('section'); next.className='today-card homework';
+   next.innerHTML='<div class="today-card-head"><strong>⏭️ Sıradaki Ödev Kontrolü</strong></div>'+nextHomeworkHTML();
+   const first=grid.firstElementChild; if(first)first.insertAdjacentElement('afterend',lessons); else grid.appendChild(lessons);
+   const cards=grid.querySelectorAll('.today-card.homework'); if(cards.length)cards[cards.length-1].insertAdjacentElement('afterend',next); else grid.appendChild(next);
+   if(typeof modalUpdateBackButton==='function')modalUpdateBackButton();
+ };
 })();
 </script>
 </body>
@@ -8488,7 +8540,7 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
 
 <style id="v7823-header-modal-final-fix">
 @media(max-width:700px){
-  /* v7.8.25: eski profil + dönem/yönetim satırını ana ekrandan kesin olarak kaldır */
+  /* v7.8.26: eski profil + dönem/yönetim satırını ana ekrandan kesin olarak kaldır */
   #headerControls,#headerControls.header-controls{display:none!important;height:0!important;min-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important}
   header{grid-template-columns:42px minmax(0,1fr) 46px!important;grid-template-rows:auto auto!important;gap:4px 8px!important;padding:10px 12px 8px!important;min-height:0!important}
   .premium-brand{grid-column:2!important;grid-row:1!important}
@@ -8531,7 +8583,7 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
 </script>
 <style id="v7824-profile-card-restore">
 @media(max-width:700px){
-  /* v7.8.25: Profil kartı geri geldi; yalnız yönetim satırı ana ekrandan kaldırıldı. */
+  /* v7.8.26: Profil kartı geri geldi; yalnız yönetim satırı ana ekrandan kaldırıldı. */
   header{grid-template-columns:42px minmax(0,1fr) 46px!important;grid-template-rows:auto auto!important;gap:8px!important;padding:10px 12px 10px!important}
   #mmTeacherLine{display:none!important}
   #headerControls,#headerControls.header-controls{display:block!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;overflow:visible!important;grid-column:1/-1!important;grid-row:2!important}
