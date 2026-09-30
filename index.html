@@ -2386,7 +2386,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.47</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.48</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -9120,3 +9120,21 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
   window.addEventListener('resize',function(){setTimeout(lockTop,0)},{passive:true});
 })();
 </script>
+
+<!-- v7.8.48 — sınıf seçiciyi kompaktlaştır, üst araçları yukarı topla -->
+<style id="v7848-class-center-compact-top">
+@media(max-width:700px){
+  body.mm-class-open:not(.class-module-page-open) .compact-class-summary{padding-top:10px!important}
+  body.mm-class-open:not(.class-module-page-open) .compact-class-head{gap:8px!important}
+  body.mm-class-open:not(.class-module-page-open) .mm-class-picker-shell{
+    width:min(176px,58vw)!important;height:46px!important;margin:0 auto 0!important;border-radius:12px!important
+  }
+  body.mm-class-open:not(.class-module-page-open) .mm-class-picker-label{font-size:26px!important}
+  body.mm-class-open:not(.class-module-page-open) .mm-class-picker-arrow{right:17px!important;font-size:24px!important;line-height:.62!important}
+  body.mm-class-open:not(.class-module-page-open) .class-top-actions{margin-top:2px!important;gap:8px!important}
+  body.mm-class-open:not(.class-module-page-open) .class-top-actions button{min-height:61px!important;padding:6px 4px!important}
+  body.mm-class-open:not(.class-module-page-open) .class-module-grid{margin-top:9px!important}
+  body.mm-class-open:not(.class-module-page-open) .compact-stats.status-only{margin-top:9px!important}
+  body.mm-class-open:not(.class-module-page-open) .overview-shortcuts{margin-top:8px!important}
+}
+</style>
