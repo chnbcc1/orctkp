@@ -2171,7 +2171,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 }
 </style>
 <style id="v7818-mobile-premium-dashboard">
-/* v7.8.29 mobile dashboard: actual packaged MualliMate+ icon, emerald/gold, cream surfaces */
+/* v7.8.30 mobile dashboard: actual packaged MualliMate+ icon, emerald/gold, cream surfaces */
 .mm-mobile-home{display:none}
 @media(max-width:700px){
  :root{--mm-emerald:#032f2b;--mm-emerald2:#06483f;--mm-gold:#e4b85a;--mm-cream:#f5ecd9;--mm-cream2:#eadfc9}
@@ -2386,7 +2386,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.29</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.30</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4315,67 +4315,7 @@ input,select,textarea{border-radius:12px!important;background:#fffefa!important}
 <button onclick="document.body.classList.add('mm-class-open');openClassModule('reports')"><span>▥</span>Raporlar</button>
 <button onclick="openMobileDrawer()"><span>☰</span>Menü</button>
 </nav>
-<nav id="mmBottomNav" aria-label="Mobil alt menü"><button onclick="document.body.classList.remove('mm-class-open');window.scrollTo({top:0,behavior:'smooth'})"><span>⌂</span>Ana Sayfa</button><button onclick="document.body.classList.remove('mm-class-open');document.getElementById('mmClassesCard')?.scrollIntoView({behavior:'smooth'})"><span>👥</span>Sınıflar</button><button class="mm-plus" onclick="openMobileQuickAdd()">＋</button><button onclick="document.body.classList.add('mm-class-open');openClassModule('reports')"><span>▥</span>Raporlar</button><button onclick="openMobileDrawer()"><span>☰</span>Menü</button></nav>
-<style id="v7829-profile-source-fix">
-@media(max-width:700px){
- #headerControls #profileChip.profile-chip{min-height:94px!important}
- #profileChip .profile-lines{align-self:center!important}
- #profileChip .profile-lines b{font-size:15px!important;margin-bottom:2px!important}
- #profileChip .profile-lines span{font-size:11px!important;line-height:1.32!important}
-}
-</style>
-<script id="v7829-profile-source-fix-script">
-(function(){
- function readObj(k){try{return JSON.parse(localStorage.getItem(k)||'{}')||{}}catch(e){return {}}}
- function text(v){return typeof v==='string'?v.trim():''}
- function first(){for(const v of arguments){const t=text(v);if(t)return t}return ''}
- function findDeep(obj,names,depth){
-   if(!obj||typeof obj!=='object'||depth>5)return '';
-   for(const n of names){if(Object.prototype.hasOwnProperty.call(obj,n)){const t=text(obj[n]);if(t)return t}}
-   for(const k of Object.keys(obj)){const v=obj[k];if(v&&typeof v==='object'){const r=findDeep(v,names,depth+1);if(r)return r}}
-   return '';
- }
- function profile829(){
-   const raw=readObj('odevTakipV5Settings');
-   const live=(window.settings&&settings.profile)||{}, saved=raw.profile||{};
-   return {
-     name:first(live.name,saved.name,findDeep(raw,['teacherName','profileName','ogretmenAdi','name'],0)),
-     school:first(live.school,saved.school,findDeep(raw,['schoolName','school','okulAdi','docAssistantSchool'],0)),
-     branch:first(live.branch,live.role,saved.branch,saved.role,findDeep(raw,['teacherBranch','branch','brans','role','docAssistantZumreBranch'],0)),
-     guideId:first(live.guideClassId,saved.guideClassId,findDeep(raw,['guideClassId','guidanceClassId','rehberlikSinifiId'],0)),
-     guideName:first(live.guideClass,live.guideClassName,saved.guideClass,saved.guideClassName,findDeep(raw,['guideClass','guideClassName','guidanceClass','rehberlikSinifi'],0)),
-     photo:live.photo||saved.photo||''
-   };
- }
- function draw(){
-   const p=profile829();
-   const nameEl=document.getElementById('headerTeacherName'), info=document.getElementById('headerSchoolName');
-   if(nameEl)nameEl.textContent=p.name||'Öğretmen Profili';
-   let guide=(window.state?.classes||[]).find(c=>String(c.id)===p.guideId);
-   if(!guide&&p.guideName)guide=(window.state?.classes||[]).find(c=>text(c.name).toLocaleLowerCase('tr-TR')===p.guideName.toLocaleLowerCase('tr-TR'));
-   if(info){
-     const rows=[];
-     if(p.branch)rows.push('<span class="mm-profile-role">'+esc(p.branch)+'</span>');
-     rows.push('<span>'+(p.school?esc(p.school):'Okul bilgisi eklenmedi')+'</span>');
-     if(guide)rows.push('<span class="mm-profile-guide">Rehberlik: '+esc(guide.name)+'</span>');
-     else if(p.guideName)rows.push('<span class="mm-profile-guide">Rehberlik: '+esc(p.guideName)+'</span>');
-     info.innerHTML=rows.join('');
-   }
-   const img=document.getElementById('headerProfilePhoto'), fb=document.getElementById('profileAvatarFallback');
-   if(img&&p.photo){img.src=p.photo;img.style.display='block';if(fb)fb.style.display='none'}
-   else if(img){img.removeAttribute('src');img.style.display='none';if(fb){fb.style.display='flex';const a=(p.name||'Ö').split(/\s+/).filter(Boolean);fb.textContent=(a.length>1?a[0][0]+a[a.length-1][0]:(a[0]?.[0]||'Ö')).toLocaleUpperCase('tr-TR')}}
- }
- window.renderProfileHeader=draw;
- // Repaint after all legacy render hooks have completed.
- function later(){setTimeout(draw,0);setTimeout(draw,80);setTimeout(draw,250)}
- const prev=window.render;if(typeof prev==='function')window.render=function(){const r=prev.apply(this,arguments);later();return r};
- const ps=window.saveProfile;if(typeof ps==='function')window.saveProfile=function(){const r=ps.apply(this,arguments);later();return r};
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',later,{once:true});else later();
- window.addEventListener('pageshow',later);
-})();
-</script>
-
-</body></html>`}
+<nav id="mmBottomNav" aria-label="Mobil alt menü"><button onclick="document.body.classList.remove('mm-class-open');window.scrollTo({top:0,behavior:'smooth'})"><span>⌂</span>Ana Sayfa</button><button onclick="document.body.classList.remove('mm-class-open');document.getElementById('mmClassesCard')?.scrollIntoView({behavior:'smooth'})"><span>👥</span>Sınıflar</button><button class="mm-plus" onclick="openMobileQuickAdd()">＋</button><button onclick="document.body.classList.add('mm-class-open');openClassModule('reports')"><span>▥</span>Raporlar</button><button onclick="openMobileDrawer()"><span>☰</span>Menü</button></nav></body></html>`}
 function docPdfWrap(ctx,text,maxW){
  const words=String(text||'').split(/\s+/).filter(Boolean),lines=[];let line='';
  for(const w of words){const test=line?line+' '+w:w;if(ctx.measureText(test).width<=maxW||!line)line=test;else{lines.push(line);line=w}}
@@ -4631,7 +4571,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.29";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.30";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -6025,7 +5965,7 @@ function realisticDesk(ctx,x,y,w,h,label,teacher=false,depth=0){
   // isimlik
   ctx.shadowColor='rgba(0,0,0,.08)';ctx.shadowBlur=3;ctx.fillStyle='#fffaf0';ctx.strokeStyle='#d6c4a5';ctx.lineWidth=1.2;rrReal(ctx,xx+ww*.06,yy+hh*.105,ww*.88,hh*.36,4);ctx.fill();ctx.stroke();ctx.shadowColor='transparent';
   ctx.fillStyle=label?'#111827':'#94a3b8';
-  // v7.8.29: öğrenci adları daha büyük; uzun adlar gerektiğinde iki satıra yayılır.
+  // v7.8.30: öğrenci adları daha büyük; uzun adlar gerektiğinde iki satıra yayılır.
   if(label)drawFullStudentName(ctx,label,xx+ww/2,yy+hh*.285,ww*.80,hh*.32,{maxFont:teacher?15:18,minFont:9,maxLines:teacher?2:2,weight:'bold',align:'center'});
   else{ctx.font=`${Math.max(9,ww*.05)}px Arial`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('Boş',xx+ww/2,yy+hh*.285);ctx.textBaseline='alphabetic'}
   ctx.restore();
@@ -7927,7 +7867,7 @@ async function saveOutputBlob(blob,name,type){const file=new File([blob],name,{t
 function bytesFromDataURL(u){const b=atob(u.split(',')[1]),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
 function asciiBytes(s){return new TextEncoder().encode(s)}
 function concatBytes(parts){let n=parts.reduce((a,b)=>a+b.length,0),o=new Uint8Array(n),p=0;for(const b of parts){o.set(b,p);p+=b.length}return o}
-async function downloadCanvasPDF(cv,name){/* v7.8.29: Yatay görseller A4 yatay oluşturulur ve sayfayı neredeyse tamamen doldurur. */const landscape=cv.width>cv.height;const PW=landscape?841.89:595.28,PH=landscape?595.28:841.89,M=landscape?8:28,usableW=PW-2*M,usableH=PH-2*M,sliceH=Math.max(1,Math.floor(cv.width*usableH/usableW)),images=[];for(let y=0;y<cv.height;y+=sliceH){const h=Math.min(sliceH,cv.height-y),part=document.createElement('canvas');part.width=cv.width;part.height=h;const q=part.getContext('2d');q.fillStyle='#fff';q.fillRect(0,0,part.width,part.height);q.drawImage(cv,0,y,cv.width,h,0,0,cv.width,h);images.push({w:part.width,h:part.height,data:bytesFromDataURL(part.toDataURL('image/jpeg',.92))})}
+async function downloadCanvasPDF(cv,name){/* v7.8.30: Yatay görseller A4 yatay oluşturulur ve sayfayı neredeyse tamamen doldurur. */const landscape=cv.width>cv.height;const PW=landscape?841.89:595.28,PH=landscape?595.28:841.89,M=landscape?8:28,usableW=PW-2*M,usableH=PH-2*M,sliceH=Math.max(1,Math.floor(cv.width*usableH/usableW)),images=[];for(let y=0;y<cv.height;y+=sliceH){const h=Math.min(sliceH,cv.height-y),part=document.createElement('canvas');part.width=cv.width;part.height=h;const q=part.getContext('2d');q.fillStyle='#fff';q.fillRect(0,0,part.width,part.height);q.drawImage(cv,0,y,cv.width,h,0,0,cv.width,h);images.push({w:part.width,h:part.height,data:bytesFromDataURL(part.toDataURL('image/jpeg',.92))})}
  const count=images.length,objs={},pageIds=[];for(let i=0;i<count;i++)pageIds.push(5+i*3);objs[1]=asciiBytes('<< /Type /Catalog /Pages 2 0 R >>');objs[2]=asciiBytes(`<< /Type /Pages /Count ${count} /Kids [${pageIds.map(id=>id+' 0 R').join(' ')}] >>`);images.forEach((im,i)=>{const imgId=3+i*3,contentId=4+i*3,pageId=5+i*3,scale=Math.min(usableW/im.w,usableH/im.h),dw=im.w*scale,dh=im.h*scale,x=M+(usableW-dw)/2,y=M+(usableH-dh)/2,stream=`q\n${dw.toFixed(2)} 0 0 ${dh.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm\n/Im0 Do\nQ\n`,sb=asciiBytes(stream);objs[imgId]=concatBytes([asciiBytes(`<< /Type /XObject /Subtype /Image /Width ${im.w} /Height ${im.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${im.data.length} >>\nstream\n`),im.data,asciiBytes('\nendstream')]);objs[contentId]=concatBytes([asciiBytes(`<< /Length ${sb.length} >>\nstream\n`),sb,asciiBytes('endstream')]);objs[pageId]=asciiBytes(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im0 ${imgId} 0 R >> >> /Contents ${contentId} 0 R >>`) });
  let parts=[asciiBytes('%PDF-1.4\n%âãÏÓ\n')],offsets=[0],pos=parts[0].length,max=2+count*3;for(let id=1;id<=max;id++){offsets[id]=pos;const b=concatBytes([asciiBytes(`${id} 0 obj\n`),objs[id],asciiBytes('\nendobj\n')]);parts.push(b);pos+=b.length}const xref=pos;let xs=`xref\n0 ${max+1}\n0000000000 65535 f \n`;for(let id=1;id<=max;id++)xs+=String(offsets[id]).padStart(10,'0')+' 00000 n \n';xs+=`trailer\n<< /Size ${max+1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;parts.push(asciiBytes(xs));await saveOutputBlob(new Blob(parts,{type:'application/pdf'}),name,'application/pdf')}
 function exportClassCSV(){const c=cls(),rows=[["Sınıf","Dönem","No","Öğrenci","Yaptı","Kısmen","Mazeretli","Yapmadı","Kontrol Edilmedi","Başarı %"]];c.students.forEach(s=>{const st=sstat(c,s.id);rows.push([c.name,currentPeriod,s.number,s.name,st.done,st.partial,st.excused,st.missing,st.pending,st.rate])});downloadBlob("\uFEFF"+rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(";")).join("\n"),`${safe(c.name)}_${currentPeriod}_donem_rapor.csv`,"text/csv;charset=utf-8")}
@@ -8373,7 +8313,7 @@ window.openArchiveSafetyCenter814=openArchiveSafetyCenter814;
 window.exportSafetySnapshot813=exportSafetySnapshot813;
 window.exportPreUpdate813=exportPreUpdate813;
 window.restoreSafetySnapshot813=restoreSafetySnapshot813;
-function install(){/* v7.8.29: Oturma planı PDF çıktısı A4 yatay ve sayfayı dolduracak biçimde düzeltildi. */}
+function install(){/* v7.8.30: Oturma planı PDF çıktısı A4 yatay ve sayfayı dolduracak biçimde düzeltildi. */}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();window.openRecovery810=overlay;
 })();
 </script>
@@ -8520,67 +8460,7 @@ function mmDrawerModule(id){closeMobileDrawer();document.body.classList.add('mm-
  const oldRender=window.render;if(typeof oldRender==='function')window.render=function(){migrateProfile827();const r=oldRender.apply(this,arguments);setTimeout(refresh827,0);return r};
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refresh827,{once:true});else setTimeout(refresh827,0);
 })();
-</script>\n
-<style id="v7829-profile-source-fix">
-@media(max-width:700px){
- #headerControls #profileChip.profile-chip{min-height:94px!important}
- #profileChip .profile-lines{align-self:center!important}
- #profileChip .profile-lines b{font-size:15px!important;margin-bottom:2px!important}
- #profileChip .profile-lines span{font-size:11px!important;line-height:1.32!important}
-}
-</style>
-<script id="v7829-profile-source-fix-script">
-(function(){
- function readObj(k){try{return JSON.parse(localStorage.getItem(k)||'{}')||{}}catch(e){return {}}}
- function text(v){return typeof v==='string'?v.trim():''}
- function first(){for(const v of arguments){const t=text(v);if(t)return t}return ''}
- function findDeep(obj,names,depth){
-   if(!obj||typeof obj!=='object'||depth>5)return '';
-   for(const n of names){if(Object.prototype.hasOwnProperty.call(obj,n)){const t=text(obj[n]);if(t)return t}}
-   for(const k of Object.keys(obj)){const v=obj[k];if(v&&typeof v==='object'){const r=findDeep(v,names,depth+1);if(r)return r}}
-   return '';
- }
- function profile829(){
-   const raw=readObj('odevTakipV5Settings');
-   const live=(window.settings&&settings.profile)||{}, saved=raw.profile||{};
-   return {
-     name:first(live.name,saved.name,findDeep(raw,['teacherName','profileName','ogretmenAdi','name'],0)),
-     school:first(live.school,saved.school,findDeep(raw,['schoolName','school','okulAdi','docAssistantSchool'],0)),
-     branch:first(live.branch,live.role,saved.branch,saved.role,findDeep(raw,['teacherBranch','branch','brans','role','docAssistantZumreBranch'],0)),
-     guideId:first(live.guideClassId,saved.guideClassId,findDeep(raw,['guideClassId','guidanceClassId','rehberlikSinifiId'],0)),
-     guideName:first(live.guideClass,live.guideClassName,saved.guideClass,saved.guideClassName,findDeep(raw,['guideClass','guideClassName','guidanceClass','rehberlikSinifi'],0)),
-     photo:live.photo||saved.photo||''
-   };
- }
- function draw(){
-   const p=profile829();
-   const nameEl=document.getElementById('headerTeacherName'), info=document.getElementById('headerSchoolName');
-   if(nameEl)nameEl.textContent=p.name||'Öğretmen Profili';
-   let guide=(window.state?.classes||[]).find(c=>String(c.id)===p.guideId);
-   if(!guide&&p.guideName)guide=(window.state?.classes||[]).find(c=>text(c.name).toLocaleLowerCase('tr-TR')===p.guideName.toLocaleLowerCase('tr-TR'));
-   if(info){
-     const rows=[];
-     if(p.branch)rows.push('<span class="mm-profile-role">'+esc(p.branch)+'</span>');
-     rows.push('<span>'+(p.school?esc(p.school):'Okul bilgisi eklenmedi')+'</span>');
-     if(guide)rows.push('<span class="mm-profile-guide">Rehberlik: '+esc(guide.name)+'</span>');
-     else if(p.guideName)rows.push('<span class="mm-profile-guide">Rehberlik: '+esc(p.guideName)+'</span>');
-     info.innerHTML=rows.join('');
-   }
-   const img=document.getElementById('headerProfilePhoto'), fb=document.getElementById('profileAvatarFallback');
-   if(img&&p.photo){img.src=p.photo;img.style.display='block';if(fb)fb.style.display='none'}
-   else if(img){img.removeAttribute('src');img.style.display='none';if(fb){fb.style.display='flex';const a=(p.name||'Ö').split(/\s+/).filter(Boolean);fb.textContent=(a.length>1?a[0][0]+a[a.length-1][0]:(a[0]?.[0]||'Ö')).toLocaleUpperCase('tr-TR')}}
- }
- window.renderProfileHeader=draw;
- // Repaint after all legacy render hooks have completed.
- function later(){setTimeout(draw,0);setTimeout(draw,80);setTimeout(draw,250)}
- const prev=window.render;if(typeof prev==='function')window.render=function(){const r=prev.apply(this,arguments);later();return r};
- const ps=window.saveProfile;if(typeof ps==='function')window.saveProfile=function(){const r=ps.apply(this,arguments);later();return r};
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',later,{once:true});else later();
- window.addEventListener('pageshow',later);
-})();
-</script>
-
-</body>
+</script>\n</body>
 </html><style id="v7412-lock-fullscreen-fix">
 /* v7.5.1: iPhone/PWA lock screen must fully cover app content */
 #lockScreen.lock{
@@ -8686,7 +8566,7 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
 
 <style id="v7823-header-modal-final-fix">
 @media(max-width:700px){
-  /* v7.8.29: eski profil + dönem/yönetim satırını ana ekrandan kesin olarak kaldır */
+  /* v7.8.30: eski profil + dönem/yönetim satırını ana ekrandan kesin olarak kaldır */
   #headerControls,#headerControls.header-controls{display:none!important;height:0!important;min-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important}
   header{grid-template-columns:42px minmax(0,1fr) 46px!important;grid-template-rows:auto auto!important;gap:4px 8px!important;padding:10px 12px 8px!important;min-height:0!important}
   .premium-brand{grid-column:2!important;grid-row:1!important}
@@ -8729,7 +8609,7 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
 </script>
 <style id="v7824-profile-card-restore">
 @media(max-width:700px){
-  /* v7.8.29: Profil kartı geri geldi; yalnız yönetim satırı ana ekrandan kaldırıldı. */
+  /* v7.8.30: Profil kartı geri geldi; yalnız yönetim satırı ana ekrandan kaldırıldı. */
   header{grid-template-columns:42px minmax(0,1fr) 46px!important;grid-template-rows:auto auto!important;gap:8px!important;padding:10px 12px 10px!important}
   #mmTeacherLine{display:none!important}
   #headerControls,#headerControls.header-controls{display:block!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;overflow:visible!important;grid-column:1/-1!important;grid-row:2!important}
@@ -8744,31 +8624,9 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
   #profileChip .profileScheduleBtn,#profileChip .profileDutyBtn{display:none!important}
 }
 </style>
-<script id="v7824-profile-card-restore-script">
-(function(){
- function install824(){
-   if(typeof window.renderProfileHeader==='function'){ window.renderProfileHeader(); return; }
-   const p=(window.settings&&settings.profile)||{};
-   const name=document.getElementById('headerTeacherName');
-   const school=document.getElementById('headerSchoolName');
-   if(name) name.textContent=(p.name||'Cihan BACACI').trim();
-   if(school){
-     const schoolName=(p.school||'').trim()||'Okul bilgisi eklenmedi';
-     const branch=(p.branch||'').trim();
-     const guide=(window.state?.classes||[]).find(c=>c.id===p.guideClassId);
-     const roleHtml=branch?'<span class="mm-profile-role">'+esc(branch)+'</span>':'';
-     const guideHtml=guide?'<span class="mm-profile-guide">'+esc(guide.name)+' Sınıf Rehber Öğretmeni</span>':'';
-     school.innerHTML=roleHtml+'<span>'+esc(schoolName)+'</span>'+guideHtml;
-   }
-   const line=document.getElementById('mmTeacherLine'); if(line) line.style.display='none';
- }
- const oldRender=window.render;
- if(typeof oldRender==='function') window.render=function(){const r=oldRender.apply(this,arguments);setTimeout(install824,0);return r};
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install824,{once:true});else install824();
-})();
-</script>
 
-<style id="v7828-profile-final-layout">
+
+<style id="v7830-profile-final-layout">
 @media(max-width:700px){
  #profileChip .profile-lines{width:100%!important;max-width:none!important;min-width:0!important;display:flex!important;flex-direction:column!important;gap:3px!important}
  #profileChip .profile-lines b,#profileChip .profile-lines span{max-width:none!important;width:100%!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:break-word!important}
@@ -8778,42 +8636,4 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
  #profileChip .mm-profile-guide{font-weight:700!important;color:#8a681f!important}
 }
 </style>
-<script id="v7828-profile-warning-final">
-(function(){
- function persistedProfile828(){
-   let raw={};try{raw=JSON.parse(localStorage.getItem('odevTakipV5Settings')||'{}')||{}}catch(e){}
-   const live=(window.settings&&settings.profile)||{}, saved=raw.profile||{};
-   const pick=(...v)=>v.find(x=>typeof x==='string'&&x.trim())||'';
-   return {
-    name:pick(live.name,saved.name,raw.teacherName,raw.profileName),
-    school:pick(live.school,saved.school,raw.schoolName,raw.school,raw.docAssistantSchool),
-    branch:pick(live.branch,live.role,saved.branch,saved.role,raw.teacherBranch,raw.branch,raw.docAssistantZumreBranch),
-    guideClassId:pick(live.guideClassId,saved.guideClassId,raw.guideClassId),
-    guideClass:pick(live.guideClass,live.guideClassName,saved.guideClass,saved.guideClassName,raw.guideClass,raw.guideClassName,raw.guidanceClass),
-    photo:live.photo||saved.photo||''
-   };
- }
- window.renderProfileHeader=function(){
-   const p=persistedProfile828(), chip=document.getElementById('profileChip'), img=document.getElementById('headerProfilePhoto'), fallback=document.getElementById('profileAvatarFallback');
-   const name=p.name.trim(), school=p.school.trim(), photo=p.photo||'';
-   if(chip)chip.classList.toggle('profile-empty',!(name||school||photo));
-   const nameEl=document.getElementById('headerTeacherName'), schoolEl=document.getElementById('headerSchoolName');
-   if(nameEl)nameEl.textContent=name||'Öğretmen Profili';
-   let guide=(window.state?.classes||[]).find(c=>c.id===p.guideClassId);
-   if(!guide&&p.guideClass)guide=(window.state?.classes||[]).find(c=>String(c.name||'').trim().toLocaleLowerCase('tr-TR')===p.guideClass.trim().toLocaleLowerCase('tr-TR'));
-   if(schoolEl)schoolEl.innerHTML=(p.branch?'<span class="mm-profile-role">'+esc(p.branch)+'</span>':'')+(school?'<span>'+esc(school)+'</span>':'<span>Okul bilgisi eklenmedi</span>')+(guide?'<span class="mm-profile-guide">Rehberlik: '+esc(guide.name)+'</span>':'');
-   if(img){if(photo){img.src=photo;img.style.display='block';if(fallback)fallback.style.display='none'}else{img.removeAttribute('src');img.style.display='none';if(fallback){fallback.style.display='flex';const parts=(name||'Ö').split(/\s+/).filter(Boolean);fallback.textContent=(parts.length>1?parts[0][0]+parts[parts.length-1][0]:(parts[0]?.[0]||'Ö')).toLocaleUpperCase('tr-TR')}}}
- };
- const oldSave=window.saveProfile; if(typeof oldSave==='function')window.saveProfile=function(){const r=oldSave.apply(this,arguments);setTimeout(()=>window.renderProfileHeader(),20);return r};
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(window.renderProfileHeader,30),{once:true});else setTimeout(window.renderProfileHeader,30);
-})();
-</script>
-<script id="v7829-last-profile-repaint">
-(function(){
- function repaint(){if(typeof window.renderProfileHeader==='function')window.renderProfileHeader()}
- const r=window.render;if(typeof r==='function')window.render=function(){const x=r.apply(this,arguments);setTimeout(repaint,300);return x};
- const s=window.saveProfile;if(typeof s==='function')window.saveProfile=function(){const x=s.apply(this,arguments);setTimeout(repaint,50);setTimeout(repaint,350);return x};
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(repaint,400),{once:true});else setTimeout(repaint,400);
- window.addEventListener('pageshow',()=>setTimeout(repaint,400));
-})();
-</script>
+
