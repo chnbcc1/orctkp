@@ -2171,7 +2171,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 }
 </style>
 <style id="v7818-mobile-premium-dashboard">
-/* v7.8.40 mobile dashboard: actual packaged MualliMate+ icon, emerald/gold, cream surfaces */
+/* v7.8.41 mobile dashboard: actual packaged MualliMate+ icon, emerald/gold, cream surfaces */
 .mm-mobile-home{display:none}
 @media(max-width:700px){
  :root{--mm-emerald:#032f2b;--mm-emerald2:#06483f;--mm-gold:#e4b85a;--mm-cream:#f5ecd9;--mm-cream2:#eadfc9}
@@ -2386,7 +2386,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.40</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.41</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4594,7 +4594,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.40";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.41";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -4606,8 +4606,8 @@ function safetyRememberRaw(raw,reason="değişiklik öncesi"){
 }
 function safetyPreUpdateSnapshot(){try{const prev=localStorage.getItem(SAFETY_VERSION_KEY)||"";if(prev!==APP_DATA_VERSION){const raw=localStorage.getItem(STORAGE_KEY);if(raw)safetyRememberRaw(raw,`güncelleme öncesi ${prev||"eski sürüm"} → ${APP_DATA_VERSION}`);const pack={createdAt:new Date().toISOString(),fromVersion:prev||"bilinmiyor",toVersion:APP_DATA_VERSION,stateRaw:raw||"",settingsRaw:localStorage.getItem(SETTINGS_KEY)||"",archivesRaw:localStorage.getItem(SCHOOL_ARCHIVE_KEY)||""};try{localStorage.setItem("odevTakipPreUpdateBackupV1",JSON.stringify(pack))}catch(e){}localStorage.setItem(SAFETY_VERSION_KEY,APP_DATA_VERSION)}}catch(e){console.warn("Güncelleme güvenlik yedeği alınamadı",e)}}
 function safetySuspiciousOverwrite(oldRaw,newObj){const old=safetyParseState(oldRaw);if(!old||window.__otsAllowEmptyStateSave)return false;const a=safetyStateStats(old),b=safetyStateStats(newObj);return a.classes>0&&b.classes===0}
-function save(){state.currentClassId=currentClassId;state.currentPeriod=currentPeriod;persistHomeworkImages().catch(e=>console.warn("Ödev görseli kaydedilemedi",e));try{const oldRaw=localStorage.getItem(STORAGE_KEY)||"";const nextObj=stateForLocalStorage();if(safetySuspiciousOverwrite(oldRaw,nextObj)){alert("Veri Güvenlik Katmanı, dolu çalışma alanının boş veriyle üzerine yazılmasını engelledi. Mevcut veriler korunuyor.");return false}safetyRememberRaw(oldRaw,"değişiklik öncesi otomatik");localStorage.setItem(STORAGE_KEY,JSON.stringify(nextObj))}catch(e){console.error(e);alert("Cihaz depolama alanı dolu. Tam yedek aldıktan sonra eski büyük görselleri kaldırmanız gerekebilir.");return false}modalDataRevision++;return true}
-function saveSettings(){try{localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings))}catch(e){console.error(e);alert("Ayarlar kaydedilemedi. Cihaz depolama alanını kontrol edin.");return false}modalDataRevision++;return true}
+function save(){state.currentClassId=currentClassId;state.currentPeriod=currentPeriod;persistHomeworkImages().catch(e=>console.warn("Ödev görseli kaydedilemedi",e));try{const oldRaw=localStorage.getItem(STORAGE_KEY)||"";const nextObj=stateForLocalStorage();if(safetySuspiciousOverwrite(oldRaw,nextObj)){alert("Veri Güvenlik Katmanı, dolu çalışma alanının boş veriyle üzerine yazılmasını engelledi. Mevcut veriler korunuyor.");return false}safetyRememberRaw(oldRaw,"değişiklik öncesi otomatik");localStorage.setItem(STORAGE_KEY,JSON.stringify(nextObj))}catch(e){console.error(e);alert("Cihaz depolama alanı dolu. Tam yedek aldıktan sonra eski büyük görselleri kaldırmanız gerekebilir.");return false}modalDataRevision++;scheduleLiveRefresh841();return true}
+function saveSettings(){try{localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings))}catch(e){console.error(e);alert("Ayarlar kaydedilemedi. Cihaz depolama alanını kontrol edin.");return false}modalDataRevision++;scheduleLiveRefresh841();return true}
 safetyPreUpdateSnapshot();
 function normalize(s){
  if(!s||!Array.isArray(s.classes))s={classes:[]};
@@ -4631,6 +4631,19 @@ function normalizeClassDuty(d){
  if(d.schema!==2)return {schema:2,startDate,assignments:{},holidays,studentArchive};
  d.startDate=startDate;d.assignments=(d.assignments&&typeof d.assignments==='object')?d.assignments:{};d.holidays=holidays;d.studentArchive=studentArchive;
  return d;
+}
+let _liveRefresh841Timer=null;
+function scheduleLiveRefresh841(){
+  clearTimeout(_liveRefresh841Timer);
+  _liveRefresh841Timer=setTimeout(refreshLiveDerivedUI841,0);
+}
+function refreshLiveDerivedUI841(){
+  try{if(typeof renderProfileHeader==='function')renderProfileHeader()}catch(e){}
+  try{if(typeof cls==='function'&&cls()&&typeof renderStats==='function')renderStats()}catch(e){}
+  try{if(typeof renderSmartAlerts==='function'&&typeof cls==='function'&&cls())renderSmartAlerts()}catch(e){}
+  try{if(typeof renderMobileHomeDashboard==='function')renderMobileHomeDashboard()}catch(e){}
+  try{if(document.body.classList.contains('mm-all-classes-open')&&typeof renderAllClassesScreen==='function')renderAllClassesScreen()}catch(e){}
+  try{if(window._activeHomeworkModalId841&&document.getElementById('modal')?.classList.contains('open')){const c=cls(),h=c?.homeworks?.find(x=>x.id===window._activeHomeworkModalId841);if(h){const st=hstat(c,h.id),sub=document.getElementById('modalSubtitle');if(sub)sub.textContent=`${c.name} · ${st.done}/${st.total} yaptı · %${st.rate}`}}}catch(e){}
 }
 function undo(){if(!undoStack.length)return;redoStack.push(JSON.stringify(state));state=normalize(JSON.parse(undoStack.pop()));currentClassId=state.currentClassId||(state.classes[0]?.id??null);currentPeriod=state.currentPeriod||"1";save();render();updateUndoRedo()}
 function redo(){if(!redoStack.length)return;undoStack.push(JSON.stringify(state));state=normalize(JSON.parse(redoStack.pop()));currentClassId=state.currentClassId||(state.classes[0]?.id??null);currentPeriod=state.currentPeriod||"1";save();render();updateUndoRedo()}
@@ -4712,7 +4725,7 @@ function modalGoBack(){
 }
 function lockModalPage(){if(modalPageLocked)return;modalPageScrollY=window.scrollY||document.documentElement.scrollTop||0;document.body.style.position="fixed";document.body.style.top=`-${modalPageScrollY}px`;document.body.style.left="0";document.body.style.right="0";document.body.style.width="100%";document.body.classList.add("modal-page-locked");modalPageLocked=true}
 function unlockModalPage(){if(!modalPageLocked)return;document.body.classList.remove("modal-page-locked");document.body.style.position="";document.body.style.top="";document.body.style.left="";document.body.style.right="";document.body.style.width="";modalPageLocked=false;window.scrollTo(0,modalPageScrollY)}
-function closeModal(){window._activeStudentModalId=null;lessonDetailClassContext=null;lessonDetailDate=null;modalHistory=[];modalUpdateBackButton();const m=el("modal");if(m)m.classList.remove("open");unlockModalPage()}
+function closeModal(){window._activeStudentModalId=null;window._activeHomeworkModalId841=null;lessonDetailClassContext=null;lessonDetailDate=null;modalHistory=[];modalUpdateBackButton();const m=el("modal");if(m)m.classList.remove("open");unlockModalPage()}
 
 // v7.6.47 — Canlı yenilenen modal geri geçmişi + iPhone arka plan kaydırma kilidi
 document.addEventListener("click",function(e){
@@ -5988,7 +6001,7 @@ function realisticDesk(ctx,x,y,w,h,label,teacher=false,depth=0){
   // isimlik
   ctx.shadowColor='rgba(0,0,0,.08)';ctx.shadowBlur=3;ctx.fillStyle='#fffaf0';ctx.strokeStyle='#d6c4a5';ctx.lineWidth=1.2;rrReal(ctx,xx+ww*.06,yy+hh*.105,ww*.88,hh*.36,4);ctx.fill();ctx.stroke();ctx.shadowColor='transparent';
   ctx.fillStyle=label?'#111827':'#94a3b8';
-  // v7.8.40: öğrenci adları daha büyük; uzun adlar gerektiğinde iki satıra yayılır.
+  // v7.8.41: öğrenci adları daha büyük; uzun adlar gerektiğinde iki satıra yayılır.
   if(label)drawFullStudentName(ctx,label,xx+ww/2,yy+hh*.285,ww*.80,hh*.32,{maxFont:teacher?15:18,minFont:9,maxLines:teacher?2:2,weight:'bold',align:'center'});
   else{ctx.font=`${Math.max(9,ww*.05)}px Arial`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('Boş',xx+ww/2,yy+hh*.285);ctx.textBaseline='alphabetic'}
   ctx.restore();
@@ -6939,7 +6952,7 @@ function commitMoveStudent(sid){
   alert(`${s.name} öğrencisi ${to.name} sınıfına taşındı.`);
 }
 
-function openHomework(hid){window._activeStudentModalId=null;
+function openHomework(hid){window._activeStudentModalId=null;window._activeHomeworkModalId841=hid;
  const c=cls(),h=c.homeworks.find(x=>x.id===hid),st=hstat(c,hid);el("modalTitle").textContent=h.name;el("modalSubtitle").textContent=`${c.name} · ${st.done}/${st.total} yaptı · %${st.rate}`;
  el("modalBody").innerHTML=`<div class="form-row"><label>Verilme Tarihi<input id="givenDate" type="date" value="${esc(h.given)}"></label><label>Son Teslim<input id="dueDate" type="date" value="${esc(h.due)}"></label><button onclick="saveDates('${hid}')">Kaydet</button></div>
  ${h.imageData?`<div class="homework-image-box" style="margin-bottom:12px"><b>📷 Ödev Görseli</b><img class="homework-image-preview" src="${h.imageData}" alt="Ödev görseli"><div class="homework-image-actions"><button onclick="viewHomeworkImage('${hid}')">Görseli Büyük Aç</button><label class="secondary" style="display:flex;align-items:center;justify-content:center;cursor:pointer;padding:10px;border-radius:10px">Görseli Değiştir<input type="file" accept="image/*" style="display:none" onchange="changeHomeworkImage('${hid}',this)"></label><button class="danger" onclick="removeHomeworkImage('${hid}')">Görseli Kaldır</button></div></div>`:`<div class="homework-image-box" style="margin-bottom:12px"><b>📷 Ödev Görseli</b><div class="tiny" style="margin:5px 0 9px">Bu ödeve henüz görsel eklenmemiş.</div><label class="secondary" style="display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:10px;border-radius:10px">Görsel Ekle<input type="file" accept="image/*" style="display:none" onchange="changeHomeworkImage('${hid}',this)"></label></div>`}
@@ -7890,7 +7903,7 @@ async function saveOutputBlob(blob,name,type){const file=new File([blob],name,{t
 function bytesFromDataURL(u){const b=atob(u.split(',')[1]),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
 function asciiBytes(s){return new TextEncoder().encode(s)}
 function concatBytes(parts){let n=parts.reduce((a,b)=>a+b.length,0),o=new Uint8Array(n),p=0;for(const b of parts){o.set(b,p);p+=b.length}return o}
-async function downloadCanvasPDF(cv,name){/* v7.8.40: Yatay görseller A4 yatay oluşturulur ve sayfayı neredeyse tamamen doldurur. */const landscape=cv.width>cv.height;const PW=landscape?841.89:595.28,PH=landscape?595.28:841.89,M=landscape?8:28,usableW=PW-2*M,usableH=PH-2*M,sliceH=Math.max(1,Math.floor(cv.width*usableH/usableW)),images=[];for(let y=0;y<cv.height;y+=sliceH){const h=Math.min(sliceH,cv.height-y),part=document.createElement('canvas');part.width=cv.width;part.height=h;const q=part.getContext('2d');q.fillStyle='#fff';q.fillRect(0,0,part.width,part.height);q.drawImage(cv,0,y,cv.width,h,0,0,cv.width,h);images.push({w:part.width,h:part.height,data:bytesFromDataURL(part.toDataURL('image/jpeg',.92))})}
+async function downloadCanvasPDF(cv,name){/* v7.8.41: Yatay görseller A4 yatay oluşturulur ve sayfayı neredeyse tamamen doldurur. */const landscape=cv.width>cv.height;const PW=landscape?841.89:595.28,PH=landscape?595.28:841.89,M=landscape?8:28,usableW=PW-2*M,usableH=PH-2*M,sliceH=Math.max(1,Math.floor(cv.width*usableH/usableW)),images=[];for(let y=0;y<cv.height;y+=sliceH){const h=Math.min(sliceH,cv.height-y),part=document.createElement('canvas');part.width=cv.width;part.height=h;const q=part.getContext('2d');q.fillStyle='#fff';q.fillRect(0,0,part.width,part.height);q.drawImage(cv,0,y,cv.width,h,0,0,cv.width,h);images.push({w:part.width,h:part.height,data:bytesFromDataURL(part.toDataURL('image/jpeg',.92))})}
  const count=images.length,objs={},pageIds=[];for(let i=0;i<count;i++)pageIds.push(5+i*3);objs[1]=asciiBytes('<< /Type /Catalog /Pages 2 0 R >>');objs[2]=asciiBytes(`<< /Type /Pages /Count ${count} /Kids [${pageIds.map(id=>id+' 0 R').join(' ')}] >>`);images.forEach((im,i)=>{const imgId=3+i*3,contentId=4+i*3,pageId=5+i*3,scale=Math.min(usableW/im.w,usableH/im.h),dw=im.w*scale,dh=im.h*scale,x=M+(usableW-dw)/2,y=M+(usableH-dh)/2,stream=`q\n${dw.toFixed(2)} 0 0 ${dh.toFixed(2)} ${x.toFixed(2)} ${y.toFixed(2)} cm\n/Im0 Do\nQ\n`,sb=asciiBytes(stream);objs[imgId]=concatBytes([asciiBytes(`<< /Type /XObject /Subtype /Image /Width ${im.w} /Height ${im.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${im.data.length} >>\nstream\n`),im.data,asciiBytes('\nendstream')]);objs[contentId]=concatBytes([asciiBytes(`<< /Length ${sb.length} >>\nstream\n`),sb,asciiBytes('endstream')]);objs[pageId]=asciiBytes(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im0 ${imgId} 0 R >> >> /Contents ${contentId} 0 R >>`) });
  let parts=[asciiBytes('%PDF-1.4\n%âãÏÓ\n')],offsets=[0],pos=parts[0].length,max=2+count*3;for(let id=1;id<=max;id++){offsets[id]=pos;const b=concatBytes([asciiBytes(`${id} 0 obj\n`),objs[id],asciiBytes('\nendobj\n')]);parts.push(b);pos+=b.length}const xref=pos;let xs=`xref\n0 ${max+1}\n0000000000 65535 f \n`;for(let id=1;id<=max;id++)xs+=String(offsets[id]).padStart(10,'0')+' 00000 n \n';xs+=`trailer\n<< /Size ${max+1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;parts.push(asciiBytes(xs));await saveOutputBlob(new Blob(parts,{type:'application/pdf'}),name,'application/pdf')}
 function exportClassCSV(){const c=cls(),rows=[["Sınıf","Dönem","No","Öğrenci","Yaptı","Kısmen","Mazeretli","Yapmadı","Kontrol Edilmedi","Başarı %"]];c.students.forEach(s=>{const st=sstat(c,s.id);rows.push([c.name,currentPeriod,s.number,s.name,st.done,st.partial,st.excused,st.missing,st.pending,st.rate])});downloadBlob("\uFEFF"+rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(";")).join("\n"),`${safe(c.name)}_${currentPeriod}_donem_rapor.csv`,"text/csv;charset=utf-8")}
@@ -8336,7 +8349,7 @@ window.openArchiveSafetyCenter814=openArchiveSafetyCenter814;
 window.exportSafetySnapshot813=exportSafetySnapshot813;
 window.exportPreUpdate813=exportPreUpdate813;
 window.restoreSafetySnapshot813=restoreSafetySnapshot813;
-function install(){/* v7.8.40: Oturma planı PDF çıktısı A4 yatay ve sayfayı dolduracak biçimde düzeltildi. */}
+function install(){/* v7.8.41: Oturma planı PDF çıktısı A4 yatay ve sayfayı dolduracak biçimde düzeltildi. */}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();window.openRecovery810=overlay;
 })();
 </script>
@@ -8629,7 +8642,7 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
 
 <style id="v7823-header-modal-final-fix">
 @media(max-width:700px){
-  /* v7.8.40: eski profil + dönem/yönetim satırını ana ekrandan kesin olarak kaldır */
+  /* v7.8.41: eski profil + dönem/yönetim satırını ana ekrandan kesin olarak kaldır */
   #headerControls,#headerControls.header-controls{display:none!important;height:0!important;min-height:0!important;margin:0!important;padding:0!important;overflow:hidden!important}
   header{grid-template-columns:42px minmax(0,1fr) 46px!important;grid-template-rows:auto auto!important;gap:4px 8px!important;padding:10px 12px 8px!important;min-height:0!important}
   .premium-brand{grid-column:2!important;grid-row:1!important}
@@ -8672,7 +8685,7 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
 </script>
 <style id="v7824-profile-card-restore">
 @media(max-width:700px){
-  /* v7.8.40: Profil kartı geri geldi; yalnız yönetim satırı ana ekrandan kaldırıldı. */
+  /* v7.8.41: Profil kartı geri geldi; yalnız yönetim satırı ana ekrandan kaldırıldı. */
   header{grid-template-columns:42px minmax(0,1fr) 46px!important;grid-template-rows:auto auto!important;gap:8px!important;padding:10px 12px 10px!important}
   #mmTeacherLine{display:none!important}
   #headerControls,#headerControls.header-controls{display:block!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;overflow:visible!important;grid-column:1/-1!important;grid-row:2!important}
