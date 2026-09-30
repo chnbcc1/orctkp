@@ -2185,9 +2185,9 @@ body.class-module-page-open #modal{z-index:9200!important}
  .mm-home-card{background:linear-gradient(180deg,rgba(5,61,54,.98),rgba(3,48,43,.98));border:1px solid rgba(228,184,90,.23);border-radius:18px;padding:12px;box-shadow:0 8px 24px rgba(0,0,0,.16);color:#fff}
  .mm-home-card.mm-lessons{border-color:#e4b85a;box-shadow:0 0 0 1px rgba(228,184,90,.18),0 8px 24px rgba(0,0,0,.18)}
  .mm-section-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}.mm-section-head b{font-size:15px}.mm-section-head button{background:transparent!important;border:0!important;box-shadow:none!important;color:#e9c777!important;padding:3px 4px!important;font-size:11px}
- .mm-now{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:9px 0;border-top:1px solid rgba(245,236,217,.11);border-bottom:1px solid rgba(245,236,217,.11)}
- .mm-now small,.mm-next-row small,.mm-duty small,.mm-class-chip small{color:#d9cfbb}.mm-now b{display:block;font-size:17px;margin-top:2px}.mm-now .mm-time{color:#f1cd7a;font-weight:800;font-size:13px}.mm-now button{background:linear-gradient(180deg,#f2d58e,#d9a746)!important;color:#1f2b27!important;border:0!important}
- .mm-next-title{font-size:10px;font-weight:800;color:#d9b761;text-transform:uppercase;letter-spacing:.08em;margin-top:8px}.mm-next-row{display:grid;grid-template-columns:68px 1fr;gap:8px;padding:7px 0;border-bottom:1px solid rgba(245,236,217,.08);font-size:12px}.mm-next-row:last-child{border-bottom:0}.mm-next-row .mm-time{color:#f0d08a;font-weight:800}
+ .mm-now{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-top:1px solid rgba(245,236,217,.11);border-bottom:1px solid rgba(245,236,217,.11)}
+ .mm-now small,.mm-next-row small,.mm-duty small,.mm-class-chip small{color:#d9cfbb}.mm-now b{display:block;font-size:17px;margin-top:2px;line-height:1.2}.mm-now .mm-time{display:block;color:#f1cd7a;font-weight:800;font-size:13px;white-space:nowrap}.mm-now button{background:linear-gradient(180deg,#f2d58e,#d9a746)!important;color:#1f2b27!important;border:0!important;align-self:center}.mm-now > div{min-width:0}
+ .mm-next-title{font-size:10px;font-weight:800;color:#d9b761;text-transform:uppercase;letter-spacing:.08em;margin-top:8px}.mm-next-row{display:grid;grid-template-columns:92px minmax(0,1fr);gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid rgba(245,236,217,.08);font-size:12px}.mm-next-row:last-child{border-bottom:0}.mm-next-row .mm-time{display:block;color:#f0d08a;font-weight:800;white-space:nowrap;line-height:1.2}.mm-next-row > span:last-child{display:block;min-width:0;line-height:1.25;word-break:break-word}
  .mm-duty-line{display:flex;gap:10px;align-items:center}.mm-duty-icon{font-size:27px}.mm-duty-line b{display:block;color:#f5d68f}.mm-duty-line button{margin-left:auto;background:#e3b657!important;color:#18332d!important}
  .mm-alert-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.mm-alert{border:1px solid rgba(245,236,217,.13);border-radius:12px;padding:8px 4px;text-align:center;background:rgba(0,0,0,.12)}.mm-alert b{display:block;font-size:17px;color:#f1ca72}.mm-alert span{font-size:9px;color:#f2eadb}
  .mm-quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.mm-quick-grid button{min-width:0;padding:10px 3px!important;border-radius:13px!important;background:rgba(6,77,67,.95)!important;border:1px solid rgba(228,184,90,.22)!important;box-shadow:none!important}.mm-quick-grid button span{display:block;font-size:21px;margin-bottom:4px}.mm-quick-grid button b{font-size:10px;line-height:1.15}
@@ -2386,7 +2386,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.52</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.53</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4589,7 +4589,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.52";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.53";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -7885,7 +7885,7 @@ function exportStudentJPEG(sid){const c=cls(),s=c.students.find(x=>x.id===sid),h
 function roundRectCanvas(ctx,x,y,w,h,r){r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
 function exportHomeworkJPEG(hid){
  const c=cls(),h=c?.homeworks?.find(x=>x.id===hid);if(!c||!h)return;
- // v7.8.52 — numarası olanlar numara sırasıyla; numarasızlar ödev kontrol listesindeki mevcut sırayla.
+ // v7.8.53 — numarası olanlar numara sırasıyla; numarasızlar ödev kontrol listesindeki mevcut sırayla.
  const students=c.students.map((st,i)=>({st,i})).sort((a,b)=>{
    const an=String(a.st.number??'').trim(),bn=String(b.st.number??'').trim();
    const ah=an!==''&&Number.isFinite(Number(an)),bh=bn!==''&&Number.isFinite(Number(bn));
@@ -7897,7 +7897,7 @@ function exportHomeworkJPEG(hid){
  students.forEach(st=>{const v=status(c,st.id,hid);counts[v]!==undefined?counts[v]++:counts.unchecked++});
  const checked=students.length-counts.unchecked, rate=students.length?Math.round(counts.done/students.length*100):0;
  const teacher=String(settings?.profile?.name||'').trim();
- const given=formatHomeworkDateInput(h.given)||'',due=formatHomeworkDateInput(h.due)||'';
+ const given=h.given?formatHomeworkDateInput(h.given):'',due=h.due?formatHomeworkDateInput(h.due):'';
  const w=1240, margin=70, headerH=220, summaryH=108, tableHeadH=56, rh=48, footerH=86;
  const height=headerH+summaryH+tableHeadH+students.length*rh+footerH;
  const cv=document.createElement('canvas');cv.width=w;cv.height=height;const x=cv.getContext('2d');
@@ -7905,9 +7905,8 @@ function exportHomeworkJPEG(hid){
  x.fillStyle='#f4f1e7';x.fillRect(0,0,w,height);
  x.fillStyle='#064e3b';x.fillRect(0,0,w,156);
  x.fillStyle='#d6b45b';x.fillRect(0,156,w,5);
- x.fillStyle='#ffffff';x.font='bold 34px Arial';x.fillText('ÖDEV KONTROL RAPORU',margin,55);
- x.fillStyle='#d6b45b';x.font='bold 20px Arial';x.fillText(`${c.name}  •  ${currentPeriod}. Dönem`,margin,91);
- if(teacher){x.fillStyle='#dbe7e2';x.font='17px Arial';x.fillText(`Ders Öğretmeni: ${teacher}`,margin,122)}
+ x.fillStyle='#ffffff';x.font='bold 31px Arial';x.fillText(`${c.name} SINIFI ÖDEV KONTROL RAPORU`,margin,58);
+ if(teacher){x.fillStyle='#eef4f1';x.font='bold 21px Arial';x.fillText(`Ders Öğretmeni: ${teacher}`,margin,98)}
  // Sağ üst ödev bilgisi — tarihler yalnız girildiyse gösterilir.
  x.textAlign='right';x.fillStyle='#ffffff';x.font='bold 24px Arial';x.fillText(h.name,w-margin,54);
  const dateBits=[];if(given)dateBits.push(`Verilme: ${given}`);if(due)dateBits.push(`Son teslim: ${due}`);
@@ -7917,14 +7916,14 @@ function exportHomeworkJPEG(hid){
  const cards=[['Yaptı',counts.done,'#15803d'],['Kısmen',counts.partial,'#7c3aed'],['Mazeretli',counts.excused,'#c56a00'],['Yapmadı',counts.missing,'#c62828'],['Kontrol Edilmedi',counts.unchecked,'#64748b']];
  const gap=12,cw=(w-2*margin-gap*4)/5,cy=178,ch=82;
  cards.forEach((a,i)=>{const cx=margin+i*(cw+gap);x.fillStyle='#fffdf8';roundRectCanvas(x,cx,cy,cw,ch,16);x.fill();x.strokeStyle='#d8cda9';x.lineWidth=1.5;x.stroke();x.fillStyle=a[2];x.font='bold 28px Arial';x.textAlign='center';x.fillText(String(a[1]),cx+cw/2,cy+35);x.fillStyle='#33443e';x.font='bold 14px Arial';x.fillText(a[0],cx+cw/2,cy+61)});x.textAlign='left';
- // Kompakt tablo: No dar, öğrenci geniş, durum öğrenci adına yakın.
- const ty=headerH+summaryH-36,tableW=860,tableX=(w-tableW)/2,noW=90,statusW=220,nameW=tableW-noW-statusW;
+ // Kompakt tablo: No dar, öğrenci geniş, durum öğrenci adına daha yakın.
+ const ty=headerH+summaryH-36,tableW=920,tableX=(w-tableW)/2,noW=96,statusW=184,nameW=tableW-noW-statusW;
  x.fillStyle='#e4ddc8';roundRectCanvas(x,tableX,ty,tableW,tableHeadH,10);x.fill();
- x.fillStyle='#173d33';x.font='bold 17px Arial';x.fillText('NO',tableX+16,ty+35);x.fillText('ÖĞRENCİ ADI SOYADI',tableX+noW+16,ty+35);x.fillText('DURUM',tableX+noW+nameW+18,ty+35);
- students.forEach((st,i)=>{const y=ty+tableHeadH+i*rh,v=status(c,st.id,hid);x.fillStyle=i%2?'#fffdf8':'#eef3ef';x.fillRect(tableX,y,tableW,rh);x.fillStyle='#253b35';x.font='16px Arial';x.fillText(String(st.number||'—'),tableX+16,y+31);drawFullStudentName(x,st.name,tableX+noW+16,y+15,nameW-28,rh-4,{maxFont:16,minFont:11,maxLines:2,weight:'normal',align:'left'});
+ x.fillStyle='#173d33';x.font='bold 18px Arial';x.fillText('NO',tableX+16,ty+35);x.fillText('ÖĞRENCİ ADI SOYADI',tableX+noW+16,ty+35);x.fillText('DURUM',tableX+noW+nameW+12,ty+35);
+ students.forEach((st,i)=>{const y=ty+tableHeadH+i*rh,v=status(c,st.id,hid);x.fillStyle=i%2?'#fffdf8':'#eef3ef';x.fillRect(tableX,y,tableW,rh);x.fillStyle='#253b35';x.font='17px Arial';x.fillText(String(st.number||'—'),tableX+16,y+31);drawFullStudentName(x,st.name,tableX+noW+16,y+15,nameW-24,rh-4,{maxFont:17,minFont:12,maxLines:2,weight:'normal',align:'left'});
    const label=v==='done'?'YAPTI':v==='partial'?'KISMEN':v==='excused'?'MAZERETLİ':v==='missing'?'YAPMADI':'KONTROL EDİLMEDİ';
    const col=v==='done'?'#15803d':v==='partial'?'#7c3aed':v==='excused'?'#c56a00':v==='missing'?'#c62828':'#64748b';
-   x.font='bold 14px Arial';const badgeW=Math.min(statusW-34,Math.max(104,x.measureText(label).width+30)),bx=tableX+noW+nameW+16,by=y+9;
+   x.font='bold 14px Arial';const badgeW=Math.min(statusW-22,Math.max(104,x.measureText(label).width+30)),bx=tableX+noW+nameW+10,by=y+9;
    x.fillStyle=col+'18';roundRectCanvas(x,bx,by,badgeW,30,15);x.fill();x.strokeStyle=col;x.lineWidth=1;x.stroke();x.fillStyle=col;x.textAlign='center';x.fillText(label,bx+badgeW/2,by+20);x.textAlign='left';
    x.strokeStyle='#dde5e0';x.lineWidth=1;x.beginPath();x.moveTo(tableX,y+rh);x.lineTo(tableX+tableW,y+rh);x.stroke()
  });
@@ -9235,4 +9234,4 @@ th{background:#f4f8f6;color:#586963}.progress>i{background:linear-gradient(90deg
 }
 </style>
 
-<!-- v7.8.52 — ödev görselini IndexedDB’den kalıcı silme + profesyonel ödev kontrol raporu -->
+<!-- v7.8.53 — ödev görselini IndexedDB’den kalıcı silme + profesyonel ödev kontrol raporu -->
