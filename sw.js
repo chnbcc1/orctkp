@@ -1,4 +1,4 @@
-const CACHE_NAME='ots-v7.8.23-ui-fix';
+const CACHE_NAME='ots-v7.8.24-ui-fix';
 const APP_SHELL = ['./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/apple-touch-icon.png'];
 self.addEventListener('install', event => { self.skipWaiting(); event.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(APP_SHELL)).catch(()=>{})); });
 self.addEventListener('activate', event => { event.waitUntil(self.clients.claim()); });
