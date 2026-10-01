@@ -1,5 +1,5 @@
-const CACHE_NAME='ots-v7.8.60-test-autosave-feedback';
-const APP_SHELL = ['./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/apple-touch-icon.png'];
+const CACHE_NAME='ots-v7.8.61-guidance-export-fit';
+const APP_SHELL = ['./index.html','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png','./icons/apple-touch-icon.png','./templates/ogrenci_bilgi_formu.pdf','./templates/ogrenci_gozlem_kaydi.pdf','./templates/rehberlik_servisine_yonlendirme_formu.pdf','./templates/psikolojik_destek_yonlendirme_formu.pdf','./templates/ev_ziyaret_formu.pdf'];
 self.addEventListener('install', event => { self.skipWaiting(); event.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(APP_SHELL)).catch(()=>{})); });
 self.addEventListener('activate', event => { event.waitUntil(self.clients.claim()); });
 self.addEventListener('fetch', event => {
