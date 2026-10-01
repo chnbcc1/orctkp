@@ -2386,7 +2386,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.67</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.68</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4590,7 +4590,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.67";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.68";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -8750,6 +8750,100 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 </script>
 
 
+
+
+<style id="v7868-guidance-record-nav-delete">
+.guidance-student-row .guidance-delete7868{min-width:64px}
+@media(max-width:700px){.guidance-student-row .guidance-delete7868{grid-column:auto}.guidance-student-row{grid-template-columns:minmax(0,1fr) auto auto!important}.guidance-student-row>span.tiny{grid-column:1/-1}}
+</style>
+<script id="v7868-guidance-record-nav-delete">
+(function(){
+  // v7.8.68 — Doldurulmuş form önizlemesinden aynı form düzenleme ekranına dönüş + tüm rehberlik kayıtlarında silme.
+  function guidanceData7868(){
+    const c=typeof cls==='function'?cls():null;if(!c)return null;
+    c.guidanceFile=c.guidanceFile&&typeof c.guidanceFile==='object'?c.guidanceFile:{};
+    c.guidanceFile.studentInfo=c.guidanceFile.studentInfo||{};
+    c.guidanceFile.records=c.guidanceFile.records||{};
+    ['election','observation','referral','psych','homeVisit'].forEach(k=>c.guidanceFile.records[k]=Array.isArray(c.guidanceFile.records[k])?c.guidanceFile.records[k]:[]);
+    return c.guidanceFile;
+  }
+  function escAttr7868(s){return String(s??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
+
+  const prevPreview=window.guidancePreviewCurrent;
+  window.guidancePreviewCurrent=function(type,id=''){
+    let sid='';
+    if(type==='studentInfo')sid=document.getElementById('g_studentId')?.value||'';
+    window._guidancePreviewForm7868={type:String(type||''),id:String(id||''),sid:String(sid||'')};
+    return prevPreview.apply(this,arguments);
+  };
+  const prevStudentPreview=window.guidancePreviewStudentInfo7864;
+  window.guidancePreviewStudentInfo7864=function(sid){
+    window._guidancePreviewForm7868={type:'studentInfo',id:'',sid:String(sid||'')};
+    return prevStudentPreview.apply(this,arguments);
+  };
+  window.guidanceExactBack7866=function(){
+    document.getElementById('exactPreview7862')?.remove();
+    const q=window._guidancePreviewForm7868;window._guidancePreviewForm7868=null;
+    if(q&&q.type){
+      if(q.type==='studentInfo')return window.guidanceOpenForm('studentInfo','',q.sid||'');
+      return window.guidanceOpenForm(q.type,q.id||'');
+    }
+    if(typeof window.guidanceRouteBack7867==='function')return window.guidanceRouteBack7867();
+    return window.openGuidanceFileCenter?.();
+  };
+
+  window.guidanceDeleteRecord7868=function(type,id){
+    const g=guidanceData7868();if(!g||!id)return;
+    const rows=g.records[type];if(!Array.isArray(rows))return;
+    if(!confirm('Bu form kaydı silinsin mi?\n\nYalnızca seçilen rehberlik formu kaydı silinir; öğrenci ve diğer sınıf verileri etkilenmez.'))return;
+    if(typeof pushUndo==='function')pushUndo();
+    g.records[type]=rows.filter(r=>String(r.id)!==String(id));
+    save();
+    window.guidanceOpenRecordList(type);
+  };
+  window.guidanceDeleteStudentInfo7868=function(sid){
+    const g=guidanceData7868();if(!g||!sid||!g.studentInfo?.[sid])return;
+    if(!confirm('Bu öğrencinin bilgi formu kaydı silinsin mi?\n\nÖğrencinin kendisi silinmez; yalnızca doldurulmuş Öğrenci Bilgi Formu kaldırılır.'))return;
+    if(typeof pushUndo==='function')pushUndo();
+    delete g.studentInfo[sid];
+    save();
+    window.guidanceStudentInfoList();
+  };
+
+  function decorateRecordDeletes7868(type){
+    const body=document.getElementById('modalBody');if(!body)return;
+    body.querySelectorAll('.guidance-student-row').forEach(row=>{
+      if(row.querySelector('.guidance-delete7868'))return;
+      const open=[...row.querySelectorAll('button')].find(b=>/guidanceOpenForm\(/.test(b.getAttribute('onclick')||''));
+      const code=open?.getAttribute('onclick')||'';
+      const m=code.match(/guidanceOpenForm\('([^']+)'\s*,\s*'([^']+)'/);if(!m||!m[2])return;
+      const b=document.createElement('button');b.className='danger guidance-delete7868';b.textContent='Sil';b.onclick=()=>window.guidanceDeleteRecord7868(type,m[2]);row.appendChild(b);
+    });
+  }
+  function decorateStudentDeletes7868(){
+    const body=document.getElementById('modalBody');if(!body)return;
+    body.querySelectorAll('.guidance-student-row').forEach(row=>{
+      if(row.querySelector('.guidance-delete7868'))return;
+      const open=[...row.querySelectorAll('button')].find(b=>/guidanceOpenForm\('studentInfo'/.test(b.getAttribute('onclick')||''));
+      const code=open?.getAttribute('onclick')||'';
+      const m=code.match(/guidanceOpenForm\('studentInfo'\s*,\s*''\s*,\s*'([^']+)'/);if(!m)return;
+      // Sil yalnızca doldurulmuş kayıtlarda gösterilsin.
+      const hasOutput=[...row.querySelectorAll('button')].some(b=>(b.textContent||'').includes('Çıktı'));
+      if(!hasOutput)return;
+      const b=document.createElement('button');b.className='danger guidance-delete7868';b.textContent='Sil';b.onclick=()=>window.guidanceDeleteStudentInfo7868(m[1]);row.appendChild(b);
+    });
+  }
+
+  const prevRecordList=window.guidanceOpenRecordList;
+  window.guidanceOpenRecordList=function(type){const r=prevRecordList.apply(this,arguments);decorateRecordDeletes7868(type);return r};
+  const prevStudentList=window.guidanceStudentInfoList;
+  window.guidanceStudentInfoList=function(){const r=prevStudentList.apply(this,arguments);decorateStudentDeletes7868();return r};
+
+  // Modal kapanınca eski önizleme hedefi tutulmasın.
+  const prevClose=window.closeModal;
+  window.closeModal=function(){window._guidancePreviewForm7868=null;return prevClose.apply(this,arguments)};
+})();
+</script>
 </body>
 </html><style id="v7412-lock-fullscreen-fix">
 /* v7.5.1: iPhone/PWA lock screen must fully cover app content */
@@ -9299,7 +9393,7 @@ html.app-locked,body.app-locked{
 </script>
 
 
-<!-- v7.8.67 — rehberlik orijinal form hizaları + seçim başlık/imza + geri dönüş -->
+<!-- v7.8.68 — rehberlik orijinal form hizaları + seçim başlık/imza + geri dönüş -->
 <style id="v7858-test-homework">
 .mm-homework-kind-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:end}
 .mm-homework-kind-row label{margin:0}
@@ -9447,7 +9541,7 @@ html.app-locked,body.app-locked{
 </script>
 
 
-<!-- v7.8.67 — test ödevinde otomatik boş + otomatik kayıt + geri bildirim + durum düğmesi aç/kapat -->
+<!-- v7.8.68 — test ödevinde otomatik boş + otomatik kayıt + geri bildirim + durum düğmesi aç/kapat -->
 <style id="v7859-test-usability">
 .mm-test-student-card{padding:14px!important}
 .mm-test-student-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
@@ -9688,7 +9782,7 @@ function currentRec7862(type,id=''){
 async function blankCanvases7862(type){const m=EXACT7862[type];if(!m)return[];const a=[];for(const src of m.pages){const im=await loadImage7862(src),cv=document.createElement('canvas');cv.width=im.naturalWidth;cv.height=im.naturalHeight;cv.getContext('2d').drawImage(im,0,0);a.push(cv)}return a}
 function studentInfoOverlay7862(cv,rec){
  const x=cv.getContext('2d'),c=cls(),p=profile7862(),st=student7862(rec.studentId),si=guidanceStore7862()?.studentInfo?.[rec.studentId]||rec;
- // v7.8.67 — cevaplar, orijinal formdaki gerçek boş alanlara göre yerleştirilir.
+ // v7.8.68 — cevaplar, orijinal formdaki gerçek boş alanlara göre yerleştirilir.
  const put=(txt,xx,yy,ww,hh,opt={})=>put7862(x,txt,xx,yy,ww,hh,{font:15,min:12,...opt});
  const right=(txt,xx,yy,ww,hh=26,opt={})=>put(txt,xx,yy,ww,hh,{align:'right',...opt});
  const center=(txt,xx,yy,ww,hh=24,opt={})=>put(txt,xx,yy,ww,hh,{align:'center',...opt});
