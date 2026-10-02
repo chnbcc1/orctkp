@@ -2391,7 +2391,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.74</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.75</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4592,7 +4592,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.74";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.75";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -8760,7 +8760,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 </style>
 <script id="v7868-guidance-record-nav-delete">
 (function(){
-  // v7.8.74 — Doldurulmuş form önizlemesinden aynı form düzenleme ekranına dönüş + tüm rehberlik kayıtlarında silme.
+  // v7.8.75 — Doldurulmuş form önizlemesinden aynı form düzenleme ekranına dönüş + tüm rehberlik kayıtlarında silme.
   function guidanceData7868(){
     const c=typeof cls==='function'?cls():null;if(!c)return null;
     c.guidanceFile=c.guidanceFile&&typeof c.guidanceFile==='object'?c.guidanceFile:{};
@@ -9450,7 +9450,7 @@ html.app-locked,body.app-locked{
 </script>
 
 
-<!-- v7.8.74 — rehberlik orijinal form hizaları + seçim başlık/imza + geri dönüş -->
+<!-- v7.8.75 — rehberlik orijinal form hizaları + seçim başlık/imza + geri dönüş -->
 <style id="v7858-test-homework">
 .mm-homework-kind-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:end}
 .mm-homework-kind-row label{margin:0}
@@ -9598,7 +9598,7 @@ html.app-locked,body.app-locked{
 </script>
 
 
-<!-- v7.8.74 — test ödevinde otomatik boş + otomatik kayıt + geri bildirim + durum düğmesi aç/kapat -->
+<!-- v7.8.75 — test ödevinde otomatik boş + otomatik kayıt + geri bildirim + durum düğmesi aç/kapat -->
 <style id="v7859-test-usability">
 .mm-test-student-card{padding:14px!important}
 .mm-test-student-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
@@ -10194,7 +10194,7 @@ window.guidanceBlankMenu7861=function(type){const m=MAP7863[type];if(!m)return;d
 })();
 </script>
 <script id="v7873-fresh-device-guard">
-/* v7.8.74 — yeni/boş cihazda sınıfa bağlı modüllerin güvenli açılışı */
+/* v7.8.75 — yeni/boş cihazda sınıfa bağlı modüllerin güvenli açılışı */
 (function(){
   function hasClass(){ return !!(typeof cls==='function' && cls()); }
   function freshSetup(){
@@ -10267,5 +10267,191 @@ window.guidanceBlankMenu7861=function(type){const m=MAP7863[type];if(!m)return;d
 
   document.addEventListener('DOMContentLoaded',function(){ setTimeout(decorateFreshHome,0); });
   setTimeout(decorateFreshHome,0);
+})();
+</script>
+
+
+<style id="v7875-static-doc-fix">
+.anthem7875{padding:34px 46px!important}
+.anthem7875 h1{text-align:center;margin:0 0 20px!important;font:700 34px "Times New Roman",serif!important}
+.anthem-stanzas7875{columns:2;column-gap:44px;font:20px/1.34 "Times New Roman",serif}
+.anthem-stanza7875{break-inside:avoid;margin:0 0 18px}
+.anthem-stanza7875 div{white-space:nowrap}
+.anthem-author7875{text-align:right;margin-top:18px;font:bold 20px "Times New Roman",serif}
+.ataturk-page7875{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:1010px;padding-top:20px}
+.ataturk-page7875 h1{font:700 36px "Times New Roman",serif!important;margin:0 0 24px!important}
+.ataturk-portrait-window7875{width:500px;height:650px;overflow:hidden;border:1px solid #c6a84b;background:#ddd;display:flex;justify-content:flex-start;align-items:stretch}
+.ataturk-portrait-window7875 img{height:100%;width:auto;max-width:none;display:block}
+.ataturk-page7875 .caption7875{font:700 25px "Times New Roman",serif;margin-top:18px}
+.ataturk-page7875 .dates7875{font:22px "Times New Roman",serif;margin-top:5px}
+@media(max-width:700px){
+ .anthem-stanzas7875{columns:1;font-size:18px}
+ .ataturk-portrait-window7875{width:480px;height:620px}
+}
+</style>
+<script id="v7875-static-doc-fix">
+(function(){
+ const OFFICIAL_COLLAGE='https://duzce.meb.gov.tr/meb_iys_dosyalar/2024_05/06143811_06105022_webb.jpg';
+ const FALLBACK='./assets/ataturk_portre_fallback.jpg';
+
+ function loadImg7875(src,cors=false){
+   return new Promise((resolve,reject)=>{
+     const im=new Image();
+     if(cors) im.crossOrigin='anonymous';
+     im.onload=()=>resolve(im);
+     im.onerror=()=>reject(new Error('Görsel yüklenemedi'));
+     im.src=src;
+   });
+ }
+
+ function canvasBase7875(){
+   const cv=document.createElement('canvas'); cv.width=1240; cv.height=1754;
+   const x=cv.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,cv.width,cv.height);
+   x.fillStyle='#111'; return [cv,x];
+ }
+
+ function splitLines7875(ctx,text,maxW){
+   const words=String(text||'').split(/\s+/).filter(Boolean), out=[]; let line='';
+   for(const w of words){
+     const t=line?line+' '+w:w;
+     if(line && ctx.measureText(t).width>maxW){out.push(line); line=w}
+     else line=t;
+   }
+   if(line) out.push(line);
+   return out;
+ }
+
+ function anthemCanvas7875(){
+   const [cv,x]=canvasBase7875(), d=G_STATIC7874.anthem;
+   x.textAlign='center'; x.font='bold 48px Times New Roman'; x.fillText('İSTİKLAL MARŞI',620,75);
+   x.textAlign='left'; x.font='26px Times New Roman';
+   const cols=[70,640], colW=530, top=125, bottom=1600;
+   let col=0,y=top;
+   d.paragraphs.forEach((stanza,idx)=>{
+     const lines=String(stanza).split('\n');
+     const need=lines.length*33+26;
+     if(y+need>bottom && col===0){col=1;y=top}
+     const xx=cols[col];
+     lines.forEach(line=>{x.fillText(line,xx,y);y+=33});
+     y+=24;
+   });
+   x.textAlign='right'; x.font='bold 26px Times New Roman'; x.fillText(d.author,1165,1650);
+   return cv;
+ }
+
+ function dutiesCanvas7875(){
+   const [cv,x]=canvasBase7875(), d=G_STATIC7874.duties, M=72, maxW=1096;
+   x.textAlign='center'; x.font='bold 43px Times New Roman'; x.fillText(d.title,620,78);
+   x.textAlign='left'; let y=132;
+   d.items.forEach((item,i)=>{
+     x.font='25px Times New Roman';
+     const prefix=(i+1)+'.  ', prefixW=x.measureText(prefix).width;
+     const lines=splitLines7875(x,item,maxW-prefixW);
+     x.fillText(prefix,M,y);
+     lines.forEach((ln,j)=>{x.fillText(ln,M+prefixW,y+j*31)});
+     y+=Math.max(1,lines.length)*31+15;
+   });
+   x.font='italic 19px Times New Roman'; x.fillStyle='#555';
+   splitLines7875(x,d.source,maxW).forEach(line=>{x.fillText(line,M,y);y+=26});
+   return cv;
+ }
+
+ async function portraitCanvas7875(){
+   const [cv,x]=canvasBase7875();
+   x.textAlign='center'; x.fillStyle='#111'; x.font='bold 48px Times New Roman'; x.fillText('ATATÜRK PORTRESİ',620,75);
+   let im=null, official=false;
+   try{im=await loadImg7875(OFFICIAL_COLLAGE,true); official=true}catch(e){
+     try{im=await loadImg7875(FALLBACK,false)}catch(e2){}
+   }
+   if(im){
+     // Official MEB collage: the historic portrait occupies the left part.
+     if(official){
+       const sw=Math.min(im.naturalWidth*0.455, im.naturalWidth), sh=im.naturalHeight;
+       const targetW=690,targetH=1040,scale=Math.min(targetW/sw,targetH/sh);
+       const dw=sw*scale,dh=sh*scale,dx=(1240-dw)/2,dy=120;
+       x.drawImage(im,0,0,sw,sh,dx,dy,dw,dh);
+       x.strokeStyle='#c7a649';x.lineWidth=4;x.strokeRect(dx,dy,dw,dh);
+     }else{
+       const targetW=820,targetH=720,scale=Math.min(targetW/im.naturalWidth,targetH/im.naturalHeight);
+       const dw=im.naturalWidth*scale,dh=im.naturalHeight*scale,dx=(1240-dw)/2,dy=260;
+       x.drawImage(im,dx,dy,dw,dh);
+     }
+   }
+   x.fillStyle='#111';x.textAlign='center';x.font='bold 34px Times New Roman';x.fillText('MUSTAFA KEMAL ATATÜRK',620,1260);
+   x.font='29px Times New Roman';x.fillText('(1881–1938)',620,1305);
+   x.font='italic 18px Times New Roman';x.fillStyle='#666';x.fillText('Kaynak: Millî Eğitim Bakanlığı',620,1660);
+   return cv;
+ }
+
+ window.guidanceStaticPdf7875=async function(kind){
+   try{
+     const cv=kind==='anthem'?anthemCanvas7875():dutiesCanvas7875();
+     await downloadCanvasPDF(cv, safe(G_STATIC7874[kind].title)+'.pdf');
+   }catch(e){console.error(e);alert('PDF dışa aktarılamadı: '+(e?.message||e))}
+ };
+
+ window.guidanceAtaturkPdf7875=async function(){
+   try{
+     const cv=await portraitCanvas7875();
+     await downloadCanvasPDF(cv,'Ataturk_Portresi.pdf');
+   }catch(e){console.error(e);alert('PDF dışa aktarılamadı: '+(e?.message||e))}
+ };
+
+ window.guidanceOpenStatic7874=function(kind){
+   const d=G_STATIC7874[kind]; if(!d)return;
+   document.getElementById('guidancePreview')?.remove();
+   const sh=document.createElement('div');sh.id='guidancePreview';sh.className='guidance-preview-sheet';
+   let body='';
+   if(kind==='anthem'){
+     body='<div class="static-doc7874 anthem7875"><h1>İSTİKLAL MARŞI</h1><div class="anthem-stanzas7875">'+
+       d.paragraphs.map(p=>'<div class="anthem-stanza7875">'+String(p).split('\n').map(line=>'<div>'+esc(line)+'</div>').join('')+'</div>').join('')+
+       '</div><div class="anthem-author7875">'+esc(d.author)+'</div></div>';
+   }else body=staticDocHtml7874(kind);
+   sh.innerHTML='<div class="guidance-preview-toolbar">'+
+     '<button class="secondary" onclick="document.getElementById(\'guidancePreview\')?.remove()">← Dön</button>'+
+     '<button onclick="guidanceStaticPdf7875(\''+kind+'\')">⬇️ PDF Dışa Aktar</button>'+
+     '<button class="secondary" onclick="guidanceStaticWord7875(\''+kind+'\')">📝 Word</button></div>'+
+     '<div class="guidance-preview-stage"><div class="guidance-preview-scaler"><article class="guidance-paper static-paper7874">'+body+'</article></div></div>';
+   document.body.appendChild(sh); if(typeof guidanceFitPreview7861==='function')setTimeout(guidanceFitPreview7861,20);
+ };
+
+ window.guidanceOpenAtaturk7874=function(){
+   document.getElementById('guidancePreview')?.remove();
+   const sh=document.createElement('div');sh.id='guidancePreview';sh.className='guidance-preview-sheet';
+   const body='<div class="ataturk-page7875"><h1>ATATÜRK PORTRESİ</h1>'+
+     '<div class="ataturk-portrait-window7875"><img src="'+OFFICIAL_COLLAGE+'" onerror="this.onerror=null;this.src=\''+FALLBACK+'\'" alt="Mustafa Kemal Atatürk"></div>'+
+     '<div class="caption7875">MUSTAFA KEMAL ATATÜRK</div><div class="dates7875">(1881–1938)</div></div>';
+   sh.innerHTML='<div class="guidance-preview-toolbar">'+
+     '<button class="secondary" onclick="document.getElementById(\'guidancePreview\')?.remove()">← Dön</button>'+
+     '<button onclick="guidanceAtaturkPdf7875()">⬇️ PDF Dışa Aktar</button>'+
+     '<button class="secondary" onclick="guidanceAtaturkWord7875()">📝 Word</button></div>'+
+     '<div class="guidance-preview-stage"><div class="guidance-preview-scaler"><article class="guidance-paper static-paper7874">'+body+'</article></div></div>';
+   document.body.appendChild(sh); if(typeof guidanceFitPreview7861==='function')setTimeout(guidanceFitPreview7861,20);
+ };
+
+ window.guidanceStaticWord7875=async function(kind){
+   const d=G_STATIC7874[kind]; if(!d || typeof JSZip==='undefined') return alert('Word oluşturma bileşeni yüklenemedi.');
+   try{
+     let body=docxParagraph(d.title,true,true,false,true,32);
+     if(kind==='anthem'){
+       d.paragraphs.forEach(p=>{
+         String(p).split('\n').forEach(line=>body+=docxParagraph(line,false,false,false,false,23));
+         body+=docxParagraph('',false,false,false,false,12);
+       });
+       body+=docxParagraph(d.author,true,false,false,false,23);
+     }else{
+       d.items.forEach((item,i)=>body+=docxParagraph((i+1)+'. '+item,false,false,false,false,22));
+       body+=docxParagraph('',false,false,false,false,12)+docxParagraph(d.source,false,false,true,false,18);
+     }
+     const z=new JSZip();
+     z.file('[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>');
+     z.folder('_rels').file('.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>');
+     const w=z.folder('word');
+     w.file('styles.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr></w:style></w:styles>');
+     w.file('document.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'+body+'<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="700" w:right="700" w:bottom="700" w:left="700"/></w:sectPr></w:body></w:document>');
+     const blob=await z.generateAsync({type:'blob',mimeType:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});
+     downloadDocumentBlob(blob,safe(d.title)+'.docx');
+   }catch(e){console.error(e);alert('Word dosyası oluşturulamadı.')}
+ };
 })();
 </script>
