@@ -2386,7 +2386,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.72</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.73</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4587,7 +4587,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.72";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.73";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -8755,7 +8755,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 </style>
 <script id="v7868-guidance-record-nav-delete">
 (function(){
-  // v7.8.72 — Doldurulmuş form önizlemesinden aynı form düzenleme ekranına dönüş + tüm rehberlik kayıtlarında silme.
+  // v7.8.73 — Doldurulmuş form önizlemesinden aynı form düzenleme ekranına dönüş + tüm rehberlik kayıtlarında silme.
   function guidanceData7868(){
     const c=typeof cls==='function'?cls():null;if(!c)return null;
     c.guidanceFile=c.guidanceFile&&typeof c.guidanceFile==='object'?c.guidanceFile:{};
@@ -9445,7 +9445,7 @@ html.app-locked,body.app-locked{
 </script>
 
 
-<!-- v7.8.72 — rehberlik orijinal form hizaları + seçim başlık/imza + geri dönüş -->
+<!-- v7.8.73 — rehberlik orijinal form hizaları + seçim başlık/imza + geri dönüş -->
 <style id="v7858-test-homework">
 .mm-homework-kind-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:end}
 .mm-homework-kind-row label{margin:0}
@@ -9593,7 +9593,7 @@ html.app-locked,body.app-locked{
 </script>
 
 
-<!-- v7.8.72 — test ödevinde otomatik boş + otomatik kayıt + geri bildirim + durum düğmesi aç/kapat -->
+<!-- v7.8.73 — test ödevinde otomatik boş + otomatik kayıt + geri bildirim + durum düğmesi aç/kapat -->
 <style id="v7859-test-usability">
 .mm-test-student-card{padding:14px!important}
 .mm-test-student-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
@@ -10099,5 +10099,81 @@ window.guidanceBlankMenu7861=function(type){const m=MAP7863[type];if(!m)return;d
     save();
     guidanceOpenRecordList(type);
   };
+})();
+</script>
+<script id="v7873-fresh-device-guard">
+/* v7.8.73 — yeni/boş cihazda sınıfa bağlı modüllerin güvenli açılışı */
+(function(){
+  function hasClass(){ return !!(typeof cls==='function' && cls()); }
+  function freshSetup(){
+    try{ document.body.classList.remove('mm-class-open'); }catch(e){}
+    const title=document.getElementById('modalTitle'), sub=document.getElementById('modalSubtitle'), body=document.getElementById('modalBody'), modal=document.getElementById('modal');
+    if(!title||!sub||!body||!modal) return;
+    title.textContent='İlk Kurulum';
+    sub.textContent='Bu cihazda henüz sınıf verisi bulunmuyor.';
+    body.innerHTML=`
+      <div class="card" style="padding:14px;margin-bottom:12px">
+        <b>Yeni iPhone algılandı</b>
+        <div class="tiny" style="margin-top:6px;line-height:1.55">MualliMate+ verileri cihazda yerel saklanır. Eski iPhone'daki sınıf ve öğrenci verileri bu cihaza otomatik gelmez.</div>
+      </div>
+      <div style="display:grid;gap:10px">
+        <button onclick="closeModal();addClass()">＋ İlk Sınıfı Ekle</button>
+        <button class="secondary" onclick="closeModal();openSettings()">👤 Öğretmen Profilini Düzenle</button>
+        <label class="btn secondary" style="display:block;text-align:center;cursor:pointer">💾 Başka Cihaz Yedeğini Yükle
+          <input type="file" accept=".json,application/json" hidden onchange="importTransferBackup(event)">
+        </label>
+      </div>
+      <div class="tiny" style="margin-top:12px">Aynı verileri kullanmak istiyorsanız eski telefondan alınmış tam yedeği yükleyin. Yeni kurulum yapacaksanız önce bir sınıf oluşturun.</div>`;
+    modal.classList.add('open');
+  }
+  window.mmFreshDeviceSetup7873=freshSetup;
+
+  // Sınıfa bağlı modüller artık boş cihazda sessizce hata vermek yerine kurulumu açar.
+  const oldOpenClassModule=window.openClassModule;
+  window.openClassModule=function(id){
+    if(!hasClass()){ freshSetup(); return; }
+    return oldOpenClassModule && oldOpenClassModule.apply(this,arguments);
+  };
+
+  ['openSeatingPlan','openClassDuty','openClassLessonInfo','openClassSettings','addHomework','openNewTrial','openQuickLesson','openAllParentMeetings'].forEach(function(name){
+    const old=window[name];
+    if(typeof old!=='function') return;
+    window[name]=function(){
+      if(!hasClass()){ freshSetup(); return; }
+      return old.apply(this,arguments);
+    };
+  });
+
+  const oldOpenGuidance=window.openGuidanceFileCenter;
+  if(typeof oldOpenGuidance==='function') window.openGuidanceFileCenter=function(){
+    if(!hasClass()){ freshSetup(); return; }
+    return oldOpenGuidance.apply(this,arguments);
+  };
+
+  function decorateFreshHome(){
+    const c = hasClass();
+    const dash=document.getElementById('mobileHomeDashboard');
+    if(!dash) return;
+    let card=document.getElementById('mmFreshDeviceCard7873');
+    if(c){ if(card) card.remove(); return; }
+    if(!card){
+      card=document.createElement('div');
+      card.id='mmFreshDeviceCard7873';
+      card.className='mm-home-card';
+      card.style.cssText='padding:16px;border:1px solid rgba(228,184,90,.7);background:#f7edd9;color:#173d33;display:grid;gap:10px';
+      card.innerHTML='<b style="font-size:18px">📱 Bu cihazda henüz sınıf yok</b><div style="font-size:13px;line-height:1.5">Sınıfa bağlı Öğrenciler, Ödevler, Notlar, Denemeler ve Rehberlik özelliklerini kullanmak için sınıf ekleyin veya diğer iPhone\'dan aldığınız yedeği yükleyin.</div><button onclick="mmFreshDeviceSetup7873()">Kurulumu Aç</button>';
+      dash.insertBefore(card,dash.firstChild);
+    }
+  }
+
+  const oldRender=window.render;
+  if(typeof oldRender==='function') window.render=function(){
+    const r=oldRender.apply(this,arguments);
+    try{decorateFreshHome()}catch(e){console.warn(e)}
+    return r;
+  };
+
+  document.addEventListener('DOMContentLoaded',function(){ setTimeout(decorateFreshHome,0); });
+  setTimeout(decorateFreshHome,0);
 })();
 </script>
