@@ -2391,7 +2391,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.75</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.76</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4592,7 +4592,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.75";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.76";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -8760,7 +8760,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 </style>
 <script id="v7868-guidance-record-nav-delete">
 (function(){
-  // v7.8.75 — Doldurulmuş form önizlemesinden aynı form düzenleme ekranına dönüş + tüm rehberlik kayıtlarında silme.
+  // v7.8.76 — Doldurulmuş form önizlemesinden aynı form düzenleme ekranına dönüş + tüm rehberlik kayıtlarında silme.
   function guidanceData7868(){
     const c=typeof cls==='function'?cls():null;if(!c)return null;
     c.guidanceFile=c.guidanceFile&&typeof c.guidanceFile==='object'?c.guidanceFile:{};
@@ -9450,7 +9450,7 @@ html.app-locked,body.app-locked{
 </script>
 
 
-<!-- v7.8.75 — rehberlik orijinal form hizaları + seçim başlık/imza + geri dönüş -->
+<!-- v7.8.76 — rehberlik orijinal form hizaları + seçim başlık/imza + geri dönüş -->
 <style id="v7858-test-homework">
 .mm-homework-kind-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:end}
 .mm-homework-kind-row label{margin:0}
@@ -9598,7 +9598,7 @@ html.app-locked,body.app-locked{
 </script>
 
 
-<!-- v7.8.75 — test ödevinde otomatik boş + otomatik kayıt + geri bildirim + durum düğmesi aç/kapat -->
+<!-- v7.8.76 — test ödevinde otomatik boş + otomatik kayıt + geri bildirim + durum düğmesi aç/kapat -->
 <style id="v7859-test-usability">
 .mm-test-student-card{padding:14px!important}
 .mm-test-student-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
@@ -9730,7 +9730,7 @@ function gProfile(){return{teacher:String(settings?.profile?.name||'').trim()||'
 function gStatus(c,id){const g=gEnsure(c),m=g.manual[id];if(id===2||id===3||id===4)return'Hazır';if(id===6)return(c.students||[]).length?'Hazır':'Eksik';if(id===8)return c.seatingPlan?'Hazır':'Eksik';if(id===9)return g.records.election.length?'Hazır':(m||'Eksik');if(id===12){const n=Object.keys(g.studentInfo).length,total=(c.students||[]).length;return total&&n>=total?'Hazır':n?`Güncellenecek ${n}/${total}`:(m||'Eksik')}if(id===14)return g.records.observation.length?'Hazır':(m||'Eksik');if(id===15)return g.records.referral.length?'Hazır':(m||'Eksik');if(id===16)return g.records.psych.length?'Hazır':(m||'Eksik');if(id===17)return g.records.homeVisit.length?'Hazır':(m||'Eksik');if(id===18){const n=(c.parentMeetings||[]).length;return n?'Hazır':(m||'Eksik')}if(id===11){const mo=(new Date()).getMonth()+1;if(m)return m;return mo<11?'Kasımda':'Güncellenecek'}return m||'Eksik'}
 function gStatusClass(s){if(String(s).startsWith('Hazır'))return'ready';if(String(s).startsWith('Güncellenecek'))return'update';if(s==='Kasımda')return'scheduled';return'missing'}
 function gCountReady(c){return G_ITEMS.filter(x=>gStatus(c,x[0])==='Hazır').length}
-function gAction(id){if(id===1)return`<button onclick="guidanceOpenCover()">Oluştur</button>`;if(id===2)return`<button onclick="guidanceOpenAtaturk7874()">Aç / Dışa Aktar</button>`;if(id===3)return`<button onclick="guidanceOpenStatic7874('anthem')">Aç / Dışa Aktar</button>`;if(id===4)return`<button onclick="guidanceOpenStatic7874('duties')">Aç / Dışa Aktar</button>`;if(id===6)return`<button onclick="guidanceOpenClassList()">Aç</button>`;if(id===8)return`<button onclick="guidanceOpenSeating7861()">Aç</button>`;if(id===9)return`<button onclick="guidanceOpenElectionList7864()">Kayıtlar</button><button onclick="guidanceOpenForm('election')">＋ Yeni</button><button class="ghost" onclick="guidanceBlankMenu7861('election')">Boş Form</button>`;if(id===12)return`<button onclick="guidanceStudentInfoList()">Öğrenciler</button><button class="ghost" onclick="guidanceBlankMenu7861('studentInfo')">Boş Form</button>`;if(id===14)return`<button onclick="guidanceOpenRecordList('observation')">Kayıtlar</button><button class="ghost" onclick="guidanceBlankMenu7861('observation')">Boş Form</button>`;if(id===15)return`<button onclick="guidanceOpenRecordList('referral')">Kayıtlar</button><button class="ghost" onclick="guidanceBlankMenu7861('referral')">Boş Form</button>`;if(id===16)return`<button onclick="guidanceOpenRecordList('psych')">Kayıtlar</button><button class="ghost" onclick="guidanceBlankMenu7861('psych')">Boş Form</button>`;if(id===17)return`<button onclick="guidanceOpenRecordList('homeVisit')">Kayıtlar</button><button class="ghost" onclick="guidanceBlankMenu7861('homeVisit')">Boş Form</button>`;return''}
+function gAction(id){if(id===1)return`<button onclick="guidanceOpenCover()">Oluştur</button>`;if(id===2)return`<button onclick="guidanceOpenAtaturk7876()">Aç / Dışa Aktar</button>`;if(id===3)return`<button onclick="guidanceOpenStatic7876('anthem')">Aç / Dışa Aktar</button>`;if(id===4)return`<button onclick="guidanceOpenStatic7876('duties')">Aç / Dışa Aktar</button>`;if(id===6)return`<button onclick="guidanceOpenClassList()">Aç</button>`;if(id===8)return`<button onclick="guidanceOpenSeating7861()">Aç</button>`;if(id===9)return`<button onclick="guidanceOpenElectionList7864()">Kayıtlar</button><button onclick="guidanceOpenForm('election')">＋ Yeni</button><button class="ghost" onclick="guidanceBlankMenu7861('election')">Boş Form</button>`;if(id===12)return`<button onclick="guidanceStudentInfoList()">Öğrenciler</button><button class="ghost" onclick="guidanceBlankMenu7861('studentInfo')">Boş Form</button>`;if(id===14)return`<button onclick="guidanceOpenRecordList('observation')">Kayıtlar</button><button class="ghost" onclick="guidanceBlankMenu7861('observation')">Boş Form</button>`;if(id===15)return`<button onclick="guidanceOpenRecordList('referral')">Kayıtlar</button><button class="ghost" onclick="guidanceBlankMenu7861('referral')">Boş Form</button>`;if(id===16)return`<button onclick="guidanceOpenRecordList('psych')">Kayıtlar</button><button class="ghost" onclick="guidanceBlankMenu7861('psych')">Boş Form</button>`;if(id===17)return`<button onclick="guidanceOpenRecordList('homeVisit')">Kayıtlar</button><button class="ghost" onclick="guidanceBlankMenu7861('homeVisit')">Boş Form</button>`;return''}
 window.openGuidanceFileCenter=function(){const c=cls();if(!c)return alert('Önce bir sınıf seçin.');const ready=gCountReady(c),total=G_ITEMS.length,missing=G_ITEMS.filter(x=>gStatus(c,x[0])==='Eksik').length;el('modalTitle').textContent='🗂️ Rehberlik Dosyası';el('modalSubtitle').textContent=`${c.name} · ${gProfile().year}`;const opts=(state.classes||[]).map(x=>`<option value="${x.id}" ${x.id===c.id?'selected':''}>${esc(x.name)}</option>`).join('');el('modalBody').innerHTML=`<div class="guidance-toolbar"><label>Sınıf<select onchange="currentClassId=this.value;save();openGuidanceFileCenter()">${opts}</select></label><button class="secondary" onclick="openDocumentAssistant()">Belge Asistanı</button></div><div class="guidance-summary"><div class="gstat"><b>${ready}</b><span>Hazır</span></div><div class="gstat"><b>${missing}</b><span>Eksik</span></div><div class="gstat"><b>${total}</b><span>Toplam</span></div></div><div class="guidance-list">${G_ITEMS.map(([id,title,note])=>{const st=gStatus(c,id);return`<div class="guidance-item"><div class="guidance-item-no">${id}</div><div><div class="guidance-item-title">${esc(title)}</div><div class="guidance-item-note">${esc(note)}</div></div><div class="guidance-item-actions"><span class="guidance-status ${gStatusClass(st)}">${esc(st)}</span>${gAction(id)}<button class="ghost" onclick="guidanceCycleStatus(${id})">Durum</button></div></div>`}).join('')}</div>`;el('modal').classList.add('open')}
 window.guidanceCycleStatus=function(id){const c=cls(),g=gEnsure(c),s=g.manual[id]||'Eksik';g.manual[id]=s==='Eksik'?'Hazır':s==='Hazır'?'Güncellenecek':'Eksik';save();openGuidanceFileCenter()}
 function gStudentOptions(c,sel=''){return(c.students||[]).map(s=>`<option value="${s.id}" ${String(s.id)===String(sel)?'selected':''}>${esc(s.number?s.number+' - ':'')}${esc(s.name)}</option>`).join('')}
@@ -10194,7 +10194,7 @@ window.guidanceBlankMenu7861=function(type){const m=MAP7863[type];if(!m)return;d
 })();
 </script>
 <script id="v7873-fresh-device-guard">
-/* v7.8.75 — yeni/boş cihazda sınıfa bağlı modüllerin güvenli açılışı */
+/* v7.8.76 — yeni/boş cihazda sınıfa bağlı modüllerin güvenli açılışı */
 (function(){
   function hasClass(){ return !!(typeof cls==='function' && cls()); }
   function freshSetup(){
@@ -10453,5 +10453,34 @@ window.guidanceBlankMenu7861=function(type){const m=MAP7863[type];if(!m)return;d
      downloadDocumentBlob(blob,safe(d.title)+'.docx');
    }catch(e){console.error(e);alert('Word dosyası oluşturulamadı.')}
  };
+})();
+</script>
+<style id="v7876-fix">
+.ataturk-official-wrap7876{width:500px;height:650px;overflow:hidden;border:2px solid #c9a83d;background:#eee;position:relative}
+.ataturk-official-wrap7876 img{position:absolute;height:650px;width:auto;max-width:none;left:-28px;top:0}
+</style>
+<script id="v7876-fix">
+(function(){
+const MEB_COLLAGE_7876='https://www.meb.gov.tr/meb_iys_dosyalar/2024_05/06105022_WEBB.jpg';
+function e7876(v){return typeof esc==='function'?esc(v):String(v??'')}
+function mount7876(body,kind){
+ document.getElementById('guidancePreview')?.remove();
+ const sh=document.createElement('div'); sh.id='guidancePreview'; sh.className='guidance-preview-sheet';
+ const bar=document.createElement('div');bar.className='guidance-preview-toolbar';
+ const back=document.createElement('button');back.className='secondary';back.textContent='← Dön';back.onclick=()=>sh.remove();bar.appendChild(back);
+ const pdf=document.createElement('button');pdf.textContent='⬇️ PDF Dışa Aktar';pdf.onclick=()=>kind==='ataturk'?guidanceAtaturkPdf7876():guidanceStaticPdf7875(kind);bar.appendChild(pdf);
+ if(kind!=='ataturk'){const word=document.createElement('button');word.className='secondary';word.textContent='📝 Word';word.onclick=()=>guidanceStaticWord7875(kind);bar.appendChild(word)}
+ const stage=document.createElement('div');stage.className='guidance-preview-stage';const scaler=document.createElement('div');scaler.className='guidance-preview-scaler';const art=document.createElement('article');art.className='guidance-paper static-paper7874';art.innerHTML=body;scaler.appendChild(art);stage.appendChild(scaler);sh.append(bar,stage);document.body.appendChild(sh);if(typeof guidanceFitPreview7861==='function')setTimeout(guidanceFitPreview7861,30)
+}
+window.guidanceOpenStatic7876=function(kind){
+ try{const d=G_STATIC7874[kind];if(!d)throw new Error('Belge verisi bulunamadı');let body='';
+ if(kind==='anthem'){body='<div class="static-doc7874 anthem7875"><h1>'+e7876(d.title)+'</h1><div class="anthem-stanzas7875">'+d.paragraphs.map(p=>'<div class="anthem-stanza7875">'+String(p).split('\n').map(line=>'<div>'+e7876(line)+'</div>').join('')+'</div>').join('')+'</div><div class="anthem-author7875">'+e7876(d.author)+'</div></div>'}
+ else body='<div class="static-doc7874 duties7874"><h1>'+e7876(d.title)+'</h1><ol>'+d.items.map(x=>'<li>'+e7876(x)+'</li>').join('')+'</ol><div class="source7874">'+e7876(d.source)+'</div></div>';
+ mount7876(body,kind)}catch(err){console.error(err);alert('Belge açılamadı: '+(err?.message||err))}
+};
+window.guidanceOpenAtaturk7876=function(){
+ const body='<div class="ataturk-page7875"><h1>ATATÜRK PORTRESİ</h1><div class="ataturk-official-wrap7876"><img src="'+MEB_COLLAGE_7876+'" alt="Mustafa Kemal Atatürk"></div><div class="caption7875">MUSTAFA KEMAL ATATÜRK</div><div class="dates7875">(1881–1938)</div><div style="font:italic 15px Times New Roman;margin-top:16px;color:#777">Kaynak: Millî Eğitim Bakanlığı</div></div>';mount7876(body,'ataturk')
+};
+window.guidanceAtaturkPdf7876=function(){window.open('https://www.meb.gov.tr/meb_iys_dosyalar/2024_05/06102941_Ataturk_Portresi.pdf','_blank')};
 })();
 </script>
