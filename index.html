@@ -2386,7 +2386,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.71</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.72</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4440,18 +4440,15 @@ async function tryLocalImageOCR(file){
 
 // v6.6 Maksimum Gizlilik: uygulama çalışma zamanında ağ çıkışını kapatır.
 (function(){
-  const deny = () => Promise.reject(new Error("Yerel Veri Modu: ağ bağlantısı engellendi."));
-  try { window.fetch = deny; } catch(e) {}
-  try {
-    window.XMLHttpRequest = class {
-      constructor(){ throw new Error("Yerel Veri Modu: XMLHttpRequest engellendi."); }
-    };
-  } catch(e) {}
+  const nativeFetch = window.fetch ? window.fetch.bind(window) : null;
+  const isLocal = (input)=>{
+    try{ const raw=(typeof input==='string')?input:(input&&input.url)||''; const u=new URL(raw,location.href); return u.origin===location.origin; }catch(e){ return false; }
+  };
+  try { window.fetch=function(input,init){ if(nativeFetch&&isLocal(input)) return nativeFetch(input,init); return Promise.reject(new Error("Yerel Veri Modu: dış ağ bağlantısı engellendi.")); }; } catch(e) {}
+  try { const NativeXHR=window.XMLHttpRequest; window.XMLHttpRequest=class extends NativeXHR{ open(method,url,...rest){ if(!isLocal(url)) throw new Error("Yerel Veri Modu: dış XMLHttpRequest engellendi."); return super.open(method,url,...rest); } }; } catch(e) {}
   try { window.WebSocket = class { constructor(){ throw new Error("Yerel Veri Modu: WebSocket engellendi."); } }; } catch(e) {}
   try { window.EventSource = class { constructor(){ throw new Error("Yerel Veri Modu: EventSource engellendi."); } }; } catch(e) {}
-  try {
-    if (navigator.sendBeacon) navigator.sendBeacon = () => false;
-  } catch(e) {}
+  try { if (navigator.sendBeacon) navigator.sendBeacon = () => false; } catch(e) {}
 })();
 
 
@@ -4590,7 +4587,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.71";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.72";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -8063,7 +8060,7 @@ migrateHomeworkImagesToIDB().then(()=>hydrateHomeworkImages()).catch(()=>{});
 <script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
   // v7.6.64-JPEG — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
   // ve aktif oturum güncelleme nedeniyle yeniden yüklenmez.
-  navigator.serviceWorker.register("./sw.js?v=7.8.04",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.8.72",{updateViaCache:"none"}).then(reg=>{
     reg.update().catch(()=>{});
     setInterval(()=>reg.update().catch(()=>{}),60*60*1000);
   }).catch(()=>{});
@@ -8758,7 +8755,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 </style>
 <script id="v7868-guidance-record-nav-delete">
 (function(){
-  // v7.8.71 — Doldurulmuş form önizlemesinden aynı form düzenleme ekranına dönüş + tüm rehberlik kayıtlarında silme.
+  // v7.8.72 — Doldurulmuş form önizlemesinden aynı form düzenleme ekranına dönüş + tüm rehberlik kayıtlarında silme.
   function guidanceData7868(){
     const c=typeof cls==='function'?cls():null;if(!c)return null;
     c.guidanceFile=c.guidanceFile&&typeof c.guidanceFile==='object'?c.guidanceFile:{};
@@ -8889,6 +8886,14 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
  };
  window.guidanceOpenRecordList=function(type){const c=cls(),g=gEnsure(c),sc=G_SCHEMAS[type],rows=g.records[type]||[];el('modalTitle').textContent=sc.title;el('modalSubtitle').textContent=c.name+' · '+rows.length+' kayıt';el('modalBody').innerHTML='<button style="width:100%;margin-bottom:10px" onclick="guidanceOpenForm(\''+type+'\')">＋ Yeni Kayıt</button><div class="guidance-student-list">'+(rows.length?rows.slice().reverse().map(r=>{const st=c.students.find(x=>String(x.id)===String(r.studentId)),d=r.date||String(r.createdAt||'').slice(0,10);return '<div class="guidance-student-row"><b>'+esc(st?(st.number?st.number+' - ':'')+st.name:'Öğrenci seçilmedi')+'</b><span class="tiny">'+esc(d||'')+'</span><button onclick="guidanceOpenForm(\''+type+'\',\''+r.id+'\')">Aç</button><button class="secondary" onclick="guidancePreviewCurrent(\''+type+'\',\''+r.id+'\')">Çıktı</button><button class="danger guidance-delete7869" onclick="guidanceDeleteRecord7868(\''+type+'\',\''+r.id+'\')">Sil</button></div>'}).join(''):'<div class="empty card">Henüz kayıt yok.</div>')+'</div><div class="modal-actions"><button class="secondary" onclick="openGuidanceFileCenter()">← Rehberlik Dosyası</button></div>';el('modal').classList.add('open')};
  window.guidanceStudentInfoList=function(){const c=cls(),g=gEnsure(c);el('modalTitle').textContent='Öğrenci Bilgi Formları';el('modalSubtitle').textContent=c.name+' · '+Object.keys(g.studentInfo).length+'/'+c.students.length+' kayıt';el('modalBody').innerHTML='<div class="guidance-student-list">'+c.students.map(st=>{const ok=!!g.studentInfo[st.id];return '<div class="guidance-student-row"><b>'+esc(st.number?st.number+' - ':'')+esc(st.name)+'</b><span class="guidance-status '+(ok?'ready':'missing')+'">'+(ok?'Hazır':'Eksik')+'</span><button onclick="guidanceOpenForm(\'studentInfo\',\'\',\''+st.id+'\')">'+(ok?'Düzenle':'Doldur')+'</button>'+(ok?'<button class="secondary" onclick="guidancePreviewStudentInfo7864(\''+st.id+'\')">Çıktı</button><button class="danger guidance-delete7869" onclick="guidanceDeleteStudentInfo7868(\''+st.id+'\')">Sil</button>':'')+'</div>'}).join('')+'</div><div class="modal-actions"><button class="secondary" onclick="openGuidanceFileCenter()">← Rehberlik Dosyası</button></div>';el('modal').classList.add('open')};
+})();
+</script>
+
+<script id="v7872-fresh-device-boot">
+(function(){
+  function boot(){ try{ if(typeof render==='function') render(); }catch(e){ console.error('MualliMate boot render',e); } }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,80),{once:true}); else setTimeout(boot,80);
+  window.addEventListener('pageshow',()=>setTimeout(boot,80));
 })();
 </script>
 </body>
@@ -9440,7 +9445,7 @@ html.app-locked,body.app-locked{
 </script>
 
 
-<!-- v7.8.71 — rehberlik orijinal form hizaları + seçim başlık/imza + geri dönüş -->
+<!-- v7.8.72 — rehberlik orijinal form hizaları + seçim başlık/imza + geri dönüş -->
 <style id="v7858-test-homework">
 .mm-homework-kind-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:end}
 .mm-homework-kind-row label{margin:0}
@@ -9588,7 +9593,7 @@ html.app-locked,body.app-locked{
 </script>
 
 
-<!-- v7.8.71 — test ödevinde otomatik boş + otomatik kayıt + geri bildirim + durum düğmesi aç/kapat -->
+<!-- v7.8.72 — test ödevinde otomatik boş + otomatik kayıt + geri bildirim + durum düğmesi aç/kapat -->
 <style id="v7859-test-usability">
 .mm-test-student-card{padding:14px!important}
 .mm-test-student-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
