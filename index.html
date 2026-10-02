@@ -2391,7 +2391,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.76</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.77</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4327,6 +4327,10 @@ input,select,textarea{border-radius:12px!important;background:#fffefa!important}
 <button onclick="openMobileDrawer()"><span>☰</span>Menü</button>
 </nav>
 <nav id="mmBottomNav" aria-label="Mobil alt menü"><button onclick="document.body.classList.remove('mm-class-open');window.scrollTo({top:0,behavior:'smooth'})"><span>⌂</span>Ana Sayfa</button><button onclick="document.body.classList.remove('mm-class-open');document.getElementById('mmClassesCard')?.scrollIntoView({behavior:'smooth'})"><span>👥</span>Sınıflar</button><button class="mm-plus" onclick="openMobileQuickAdd()">＋</button><button onclick="document.body.classList.add('mm-class-open');openClassModule('reports')"><span>▥</span>Raporlar</button><button onclick="openMobileDrawer()"><span>☰</span>Menü</button></nav>
+<style id="v7877-fix">
+.ataturk-official-wrap7876{width:500px;height:648px;overflow:hidden;border:2px solid #c9a83d;background:#eee;display:flex;align-items:center;justify-content:center;position:relative}
+.ataturk-official-wrap7876 img{position:static!important;width:100%!important;height:100%!important;max-width:100%!important;object-fit:contain!important;object-position:center center!important}
+</style>
 </body></html>`}
 function docPdfWrap(ctx,text,maxW){
  const words=String(text||'').split(/\s+/).filter(Boolean),lines=[];let line='';
@@ -4592,7 +4596,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.76";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.77";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -8760,7 +8764,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 </style>
 <script id="v7868-guidance-record-nav-delete">
 (function(){
-  // v7.8.76 — Doldurulmuş form önizlemesinden aynı form düzenleme ekranına dönüş + tüm rehberlik kayıtlarında silme.
+  // v7.8.77 — Doldurulmuş form önizlemesinden aynı form düzenleme ekranına dönüş + tüm rehberlik kayıtlarında silme.
   function guidanceData7868(){
     const c=typeof cls==='function'?cls():null;if(!c)return null;
     c.guidanceFile=c.guidanceFile&&typeof c.guidanceFile==='object'?c.guidanceFile:{};
@@ -8901,6 +8905,10 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   window.addEventListener('pageshow',()=>setTimeout(boot,80));
 })();
 </script>
+<style id="v7877-fix">
+.ataturk-official-wrap7876{width:500px;height:648px;overflow:hidden;border:2px solid #c9a83d;background:#eee;display:flex;align-items:center;justify-content:center;position:relative}
+.ataturk-official-wrap7876 img{position:static!important;width:100%!important;height:100%!important;max-width:100%!important;object-fit:contain!important;object-position:center center!important}
+</style>
 </body>
 </html><style id="v7412-lock-fullscreen-fix">
 /* v7.5.1: iPhone/PWA lock screen must fully cover app content */
@@ -9450,7 +9458,7 @@ html.app-locked,body.app-locked{
 </script>
 
 
-<!-- v7.8.76 — rehberlik orijinal form hizaları + seçim başlık/imza + geri dönüş -->
+<!-- v7.8.77 — rehberlik orijinal form hizaları + seçim başlık/imza + geri dönüş -->
 <style id="v7858-test-homework">
 .mm-homework-kind-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:end}
 .mm-homework-kind-row label{margin:0}
@@ -9598,7 +9606,7 @@ html.app-locked,body.app-locked{
 </script>
 
 
-<!-- v7.8.76 — test ödevinde otomatik boş + otomatik kayıt + geri bildirim + durum düğmesi aç/kapat -->
+<!-- v7.8.77 — test ödevinde otomatik boş + otomatik kayıt + geri bildirim + durum düğmesi aç/kapat -->
 <style id="v7859-test-usability">
 .mm-test-student-card{padding:14px!important}
 .mm-test-student-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}
@@ -9752,7 +9760,7 @@ window.guidanceExportWord=async function(title,rows){if(typeof JSZip==='undefine
 window.guidanceOpenCover=function(){const c=cls(),p=gProfile(),rows=[['h1',p.school],['h2','SINIF REHBERLİK DOSYASI'],['p',`${c.name} SINIFI`],['p',`${p.year} Eğitim Öğretim Yılı`],['p',`Sınıf Rehber Öğretmeni: ${p.teacher}`]];guidancePreviewDoc('Kapak',rows,true)}
 window.guidanceOpenClassList=function(){const c=cls(),p=gProfile(),rows=[['Okul',p.school],['Sınıf',c.name],['Eğitim Öğretim Yılı',p.year],...c.students.map((s,i)=>[`${i+1}. ${s.number||''}`,s.name])];guidancePreviewDoc(`${c.name} SINIFI ÖĞRENCİ LİSTESİ`,rows)}
 
-const G_STATIC7874={
+window.G_STATIC7874={
  anthem:{
   title:'İSTİKLAL MARŞI',
   author:'Mehmet Âkif ERSOY',
@@ -10194,7 +10202,7 @@ window.guidanceBlankMenu7861=function(type){const m=MAP7863[type];if(!m)return;d
 })();
 </script>
 <script id="v7873-fresh-device-guard">
-/* v7.8.76 — yeni/boş cihazda sınıfa bağlı modüllerin güvenli açılışı */
+/* v7.8.77 — yeni/boş cihazda sınıfa bağlı modüllerin güvenli açılışı */
 (function(){
   function hasClass(){ return !!(typeof cls==='function' && cls()); }
   function freshSetup(){
@@ -10461,7 +10469,7 @@ window.guidanceBlankMenu7861=function(type){const m=MAP7863[type];if(!m)return;d
 </style>
 <script id="v7876-fix">
 (function(){
-const MEB_COLLAGE_7876='https://www.meb.gov.tr/meb_iys_dosyalar/2024_05/06105022_WEBB.jpg';
+const MEB_COLLAGE_7876='./assets/ataturk_portrait.jpg';
 function e7876(v){return typeof esc==='function'?esc(v):String(v??'')}
 function mount7876(body,kind){
  document.getElementById('guidancePreview')?.remove();
@@ -10481,6 +10489,14 @@ window.guidanceOpenStatic7876=function(kind){
 window.guidanceOpenAtaturk7876=function(){
  const body='<div class="ataturk-page7875"><h1>ATATÜRK PORTRESİ</h1><div class="ataturk-official-wrap7876"><img src="'+MEB_COLLAGE_7876+'" alt="Mustafa Kemal Atatürk"></div><div class="caption7875">MUSTAFA KEMAL ATATÜRK</div><div class="dates7875">(1881–1938)</div><div style="font:italic 15px Times New Roman;margin-top:16px;color:#777">Kaynak: Millî Eğitim Bakanlığı</div></div>';mount7876(body,'ataturk')
 };
-window.guidanceAtaturkPdf7876=function(){window.open('https://www.meb.gov.tr/meb_iys_dosyalar/2024_05/06102941_Ataturk_Portresi.pdf','_blank')};
+window.guidanceAtaturkPdf7876=async function(){
+ try{
+  const cv=document.createElement('canvas');cv.width=1240;cv.height=1754;const x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,cv.width,cv.height);x.fillStyle='#111';x.textAlign='center';x.font='bold 48px Times New Roman';x.fillText('ATATÜRK PORTRESİ',620,100);
+  const img=new Image();img.src='./assets/ataturk_portrait.jpg';await new Promise((ok,no)=>{img.onload=ok;img.onerror=no});
+  const box={x:260,y:175,w:720,h:930};const r=Math.min(box.w/img.naturalWidth,box.h/img.naturalHeight);const w=img.naturalWidth*r,h=img.naturalHeight*r;x.drawImage(img,box.x+(box.w-w)/2,box.y+(box.h-h)/2,w,h);x.strokeStyle='#c9a83d';x.lineWidth=3;x.strokeRect(box.x,box.y,box.w,box.h);
+  x.fillStyle='#111';x.font='bold 36px Times New Roman';x.fillText('MUSTAFA KEMAL ATATÜRK',620,1170);x.font='28px Times New Roman';x.fillText('(1881–1938)',620,1215);x.fillStyle='#777';x.font='italic 20px Times New Roman';x.fillText('Kaynak: Millî Eğitim Bakanlığı',620,1280);
+  await downloadCanvasPDF(cv,'Ataturk_Portresi.pdf');
+ }catch(e){console.error(e);alert('PDF oluşturulamadı: '+(e&&e.message?e.message:e))}
+};
 })();
 </script>
