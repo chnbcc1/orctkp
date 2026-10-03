@@ -2391,7 +2391,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.84</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.85</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4605,7 +4605,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.84";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.85";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -6255,7 +6255,7 @@ async function prepareHomeworkImage(input){const f=input?.files?.[0];if(!f){wind
 function removeNewHomeworkImage(){window._newHomeworkImage="";const i=el("newHomeworkImageInput");if(i)i.value="";const h=el("newHomeworkImagePreview");if(h)h.innerHTML=""}
 async function saveNewHomework(){
   const c=cls(),name=(el("newHomeworkName")?.value||"").trim();if(!c||!name)return alert("Ödev adı girin.");
-  const h={id:uid(),name,given:el("newHomeworkGiven")?.value||"",due:el("newHomeworkDue")?.value||"",period:currentPeriod,imageData:window._newHomeworkImage||""};
+  const h={id:uid(),name,given:el("newHomeworkGiven")?.value||"",due:el("newHomeworkDue")?.value||"",period:currentPeriod,imageData:window._newHomeworkImage||"",createdAt:new Date().toISOString()};
   if(h.imageData){h.imageKey=homeworkImageKey(c,h);try{await idbPutHomeworkImage(h.imageKey,h.imageData)}catch(e){return alert("Ödev görseli cihaz deposuna kaydedilemedi: "+(e?.message||e))}}
   pushUndo();c.homeworks.push(h);
   window._newHomeworkImage="";if(save()===false){c.homeworks=c.homeworks.filter(x=>x.id!==h.id);return}closeModal();render();
@@ -6279,7 +6279,7 @@ function saveHomeworkEdit(hid){
   save();render();openHomework(hid);
 }
 function openBulkHomeworks(){el("modalTitle").textContent="Toplu Ödev Ekle";el("modalSubtitle").textContent=(currentPeriod==="1"?"1. Dönem":"2. Dönem")+" · Her satıra bir ödev";el("modalBody").innerHTML=`<textarea id="bulkHomeworks" class="note" placeholder="Üslü Sayılar Testi&#10;Köklü Sayılar Çalışması"></textarea><div style="margin-top:10px"><button class="full-action" onclick="saveBulkHomeworks()">Ödevleri Ekle</button></div>`;el("modal").classList.add("open")}
-function saveBulkHomeworks(){const c=cls(),a=el("bulkHomeworks").value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),ex=new Set(hwPeriod(c).map(h=>h.name.toLocaleLowerCase("tr")));pushUndo();let added=0,skipped=0;a.forEach(n=>{const k=n.toLocaleLowerCase("tr");if(!ex.has(k)){c.homeworks.push({id:uid(),name:n,given:"",due:"",period:currentPeriod});ex.add(k);added++}else skipped++});save();closeModal();render();alert(`${added} ödev eklendi${skipped?`, ${skipped} tekrar eden ödev atlandı`:""}.`)}
+function saveBulkHomeworks(){const c=cls(),a=el("bulkHomeworks").value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean),ex=new Set(hwPeriod(c).map(h=>h.name.toLocaleLowerCase("tr")));pushUndo();let added=0,skipped=0;a.forEach(n=>{const k=n.toLocaleLowerCase("tr");if(!ex.has(k)){c.homeworks.push({id:uid(),name:n,given:"",due:"",period:currentPeriod,createdAt:new Date().toISOString()});ex.add(k);added++}else skipped++});save();closeModal();render();alert(`${added} ödev eklendi${skipped?`, ${skipped} tekrar eden ödev atlandı`:""}.`)}
 
 function status(c,sid,hid){let v=c.checks?.[sid]?.[hid];return ["done","partial","excused","missing"].includes(v)?v:"pending"}
 function setStatus(c,sid,hid,v,doPush=true){
@@ -6900,7 +6900,7 @@ function openParentMeetingForm(sid,mid=""){
 function saveParentMeeting(sid,mid=""){
   const c=cls(); if(!c)return;
   c.parentMeetings=Array.isArray(c.parentMeetings)?c.parentMeetings:[];
-  const rec={id:mid||uid(),studentId:sid,date:el("pmDate").value,person:el("pmPerson").value.trim(),subject:el("pmSubject").value.trim(),note:el("pmNote").value.trim(),result:el("pmResult").value.trim()};
+  const oldRec=mid?c.parentMeetings.find(x=>x.id===mid):null;const rec={id:mid||uid(),studentId:sid,date:el("pmDate").value,person:el("pmPerson").value.trim(),subject:el("pmSubject").value.trim(),note:el("pmNote").value.trim(),result:el("pmResult").value.trim(),createdAt:oldRec?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};
   if(!rec.date)return alert("Görüşme tarihini seçin.");
   pushUndo();
   const i=c.parentMeetings.findIndex(x=>x.id===mid);
@@ -7208,7 +7208,7 @@ function openNewTrial(){
   toggleTrialPenaltyOptions();
 }
 function toggleTrialPenaltyOptions(){const on=!!el('trialPenalty')?.checked;const txt=el('trialPenaltyText'),box=el('trialPenaltyOptions'),sel=el('trialDiv');if(txt)txt.textContent=on?'Evet':'Hayır';if(box){box.style.display=on?'block':'none';box.setAttribute('aria-hidden',on?'false':'true')}if(sel)sel.disabled=!on}
-function saveNewTrial(){const name=el('trialName').value.trim(),date=el('trialDateValue').value,subjects=el('trialSubjects').value.split(',').map(x=>x.trim()).filter(Boolean),penalty=!!el('trialPenalty')?.checked,div=Number(el('trialDiv')?.value)||4;if(!name)return alert('Deneme adını girin.');if(!date)return alert('Deneme tarihini seçin.');if(!subjects.length)return alert('En az bir ders girin.');pushUndo();const t={id:uid(),name,date,subjects,wrongPenalty:penalty,wrongDivisor:div,results:{}};cls().students.forEach(st=>t.results[st.id]={attended:true,subjects:{}});cls().trials.push(t);save();render();openTrial(t.id)}
+function saveNewTrial(){const name=el('trialName').value.trim(),date=el('trialDateValue').value,subjects=el('trialSubjects').value.split(',').map(x=>x.trim()).filter(Boolean),penalty=!!el('trialPenalty')?.checked,div=Number(el('trialDiv')?.value)||4;if(!name)return alert('Deneme adını girin.');if(!date)return alert('Deneme tarihini seçin.');if(!subjects.length)return alert('En az bir ders girin.');pushUndo();const t={id:uid(),name,date,subjects,wrongPenalty:penalty,wrongDivisor:div,results:{},createdAt:new Date().toISOString()};cls().students.forEach(st=>t.results[st.id]={attended:true,subjects:{}});cls().trials.push(t);save();render();openTrial(t.id)}
 function openTrial(id){const c=cls(),t=trialList(c).find(x=>x.id===id);if(!t)return;el('modalTitle').textContent=t.name;el('modalSubtitle').textContent=`${c.name} · ${trialDateTR(t.date)}`;el('modalBody').innerHTML=`<div class="modal-actions trial-top-actions" style="margin-top:0;margin-bottom:12px"><button class="secondary" onclick="exportTrialCSV('${t.id}')">Excel / CSV Raporu</button><button class="secondary" onclick="exportSingleTrialJPEG('${t.id}')">Rapor Çıktısı</button><button class="secondary trial-info-full" onclick="editTrialInfo('${t.id}')">Deneme Bilgileri</button></div><div class="trial-card-stats"><div class="trial-mini"><span>Katılan</span><b>${trialStats(t).attended}</b></div><div class="trial-mini"><span>Girmeyen</span><b>${trialStats(t).absent}</b></div><div class="trial-mini"><span>Ort. Net</span><b>${trialStats(t).avg??'-'}</b></div></div><div style="display:grid;gap:8px;margin-top:12px">${c.students.map(st=>trialStudentEditor(t,st)).join('')}</div><div class="modal-actions"><button class="danger" onclick="deleteTrial('${t.id}')">Denemeyi Sil</button></div>`;el('modal').classList.add('open')}
 function trialStudentEditor(t,st){const r=t.results[st.id]||(t.results[st.id]={attended:true,subjects:{}}),att=r.attended!==false,total=trialStudentTotal(t,st.id),trend=trialTrend(t,st.id);return `<div class="trial-student-card" data-trial-student="${st.id}"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><b>${esc(st.number?st.number+' - ':'')}${esc(st.name)}</b><span><b data-trial-total>${total===null?'Girmedi':total.toLocaleString('tr-TR',{maximumFractionDigits:2})+' net'}</b> <small class="${trend.cls}">${trend.text}</small></span></div><label class="trial-participation" style="display:flex;align-items:center;gap:7px;margin-top:8px"><input type="checkbox" ${att?'checked':''} onchange="setTrialAttendance('${t.id}','${st.id}',this.checked)"> Denemeye katıldı</label>${att?`<div>${(t.subjects||[]).map(sub=>{const x=r.subjects?.[sub]||{},sn=trialNet(x.correct,x.wrong,t.wrongDivisor,t.wrongPenalty!==false);return `<div class="trial-subject-block" data-trial-subject="${esc(sub)}"><div class="trial-subject-head"><b>${esc(sub)}</b><span class="trial-subject-net" data-subject-net>${sn.toLocaleString('tr-TR',{maximumFractionDigits:2})} net</span></div><div class="trial-subject-grid"><label>Doğru<input class="trial-score-input" type="number" min="0" inputmode="numeric" value="${x.correct??''}" oninput="setTrialScoreLive('${t.id}','${st.id}','${esc(sub)}','correct',this.value,this)"></label><label>Yanlış<input class="trial-score-input" type="number" min="0" inputmode="numeric" value="${x.wrong??''}" oninput="setTrialScoreLive('${t.id}','${st.id}','${esc(sub)}','wrong',this.value,this)"></label><label>Boş<input class="trial-score-input" type="number" min="0" inputmode="numeric" value="${x.blank??''}" oninput="setTrialScoreLive('${t.id}','${st.id}','${esc(sub)}','blank',this.value,this)"></label></div></div>`}).join('')}</div>`:''}</div>`}
 function setTrialAttendance(tid,sid,on){const t=trialList().find(x=>x.id===tid);if(!t)return;t.results[sid]=t.results[sid]||{subjects:{}};t.results[sid].attended=!!on;save();render();openTrial(tid)}
@@ -7975,7 +7975,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.84",
+    appVersion:"v7.8.85",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -7988,7 +7988,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.84",
+    appVersion:"v7.8.85",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -8085,7 +8085,7 @@ migrateHomeworkImagesToIDB().then(()=>hydrateHomeworkImages()).catch(()=>{});
 <script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
   // v7.6.64-JPEG — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
   // ve aktif oturum güncelleme nedeniyle yeniden yüklenmez.
-  navigator.serviceWorker.register("./sw.js?v=7.8.84",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.8.85",{updateViaCache:"none"}).then(reg=>{
     reg.update().catch(()=>{});
     setInterval(()=>reg.update().catch(()=>{}),60*60*1000);
   }).catch(()=>{});
@@ -9163,7 +9163,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   }
   window.mmRecordBackup884=function(backup,kind){
     try{localStorage.setItem(HEALTH_KEY,JSON.stringify({
-      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.84',
+      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.85',
       stats:stats(backup?.state||state),
       archives:Array.isArray(backup?.schoolYearArchives)?backup.schoolYearArchives.length:loadSchoolYearArchives().length
     }))}catch(e){console.warn('Yedek sağlık kaydı yazılamadı',e)}
@@ -9289,7 +9289,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     el('modalTitle').textContent='Sistem Sağlığı';el('modalSubtitle').textContent='Salt okunur veri kontrolü, depolama durumu ve yedek doğrulama.';
     el('modalBody').innerHTML=`<div class="mm-health-status884 ${bs.cls}"><span class="dot"></span><div><b>${esc(bs.text)}</b><div class="tiny" style="margin-top:3px">Bu ekran mevcut öğrenci verilerini değiştirmez.</div></div></div>
       <div class="mm-health-grid884">
-        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.84</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
+        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.85</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
         <div class="mm-health-card884"><span>SINIF</span><b>${st.classes}</b></div><div class="mm-health-card884"><span>ÖĞRENCİ</span><b>${st.students}</b></div><div class="mm-health-card884"><span>ÖDEV</span><b>${st.homeworks}</b></div>
         <div class="mm-health-card884"><span>DENEME</span><b>${st.trials}</b></div><div class="mm-health-card884"><span>VELİ GÖRÜŞMESİ</span><b>${st.meetings}</b></div><div class="mm-health-card884"><span>REHBERLİK KAYDI</span><b>${st.guidance}</b></div>
         <div class="mm-health-card884"><span>YEREL VERİ</span><b>${fmtBytes(localBytes())}</b></div><div class="mm-health-card884"><span>ÖDEV GÖRSELİ</span><b id="mmHealthIDB884">Kontrol…</b></div><div class="mm-health-card884"><span>DEPOLAMA</span><b id="mmHealthStorage884">Kontrol…</b></div>
@@ -9307,7 +9307,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   };
 
   window.exportVerifiedBackup884=function(){
-    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.84',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
+    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.85',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
     downloadBlob(JSON.stringify(backup,null,2),'MualliMate_DOGRULANMIS_TAM_YEDEK.json','application/json');mmRecordBackup884(backup,'doğrulanmış tam yedek');setTimeout(()=>openSystemHealth884(),80);
   };
 
@@ -9319,6 +9319,307 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       if(host)host.innerHTML=`<b style="color:#166534">✓ Yedek yapısı geçerli</b><div class="tiny" style="margin-top:6px;line-height:1.55">${esc(f.name)}<br>${s.classes} sınıf · ${s.students} öğrenci · ${s.homeworks} ödev · ${s.trials} deneme · ${s.meetings} veli görüşmesi · ${s.guidance} rehberlik kaydı · ${a} eğitim yılı arşivi${profile?`<br>Profil: ${esc(profile)}`:''}${d.exportedAt?`<br>Yedek tarihi: ${esc(trDate(d.exportedAt))}`:''}</div><div class="tiny" style="margin-top:7px"><b>Hiçbir veri geri yüklenmedi.</b></div>`;
     }catch(e){if(host)host.innerHTML=`<b style="color:#b91c1c">✕ Yedek doğrulanamadı</b><div class="tiny" style="margin-top:5px">${esc(e?.message||e)}</div>`}finally{ev.target.value=''}};
     r.onerror=()=>{if(host)host.innerHTML='<b style="color:#b91c1c">Dosya okunamadı.</b>';ev.target.value=''};r.readAsText(f);
+  };
+})();
+</script>
+
+
+<style id="v7885-search-work-center">
+.mm-search-filters885{display:flex;gap:6px;overflow-x:auto;padding:2px 0 9px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.mm-search-filters885::-webkit-scrollbar{display:none}
+.mm-search-chip885{flex:0 0 auto!important;min-height:34px!important;padding:7px 12px!important;border-radius:999px!important;background:#f7edd8!important;border:1px solid #d4c29b!important;color:#234c41!important;font-size:11px!important;font-weight:900!important;box-shadow:none!important}
+.mm-search-chip885.active{background:#0f6b59!important;color:#fff!important;border-color:#0f6b59!important}
+.mm-search-quick885{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:3px 0 12px}
+.mm-search-quick885 button{min-height:52px;font-size:13px!important}
+.mm-work-summary885{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.mm-work-summary885>div{border:1px solid #ddcfb4;background:#fffaf0;border-radius:13px;padding:10px;text-align:center}
+.mm-work-summary885 span{display:block;font-size:9px;color:#64748b;font-weight:900}
+.mm-work-summary885 b{display:block;font-size:20px;color:#173d33;margin-top:3px}
+.mm-work-list885{display:grid;gap:8px}
+.mm-work-row885{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:9px;border:1px solid #ded1b8;background:#fffaf0;border-radius:14px;padding:10px}
+.mm-work-row885 .ico{font-size:22px;text-align:center}
+.mm-work-row885 b{display:block;color:#173d33;font-size:13px}
+.mm-work-row885 small{display:block;color:#64748b;font-size:10px;line-height:1.4;margin-top:3px}
+.mm-work-row885 button{min-height:38px!important;padding:7px 10px!important;font-size:10px!important}
+.mm-recent-type885{display:inline-block;margin-top:5px;border:1px solid #d6c49e;background:#f5ead3;border-radius:999px;padding:3px 7px;font-size:9px;font-weight:900;color:#53655f}
+@media(max-width:560px){
+ .mm-work-row885{grid-template-columns:36px minmax(0,1fr)}
+ .mm-work-row885 button{grid-column:2;width:100%}
+}
+</style>
+<script id="v7885-search-work-center">
+(function(){
+  const FILTERS885=[
+    ['all','Tümü'],['student','Öğrenci'],['homework','Ödev'],['trial','Deneme'],
+    ['meeting','Veli'],['guidance','Rehberlik'],['document','Belge']
+  ];
+  window._mmSearchFilter885='all';
+
+  function norm885(v){
+    return String(v??'').toLocaleLowerCase('tr-TR').normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/ı/g,'i').replace(/ğ/g,'g').replace(/ü/g,'u')
+      .replace(/ş/g,'s').replace(/ö/g,'o').replace(/ç/g,'c')
+      .replace(/\s+/g,' ').trim();
+  }
+  function hit885(q,...xs){return norm885(xs.filter(Boolean).join(' ')).includes(norm885(q))}
+  function selectedClass885(cid){
+    const c=(state.classes||[]).find(x=>String(x.id)===String(cid));
+    if(!c)return false;
+    currentClassId=c.id;state.currentClassId=c.id;save();render();return true;
+  }
+  function gradeRecordRead885(c,sid){
+    const direct=c?.grades?.[currentPeriod]?.[sid];
+    if(direct&&typeof direct==='object')return direct;
+    const legacy=c?.grades?.[sid];
+    return legacy&&typeof legacy==='object'?legacy:{};
+  }
+  function dateMs885(v){
+    if(!v)return 0;
+    const d=new Date(v);
+    return Number.isFinite(d.getTime())?d.getTime():0;
+  }
+  function dateTR885(v){
+    if(!v)return '';
+    try{
+      const d=new Date(v);
+      if(!Number.isFinite(d.getTime()))return String(v);
+      return d.toLocaleString('tr-TR',{dateStyle:'short',timeStyle:String(v).includes('T')?'short':undefined});
+    }catch(e){return String(v)}
+  }
+
+  const docs885=[
+    {icon:'🗃️',title:'Öğretmen Dosyası',meta:'Öğretmen dosyası oluşturucu',keys:'öğretmen dosyası belge',action:"openTeacherFileCenter()"},
+    {icon:'🗂️',title:'Rehberlik Dosyası',meta:'Sınıf rehberlik belgeleri',keys:'rehberlik dosyası belge form',action:"openGuidanceFileCenter()"},
+    {icon:'📁',title:'Belge Asistanı',meta:'Zümre, ŞÖK ve toplantı tutanakları',keys:'belge asistanı zümre şök tutanak toplantı',action:"openDocumentAssistant()"},
+    {icon:'📄',title:'Raporlar',meta:'Sınıf raporları ve çıktılar',keys:'rapor raporlar çıktı',action:"openClassModule('reports')"}
+  ];
+
+  function collect885(q,filter){
+    const out=[], nq=norm885(q);if(!nq)return out;
+    const allow=cat=>filter==='all'||filter===cat;
+
+    if(allow('document')){
+      for(const d of docs885)if(hit885(nq,d.title,d.meta,d.keys))out.push({...d,type:'Belge',cat:'document'});
+    }
+
+    for(const c of (state.classes||[])){
+      if(filter==='all'&&hit885(nq,c.name,'sınıf')){
+        out.push({icon:'🏫',title:c.name,meta:`Sınıf · ${(c.students||[]).length} öğrenci`,type:'Sınıf',cat:'class',action:`mmSearchOpenClass884('${c.id}')`});
+      }
+
+      if(allow('student'))for(const s of (c.students||[])){
+        if(hit885(nq,s.name,s.number,c.name,'öğrenci'))out.push({
+          icon:'👤',title:`${s.number?s.number+' - ':''}${s.name}`,
+          meta:`${c.name} · Öğrenci Detay Merkezi`,type:'Öğrenci',cat:'student',
+          action:`mmSearchOpenStudent884('${c.id}','${s.id}')`
+        });
+      }
+
+      if(allow('homework'))for(const h of (c.homeworks||[])){
+        if(hit885(nq,h.name,h.given,h.due,c.name,'ödev'))out.push({
+          icon:'📚',title:h.name||'Ödev',meta:`${c.name}${h.due?' · Son teslim '+h.due:''}`,
+          type:'Ödev',cat:'homework',action:`mmSearchOpenHomework885('${c.id}','${h.id}')`
+        });
+      }
+
+      if(allow('trial'))for(const t of (c.trials||[])){
+        if(hit885(nq,t.name,t.date,c.name,(t.subjects||[]).join(' '),'deneme'))out.push({
+          icon:'📊',title:t.name||'Deneme',meta:`${c.name}${t.date?' · '+t.date:''}`,
+          type:'Deneme',cat:'trial',action:`mmSearchOpenTrial884('${c.id}','${t.id}')`
+        });
+      }
+
+      const byId=Object.fromEntries((c.students||[]).map(s=>[String(s.id),s]));
+
+      if(allow('meeting'))for(const m of (c.parentMeetings||[])){
+        const s=byId[String(m.studentId)];
+        if(hit885(nq,s?.name,s?.number,m.person,m.subject,m.note,m.result,m.date,c.name,'veli görüşmesi'))out.push({
+          icon:'👥',title:`${s?.name||'Öğrenci'} · Veli Görüşmesi`,
+          meta:`${c.name}${m.date?' · '+m.date:''}${m.subject?' · '+m.subject:''}`,
+          type:'Veli',cat:'meeting',action:`mmSearchOpenMeeting884('${c.id}','${m.studentId}')`
+        });
+      }
+
+      if(allow('guidance')){
+        const g=c.guidanceFile||{}, names={
+          observation:'Öğrenci Gözlem Kaydı',
+          referral:'Rehberlik Servisine Öğrenci Yönlendirme',
+          psych:'Psikolojik Destek Yönlendirme',
+          homeVisit:'Ev Ziyaret Formu'
+        };
+        for(const sid of Object.keys(g.studentInfo||{})){
+          const s=byId[String(sid)];
+          if(hit885(nq,'öğrenci bilgi formu',s?.name,s?.number,c.name))out.push({
+            icon:'📝',title:`Öğrenci Bilgi Formu · ${s?.name||'Öğrenci'}`,meta:c.name,
+            type:'Rehberlik',cat:'guidance',action:`mmSearchOpenGuidance884('${c.id}','studentInfo','','${sid}')`
+          });
+        }
+        for(const [kind,title] of Object.entries(names))for(const r of (g.records?.[kind]||[])){
+          const s=byId[String(r.studentId)];
+          if(hit885(nq,title,s?.name,s?.number,r.date,c.name))out.push({
+            icon:'🗂️',title:`${title} · ${s?.name||'Öğrenci'}`,
+            meta:`${c.name}${r.date?' · '+r.date:''}`,type:'Rehberlik',cat:'guidance',
+            action:`mmSearchOpenGuidance884('${c.id}','${kind}','${r.id}','${r.studentId||''}')`
+          });
+        }
+      }
+      if(out.length>120)break;
+    }
+    return out.slice(0,80);
+  }
+
+  function filterHtml885(){
+    return `<div class="mm-search-filters885">${FILTERS885.map(([id,label])=>
+      `<button class="mm-search-chip885 ${window._mmSearchFilter885===id?'active':''}" onclick="setSearchFilter885('${id}')">${label}</button>`
+    ).join('')}</div>`;
+  }
+
+  window.openGeneralSearch884=function(){
+    window._mmSearchFilter885='all';
+    el('modalTitle').textContent='Genel Arama';
+    el('modalSubtitle').textContent='Öğrenci ve kayıtları bulur; eksik işleri hızlıca gösterir.';
+    el('modalBody').innerHTML=`
+      <div class="mm-search-box884">
+        <input id="mmGlobalSearch884" class="mm-search-input884" placeholder="Örn. Mir, 171, üslü sayılar, veli..." autocomplete="off" oninput="renderGeneralSearch884(this.value)">
+        <div id="mmSearchFiltersHost885">${filterHtml885()}</div>
+      </div>
+      <div class="mm-search-quick885">
+        <button class="secondary" onclick="openStudentFinder884()">👤 Öğrenci Bul</button>
+        <button class="secondary" onclick="openMissingHomeworks885()">📕 Eksik Ödevler</button>
+        <button class="secondary" onclick="openMissingGrades885()">📝 Eksik Notlar</button>
+        <button class="secondary" onclick="openRecentRecords885()">🕘 Son Kayıtlar</button>
+      </div>
+      <div id="mmSearchResults884"><div class="empty card">Aramak istediğiniz kelimeyi, öğrenci adını veya numarayı yazın.</div></div>`;
+    el('modal').classList.add('open');
+    setTimeout(()=>el('mmGlobalSearch884')?.focus(),80);
+  };
+
+  window.setSearchFilter885=function(id){
+    window._mmSearchFilter885=id;
+    const host=el('mmSearchFiltersHost885');if(host)host.innerHTML=filterHtml885();
+    renderGeneralSearch884(el('mmGlobalSearch884')?.value||'');
+  };
+
+  window.renderGeneralSearch884=function(q){
+    const host=el('mmSearchResults884');if(!host)return;
+    const rows=collect885(q,window._mmSearchFilter885||'all');
+    if(!String(q||'').trim()){
+      host.innerHTML='<div class="empty card">Aramak istediğiniz kelimeyi, öğrenci adını veya numarayı yazın.</div>';
+      return;
+    }
+    host.innerHTML=rows.length
+      ?`<div class="tiny" style="margin:3px 0 9px">${rows.length} sonuç · ${FILTERS885.find(x=>x[0]===window._mmSearchFilter885)?.[1]||'Tümü'}</div>
+        <div class="mm-search-results884">${rows.map(r=>`<div class="mm-search-result884" onclick="${r.action}">
+          <div class="ico">${r.icon}</div><div><b>${esc(r.title)}</b><small>${esc(r.meta||'')}</small></div>
+          <span class="mm-search-type884">${esc(r.type)}</span></div>`).join('')}</div>`
+      :'<div class="empty card">Bu filtrede aramaya uygun kayıt bulunamadı.</div>';
+  };
+
+  window.mmSearchOpenHomework885=function(cid,hid){
+    if(!selectedClass885(cid))return;
+    setTimeout(()=>openHomework(hid),20);
+  };
+
+  window.openMissingHomeworks885=function(){
+    const rows=[];
+    for(const c of (state.classes||[])){
+      const hs=(c.homeworks||[]).filter(h=>String(h.period||'1')===String(currentPeriod));
+      for(const s of (c.students||[]))for(const h of hs){
+        if(status(c,s.id,h.id)==='missing')rows.push({c,s,h});
+      }
+    }
+    el('modalTitle').textContent='Eksik Ödevler';
+    el('modalSubtitle').textContent=`${currentPeriod}. Dönem · tüm sınıflar`;
+    const students=new Set(rows.map(x=>`${x.c.id}:${x.s.id}`));
+    el('modalBody').innerHTML=`
+      <div class="mm-work-summary885">
+        <div><span>EKSİK KAYIT</span><b>${rows.length}</b></div>
+        <div><span>ÖĞRENCİ</span><b>${students.size}</b></div>
+        <div><span>SINIF</span><b>${new Set(rows.map(x=>x.c.id)).size}</b></div>
+      </div>
+      <div class="mm-work-list885">${rows.length?rows.map(({c,s,h})=>`
+        <div class="mm-work-row885"><div class="ico">📕</div><div>
+          <b>${esc(s.number?s.number+' - ':'')}${esc(s.name)}</b>
+          <small>${esc(c.name)} · ${esc(h.name||'Ödev')}${h.due?' · Son teslim: '+esc(h.due):''}</small>
+        </div><button class="secondary" onclick="mmSearchOpenHomework885('${c.id}','${h.id}')">Ödevi Aç</button></div>`
+      ).join(''):'<div class="empty card">Bu dönemde “Yapmadı” olarak işaretlenmiş ödev bulunmuyor.</div>'}</div>
+      <div class="modal-actions"><button class="secondary" onclick="openGeneralSearch884()">← Genel Aramaya Dön</button></div>`;
+    el('modal').classList.add('open');
+  };
+
+  window.openMissingGrades885=function(){
+    const rows=[];
+    for(const c of (state.classes||[]))for(const s of (c.students||[])){
+      const g=gradeRecordRead885(c,s.id), miss=missingGradeLabels(g);
+      if(miss.length)rows.push({c,s,miss});
+    }
+    el('modalTitle').textContent='Eksik Notlar';
+    el('modalSubtitle').textContent=`${currentPeriod}. Dönem · Proje notu isteğe bağlıdır`;
+    el('modalBody').innerHTML=`
+      <div class="mm-work-summary885">
+        <div><span>ÖĞRENCİ</span><b>${rows.length}</b></div>
+        <div><span>EKSİK ALAN</span><b>${rows.reduce((a,x)=>a+x.miss.length,0)}</b></div>
+        <div><span>SINIF</span><b>${new Set(rows.map(x=>x.c.id)).size}</b></div>
+      </div>
+      <div class="mm-work-list885">${rows.length?rows.map(({c,s,miss})=>`
+        <div class="mm-work-row885"><div class="ico">📝</div><div>
+          <b>${esc(s.number?s.number+' - ':'')}${esc(s.name)}</b>
+          <small>${esc(c.name)} · Eksik: ${esc(miss.join(' · '))}</small>
+        </div><button class="secondary" onclick="openMissingGradeClass885('${c.id}')">Notlara Git</button></div>`
+      ).join(''):'<div class="empty card">Zorunlu sınav ve performans notlarında eksik görünmüyor.</div>'}</div>
+      <div class="modal-actions"><button class="secondary" onclick="openGeneralSearch884()">← Genel Aramaya Dön</button></div>`;
+    el('modal').classList.add('open');
+  };
+
+  window.openMissingGradeClass885=function(cid){
+    if(!selectedClass885(cid))return;
+    closeModal();
+    setTimeout(()=>openClassModule('grades'),20);
+  };
+
+  function recentRows885(){
+    const rows=[];
+    for(const c of (state.classes||[])){
+      const byId=Object.fromEntries((c.students||[]).map(s=>[String(s.id),s]));
+      for(const h of (c.homeworks||[])){
+        const raw=h.createdAt||h.given||h.due;
+        if(raw)rows.push({ts:dateMs885(raw),date:raw,icon:'📚',type:'Ödev',title:h.name||'Ödev',meta:c.name,action:`mmSearchOpenHomework885('${c.id}','${h.id}')`});
+      }
+      for(const t of (c.trials||[])){
+        const raw=t.createdAt||t.date;
+        if(raw)rows.push({ts:dateMs885(raw),date:raw,icon:'📊',type:'Deneme',title:t.name||'Deneme',meta:c.name,action:`mmSearchOpenTrial884('${c.id}','${t.id}')`});
+      }
+      for(const m of (c.parentMeetings||[])){
+        const raw=m.updatedAt||m.createdAt||m.date, s=byId[String(m.studentId)];
+        if(raw)rows.push({ts:dateMs885(raw),date:raw,icon:'👥',type:'Veli',title:`${s?.name||'Öğrenci'} · Veli Görüşmesi`,meta:`${c.name}${m.subject?' · '+m.subject:''}`,action:`mmSearchOpenMeeting884('${c.id}','${m.studentId}')`});
+      }
+      const g=c.guidanceFile||{};
+      for(const [sid,r] of Object.entries(g.studentInfo||{})){
+        const raw=r.updatedAt, s=byId[String(sid)];
+        if(raw)rows.push({ts:dateMs885(raw),date:raw,icon:'📝',type:'Rehberlik',title:`Öğrenci Bilgi Formu · ${s?.name||'Öğrenci'}`,meta:c.name,action:`mmSearchOpenGuidance884('${c.id}','studentInfo','','${sid}')`});
+      }
+      const titles={observation:'Öğrenci Gözlem Kaydı',referral:'Rehberlik Servisine Yönlendirme',psych:'Psikolojik Destek Yönlendirme',homeVisit:'Ev Ziyaret Formu',election:'Sınıf Seçim Tutanağı'};
+      for(const [kind,list] of Object.entries(g.records||{}))if(Array.isArray(list))for(const r of list){
+        const raw=r.updatedAt||r.createdAt||r.date;if(!raw)continue;
+        const s=byId[String(r.studentId)];
+        rows.push({ts:dateMs885(raw),date:raw,icon:'🗂️',type:'Rehberlik',title:`${titles[kind]||'Rehberlik Kaydı'}${s?' · '+s.name:''}`,meta:c.name,action:kind==='election'?`openGuidanceFileCenter()`:`mmSearchOpenGuidance884('${c.id}','${kind}','${r.id}','${r.studentId||''}')`});
+      }
+    }
+    return rows.filter(x=>x.ts>0).sort((a,b)=>b.ts-a.ts).slice(0,30);
+  }
+
+  window.openRecentRecords885=function(){
+    const rows=recentRows885();
+    el('modalTitle').textContent='Son Kayıtlar';
+    el('modalSubtitle').textContent='Ödev, deneme, veli görüşmesi ve rehberlik kayıtlarının en güncel olanları.';
+    el('modalBody').innerHTML=`<div class="mm-work-list885">${rows.length?rows.map(r=>`
+      <div class="mm-work-row885"><div class="ico">${r.icon}</div><div>
+        <b>${esc(r.title)}</b><small>${esc(r.meta)} · ${esc(dateTR885(r.date))}</small><span class="mm-recent-type885">${esc(r.type)}</span>
+      </div><button class="secondary" onclick="${r.action}">Aç</button></div>`).join('')
+      :'<div class="empty card">Tarihli bir kayıt bulunamadı.</div>'}</div>
+      <div class="modal-actions"><button class="secondary" onclick="openGeneralSearch884()">← Genel Aramaya Dön</button></div>`;
+    el('modal').classList.add('open');
   };
 })();
 </script>
