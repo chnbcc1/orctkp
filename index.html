@@ -2391,7 +2391,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.88</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.89</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2583,7 +2583,7 @@ function openDocumentAssistant(origin=""){
   window.__docAssistantOrigin=String(origin||"");
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.8.88 · Belge Üretim Merkezi · çevrimdışı";
+  el("modalSubtitle").textContent="v7.8.89 · Belge Üretim Merkezi · çevrimdışı";
   const teacherFileReturn=window.__docAssistantOrigin==="teacherFile"?`<div class="teacher-file-return-card"><button type="button" class="secondary" onclick="teacherFileReturnFromAssistant()">← Öğretmen Dosyasına Dön</button></div>`:"";
   el("modalBody").innerHTML=`${teacherFileReturn}
     <div class="doc-assistant-tools887">
@@ -4630,7 +4630,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.88";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.89";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -8000,7 +8000,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.88",
+    appVersion:"v7.8.89",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -8013,7 +8013,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.88",
+    appVersion:"v7.8.89",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -8110,7 +8110,7 @@ migrateHomeworkImagesToIDB().then(()=>hydrateHomeworkImages()).catch(()=>{});
 <script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
   // v7.6.64-JPEG — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
   // ve aktif oturum güncelleme nedeniyle yeniden yüklenmez.
-  navigator.serviceWorker.register("./sw.js?v=7.8.88",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.8.89",{updateViaCache:"none"}).then(reg=>{
     reg.update().catch(()=>{});
     setInterval(()=>reg.update().catch(()=>{}),60*60*1000);
   }).catch(()=>{});
@@ -9188,7 +9188,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   }
   window.mmRecordBackup884=function(backup,kind){
     try{localStorage.setItem(HEALTH_KEY,JSON.stringify({
-      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.88',
+      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.89',
       stats:stats(backup?.state||state),
       archives:Array.isArray(backup?.schoolYearArchives)?backup.schoolYearArchives.length:loadSchoolYearArchives().length
     }))}catch(e){console.warn('Yedek sağlık kaydı yazılamadı',e)}
@@ -9314,7 +9314,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     el('modalTitle').textContent='Sistem Sağlığı';el('modalSubtitle').textContent='Salt okunur veri kontrolü, depolama durumu ve yedek doğrulama.';
     el('modalBody').innerHTML=`<div class="mm-health-status884 ${bs.cls}"><span class="dot"></span><div><b>${esc(bs.text)}</b><div class="tiny" style="margin-top:3px">Bu ekran mevcut öğrenci verilerini değiştirmez.</div></div></div>
       <div class="mm-health-grid884">
-        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.88</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
+        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.89</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
         <div class="mm-health-card884"><span>SINIF</span><b>${st.classes}</b></div><div class="mm-health-card884"><span>ÖĞRENCİ</span><b>${st.students}</b></div><div class="mm-health-card884"><span>ÖDEV</span><b>${st.homeworks}</b></div>
         <div class="mm-health-card884"><span>DENEME</span><b>${st.trials}</b></div><div class="mm-health-card884"><span>VELİ GÖRÜŞMESİ</span><b>${st.meetings}</b></div><div class="mm-health-card884"><span>REHBERLİK KAYDI</span><b>${st.guidance}</b></div>
         <div class="mm-health-card884"><span>YEREL VERİ</span><b>${fmtBytes(localBytes())}</b></div><div class="mm-health-card884"><span>ÖDEV GÖRSELİ</span><b id="mmHealthIDB884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA TOPLAM / ÜST SINIR</span><b id="mmHealthStorage884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA ÖNBELLEĞİ</span><b id="mmHealthCaches886">Kontrol…</b></div>
@@ -9324,7 +9324,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
         <label class="btn secondary" style="display:block;width:100%;box-sizing:border-box;text-align:center;cursor:pointer">🔍 Yedek Dosyasını Kontrol Et<input type="file" accept=".json,application/json" hidden onchange="validateBackupFile884(event)"></label>
         <div id="mmBackupCheck884" class="mm-backup-check884">Henüz bir yedek dosyası kontrol edilmedi.</div></div>
       <div class="card" style="padding:12px;margin-top:10px"><b>PWA Önbellek Bakımı</b>
-        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.88</b> ve önceki stabil sürüm <b>v7.8.85</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
+        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.89</b> ve önceki stabil sürüm <b>v7.8.88</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
         <button class="secondary" style="width:100%" onclick="cleanupOldPWACaches886()">🧹 Eski PWA Önbelleklerini Temizle</button>
         <div id="mmCacheMaintenance886" class="tiny" style="margin-top:8px;line-height:1.45">Önbellekler kontrol ediliyor…</div>
       </div>`;
@@ -9338,7 +9338,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   };
 
   window.exportVerifiedBackup884=function(){
-    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.88',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
+    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.89',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
     downloadBlob(JSON.stringify(backup,null,2),'MualliMate_DOGRULANMIS_TAM_YEDEK.json','application/json');mmRecordBackup884(backup,'doğrulanmış tam yedek');setTimeout(()=>openSystemHealth884(),80);
   };
 
@@ -9662,8 +9662,8 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 </style>
 <script id="v7886-cache-maintenance">
 (function(){
-  const CURRENT_CACHE_886='ots-v7.8.88-health-cache-maintenance';
-  const PREVIOUS_STABLE_CACHE_886='ots-v7.8.85-search-work-center';
+  const CURRENT_CACHE_886='ots-v7.8.89-document-preview-hq-worksheet';
+  const PREVIOUS_STABLE_CACHE_886='ots-v7.8.88-doc-assistant-fixes';
   const KEEP_CACHES_886=new Set([CURRENT_CACHE_886,PREVIOUS_STABLE_CACHE_886]);
 
   async function getMualliMateCaches886(){
@@ -9682,7 +9682,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       if(countHost) countHost.textContent=`${keys.length} cache · ${removable.length} eski`;
       if(noteHost){
         if(removable.length){
-          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.88${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.85':' (v7.8.85 cihazda bulunamadı)'}`;
+          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.89${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.88':' (v7.8.88 cihazda bulunamadı)'}`;
         }else{
           noteHost.innerHTML='<span class="mm-cache-ok886">✓ Temizlenecek eski MualliMate önbelleği yok.</span><br>Mevcut ve önceki stabil sürüm korunuyor.';
         }
@@ -9708,7 +9708,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     const versions=info.removable.map(k=>k.replace(/^ots-/,'')).join('\n• ');
     const ok=confirm(
       'Yalnızca eski MualliMate PWA önbellekleri silinecek.\n\n'+
-      'Korunacaklar:\n• v7.8.88 (mevcut sürüm)\n• v7.8.85 (önceki stabil sürüm)\n\n'+
+      'Korunacaklar:\n• v7.8.89 (mevcut sürüm)\n• v7.8.88 (önceki stabil sürüm)\n\n'+
       'Silinecek eski önbellekler:\n• '+versions+'\n\n'+
       'Öğrenci verileri, notlar, ödevler, yedekler, arşivler ve IndexedDB etkilenmez.\n\nDevam edilsin mi?'
     );
@@ -9720,7 +9720,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       }catch(e){ failed++; }
     }
     await refreshPWACacheStatus886();
-    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.88 ve önceki stabil v7.8.85 önbellekleri korundu.`);
+    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.89 ve önceki stabil v7.8.88 önbellekleri korundu.`);
   };
 })();
 </script>
@@ -9834,7 +9834,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     }else if(type==='yaprak'){
       showLabel887('docAssistantClass',false);
       if(prompt)prompt.style.display='none';
-      special.innerHTML=`<div class="doc-special887"><h4>🧩 Ödev / Test Yaprağı Oluşturucu</h4><div class="tiny" style="line-height:1.55">Soruların fotoğraflarını kamera veya galeriden ekleyin; A4 sayfa üzerinde sürükleyin, büyütüp küçültün ve PDF olarak dışa aktarın. Kaydetmek zorunlu değildir.</div><button style="width:100%;margin-top:10px" onclick="openWorksheetStudio887()">Editörü Aç</button></div>`;
+      special.innerHTML=`<div class="doc-special887"><h4>🧩 Ödev / Test Yaprağı Oluşturucu</h4><div class="tiny" style="line-height:1.55">Soruların fotoğraflarını kamera veya galeriden ekleyin; A4 sayfa üzerinde sürükleyin, büyütüp küçültün ve PDF olarak dışa aktarın. Görselin özgün çözünürlüğü korunur; PDF 300 DPI baskı kalitesinde hazırlanır. Kaydetmek zorunlu değildir.</div></div>`;
     }
   };
 
@@ -9873,7 +9873,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     const authority=(v.petitionAuthority||`${v.school||''} MÜDÜRLÜĞÜNE`).trim();
     const request=v.petitionRequest||v.prompt||'[Talebinizi buraya yazın.]';
     const subject=v.petitionSubject||'[Konu]';
-    return `${authority}\n\nTarih: ${docDateTR(v.date)}\nKonu: ${subject}\n\n${request}\n\nGereğini arz ederim.\n\n${v.teacher||'[Ad Soyad]'}\n${v.petitionRole||v.branch||'[Görev / Branş]'}${v.petitionContact?`\nİletişim: ${v.petitionContact}`:''}${attachmentsText887(v.attachments)}`;
+    return `${authority}\n\nKonu: ${subject}\n\n${request}\n\nGereğini arz ederim.\n\nTarih: ${docDateTR(v.date)}\n${v.teacher||'[Ad Soyad]'}\n${v.petitionRole||v.branch||'[Görev / Branş]'}${v.petitionContact?`\nİletişim: ${v.petitionContact}`:''}${attachmentsText887(v.attachments)}`;
   };
 
   function gradeRecord887(c,sid,period){
@@ -10219,6 +10219,185 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 })();
 </script>
 
+
+
+<style id="v7889-document-preview-professional">
+/* v7.8.89 - A4 önizleme, profesyonel belge düzeni ve mobil ölçekleme */
+.doc-print-sheet{padding:10px!important;background:#e7e9ed!important;overflow:auto!important}
+.doc-print-toolbar{gap:10px!important;padding:10px!important}
+.doc-print-stage{width:100%;display:flex;justify-content:center;align-items:flex-start;overflow:visible;padding:8px 0 28px;box-sizing:border-box}
+.doc-paper-scaler{position:relative;flex:0 0 auto;margin:0 auto}
+.doc-paper{width:210mm!important;min-height:297mm!important;box-sizing:border-box!important;padding:15mm 15mm 18mm!important;background:#fff!important;color:#000!important;font-family:"Times New Roman",Times,serif!important;font-size:12pt!important;line-height:1.15!important;transform-origin:top left!important;box-shadow:0 5px 24px rgba(15,23,42,.22)}
+.doc-paper section{overflow:visible!important}
+.doc-paper p{margin:0 0 6pt!important;text-align:justify!important;orphans:2;widows:2}
+.doc-paper .doc-school-title,.doc-paper .doc-title{font-size:12pt!important;font-weight:700!important;text-align:center!important;line-height:1.2!important;margin:0 0 9pt!important}
+.doc-paper .doc-section{font-size:12pt!important;font-weight:700!important;margin:11pt 0 5pt!important;break-after:avoid-page;page-break-after:avoid}
+.doc-paper table{font-size:11.5pt!important;line-height:1.15!important;margin:7pt 0 11pt!important}
+.doc-paper td,.doc-paper th{padding:4.5pt 5pt!important}
+.doc-paper .sok-invite-sign{margin-top:18pt!important;margin-bottom:16pt!important}
+.doc-paper .sok-final-signatures{margin-top:30pt!important}
+.doc-paper .petition-authority,.doc-paper .structured-title{text-align:center;font-weight:700;font-size:12pt;line-height:1.2;margin:0 0 20pt}
+.doc-paper .petition-subject{margin:0 0 16pt;font-weight:400}
+.doc-paper .petition-subject b{display:inline-block;min-width:42pt}
+.doc-paper .petition-body{margin:0 0 8pt;text-align:justify}
+.doc-paper .petition-closing{margin-top:12pt}
+.doc-paper .petition-signature{width:46%;margin:18pt 0 14pt auto;text-align:center;page-break-inside:avoid;break-inside:avoid}
+.doc-paper .petition-signature .date{margin-bottom:24pt}
+.doc-paper .petition-signature .name{font-weight:700}
+.doc-paper .petition-signature .role{margin-top:3pt}
+.doc-paper .petition-contact,.doc-paper .petition-attachments{margin-top:12pt;page-break-inside:avoid;break-inside:avoid}
+.doc-paper .petition-attachments ol{padding-left:20pt;margin:4pt 0 0}
+.doc-paper .structured-school{text-align:center;font-weight:700;margin-bottom:7pt}
+.doc-paper .structured-title{margin-bottom:14pt}
+.doc-paper .structured-meta{width:100%;border-collapse:collapse;margin:0 0 14pt!important}
+.doc-paper .structured-meta td{border:1px solid #777!important;padding:4pt 6pt!important}
+.doc-paper .structured-meta td:first-child{width:39%;font-weight:700}
+.doc-paper .structured-section{font-weight:700;margin:12pt 0 5pt;padding-bottom:2pt;border-bottom:.6pt solid #444;break-after:avoid-page;page-break-after:avoid}
+.doc-paper .structured-row{margin-bottom:4pt!important;text-align:left!important}
+.doc-paper .structured-row b{font-weight:700}
+.doc-paper .structured-eval{text-align:justify!important}
+.doc-paper .structured-reporter{width:40%;margin:20pt 0 0 auto;text-align:center;page-break-inside:avoid;break-inside:avoid}
+.doc-paper .structured-reporter b{display:block;margin-top:22pt}
+@media(max-width:760px){
+  .doc-print-sheet{padding:6px!important;overflow-x:hidden!important}
+  .doc-print-stage{padding:5px 0 18px!important}
+  .doc-paper{width:210mm!important;min-height:297mm!important;padding:15mm 15mm 18mm!important;margin:0!important;font-size:12pt!important}
+  .doc-print-toolbar{position:sticky;top:0;left:0;right:0;z-index:4}
+}
+@media print{
+  @page{size:A4;margin:15mm 15mm 18mm 15mm}
+  .doc-print-sheet{position:static!important;padding:0!important;background:#fff!important;overflow:visible!important}
+  .doc-print-toolbar{display:none!important}
+  .doc-print-stage{display:block!important;padding:0!important;overflow:visible!important}
+  .doc-paper-scaler{width:auto!important;height:auto!important;margin:0!important}
+  .doc-paper{width:auto!important;min-height:0!important;padding:0!important;margin:0!important;box-shadow:none!important;transform:none!important}
+}
+</style>
+
+<script id="v7889-document-preview-hq-worksheet">
+(function(){
+  const baseDocDraftToHTML889=window.docDraftToHTML;
+  const baseRenderDocCanvas889=window.renderDocumentAssistantPDFCanvas;
+  function docType889(){return String(window._docAssistantLastValues?.type||settings.docAssistantLastType||'').trim()}
+  function nonEmpty889(t){return String(t||'').replace(/\r/g,'').split('\n').map(x=>x.trim()).filter(Boolean)}
+  function petitionHTML889(t){
+    const lines=String(t||'').replace(/\r/g,'').split('\n').map(x=>x.trim()),first=lines.findIndex(Boolean);
+    if(first<0)return '';
+    const authority=lines[first],body=[],tail=[],attachments=[];let date='',subject='',afterClose=false,inAttachments=false;
+    for(let i=first+1;i<lines.length;i++){
+      const x=lines[i];if(!x)continue;
+      if(/^Tarih\s*:/i.test(x)){date=x.replace(/^Tarih\s*:\s*/i,'');continue}
+      if(/^Konu\s*:/i.test(x)){subject=x.replace(/^Konu\s*:\s*/i,'');continue}
+      if(/^EKLER\s*:?$/i.test(x)){inAttachments=true;continue}
+      if(inAttachments){attachments.push(x.replace(/^\d+[.)-]?\s*/,''));continue}
+      if(/^Gereğini arz ederim\.?$/i.test(x)){afterClose=true;continue}
+      if(afterClose)tail.push(x);else body.push(x)
+    }
+    const contactIndex=tail.findIndex(x=>/^İletişim\s*:/i.test(x)),contact=contactIndex>=0?tail.splice(contactIndex,1)[0].replace(/^İletişim\s*:\s*/i,''):'';
+    const name=tail[0]||'',role=tail[1]||'',extra=tail.slice(2);
+    return `<section class="petition-doc"><div class="petition-authority">${esc(authority)}</div>${subject?`<div class="petition-subject"><b>Konu:</b> ${esc(subject)}</div>`:''}${body.map(x=>`<p class="petition-body">${esc(x)}</p>`).join('')}<p class="petition-closing">Gereğini arz ederim.</p><div class="petition-signature">${date?`<div class="date">${esc(date)}</div>`:''}<div style="height:18pt"></div>${name?`<div class="name">${esc(name)}</div>`:''}${role?`<div class="role">${esc(role)}</div>`:''}</div>${contact?`<div class="petition-contact"><b>İletişim:</b> ${esc(contact)}</div>`:''}${extra.map(x=>`<p>${esc(x)}</p>`).join('')}${attachments.length?`<div class="petition-attachments"><b>Ekler:</b><ol>${attachments.map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`:''}</section>`
+  }
+  function structuredHTML889(t){
+    const lines=nonEmpty889(t);if(!lines.length)return '';
+    const school=lines.shift()||'',title=lines.shift()||'';const meta=[],parts=[];let section='',reporter=false;
+    for(let i=0;i<lines.length;i++){
+      const x=lines[i];
+      if(/^Raporlayan$/i.test(x)){reporter=true;const name=lines[i+1]||'';parts.push({reporter:name});i++;continue}
+      if(/^(AKADEMİK DURUM|ÖDEV \/ ÇALIŞMA TAKİBİ|İLETİŞİM VE REHBERLİK|GENEL DEĞERLENDİRME|KONU|AÇIKLAMA|EKLER:?|GÜNDEM MADDELERİ|GÖRÜŞMELER|ALINAN KARARLAR)$/i.test(x)){section=x.replace(/:$/,'');parts.push({section});continue}
+      const m=x.match(/^([^:]{2,45}):\s*(.*)$/);
+      if(!parts.length&&m)meta.push([m[1],m[2]]);else parts.push({text:x,kv:m?m.slice(1):null,section})
+    }
+    let html=`<section class="structured-doc"><div class="structured-school">${esc(school)}</div><div class="structured-title">${esc(title)}</div>`;
+    if(meta.length)html+=`<table class="structured-meta"><tbody>${meta.map(a=>`<tr><td>${esc(a[0])}</td><td>${esc(a[1])}</td></tr>`).join('')}</tbody></table>`;
+    for(const p of parts){
+      if(p.section){html+=`<div class="structured-section">${esc(p.section)}</div>`;continue}
+      if(p.reporter!==undefined){html+=`<div class="structured-reporter">Raporlayan<b>${esc(p.reporter)}</b></div>`;continue}
+      if(p.kv)html+=`<p class="structured-row"><b>${esc(p.kv[0])}:</b> ${esc(p.kv[1])}</p>`;
+      else html+=`<p class="${p.section==='GENEL DEĞERLENDİRME'?'structured-eval':'structured-row'}">${esc(p.text||'')}</p>`
+    }
+    return html+'</section>'
+  }
+  window.docDraftToHTML=function(t){
+    const type=docType889();
+    if(type==='dilekce')return petitionHTML889(t);
+    if(type==='durum'||type==='serbest')return structuredHTML889(t);
+    return baseDocDraftToHTML889(t)
+  };
+
+  window.fitDocumentPreview=function(){
+    const sh=document.querySelector('.doc-print-sheet'),stage=sh?.querySelector('.doc-print-stage'),sc=sh?.querySelector('.doc-paper-scaler'),paper=sh?.querySelector('.doc-paper');
+    if(!sh||!stage||!sc||!paper)return;
+    paper.style.transform='none';sc.style.width='auto';sc.style.height='auto';
+    requestAnimationFrame(()=>{
+      const naturalW=paper.offsetWidth||794,naturalH=paper.scrollHeight||1123,avail=Math.max(240,stage.clientWidth-10),scale=Math.min(1,avail/naturalW);
+      paper.style.transform=`scale(${scale})`;paper.style.transformOrigin='top left';sc.style.width=(naturalW*scale)+'px';sc.style.height=(naturalH*scale)+'px';
+    })
+  };
+  window.printDocumentAssistantDraft=function(){
+    const t=el('docAssistantDraft')?.value||'';if(!t.trim())return alert('Önce belge taslağı oluşturun.');
+    closeDocumentPrintPreview();const sh=document.createElement('div'),type=docType889();sh.className='doc-print-sheet';
+    sh.innerHTML=`<div class="doc-print-toolbar"><button class="secondary" onclick="closeDocumentPrintPreview()">← Belge Asistanına Dön</button><button onclick="window.print()">🖨️ Yazdır / PDF</button></div><div class="doc-print-stage"><div class="doc-paper-scaler"><article class="doc-paper doc-type-${esc(type||'belge')}">${window.docDraftToHTML(t)}</article></div></div>`;
+    document.body.appendChild(sh);document.body.classList.add('doc-print-open');sh.scrollTop=0;window.fitDocumentPreview()
+  };
+  window.addEventListener('resize',()=>{if(document.querySelector('.doc-print-sheet'))window.fitDocumentPreview()});
+
+  function docPrintCSS889(){return `@page{size:A4;margin:15mm 15mm 18mm 15mm}html,body{margin:0;padding:0;background:#fff;color:#000}body{font-family:"Times New Roman",Times,serif;font-size:12pt;line-height:1.15}section{overflow:visible}p{margin:0 0 6pt;text-align:justify;orphans:2;widows:2}.doc-school-title,.doc-title,.petition-authority,.structured-school,.structured-title{text-align:center;font-weight:700;font-size:12pt;line-height:1.2;margin:0 0 9pt}.doc-section,.structured-section{font-weight:700;margin:11pt 0 5pt;break-after:avoid-page;page-break-after:avoid}.page-break{break-before:page;page-break-before:always}.sok-agenda-item{display:block;break-inside:avoid-page;page-break-inside:avoid;margin:0 0 6pt}.sok-agenda-item p{margin:0 0 2pt}.sok-agenda-item .discussion-title{font-weight:700}.sok-invite-sign{width:46%;margin:18pt 0 16pt auto;text-align:center}.sok-final-signatures{display:grid;grid-template-columns:1fr 1fr;gap:20pt 50pt;margin-top:30pt;page-break-inside:avoid;text-align:center}.sok-final-signatures .advisor{grid-column:1/3}.sok-final-signatures b{display:block;margin-top:3pt}.sok-approval{text-align:center;margin-top:18pt;page-break-inside:avoid}table{width:100%;border-collapse:collapse;table-layout:fixed;margin:7pt 0 11pt;font-size:11.5pt}th,td{border:1px solid #000;padding:4.5pt 5pt;vertical-align:top}.meta-table td:first-child,.structured-meta td:first-child{width:39%;font-weight:700}.petition-authority{margin-bottom:20pt}.petition-subject{margin-bottom:16pt}.petition-subject b{display:inline-block;min-width:42pt}.petition-body{margin-bottom:8pt}.petition-closing{margin-top:12pt}.petition-signature{width:46%;margin:18pt 0 14pt auto;text-align:center;page-break-inside:avoid}.petition-signature .date{margin-bottom:24pt}.petition-signature .name{font-weight:700}.petition-contact,.petition-attachments{margin-top:12pt;page-break-inside:avoid}.petition-attachments ol{padding-left:20pt}.structured-title{margin-bottom:14pt}.structured-meta td{border:1px solid #777}.structured-section{padding-bottom:2pt;border-bottom:.6pt solid #444}.structured-row{margin-bottom:4pt;text-align:left}.structured-reporter{width:40%;margin:20pt 0 0 auto;text-align:center;page-break-inside:avoid}.structured-reporter b{display:block;margin-top:22pt}`}
+  window.printableDocumentHTML=function(t){return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${xmlEsc(documentExportBaseName())}</title><style>${docPrintCSS889()}</style></head><body>${window.docDraftToHTML(t)}<script>window.addEventListener('load',()=>setTimeout(()=>window.print(),250));<\/script></body></html>`};
+
+  function wrapCanvas889(ctx,text,maxW){const words=String(text||'').split(/\s+/).filter(Boolean),out=[];let line='';for(const w of words){const q=line?line+' '+w:w;if(!line||ctx.measureText(q).width<=maxW)line=q;else{out.push(line);line=w}}if(line)out.push(line);return out.length?out:['']}
+  function canvasPagesForStructured889(t,type){
+    const DPI=200,W=1654,H=2339,M=118,contentW=W-2*M,lineH=46,paraGap=16,pages=[];let cv,ctx,y;
+    function newPage(){cv=document.createElement('canvas');cv.width=W;cv.height=H;ctx=cv.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);ctx.fillStyle='#111';ctx.textBaseline='alphabetic';y=M;pages.push(cv)}
+    function font(b=false,size=33,it=false){ctx.font=`${it?'italic ':''}${b?'bold ':''}${size}px "Times New Roman",Times,serif`;ctx.fillStyle='#111'}
+    function need(h){if(y+h>H-M)newPage()}
+    function center(text,b=true,size=34,gap=18){font(b,size);const ls=wrapCanvas889(ctx,text,contentW);need(ls.length*lineH+gap);ctx.textAlign='center';for(const l of ls){ctx.fillText(l,W/2,y);y+=lineH}ctx.textAlign='left';y+=gap}
+    function paragraph(text,opt={}){font(!!opt.bold,opt.size||33,!!opt.italic);const w=opt.width||contentW,ls=wrapCanvas889(ctx,text,w);need(ls.length*lineH+(opt.gap??paraGap));for(let k=0;k<ls.length;k++){const l=ls[k];ctx.textAlign=opt.align||'left';let x=opt.x??M;if(ctx.textAlign==='center')x=W/2;else if(ctx.textAlign==='right')x=W-M;ctx.fillText(l,x,y);y+=lineH}ctx.textAlign='left';y+=opt.gap??paraGap}
+    function justified(text){font(false,33);const words=String(text||'').split(/\s+/).filter(Boolean),lines=[];let line=[];for(const w of words){const test=[...line,w].join(' ');if(!line.length||ctx.measureText(test).width<=contentW)line.push(w);else{lines.push(line);line=[w]}}if(line.length)lines.push(line);need(lines.length*lineH+paraGap);for(let i=0;i<lines.length;i++){const a=lines[i],last=i===lines.length-1;if(last||a.length===1){ctx.fillText(a.join(' '),M,y)}else{const wordsW=a.reduce((sum,w)=>sum+ctx.measureText(w).width,0),gap=(contentW-wordsW)/(a.length-1);let x=M;for(const w of a){ctx.fillText(w,x,y);x+=ctx.measureText(w).width+gap}}y+=lineH}y+=paraGap}
+    function metaTable(rows){const left=500,rh=56;for(const row of rows){need(rh);ctx.strokeStyle='#555';ctx.lineWidth=1.5;ctx.strokeRect(M,y,contentW,rh);ctx.beginPath();ctx.moveTo(M+left,y);ctx.lineTo(M+left,y+rh);ctx.stroke();font(true,29);ctx.fillText(row[0],M+12,y+37);font(false,29);ctx.fillText(row[1],M+left+12,y+37);y+=rh}y+=24}
+    newPage();const lines=String(t||'').replace(/\r/g,'').split('\n').map(x=>x.trim());
+    if(type==='dilekce'){
+      const first=lines.findIndex(Boolean),authority=first>=0?lines[first]:'';let date='',subject='',closed=false,inAtt=false;const body=[],tail=[],atts=[];
+      for(let i=first+1;i<lines.length;i++){const x=lines[i];if(!x)continue;if(/^Tarih\s*:/i.test(x)){date=x.replace(/^Tarih\s*:\s*/i,'');continue}if(/^Konu\s*:/i.test(x)){subject=x.replace(/^Konu\s*:\s*/i,'');continue}if(/^EKLER\s*:?$/i.test(x)){inAtt=true;continue}if(inAtt){atts.push(x.replace(/^\d+[.)-]?\s*/,''));continue}if(/^Gereğini arz ederim\.?$/i.test(x)){closed=true;continue}if(closed)tail.push(x);else body.push(x)}
+      center(authority,true,34,40);if(subject){font(true,33);ctx.fillText('Konu:',M,y);font(false,33);ctx.fillText(subject,M+100,y);y+=lineH+28}body.forEach(justified);paragraph('Gereğini arz ederim.',{gap:28});
+      const contactIdx=tail.findIndex(x=>/^İletişim\s*:/i.test(x)),contact=contactIdx>=0?tail.splice(contactIdx,1)[0].replace(/^İletişim\s*:\s*/i,''):'';const name=tail[0]||'',role=tail[1]||'';
+      need(280);const bx=W-M-390;ctx.textAlign='center';font(false,32);if(date){ctx.fillText(date,bx,y);y+=70}else y+=20;y+=72;font(true,32);ctx.fillText(name,bx,y);y+=42;font(false,30);ctx.fillText(role,bx,y);ctx.textAlign='left';y+=45;if(contact)paragraph('İletişim: '+contact,{size:29,gap:12});if(atts.length){paragraph('EKLER:',{bold:true,size:30,gap:6});atts.forEach((a,i)=>paragraph(`${i+1}. ${a}`,{size:29,gap:4}))}
+      return pages
+    }
+    const ne=lines.filter(Boolean),school=ne.shift()||'',title=ne.shift()||'';center(school,true,32,10);center(title,true,38,28);const meta=[],rest=[];let seenSection=false;
+    for(let i=0;i<ne.length;i++){const x=ne[i];if(/^Raporlayan$/i.test(x)){rest.push({reporter:ne[i+1]||''});i++;seenSection=true;continue}if(/^(AKADEMİK DURUM|ÖDEV \/ ÇALIŞMA TAKİBİ|İLETİŞİM VE REHBERLİK|GENEL DEĞERLENDİRME|KONU|AÇIKLAMA|EKLER:?)/i.test(x)){rest.push({section:x.replace(/:$/,'')});seenSection=true;continue}const m=x.match(/^([^:]{2,45}):\s*(.*)$/);if(!seenSection&&m)meta.push([m[1],m[2]]);else rest.push({text:x,kv:m?m.slice(1):null})}
+    if(meta.length)metaTable(meta);let current='';
+    for(const r of rest){if(r.section){current=r.section;need(70);font(true,32);ctx.fillText(current,M,y);y+=12;ctx.strokeStyle='#555';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(M,y);ctx.lineTo(W-M,y);ctx.stroke();y+=42;continue}if(r.reporter!==undefined){need(210);const bx=W-M-330;ctx.textAlign='center';font(false,29);ctx.fillText('Raporlayan',bx,y);y+=70;font(true,31);ctx.fillText(r.reporter,bx,y);ctx.textAlign='left';y+=35;continue}if(current==='GENEL DEĞERLENDİRME'||current==='AÇIKLAMA')justified(r.text||'');else if(r.kv){font(true,30);const label=r.kv[0]+':';ctx.fillText(label,M,y);const lx=M+ctx.measureText(label).width+12;font(false,30);const vals=wrapCanvas889(ctx,r.kv[1],contentW-(lx-M));need(Math.max(1,vals.length)*42+8);for(let j=0;j<vals.length;j++){ctx.fillText(vals[j],j?M:lx,y);y+=42}y+=8}else paragraph(r.text||'',{size:30,gap:8})}
+    return pages
+  }
+  async function canvasToJpeg889(cv,q=.98){return await new Promise((resolve,reject)=>{if(cv.toBlob)cv.toBlob(async b=>{if(!b)return reject(new Error('JPEG oluşturulamadı'));resolve(new Uint8Array(await b.arrayBuffer()))},'image/jpeg',q);else{try{resolve(bytesFromDataURL(cv.toDataURL('image/jpeg',q)))}catch(e){reject(e)}}})}
+  async function saveJpegPagesA4889(pages,name,quality=.98){
+    const PW=595.28,PH=841.89,images=[];for(const cv of pages){images.push({w:cv.width,h:cv.height,data:await canvasToJpeg889(cv,quality)});await new Promise(r=>setTimeout(r,0))}
+    const count=images.length,objs={},pageIds=[];for(let i=0;i<count;i++)pageIds.push(5+i*3);objs[1]=asciiBytes('<< /Type /Catalog /Pages 2 0 R >>');objs[2]=asciiBytes(`<< /Type /Pages /Count ${count} /Kids [${pageIds.map(id=>id+' 0 R').join(' ')}] >>`);
+    images.forEach((im,i)=>{const imgId=3+i*3,contentId=4+i*3,pageId=5+i*3;objs[imgId]=concatBytes([asciiBytes(`<< /Type /XObject /Subtype /Image /Width ${im.w} /Height ${im.h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${im.data.length} >>\nstream\n`),im.data,asciiBytes('\nendstream')]);const st=`q\n${PW} 0 0 ${PH} 0 0 cm\n/Im0 Do\nQ\n`,sb=asciiBytes(st);objs[contentId]=concatBytes([asciiBytes(`<< /Length ${sb.length} >>\nstream\n`),sb,asciiBytes('endstream')]);objs[pageId]=asciiBytes(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im0 ${imgId} 0 R >> >> /Contents ${contentId} 0 R >>`) });
+    let parts=[asciiBytes('%PDF-1.4\n%âãÏÓ\n')],offsets=[0],pos=parts[0].length,max=2+count*3;for(let id=1;id<=max;id++){offsets[id]=pos;const b=concatBytes([asciiBytes(`${id} 0 obj\n`),objs[id],asciiBytes('\nendobj\n')]);parts.push(b);pos+=b.length}const xref=pos;let xs=`xref\n0 ${max+1}\n0000000000 65535 f \n`;for(let id=1;id<=max;id++)xs+=String(offsets[id]).padStart(10,'0')+' 00000 n \n';xs+=`trailer\n<< /Size ${max+1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`;parts.push(asciiBytes(xs));await saveOutputBlob(new Blob(parts,{type:'application/pdf'}),name,'application/pdf')
+  }
+  window.exportDocumentAssistantPDF=async function(){
+    const t=el('docAssistantDraft')?.value||'';if(!t.trim())return alert('Önce belge taslağı oluşturun.');const type=docType889();
+    try{if(['dilekce','durum','serbest'].includes(type)){await saveJpegPagesA4889(canvasPagesForStructured889(t,type),documentExportBaseName()+'.pdf',.98)}else{const cv=baseRenderDocCanvas889(t);await downloadCanvasPDF(cv,documentExportBaseName()+'.pdf')}}catch(e){console.error(e);alert('PDF oluşturulamadı: '+(e?.message||e))}
+  };
+
+  async function readImageOriginal889(file){
+    const data=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(r.error);r.readAsDataURL(file)});
+    const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=()=>rej(new Error('Görsel açılamadı'));i.src=data});
+    return {data,w:img.naturalWidth,h:img.naturalHeight}
+  }
+  window.worksheetAddImages887=async function(ev){
+    const files=[...(ev.target.files||[])];ev.target.value='';if(!files.length)return;const w=window._worksheet887,p=w?.pages?.[w.current];if(!p)return;let n=p.items.length;
+    for(const f of files){try{const d=await readImageOriginal889(f),ratio=d.w/d.h;let ww=Math.min(360,700),hh=ww/ratio;if(hh>420){const k=420/hh;hh*=k;ww*=k}const x=40+(n%2)*365,y=70+Math.floor(n/2)*250;p.items.push({id:'ws_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8),data:d.data,x:Math.min(x,794-ww-20),y:Math.min(y,1123-hh-20),w:ww,h:hh,ratio,sourceW:d.w,sourceH:d.h});n++}catch(e){console.error('Yaprak görseli eklenemedi',e)}}window.renderWorksheet887()
+  };
+  async function renderWorksheetPage300889(pg){
+    const scale=2480/794,cv=document.createElement('canvas');cv.width=2480;cv.height=Math.round(1123*scale);const x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,cv.width,cv.height);x.imageSmoothingEnabled=true;try{x.imageSmoothingQuality='high'}catch(e){}x.setTransform(scale,0,0,scale,0,0);if(window._worksheet887.title){x.fillStyle='#111';x.textAlign='center';x.font='bold 25px Arial';x.fillText(window._worksheet887.title,397,45)}for(const it of pg.items){try{const img=await new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=it.data});x.drawImage(img,it.x,it.y,it.w,it.h)}catch(e){console.warn('Yaprak görseli atlandı',e)}}x.setTransform(1,0,0,1,0,0);return cv
+  }
+  window.exportWorksheetPdf887=async function(){
+    try{const pages=[];for(const p of window._worksheet887.pages){const cv=await renderWorksheetPage300889(p);pages.push(cv);await new Promise(r=>setTimeout(r,0))}await saveJpegPagesA4889(pages,(safe(window._worksheet887.title||'Odev_Test_Yapragi')||'Odev_Test_Yapragi')+'.pdf',.99)}catch(e){console.error(e);alert('PDF oluşturulamadı: '+(e?.message||e))}
+  };
+})();
+</script>
 </body>
 </html><style id="v7412-lock-fullscreen-fix">
 /* v7.5.1: iPhone/PWA lock screen must fully cover app content */
