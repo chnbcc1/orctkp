@@ -2391,7 +2391,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.85</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.86</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4605,7 +4605,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.85";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.86";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -7975,7 +7975,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.85",
+    appVersion:"v7.8.86",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -7988,7 +7988,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.85",
+    appVersion:"v7.8.86",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -8085,7 +8085,7 @@ migrateHomeworkImagesToIDB().then(()=>hydrateHomeworkImages()).catch(()=>{});
 <script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
   // v7.6.64-JPEG — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
   // ve aktif oturum güncelleme nedeniyle yeniden yüklenmez.
-  navigator.serviceWorker.register("./sw.js?v=7.8.85",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.8.86",{updateViaCache:"none"}).then(reg=>{
     reg.update().catch(()=>{});
     setInterval(()=>reg.update().catch(()=>{}),60*60*1000);
   }).catch(()=>{});
@@ -9163,7 +9163,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   }
   window.mmRecordBackup884=function(backup,kind){
     try{localStorage.setItem(HEALTH_KEY,JSON.stringify({
-      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.85',
+      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.86',
       stats:stats(backup?.state||state),
       archives:Array.isArray(backup?.schoolYearArchives)?backup.schoolYearArchives.length:loadSchoolYearArchives().length
     }))}catch(e){console.warn('Yedek sağlık kaydı yazılamadı',e)}
@@ -9289,25 +9289,31 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     el('modalTitle').textContent='Sistem Sağlığı';el('modalSubtitle').textContent='Salt okunur veri kontrolü, depolama durumu ve yedek doğrulama.';
     el('modalBody').innerHTML=`<div class="mm-health-status884 ${bs.cls}"><span class="dot"></span><div><b>${esc(bs.text)}</b><div class="tiny" style="margin-top:3px">Bu ekran mevcut öğrenci verilerini değiştirmez.</div></div></div>
       <div class="mm-health-grid884">
-        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.85</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
+        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.86</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
         <div class="mm-health-card884"><span>SINIF</span><b>${st.classes}</b></div><div class="mm-health-card884"><span>ÖĞRENCİ</span><b>${st.students}</b></div><div class="mm-health-card884"><span>ÖDEV</span><b>${st.homeworks}</b></div>
         <div class="mm-health-card884"><span>DENEME</span><b>${st.trials}</b></div><div class="mm-health-card884"><span>VELİ GÖRÜŞMESİ</span><b>${st.meetings}</b></div><div class="mm-health-card884"><span>REHBERLİK KAYDI</span><b>${st.guidance}</b></div>
-        <div class="mm-health-card884"><span>YEREL VERİ</span><b>${fmtBytes(localBytes())}</b></div><div class="mm-health-card884"><span>ÖDEV GÖRSELİ</span><b id="mmHealthIDB884">Kontrol…</b></div><div class="mm-health-card884"><span>DEPOLAMA</span><b id="mmHealthStorage884">Kontrol…</b></div>
+        <div class="mm-health-card884"><span>YEREL VERİ</span><b>${fmtBytes(localBytes())}</b></div><div class="mm-health-card884"><span>ÖDEV GÖRSELİ</span><b id="mmHealthIDB884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA TOPLAM / ÜST SINIR</span><b id="mmHealthStorage884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA ÖNBELLEĞİ</span><b id="mmHealthCaches886">Kontrol…</b></div>
       </div>
       <div class="card" style="padding:12px"><b>Yedekleme ve Doğrulama</b><div class="tiny" style="margin:5px 0 10px;line-height:1.5">Yedek dosyasını geri yüklemeden kontrol edebilirsiniz. Kontrol işlemi hiçbir veriyi içe aktarmaz.</div>
         <button style="width:100%;margin-bottom:8px" onclick="exportVerifiedBackup884()">💾 Doğrulanmış Tam Yedek Al</button>
         <label class="btn secondary" style="display:block;width:100%;box-sizing:border-box;text-align:center;cursor:pointer">🔍 Yedek Dosyasını Kontrol Et<input type="file" accept=".json,application/json" hidden onchange="validateBackupFile884(event)"></label>
-        <div id="mmBackupCheck884" class="mm-backup-check884">Henüz bir yedek dosyası kontrol edilmedi.</div></div>`;
+        <div id="mmBackupCheck884" class="mm-backup-check884">Henüz bir yedek dosyası kontrol edilmedi.</div></div>
+      <div class="card" style="padding:12px;margin-top:10px"><b>PWA Önbellek Bakımı</b>
+        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.86</b> ve önceki stabil sürüm <b>v7.8.85</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
+        <button class="secondary" style="width:100%" onclick="cleanupOldPWACaches886()">🧹 Eski PWA Önbelleklerini Temizle</button>
+        <div id="mmCacheMaintenance886" class="tiny" style="margin-top:8px;line-height:1.45">Önbellekler kontrol ediliyor…</div>
+      </div>`;
     el('modal').classList.add('open');
     const n=await idbCount();if(el('mmHealthIDB884'))el('mmHealthIDB884').textContent=n===null?'Erişilemedi':String(n);
     try{
       if(navigator.storage?.estimate){const e=await navigator.storage.estimate(),txt=e.quota?`${fmtBytes(e.usage||0)} / ${fmtBytes(e.quota)}`:fmtBytes(e.usage||0);if(el('mmHealthStorage884'))el('mmHealthStorage884').textContent=txt}
       else if(el('mmHealthStorage884'))el('mmHealthStorage884').textContent='Bilgi yok';
     }catch(e){if(el('mmHealthStorage884'))el('mmHealthStorage884').textContent='Erişilemedi'}
+    if(typeof refreshPWACacheStatus886==='function') await refreshPWACacheStatus886();
   };
 
   window.exportVerifiedBackup884=function(){
-    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.85',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
+    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.86',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
     downloadBlob(JSON.stringify(backup,null,2),'MualliMate_DOGRULANMIS_TAM_YEDEK.json','application/json');mmRecordBackup884(backup,'doğrulanmış tam yedek');setTimeout(()=>openSystemHealth884(),80);
   };
 
@@ -9620,6 +9626,76 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       :'<div class="empty card">Tarihli bir kayıt bulunamadı.</div>'}</div>
       <div class="modal-actions"><button class="secondary" onclick="openGeneralSearch884()">← Genel Aramaya Dön</button></div>`;
     el('modal').classList.add('open');
+  };
+})();
+</script>
+
+
+<style id="v7886-cache-maintenance">
+.mm-cache-ok886{color:#166534;font-weight:800}
+.mm-cache-warn886{color:#9a5a00;font-weight:800}
+</style>
+<script id="v7886-cache-maintenance">
+(function(){
+  const CURRENT_CACHE_886='ots-v7.8.86-health-cache-maintenance';
+  const PREVIOUS_STABLE_CACHE_886='ots-v7.8.85-search-work-center';
+  const KEEP_CACHES_886=new Set([CURRENT_CACHE_886,PREVIOUS_STABLE_CACHE_886]);
+
+  async function getMualliMateCaches886(){
+    if(!('caches' in window)) return [];
+    const keys=await caches.keys();
+    return keys.filter(k=>String(k).startsWith('ots-v'));
+  }
+
+  window.refreshPWACacheStatus886=async function(){
+    const countHost=el('mmHealthCaches886');
+    const noteHost=el('mmCacheMaintenance886');
+    try{
+      const keys=await getMualliMateCaches886();
+      const removable=keys.filter(k=>!KEEP_CACHES_886.has(k));
+      const protectedFound=keys.filter(k=>KEEP_CACHES_886.has(k));
+      if(countHost) countHost.textContent=`${keys.length} cache · ${removable.length} eski`;
+      if(noteHost){
+        if(removable.length){
+          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.86${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.85':' (v7.8.85 cihazda bulunamadı)'}`;
+        }else{
+          noteHost.innerHTML='<span class="mm-cache-ok886">✓ Temizlenecek eski MualliMate önbelleği yok.</span><br>Mevcut ve önceki stabil sürüm korunuyor.';
+        }
+      }
+      return {keys,removable};
+    }catch(e){
+      if(countHost) countHost.textContent='Erişilemedi';
+      if(noteHost) noteHost.textContent='Önbellek bilgisi okunamadı.';
+      return {keys:[],removable:[]};
+    }
+  };
+
+  window.cleanupOldPWACaches886=async function(){
+    if(!('caches' in window)){
+      alert('Bu cihazda PWA önbellek yönetimine erişilemiyor.');
+      return;
+    }
+    const info=await refreshPWACacheStatus886();
+    if(!info.removable.length){
+      alert('Temizlenecek eski MualliMate PWA önbelleği yok.');
+      return;
+    }
+    const versions=info.removable.map(k=>k.replace(/^ots-/,'')).join('\n• ');
+    const ok=confirm(
+      'Yalnızca eski MualliMate PWA önbellekleri silinecek.\n\n'+
+      'Korunacaklar:\n• v7.8.86 (mevcut sürüm)\n• v7.8.85 (önceki stabil sürüm)\n\n'+
+      'Silinecek eski önbellekler:\n• '+versions+'\n\n'+
+      'Öğrenci verileri, notlar, ödevler, yedekler, arşivler ve IndexedDB etkilenmez.\n\nDevam edilsin mi?'
+    );
+    if(!ok) return;
+    let deleted=0,failed=0;
+    for(const name of info.removable){
+      try{
+        if(await caches.delete(name)) deleted++; else failed++;
+      }catch(e){ failed++; }
+    }
+    await refreshPWACacheStatus886();
+    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.86 ve önceki stabil v7.8.85 önbellekleri korundu.`);
   };
 })();
 </script>
