@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" class="mm-first-paint-lock">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
@@ -2243,6 +2243,44 @@ body.class-module-page-open #modal{z-index:9200!important}
 .static-paper7874{font-family:"Times New Roman",serif}.static-doc7874 h1,.ataturk7874 h1{text-align:center;font-size:28px;margin:0 0 28px}.anthem-lines7874{columns:2;column-gap:34px}.anthem-lines7874 p{font-size:16px;line-height:1.5;margin:0 0 18px;break-inside:avoid}.author7874{text-align:right;font-weight:700;font-size:18px;margin-top:16px}.duties7874 ol{padding-left:28px}.duties7874 li{font-size:16px;line-height:1.5;margin-bottom:10px}.source7874{font-size:12px;color:#555;margin-top:24px;font-style:italic}.ataturk7874{text-align:center}.portrait-frame7874{height:720px;border:2px solid #222;display:flex;align-items:center;justify-content:center;margin:24px auto;max-width:500px;background:#fafafa}.portrait-placeholder7874{font-size:28px;font-weight:700;line-height:1.5}.portrait-placeholder7874 span{font-size:22px;font-weight:400}@media(max-width:700px){.anthem-lines7874{columns:1}.portrait-frame7874{height:650px}}
 @media print{.guidance-preview-toolbar{display:none!important}.static-paper7874{transform:none!important}}
 </style>
+
+<style id="v78100-safari-first-paint-lock">
+/* v7.8.100 — Safari/iPhone reload FOUC guard.
+   The final PIN appearance is available in <head> so Safari never paints
+   legacy blue/green intermediate login styles while parsing the file. */
+html.mm-first-paint-lock,html.mm-first-paint-lock body{
+  width:100%!important;min-height:100%!important;margin:0!important;
+  overflow:hidden!important;overscroll-behavior:none!important;
+  background:#0f172a!important;
+}
+#lockScreen.lock{
+  position:fixed!important;inset:0!important;top:0!important;left:0!important;right:0!important;bottom:0!important;
+  width:100vw!important;height:100vh!important;height:100dvh!important;min-height:100vh!important;min-height:100dvh!important;
+  z-index:2147483647!important;overflow:hidden!important;overscroll-behavior:none!important;
+  display:flex;align-items:center;justify-content:center;
+  padding:max(20px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left))!important;
+  box-sizing:border-box!important;background:#0f172a!important;
+}
+#lockScreen.lock.hidden{display:none!important}
+#lockScreen .lockbox{
+  width:min(430px,100%)!important;max-height:calc(100dvh - 40px);overflow:auto;
+  border:1px solid rgba(214,163,59,.4)!important;border-radius:28px!important;padding:26px!important;
+  box-shadow:0 30px 80px rgba(0,0,0,.28)!important;background:linear-gradient(180deg,#fff 0%,#fbfaf6 100%)!important;
+  box-sizing:border-box!important;
+}
+#lockScreen .premium-login-brand{display:flex!important;align-items:center!important;gap:14px!important;margin-bottom:18px!important}
+#lockScreen .premium-login-brand img{display:block!important;width:76px!important;height:76px!important;min-width:76px!important;min-height:76px!important;max-width:76px!important;max-height:76px!important;object-fit:cover!important;border-radius:22px!important;box-shadow:0 10px 25px rgba(2,44,34,.2)!important}
+#lockScreen .premium-login-brand h2{font-family:Georgia,serif!important;color:#064e3b!important;font-size:30px!important;line-height:1.05!important;margin:0!important}
+#lockScreen .premium-login-brand span{display:block!important;color:#7a6b4a!important;font-size:12px!important;font-weight:800!important;letter-spacing:.04em!important;margin-top:3px!important}
+#lockScreen #pinCreateBtn,#lockScreen #pinLoginBtn{background:#075f52!important;color:#fff!important;border-color:#075f52!important}
+@media(max-width:700px){
+  #lockScreen.lock{padding:12px max(14px,env(safe-area-inset-right)) 12px max(14px,env(safe-area-inset-left))!important}
+  #lockScreen .lockbox{max-height:calc(100dvh - 24px)!important;overflow:hidden!important;padding:20px!important}
+  #lockScreen .premium-login-brand{margin-bottom:12px!important}
+  #lockScreen .premium-login-brand img{width:66px!important;height:66px!important;min-width:66px!important;min-height:66px!important;max-width:66px!important;max-height:66px!important;border-radius:20px!important}
+  #lockScreen .premium-login-brand h2{font-size:27px!important}
+}
+</style>
 </head>
 <body>
 
@@ -2391,7 +2429,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.99</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.100</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2583,7 +2621,7 @@ function openDocumentAssistant(origin=""){
   window.__docAssistantOrigin=String(origin||"");
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.8.99 · Belge Üretim Merkezi · çevrimdışı";
+  el("modalSubtitle").textContent="v7.8.100 · Belge Üretim Merkezi · çevrimdışı";
   const teacherFileReturn=window.__docAssistantOrigin==="teacherFile"?`<div class="teacher-file-return-card"><button type="button" class="secondary" onclick="teacherFileReturnFromAssistant()">← Öğretmen Dosyasına Dön</button></div>`:"";
   el("modalBody").innerHTML=`${teacherFileReturn}
     <div class="doc-assistant-tools887">
@@ -4637,7 +4675,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.99";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.100";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -8007,7 +8045,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.99",
+    appVersion:"v7.8.100",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -8020,7 +8058,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.99",
+    appVersion:"v7.8.100",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -9195,7 +9233,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   }
   window.mmRecordBackup884=function(backup,kind){
     try{localStorage.setItem(HEALTH_KEY,JSON.stringify({
-      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.99',
+      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.100',
       stats:stats(backup?.state||state),
       archives:Array.isArray(backup?.schoolYearArchives)?backup.schoolYearArchives.length:loadSchoolYearArchives().length
     }))}catch(e){console.warn('Yedek sağlık kaydı yazılamadı',e)}
@@ -9321,7 +9359,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     el('modalTitle').textContent='Sistem Sağlığı';el('modalSubtitle').textContent='Salt okunur veri kontrolü, depolama durumu ve yedek doğrulama.';
     el('modalBody').innerHTML=`<div class="mm-health-status884 ${bs.cls}"><span class="dot"></span><div><b>${esc(bs.text)}</b><div class="tiny" style="margin-top:3px">Bu ekran mevcut öğrenci verilerini değiştirmez.</div></div></div>
       <div class="mm-health-grid884">
-        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.99</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
+        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.100</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
         <div class="mm-health-card884"><span>SINIF</span><b>${st.classes}</b></div><div class="mm-health-card884"><span>ÖĞRENCİ</span><b>${st.students}</b></div><div class="mm-health-card884"><span>ÖDEV</span><b>${st.homeworks}</b></div>
         <div class="mm-health-card884"><span>DENEME</span><b>${st.trials}</b></div><div class="mm-health-card884"><span>VELİ GÖRÜŞMESİ</span><b>${st.meetings}</b></div><div class="mm-health-card884"><span>REHBERLİK KAYDI</span><b>${st.guidance}</b></div>
         <div class="mm-health-card884"><span>YEREL VERİ</span><b>${fmtBytes(localBytes())}</b></div><div class="mm-health-card884"><span>ÖDEV GÖRSELİ</span><b id="mmHealthIDB884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA TOPLAM / ÜST SINIR</span><b id="mmHealthStorage884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA ÖNBELLEĞİ</span><b id="mmHealthCaches886">Kontrol…</b></div>
@@ -9331,7 +9369,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
         <label class="btn secondary" style="display:block;width:100%;box-sizing:border-box;text-align:center;cursor:pointer">🔍 Yedek Dosyasını Kontrol Et<input type="file" accept=".json,application/json" hidden onchange="validateBackupFile884(event)"></label>
         <div id="mmBackupCheck884" class="mm-backup-check884">Henüz bir yedek dosyası kontrol edilmedi.</div></div>
       <div class="card" style="padding:12px;margin-top:10px"><b>PWA Önbellek Bakımı</b>
-        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.99</b> ve önceki stabil sürüm <b>v7.8.98</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
+        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.100</b> ve önceki stabil sürüm <b>v7.8.99</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
         <button class="secondary" style="width:100%" onclick="cleanupOldPWACaches886()">🧹 Eski PWA Önbelleklerini Temizle</button>
         <div id="mmCacheMaintenance886" class="tiny" style="margin-top:8px;line-height:1.45">Önbellekler kontrol ediliyor…</div>
       </div>`;
@@ -9345,7 +9383,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   };
 
   window.exportVerifiedBackup884=function(){
-    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.99',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
+    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.100',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
     downloadBlob(JSON.stringify(backup,null,2),'MualliMate_DOGRULANMIS_TAM_YEDEK.json','application/json');mmRecordBackup884(backup,'doğrulanmış tam yedek');setTimeout(()=>openSystemHealth884(),80);
   };
 
@@ -9669,8 +9707,8 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 </style>
 <script id="v7886-cache-maintenance">
 (function(){
-  const CURRENT_CACHE_886='ots-v7.8.99-optical-reader-login-fix';
-  const PREVIOUS_STABLE_CACHE_886='ots-v7.8.98-optical-picker-preview-nav';
+  const CURRENT_CACHE_886='ots-v7.8.100-safari-first-paint-lock';
+  const PREVIOUS_STABLE_CACHE_886='ots-v7.8.99-optical-reader-login-fix';
   const KEEP_CACHES_886=new Set([CURRENT_CACHE_886,PREVIOUS_STABLE_CACHE_886]);
 
   async function getMualliMateCaches886(){
@@ -9689,7 +9727,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       if(countHost) countHost.textContent=`${keys.length} cache · ${removable.length} eski`;
       if(noteHost){
         if(removable.length){
-          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.99${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.98':' (v7.8.98 cihazda bulunamadı)'}`;
+          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.100${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.99':' (v7.8.99 cihazda bulunamadı)'}`;
         }else{
           noteHost.innerHTML='<span class="mm-cache-ok886">✓ Temizlenecek eski MualliMate önbelleği yok.</span><br>Mevcut ve önceki stabil sürüm korunuyor.';
         }
@@ -9715,7 +9753,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     const versions=info.removable.map(k=>k.replace(/^ots-/,'')).join('\n• ');
     const ok=confirm(
       'Yalnızca eski MualliMate PWA önbellekleri silinecek.\n\n'+
-      'Korunacaklar:\n• v7.8.99 (mevcut sürüm)\n• v7.8.98 (önceki stabil sürüm)\n\n'+
+      'Korunacaklar:\n• v7.8.100 (mevcut sürüm)\n• v7.8.99 (önceki stabil sürüm)\n\n'+
       'Silinecek eski önbellekler:\n• '+versions+'\n\n'+
       'Öğrenci verileri, notlar, ödevler, yedekler, arşivler ve IndexedDB etkilenmez.\n\nDevam edilsin mi?'
     );
@@ -9727,7 +9765,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       }catch(e){ failed++; }
     }
     await refreshPWACacheStatus886();
-    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.99 ve önceki stabil v7.8.98 önbellekleri korundu.`);
+    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.100 ve önceki stabil v7.8.99 önbellekleri korundu.`);
   };
 })();
 </script>
@@ -12399,5 +12437,16 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
  if(window.visualViewport)visualViewport.addEventListener('scroll',hold,{passive:true});
  const mo=new MutationObserver(sync);function start(){const l=lock();if(l)mo.observe(l,{attributes:true,attributeFilter:['class','style']});sync();setTimeout(sync,80);setTimeout(sync,300)}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
+</script>
+
+
+<!-- v7.8.100 — release first-paint guard only after all legacy/appended styles are parsed -->
+<script id="v78100-safari-first-paint-release">
+(function(){
+ function release(){
+   requestAnimationFrame(function(){requestAnimationFrame(function(){document.documentElement.classList.remove('mm-first-paint-lock')})});
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',release,{once:true});else release();
 })();
 </script>
