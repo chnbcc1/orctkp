@@ -2391,7 +2391,7 @@ body.class-module-page-open #modal{z-index:9200!important}
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.87</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.88</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2583,13 +2583,13 @@ function openDocumentAssistant(origin=""){
   window.__docAssistantOrigin=String(origin||"");
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.8.87 · Belge Üretim Merkezi · çevrimdışı";
+  el("modalSubtitle").textContent="v7.8.88 · Belge Üretim Merkezi · çevrimdışı";
   const teacherFileReturn=window.__docAssistantOrigin==="teacherFile"?`<div class="teacher-file-return-card"><button type="button" class="secondary" onclick="teacherFileReturnFromAssistant()">← Öğretmen Dosyasına Dön</button></div>`:"";
   el("modalBody").innerHTML=`${teacherFileReturn}
     <div class="doc-assistant-tools887">
-      <button type="button" class="secondary" onclick="openDocumentWizard887()">🧭 Belge Sihirbazı</button>
-      <button type="button" class="secondary" onclick="openDocumentHistory887()">🕘 Son Belgeler</button>
-      <button type="button" class="secondary" onclick="openWorksheetStudio887()">🧩 Yaprak Oluşturucu</button>
+      <button type="button" class="secondary doc-tool-tile888" onclick="openDocumentWizard887()"><span>🧭</span><b>Sihirbaz</b></button>
+      <button type="button" class="secondary doc-tool-tile888" onclick="openDocumentHistory887()"><span>🕘</span><b>Son Belgeler</b></button>
+      <button type="button" class="secondary doc-tool-tile888" onclick="openWorksheetStudio887()"><span>🧩</span><b>Yaprak</b></button>
     </div>
     <div class="doc-assistant-note compact"><b>🔒 Çevrimdışı</b><span>Veri gönderilmez; taslağı siz doğrularsınız.</span></div>
     <div class="doc-assistant-grid">
@@ -4165,13 +4165,20 @@ function generateDocumentAssistantDraft(){
   if(v.type==="yaprak"){openWorksheetStudio887();return}
   window._docAssistantLastValues={...v};
   settings.docAssistantLastType=v.type;settings.docAssistantLastFormByType=settings.docAssistantLastFormByType||{};settings.docAssistantLastFormByType[v.type]={date:v.date,year:v.year,period:v.period,school:v.school,teacher:v.teacher,className:v.className,time:v.time,place:v.place,vicePrincipal:v.vicePrincipal,principal:v.principal,prompt:v.prompt,branch:v.branch};saveSettings();
-  let draft=v.type==="dilekce"
-    ?buildPetitionDraft887(v)
-    :v.type==="durum"
-      ?buildSmartStatusDraft887(v)
-      :v.type==="serbest"
-        ?buildSpecialDocumentDraft887(v)
-        :buildDocumentDraft(v);
+  let draft="";
+  try{
+    draft=v.type==="dilekce"
+      ?window.buildPetitionDraft887(v)
+      :v.type==="durum"
+        ?window.buildSmartStatusDraft887(v)
+        :v.type==="serbest"
+          ?window.buildSpecialDocumentDraft887(v)
+          :buildDocumentDraft(v);
+  }catch(err){
+    console.error("Belge taslağı oluşturma hatası",err);
+    alert("Belge taslağı oluşturulamadı: "+(err?.message||err));
+    return;
+  }
   if(v.type==="sok"){
     try{
       const enriched=sokDefaultTeacherRichDraft(draft);
@@ -4623,7 +4630,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.87";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.88";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -7993,7 +8000,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.87",
+    appVersion:"v7.8.88",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -8006,7 +8013,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.87",
+    appVersion:"v7.8.88",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -8103,7 +8110,7 @@ migrateHomeworkImagesToIDB().then(()=>hydrateHomeworkImages()).catch(()=>{});
 <script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
   // v7.6.64-JPEG — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
   // ve aktif oturum güncelleme nedeniyle yeniden yüklenmez.
-  navigator.serviceWorker.register("./sw.js?v=7.8.87",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.8.88",{updateViaCache:"none"}).then(reg=>{
     reg.update().catch(()=>{});
     setInterval(()=>reg.update().catch(()=>{}),60*60*1000);
   }).catch(()=>{});
@@ -9181,7 +9188,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   }
   window.mmRecordBackup884=function(backup,kind){
     try{localStorage.setItem(HEALTH_KEY,JSON.stringify({
-      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.87',
+      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.88',
       stats:stats(backup?.state||state),
       archives:Array.isArray(backup?.schoolYearArchives)?backup.schoolYearArchives.length:loadSchoolYearArchives().length
     }))}catch(e){console.warn('Yedek sağlık kaydı yazılamadı',e)}
@@ -9307,7 +9314,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     el('modalTitle').textContent='Sistem Sağlığı';el('modalSubtitle').textContent='Salt okunur veri kontrolü, depolama durumu ve yedek doğrulama.';
     el('modalBody').innerHTML=`<div class="mm-health-status884 ${bs.cls}"><span class="dot"></span><div><b>${esc(bs.text)}</b><div class="tiny" style="margin-top:3px">Bu ekran mevcut öğrenci verilerini değiştirmez.</div></div></div>
       <div class="mm-health-grid884">
-        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.87</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
+        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.88</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
         <div class="mm-health-card884"><span>SINIF</span><b>${st.classes}</b></div><div class="mm-health-card884"><span>ÖĞRENCİ</span><b>${st.students}</b></div><div class="mm-health-card884"><span>ÖDEV</span><b>${st.homeworks}</b></div>
         <div class="mm-health-card884"><span>DENEME</span><b>${st.trials}</b></div><div class="mm-health-card884"><span>VELİ GÖRÜŞMESİ</span><b>${st.meetings}</b></div><div class="mm-health-card884"><span>REHBERLİK KAYDI</span><b>${st.guidance}</b></div>
         <div class="mm-health-card884"><span>YEREL VERİ</span><b>${fmtBytes(localBytes())}</b></div><div class="mm-health-card884"><span>ÖDEV GÖRSELİ</span><b id="mmHealthIDB884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA TOPLAM / ÜST SINIR</span><b id="mmHealthStorage884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA ÖNBELLEĞİ</span><b id="mmHealthCaches886">Kontrol…</b></div>
@@ -9317,7 +9324,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
         <label class="btn secondary" style="display:block;width:100%;box-sizing:border-box;text-align:center;cursor:pointer">🔍 Yedek Dosyasını Kontrol Et<input type="file" accept=".json,application/json" hidden onchange="validateBackupFile884(event)"></label>
         <div id="mmBackupCheck884" class="mm-backup-check884">Henüz bir yedek dosyası kontrol edilmedi.</div></div>
       <div class="card" style="padding:12px;margin-top:10px"><b>PWA Önbellek Bakımı</b>
-        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.87</b> ve önceki stabil sürüm <b>v7.8.85</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
+        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.88</b> ve önceki stabil sürüm <b>v7.8.85</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
         <button class="secondary" style="width:100%" onclick="cleanupOldPWACaches886()">🧹 Eski PWA Önbelleklerini Temizle</button>
         <div id="mmCacheMaintenance886" class="tiny" style="margin-top:8px;line-height:1.45">Önbellekler kontrol ediliyor…</div>
       </div>`;
@@ -9331,7 +9338,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   };
 
   window.exportVerifiedBackup884=function(){
-    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.87',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
+    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.88',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
     downloadBlob(JSON.stringify(backup,null,2),'MualliMate_DOGRULANMIS_TAM_YEDEK.json','application/json');mmRecordBackup884(backup,'doğrulanmış tam yedek');setTimeout(()=>openSystemHealth884(),80);
   };
 
@@ -9655,7 +9662,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 </style>
 <script id="v7886-cache-maintenance">
 (function(){
-  const CURRENT_CACHE_886='ots-v7.8.87-health-cache-maintenance';
+  const CURRENT_CACHE_886='ots-v7.8.88-health-cache-maintenance';
   const PREVIOUS_STABLE_CACHE_886='ots-v7.8.85-search-work-center';
   const KEEP_CACHES_886=new Set([CURRENT_CACHE_886,PREVIOUS_STABLE_CACHE_886]);
 
@@ -9675,7 +9682,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       if(countHost) countHost.textContent=`${keys.length} cache · ${removable.length} eski`;
       if(noteHost){
         if(removable.length){
-          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.87${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.85':' (v7.8.85 cihazda bulunamadı)'}`;
+          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.88${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.85':' (v7.8.85 cihazda bulunamadı)'}`;
         }else{
           noteHost.innerHTML='<span class="mm-cache-ok886">✓ Temizlenecek eski MualliMate önbelleği yok.</span><br>Mevcut ve önceki stabil sürüm korunuyor.';
         }
@@ -9701,7 +9708,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     const versions=info.removable.map(k=>k.replace(/^ots-/,'')).join('\n• ');
     const ok=confirm(
       'Yalnızca eski MualliMate PWA önbellekleri silinecek.\n\n'+
-      'Korunacaklar:\n• v7.8.87 (mevcut sürüm)\n• v7.8.85 (önceki stabil sürüm)\n\n'+
+      'Korunacaklar:\n• v7.8.88 (mevcut sürüm)\n• v7.8.85 (önceki stabil sürüm)\n\n'+
       'Silinecek eski önbellekler:\n• '+versions+'\n\n'+
       'Öğrenci verileri, notlar, ödevler, yedekler, arşivler ve IndexedDB etkilenmez.\n\nDevam edilsin mi?'
     );
@@ -9713,7 +9720,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       }catch(e){ failed++; }
     }
     await refreshPWACacheStatus886();
-    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.87 ve önceki stabil v7.8.85 önbellekleri korundu.`);
+    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.88 ve önceki stabil v7.8.85 önbellekleri korundu.`);
   };
 })();
 </script>
@@ -9784,8 +9791,10 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     if(prompt)prompt.style.display='';
     special.innerHTML='';
 
-    const generateBtn=el('modalBody')?.querySelector('.modal-actions>button');
+    const actionBtns=[...(el('modalBody')?.querySelectorAll('.modal-actions>button')||[])];
+    const generateBtn=actionBtns[0],templatesBtn=actionBtns[1];
     if(generateBtn)generateBtn.textContent=type==='yaprak'?'🧩 Editörü Aç':'✨ Taslak Oluştur';
+    if(templatesBtn)templatesBtn.style.display=['zumre','sok','veli'].includes(type)?'':'none';
 
     if(['dilekce','durum','serbest','yaprak'].includes(type)){
       if(agenda)agenda.style.display='none';
@@ -9864,7 +9873,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     const authority=(v.petitionAuthority||`${v.school||''} MÜDÜRLÜĞÜNE`).trim();
     const request=v.petitionRequest||v.prompt||'[Talebinizi buraya yazın.]';
     const subject=v.petitionSubject||'[Konu]';
-    return `${authority}\n\nTarih: ${documentDateTR(v.date)}\nKonu: ${subject}\n\n${request}\n\nGereğini arz ederim.\n\n${v.teacher||'[Ad Soyad]'}\n${v.petitionRole||v.branch||'[Görev / Branş]'}${v.petitionContact?`\nİletişim: ${v.petitionContact}`:''}${attachmentsText887(v.attachments)}`;
+    return `${authority}\n\nTarih: ${docDateTR(v.date)}\nKonu: ${subject}\n\n${request}\n\nGereğini arz ederim.\n\n${v.teacher||'[Ad Soyad]'}\n${v.petitionRole||v.branch||'[Görev / Branş]'}${v.petitionContact?`\nİletişim: ${v.petitionContact}`:''}${attachmentsText887(v.attachments)}`;
   };
 
   function gradeRecord887(c,sid,period){
@@ -9876,6 +9885,15 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     const g=c?.guidanceFile||{};let n=0;
     if(sid){if(g.studentInfo?.[sid])n++;for(const a of Object.values(g.records||{}))if(Array.isArray(a))n+=a.filter(r=>String(r.studentId)===String(sid)).length;return n}
     n+=Object.keys(g.studentInfo||{}).length;for(const a of Object.values(g.records||{}))if(Array.isArray(a))n+=a.length;return n;
+  }
+  function trialStatsForClass888(c,t){
+    let attended=0,scored=0,total=0;
+    for(const st of (c?.students||[])){
+      const n=trialStudentTotal(t,st.id);
+      if(n!==null)attended++;
+      if(n!==null&&trialHasEnteredScore(t,st.id)){scored++;total+=n}
+    }
+    return {attended,absent:Math.max(0,(c?.students||[]).length-attended),scored,avg:scored?Math.round(total/scored*100)/100:null};
   }
 
   window.buildSmartStatusDraft887=function(v){
@@ -9890,7 +9908,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       const total=hs.length,completion=total?Math.round((hw.done+hw.partial*.5)*100/total):0;
       const g=gradeRecord887(c,s.id,period),avg=gradeAverage(g),miss=missingGradeLabels(g);
       const tr=trialReportStudentStats(c,s.id),meet=(c.parentMeetings||[]).filter(x=>String(x.studentId)===String(s.id));
-      return `${v.school}\n\nÖĞRENCİ DURUM RAPORU\n\nTarih: ${documentDateTR(v.date)}\nEğitim Öğretim Yılı: ${v.year}\nDönem: ${period}. Dönem\nSınıf / Şube: ${c.name}\nÖğrenci: ${s.number?s.number+' - ':''}${s.name}\n\nAKADEMİK DURUM\nNot Ortalaması: ${avg===null?'-':avg.toLocaleString('tr-TR',{maximumFractionDigits:2})}\nEksik Zorunlu Not: ${miss.length?miss.join(', '):'Yok'}\nDeneme Sayısı: ${tr.trials.length}\nSon Deneme Neti: ${tr.last===null?'-':tr.last.toLocaleString('tr-TR',{maximumFractionDigits:2})}\nDeneme Ortalaması: ${tr.avg===null?'-':tr.avg.toLocaleString('tr-TR',{maximumFractionDigits:2})}\n\nÖDEV / ÇALIŞMA TAKİBİ\nToplam Ödev: ${total}\nYaptı: ${hw.done} · Kısmen: ${hw.partial} · Mazeretli: ${hw.excused} · Yapmadı: ${hw.missing} · Kontrol Edilmedi: ${hw.pending}\nTamamlama Oranı: %${completion}\n\nİLETİŞİM VE REHBERLİK\nVeli Görüşmesi: ${meet.length}\nRehberlik Kaydı: ${guidanceCount887(c,s.id)}\n\nGENEL DEĞERLENDİRME\n${avg!==null&&avg<50?'Akademik başarı açısından desteklenmesi önerilir. ':''}${hw.missing?'Ödev eksiklerinin düzenli takip edilmesi önerilir. ':''}${!hw.missing&&avg!==null&&avg>=50?'Mevcut çalışma ve başarı düzeyinin sürdürülmesi önerilir. ':''}${v.prompt||''}\n\nRaporlayan\n${v.teacher||''}`;
+      return `${v.school}\n\nÖĞRENCİ DURUM RAPORU\n\nTarih: ${docDateTR(v.date)}\nEğitim Öğretim Yılı: ${v.year}\nDönem: ${period}. Dönem\nSınıf / Şube: ${c.name}\nÖğrenci: ${s.number?s.number+' - ':''}${s.name}\n\nAKADEMİK DURUM\nNot Ortalaması: ${avg===null?'-':avg.toLocaleString('tr-TR',{maximumFractionDigits:2})}\nEksik Zorunlu Not: ${miss.length?miss.join(', '):'Yok'}\nDeneme Sayısı: ${tr.trials.length}\nSon Deneme Neti: ${tr.last===null?'-':tr.last.toLocaleString('tr-TR',{maximumFractionDigits:2})}\nDeneme Ortalaması: ${tr.avg===null?'-':tr.avg.toLocaleString('tr-TR',{maximumFractionDigits:2})}\n\nÖDEV / ÇALIŞMA TAKİBİ\nToplam Ödev: ${total}\nYaptı: ${hw.done} · Kısmen: ${hw.partial} · Mazeretli: ${hw.excused} · Yapmadı: ${hw.missing} · Kontrol Edilmedi: ${hw.pending}\nTamamlama Oranı: %${completion}\n\nİLETİŞİM VE REHBERLİK\nVeli Görüşmesi: ${meet.length}\nRehberlik Kaydı: ${guidanceCount887(c,s.id)}\n\nGENEL DEĞERLENDİRME\n${avg!==null&&avg<50?'Akademik başarı açısından desteklenmesi önerilir. ':''}${hw.missing?'Ödev eksiklerinin düzenli takip edilmesi önerilir. ':''}${!hw.missing&&avg!==null&&avg>=50?'Mevcut çalışma ve başarı düzeyinin sürdürülmesi önerilir. ':''}${v.prompt||''}\n\nRaporlayan\n${v.teacher||''}`;
     }
 
     let hw={done:0,partial:0,excused:0,missing:0,pending:0};
@@ -9900,13 +9918,13 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     const classAvg=avgs.length?avgs.reduce((a,b)=>a+b,0)/avgs.length:null;
     const missingStudents=(c.students||[]).filter(s=>missingGradeLabels(gradeRecord887(c,s.id,period)).length).length;
     const trials=(c.trials||[]).slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
-    const lastTrial=trials[0],ts=lastTrial?trialStats(lastTrial):null;
-    return `${v.school}\n\nSINIF GENEL DURUM RAPORU\n\nTarih: ${documentDateTR(v.date)}\nEğitim Öğretim Yılı: ${v.year}\nDönem: ${period}. Dönem\nSınıf / Şube: ${c.name}\nÖğrenci Sayısı: ${(c.students||[]).length}\n\nAKADEMİK DURUM\nSınıf Not Ortalaması: ${classAvg===null?'-':classAvg.toLocaleString('tr-TR',{maximumFractionDigits:2})}\nEksik Zorunlu Notu Bulunan Öğrenci: ${missingStudents}\nDeneme Sayısı: ${trials.length}\n${lastTrial?`Son Deneme: ${lastTrial.name||'Deneme'} · Katılan ${ts.attended}/${(c.students||[]).length} · Ort. Net ${ts.avg===null?'-':ts.avg.toLocaleString('tr-TR',{maximumFractionDigits:2})}`:'Son Deneme: -'}\n\nÖDEV / ÇALIŞMA TAKİBİ\nKayıtlı Ödev: ${hs.length}\nYaptı: ${hw.done} · Kısmen: ${hw.partial} · Mazeretli: ${hw.excused} · Yapmadı: ${hw.missing} · Kontrol Edilmedi: ${hw.pending}\nGenel Tamamlama Oranı: %${completion}\n\nİLETİŞİM VE REHBERLİK\nVeli Görüşmesi: ${(c.parentMeetings||[]).length}\nRehberlik Kaydı: ${guidanceCount887(c)}\n\nGENEL DEĞERLENDİRME\n${classAvg!==null&&classAvg<50?'Sınıfın akademik başarı düzeyini artırmaya yönelik destekleyici çalışmalar planlanması önerilir. ':''}${hw.missing?'Eksik ödevlerin öğrenci bazında izlenmesi ve gerekli durumlarda veli iş birliği kurulması önerilir. ':''}${v.prompt||''}\n\nRaporlayan\n${v.teacher||''}`;
+    const lastTrial=trials[0],ts=lastTrial?trialStatsForClass888(c,lastTrial):null;
+    return `${v.school}\n\nSINIF GENEL DURUM RAPORU\n\nTarih: ${docDateTR(v.date)}\nEğitim Öğretim Yılı: ${v.year}\nDönem: ${period}. Dönem\nSınıf / Şube: ${c.name}\nÖğrenci Sayısı: ${(c.students||[]).length}\n\nAKADEMİK DURUM\nSınıf Not Ortalaması: ${classAvg===null?'-':classAvg.toLocaleString('tr-TR',{maximumFractionDigits:2})}\nEksik Zorunlu Notu Bulunan Öğrenci: ${missingStudents}\nDeneme Sayısı: ${trials.length}\n${lastTrial?`Son Deneme: ${lastTrial.name||'Deneme'} · Katılan ${ts.attended}/${(c.students||[]).length} · Ort. Net ${ts.avg===null?'-':ts.avg.toLocaleString('tr-TR',{maximumFractionDigits:2})}`:'Son Deneme: -'}\n\nÖDEV / ÇALIŞMA TAKİBİ\nKayıtlı Ödev: ${hs.length}\nYaptı: ${hw.done} · Kısmen: ${hw.partial} · Mazeretli: ${hw.excused} · Yapmadı: ${hw.missing} · Kontrol Edilmedi: ${hw.pending}\nGenel Tamamlama Oranı: %${completion}\n\nİLETİŞİM VE REHBERLİK\nVeli Görüşmesi: ${(c.parentMeetings||[]).length}\nRehberlik Kaydı: ${guidanceCount887(c)}\n\nGENEL DEĞERLENDİRME\n${classAvg!==null&&classAvg<50?'Sınıfın akademik başarı düzeyini artırmaya yönelik destekleyici çalışmalar planlanması önerilir. ':''}${hw.missing?'Eksik ödevlerin öğrenci bazında izlenmesi ve gerekli durumlarda veli iş birliği kurulması önerilir. ':''}${v.prompt||''}\n\nRaporlayan\n${v.teacher||''}`;
   };
 
   window.buildSpecialDocumentDraft887=function(v){
     const title=v.specialTitle||'ÖZEL BELGE',subject=v.specialSubject||'[Konu]';
-    return `${v.school}\n\n${title}\n\nTarih: ${documentDateTR(v.date)}\nEğitim Öğretim Yılı: ${v.year}\nDönem: ${v.period}. Dönem\n${v.className?`Sınıf / Şube: ${v.className}\n`:''}Hazırlayan: ${v.teacher}\n\nKONU\n${subject}\n\nAÇIKLAMA\n${v.prompt||'[Belge içeriğini buraya yazın.]'}${attachmentsText887(v.attachments)}`;
+    return `${v.school}\n\n${title}\n\nTarih: ${docDateTR(v.date)}\nEğitim Öğretim Yılı: ${v.year}\nDönem: ${v.period}. Dönem\n${v.className?`Sınıf / Şube: ${v.className}\n`:''}Hazırlayan: ${v.teacher}\n\nKONU\n${subject}\n\nAÇIKLAMA\n${v.prompt||'[Belge içeriğini buraya yazın.]'}${attachmentsText887(v.attachments)}`;
   };
 
   window.saveGeneratedDocument887=function(draft,v,label){
@@ -10035,6 +10053,8 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     host.innerHTML=(window._worksheet887.title?`<div class="ws-title887">${esc(window._worksheet887.title)}</div>`:'')+
       p.items.map(it=>`<div class="ws-item887" data-id="${it.id}" style="left:${it.x}px;top:${it.y}px;width:${it.w}px;height:${it.h}px" onpointerdown="worksheetDragStart887(event,'${it.id}')"><img src="${it.data}"><button class="ws-delete887" onpointerdown="event.stopPropagation()" onclick="event.stopPropagation();worksheetDeleteItem887('${it.id}')">×</button><span class="ws-resize887" onpointerdown="worksheetResizeStart887(event,'${it.id}')"></span></div>`).join('');
     const lab=el('wsPageLabel887');if(lab)lab.textContent=`${window._worksheet887.current+1} / ${window._worksheet887.pages.length}`;
+    const del=[...document.querySelectorAll('#worksheetStudio887 .ws-bottom887 .danger')][0];
+    if(del)del.textContent=window._worksheet887.pages.length===1?'Sayfayı Temizle':'Sayfayı Sil';
     setTimeout(fitWorksheet887,0);
   };
 
@@ -10146,6 +10166,56 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   };
   window.loadWorksheetDraft887=async function(id){const x=await wsGetDb887(id);if(!x)return;document.getElementById('wsDrafts887')?.remove();openWorksheetStudio887(x)};
   window.deleteWorksheetDraft887=async function(id){if(!confirm('Bu yaprak taslağı silinsin mi?'))return;await wsDeleteDb887(id);openWorksheetDrafts887()};
+})();
+</script>
+
+
+<style id="v7888-ui-fixes">
+.doc-assistant-tools887{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:8px!important;
+  margin:0 0 10px!important;
+}
+.doc-tool-tile888{
+  min-height:72px!important;
+  padding:9px 6px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:4px!important;
+  line-height:1.1!important;
+}
+.doc-tool-tile888 span{font-size:22px}
+.doc-tool-tile888 b{font-size:11px;color:inherit}
+.ws-drafts-panel887,
+.ws-drafts-panel887 h3,
+.ws-draft-row887,
+.ws-draft-row887 b{
+  color:#173d33!important;
+}
+.ws-drafts-panel887 h3{font-weight:900!important}
+.ws-draft-row887 .tiny{color:#64748b!important}
+.ws-draft-row887{background:#fffaf0!important}
+@media(max-width:560px){
+  .doc-assistant-tools887{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .doc-tool-tile888{min-height:68px!important;padding:8px 4px!important}
+  .doc-tool-tile888 b{font-size:10px!important}
+}
+</style>
+
+<script id="v7888-runtime-selfcheck">
+(function(){
+  window.mmDocumentToolsSelfCheck888=function(){
+    const missing=[];
+    if(typeof window.buildPetitionDraft887!=='function')missing.push('Dilekçe');
+    if(typeof window.buildSmartStatusDraft887!=='function')missing.push('Akıllı Rapor');
+    if(typeof window.buildSpecialDocumentDraft887!=='function')missing.push('Özel Belge');
+    if(typeof docDateTR!=='function')missing.push('Tarih biçimleyici');
+    if(missing.length)console.error('Belge Asistanı öz-kontrol eksikleri:',missing);
+    return missing;
+  };
+  setTimeout(()=>window.mmDocumentToolsSelfCheck888(),0);
 })();
 </script>
 
