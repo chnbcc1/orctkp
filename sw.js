@@ -1,5 +1,5 @@
-const CACHE_NAME='ots-v7.8.112-optical-light-normalize';
-const PREVIOUS_STABLE_CACHE='ots-v7.8.111-optical-return-back-fix';
+const CACHE_NAME='ots-v7.8.113-optical-number-corner-adaptive';
+const PREVIOUS_STABLE_CACHE='ots-v7.8.112-optical-light-normalize';
 const APP_SHELL = ['./assets/rehberlik_ataturk_v7881.png', './assets/rehberlik_istiklal_v7881.png', './index.html', './jszip.min.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png', './templates/ogrenci_bilgi_formu.pdf', './templates/ogrenci_gozlem_kaydi.pdf', './templates/rehberlik_servisine_yonlendirme_formu.pdf', './templates/psikolojik_destek_yonlendirme_formu.pdf', './templates/ev_ziyaret_formu.pdf', './templates/sinif_baskan_secim_tutanagi_bos.pdf', './templates/secim_sonucu_formu.pdf', './templates/exact/student_info_1.png', './templates/exact/student_info_2.png', './templates/exact/observation_1.png', './templates/exact/observation_2.png', './templates/exact/referral_1.png', './templates/exact/referral_2.png', './templates/exact/psych_1.png', './templates/exact/psych_2.png', './templates/exact/home_visit_1.png', './templates/exact/home_visit_2.png', './templates/exact/election_1.png', './templates/exact/election_result_1.png'];
 self.addEventListener('install', event => { self.skipWaiting(); event.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(APP_SHELL)).catch(()=>{})); });
 self.addEventListener('activate', event => {
