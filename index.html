@@ -12903,76 +12903,38 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 
 
 
-<!-- v7.8.124 — Nöbet modalı bağımsız kaydırma + sabit arka plan -->
+<!-- v7.8.124 — Nöbet modalı bağımsız kaydırma; arka plan sabit -->
 <style id="v78124-layout-duty-scroll">
 @media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
-  /* Ana ekranın iki satırı viewport içine sabitlenir. Ders sayısı artsa da alt kartları aşağı itemez. */
   body.mm-landscape-home-lock .layout{height:calc(100dvh - 80px)!important;max-height:calc(100dvh - 80px)!important}
   body.mm-landscape-home-lock main{height:100%!important;max-height:100%!important;box-sizing:border-box!important}
-  body.mm-landscape-home-lock #mobileHomeDashboard{
-    height:100%!important;max-height:100%!important;
-    grid-template-rows:minmax(0,44%) minmax(0,56%)!important;
-    box-sizing:border-box!important;
-  }
+  body.mm-landscape-home-lock #mobileHomeDashboard{height:100%!important;max-height:100%!important;grid-template-rows:minmax(0,44%) minmax(0,56%)!important;box-sizing:border-box!important}
   body.mm-landscape-home-lock .mm-home-card.mm-lessons{height:100%!important;max-height:100%!important;min-height:0!important;overflow:hidden!important}
-  body.mm-landscape-home-lock .mm-home-card.mm-lessons .mm-next-title,
-  body.mm-landscape-home-lock .mm-home-card.mm-lessons .mm-next-row{font-size:9px!important}
+  body.mm-landscape-home-lock .mm-home-card.mm-lessons .mm-next-title,body.mm-landscape-home-lock .mm-home-card.mm-lessons .mm-next-row{font-size:9px!important}
   body.mm-landscape-home-lock .mm-home-card.mm-lessons .mm-next-row{padding:2px 0!important}
 }
-
-/* Nöbet formunda arka sayfa sabit; yalnız öndeki modal kendi sınırları içinde kayar. */
-html.mm-duty-modal-lock,body.mm-duty-modal-lock{
-  width:100%!important;height:100%!important;max-height:100%!important;
-  overflow:hidden!important;overscroll-behavior:none!important;
-}
-body.mm-duty-modal-lock{position:fixed!important;inset:0!important;margin:0!important}
-body.mm-duty-modal-lock #modal.open{
-  position:fixed!important;inset:0!important;overflow:hidden!important;
-  overscroll-behavior:none!important;touch-action:none!important;
-}
+html.mm-duty-modal-lock,body.mm-duty-modal-lock{width:100%!important;height:100%!important;overflow:hidden!important;overscroll-behavior:none!important}
+body.mm-duty-modal-lock{position:fixed!important;left:0!important;right:0!important;margin:0!important}
+body.mm-duty-modal-lock #modal.open{position:fixed!important;inset:0!important;overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}
 body.mm-duty-modal-lock #modal.open .modal-box{
-  max-height:calc(100dvh - 24px)!important;overflow:hidden!important;
-  overscroll-behavior:none!important;touch-action:auto!important;
+  max-height:calc(100dvh - 28px)!important;overflow-y:auto!important;overflow-x:hidden!important;
+  overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;
 }
-body.mm-duty-modal-lock #modal.open .modal-body{
-  min-height:0!important;max-height:calc(100dvh - 120px)!important;
-  overflow-y:auto!important;overflow-x:hidden!important;
-  overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;
-  touch-action:pan-y!important;
-}
+body.mm-duty-modal-lock #modal.open .modal-head{position:sticky!important;top:0!important;z-index:3!important}
+body.mm-duty-modal-lock #modal.open .modal-body{overscroll-behavior-y:contain!important;touch-action:pan-y!important}
+body.mm-duty-modal-lock #modal.open input,body.mm-duty-modal-lock #modal.open select,body.mm-duty-modal-lock #modal.open textarea,body.mm-duty-modal-lock #modal.open button{touch-action:manipulation!important}
 </style>
 <script id="v78124-layout-duty-scroll-script">
 (function(){
-  const VERSION='v7.8.123';
-  function isDutyEdit(){
-    const m=document.getElementById('modal');
-    if(!m||!m.classList.contains('open'))return false;
-    const t=(document.getElementById('modalTitle')?.textContent||'').trim();
-    return t==='Okul Nöbeti Ekle'||t==='Okul Nöbetini Düzenle';
-  }
-  function syncDutyLock(){
-    const on=isDutyEdit();
-    document.documentElement.classList.toggle('mm-duty-modal-lock',on);
-    document.body.classList.toggle('mm-duty-modal-lock',on);
-    if(on){try{window.scrollTo(0,0)}catch(e){}}
-  }
-  function start(){
-    const m=document.getElementById('modal');
-    if(m)new MutationObserver(()=>requestAnimationFrame(syncDutyLock)).observe(m,{attributes:true,attributeFilter:['class'],subtree:true,childList:true,characterData:true});
-    syncDutyLock();
-  }
-  /* iOS: modal gövdesindeki pan-y serbest, modal dışındaki hareket arka sayfaya geçmez. */
-  document.addEventListener('touchmove',function(e){
-    if(!document.body.classList.contains('mm-duty-modal-lock'))return;
-    const target=e.target;
-    if(target&&target.closest&&target.closest('#modal.open .modal-body'))return;
-    e.preventDefault();
-  },{passive:false,capture:true});
-  const oldOpenDutyDay=window.openDutyDay;
-  if(typeof oldOpenDutyDay==='function')window.openDutyDay=function(){const r=oldOpenDutyDay.apply(this,arguments);setTimeout(syncDutyLock,0);return r};
-  const oldClose=window.closeModal;
-  if(typeof oldClose==='function')window.closeModal=function(){document.documentElement.classList.remove('mm-duty-modal-lock');document.body.classList.remove('mm-duty-modal-lock');return oldClose.apply(this,arguments)};
-  /* Görünen sürüm rozetini bu paketle eşitle. */
+  const VERSION='v7.8.124'; let lockedY=0;
+  function isDutyEdit(){const m=document.getElementById('modal');if(!m||!m.classList.contains('open'))return false;const t=(document.getElementById('modalTitle')?.textContent||'').trim();return t==='Okul Nöbeti Ekle'||t==='Okul Nöbetini Düzenle'}
+  function lock(){if(document.body.classList.contains('mm-duty-modal-lock'))return;lockedY=window.scrollY||0;document.documentElement.classList.add('mm-duty-modal-lock');document.body.classList.add('mm-duty-modal-lock');document.body.style.top=(-lockedY)+'px'}
+  function unlock(){if(!document.body.classList.contains('mm-duty-modal-lock'))return;document.documentElement.classList.remove('mm-duty-modal-lock');document.body.classList.remove('mm-duty-modal-lock');document.body.style.top='';try{window.scrollTo(0,lockedY)}catch(e){}}
+  function sync(){isDutyEdit()?lock():unlock()}
+  function start(){const m=document.getElementById('modal');if(m)new MutationObserver(()=>requestAnimationFrame(sync)).observe(m,{attributes:true,attributeFilter:['class'],subtree:true,childList:true,characterData:true});sync()}
+  document.addEventListener('touchmove',function(e){if(!document.body.classList.contains('mm-duty-modal-lock'))return;const box=e.target&&e.target.closest?e.target.closest('#modal .modal-box'):null;if(!box){e.preventDefault();return}const max=box.scrollHeight-box.clientHeight;if(max<=1){e.preventDefault();return}},{passive:false,capture:true});
+  const oldOpenDutyDay=window.openDutyDay;if(typeof oldOpenDutyDay==='function')window.openDutyDay=function(){const r=oldOpenDutyDay.apply(this,arguments);setTimeout(sync,0);return r};
+  const oldClose=window.closeModal;if(typeof oldClose==='function')window.closeModal=function(){unlock();return oldClose.apply(this,arguments)};
   function versionBadge(){document.querySelectorAll('.premium-brand .tiny').forEach(x=>{if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION})}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{start();versionBadge()},{once:true});else{start();versionBadge()}
 })();
