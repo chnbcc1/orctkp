@@ -2504,7 +2504,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.114</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.115</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2696,7 +2696,7 @@ function openDocumentAssistant(origin=""){
   window.__docAssistantOrigin=String(origin||"");
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.8.114 · Belge Üretim Merkezi · çevrimdışı";
+  el("modalSubtitle").textContent="v7.8.115 · Belge Üretim Merkezi · çevrimdışı";
   const teacherFileReturn=window.__docAssistantOrigin==="teacherFile"?`<div class="teacher-file-return-card"><button type="button" class="secondary" onclick="teacherFileReturnFromAssistant()">← Öğretmen Dosyasına Dön</button></div>`:"";
   el("modalBody").innerHTML=`${teacherFileReturn}
     <div class="doc-assistant-tools887">
@@ -4750,7 +4750,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.114";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.115";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -8120,7 +8120,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.114",
+    appVersion:"v7.8.115",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -8133,7 +8133,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.114",
+    appVersion:"v7.8.115",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -9308,7 +9308,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   }
   window.mmRecordBackup884=function(backup,kind){
     try{localStorage.setItem(HEALTH_KEY,JSON.stringify({
-      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.114',
+      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.115',
       stats:stats(backup?.state||state),
       archives:Array.isArray(backup?.schoolYearArchives)?backup.schoolYearArchives.length:loadSchoolYearArchives().length
     }))}catch(e){console.warn('Yedek sağlık kaydı yazılamadı',e)}
@@ -9434,7 +9434,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     el('modalTitle').textContent='Sistem Sağlığı';el('modalSubtitle').textContent='Salt okunur veri kontrolü, depolama durumu ve yedek doğrulama.';
     el('modalBody').innerHTML=`<div class="mm-health-status884 ${bs.cls}"><span class="dot"></span><div><b>${esc(bs.text)}</b><div class="tiny" style="margin-top:3px">Bu ekran mevcut öğrenci verilerini değiştirmez.</div></div></div>
       <div class="mm-health-grid884">
-        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.114</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
+        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.115</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
         <div class="mm-health-card884"><span>SINIF</span><b>${st.classes}</b></div><div class="mm-health-card884"><span>ÖĞRENCİ</span><b>${st.students}</b></div><div class="mm-health-card884"><span>ÖDEV</span><b>${st.homeworks}</b></div>
         <div class="mm-health-card884"><span>DENEME</span><b>${st.trials}</b></div><div class="mm-health-card884"><span>VELİ GÖRÜŞMESİ</span><b>${st.meetings}</b></div><div class="mm-health-card884"><span>REHBERLİK KAYDI</span><b>${st.guidance}</b></div>
         <div class="mm-health-card884"><span>YEREL VERİ</span><b>${fmtBytes(localBytes())}</b></div><div class="mm-health-card884"><span>ÖDEV GÖRSELİ</span><b id="mmHealthIDB884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA TOPLAM / ÜST SINIR</span><b id="mmHealthStorage884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA ÖNBELLEĞİ</span><b id="mmHealthCaches886">Kontrol…</b></div>
@@ -9444,7 +9444,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
         <label class="btn secondary" style="display:block;width:100%;box-sizing:border-box;text-align:center;cursor:pointer">🔍 Yedek Dosyasını Kontrol Et<input type="file" accept=".json,application/json" hidden onchange="validateBackupFile884(event)"></label>
         <div id="mmBackupCheck884" class="mm-backup-check884">Henüz bir yedek dosyası kontrol edilmedi.</div></div>
       <div class="card" style="padding:12px;margin-top:10px"><b>PWA Önbellek Bakımı</b>
-        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.114</b> ve önceki stabil sürüm <b>v7.8.113</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
+        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.115</b> ve önceki stabil sürüm <b>v7.8.114</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
         <button class="secondary" style="width:100%" onclick="cleanupOldPWACaches886()">🧹 Eski PWA Önbelleklerini Temizle</button>
         <div id="mmCacheMaintenance886" class="tiny" style="margin-top:8px;line-height:1.45">Önbellekler kontrol ediliyor…</div>
       </div>`;
@@ -9458,7 +9458,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   };
 
   window.exportVerifiedBackup884=function(){
-    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.114',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
+    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.115',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
     downloadBlob(JSON.stringify(backup,null,2),'MualliMate_DOGRULANMIS_TAM_YEDEK.json','application/json');mmRecordBackup884(backup,'doğrulanmış tam yedek');setTimeout(()=>openSystemHealth884(),80);
   };
 
@@ -9782,8 +9782,8 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 </style>
 <script id="v7886-cache-maintenance">
 (function(){
-  const CURRENT_CACHE_886='ots-v7.8.114-optical-deskew-edge-corner';
-  const PREVIOUS_STABLE_CACHE_886='ots-v7.8.113-optical-number-corner-adaptive';
+  const CURRENT_CACHE_886='ots-v7.8.115-optical-number-fine-refine';
+  const PREVIOUS_STABLE_CACHE_886='ots-v7.8.114-optical-deskew-edge-corner';
   const KEEP_CACHES_886=new Set([CURRENT_CACHE_886,PREVIOUS_STABLE_CACHE_886]);
 
   async function getMualliMateCaches886(){
@@ -9802,7 +9802,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       if(countHost) countHost.textContent=`${keys.length} cache · ${removable.length} eski`;
       if(noteHost){
         if(removable.length){
-          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.114${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.113':' (v7.8.113 cihazda bulunamadı)'}`;
+          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.115${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.114':' (v7.8.114 cihazda bulunamadı)'}`;
         }else{
           noteHost.innerHTML='<span class="mm-cache-ok886">✓ Temizlenecek eski MualliMate önbelleği yok.</span><br>Mevcut ve önceki stabil sürüm korunuyor.';
         }
@@ -9828,7 +9828,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     const versions=info.removable.map(k=>k.replace(/^ots-/,'')).join('\n• ');
     const ok=confirm(
       'Yalnızca eski MualliMate PWA önbellekleri silinecek.\n\n'+
-      'Korunacaklar:\n• v7.8.114 (mevcut sürüm)\n• v7.8.113 (önceki stabil sürüm)\n\n'+
+      'Korunacaklar:\n• v7.8.115 (mevcut sürüm)\n• v7.8.114 (önceki stabil sürüm)\n\n'+
       'Silinecek eski önbellekler:\n• '+versions+'\n\n'+
       'Öğrenci verileri, notlar, ödevler, yedekler, arşivler ve IndexedDB etkilenmez.\n\nDevam edilsin mi?'
     );
@@ -9840,7 +9840,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       }catch(e){ failed++; }
     }
     await refreshPWACacheStatus886();
-    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.114 ve önceki stabil v7.8.113 önbellekleri korundu.`);
+    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.115 ve önceki stabil v7.8.114 önbellekleri korundu.`);
   };
 })();
 </script>
@@ -12518,11 +12518,21 @@ function numberCandidate795(img,w,h,H,L,c,dx,dy){
  if(num&&!num.includes('?'))quality+=.75;if(!marked)quality-=2;
  return{reads,num,amb,student,quality,dx,dy}
 }
+/* v7.8.115 — 5 haneli öğrenci no için iki aşamalı adaptif hizalama. Önce hızlı kaba tarama, sonra en iyi birkaç adayın çevresinde 2 px'lik mikro tarama yapılır. Eğik/kesik köşe düzeltmesinden sonra numara alanında kalan yerel kaymayı giderir. */
 function readStudentNumberAdaptive795(img,w,h,H,L,c){
- const base=numberCandidate795(img,w,h,H,L,c,0,0);if(base.student&&!base.amb.length)return base;
- let best=base;
+ const pool=[],seen=new Set();let best=null;
+ const add=(dx,dy)=>{const k=`${Number(dx).toFixed(2)}:${Number(dy).toFixed(2)}`;if(seen.has(k))return null;seen.add(k);const cur=numberCandidate795(img,w,h,H,L,c,dx,dy);pool.push(cur);if(!best||cur.quality>best.quality+.001)best=cur;return cur};
+ add(0,0);
  const dxs=[0,-6,6,-12,12,-18,18],dys=[0,-6,6,-12,12,-15,15,-18.5,18.5,-22,22];
- for(const dx of dxs)for(const dy of dys){if(dx===0&&dy===0)continue;const cur=numberCandidate795(img,w,h,H,L,c,dx,dy);if(cur.quality>best.quality+.015)best=cur}
+ for(const dx of dxs)for(const dy of dys){if(dx===0&&dy===0)continue;add(dx,dy)}
+ /* Sınıftaki gerçek bir öğrenci numarası yakalandıysa eşleşme puanı zaten güçlüdür; yine de kaba taramanın en iyi eşleşmesini kullan. */
+ const matched=pool.filter(x=>x.student&&!x.amb.length).sort((a,b)=>b.quality-a.quality)[0];
+ if(matched&&matched.quality>best.quality-1)return matched;
+ /* Kaba taramadaki farklı yerel tepeleri koru. Aynı bölgedeki adayları çoğaltmak yerine en iyi 4 çekirdeği mikro taramaya al. */
+ const seeds=[];for(const cur of [...pool].sort((a,b)=>b.quality-a.quality)){if(seeds.every(s=>Math.abs(s.dx-cur.dx)>3||Math.abs(s.dy-cur.dy)>5)){seeds.push(cur);if(seeds.length>=4)break}}
+ for(const seed of seeds){for(const ddx of[-4,-2,0,2,4])for(const ddy of[-4,-2,0,2,4])add(seed.dx+ddx,seed.dy+ddy)}
+ const matchedFine=pool.filter(x=>x.student&&!x.amb.length).sort((a,b)=>b.quality-a.quality)[0];
+ if(matchedFine)return matchedFine;
  return best
 }
 async function scanOne795(file,cfg,c){
