@@ -2504,7 +2504,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.117</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.118</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2696,7 +2696,7 @@ function openDocumentAssistant(origin=""){
   window.__docAssistantOrigin=String(origin||"");
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.8.117 · Belge Üretim Merkezi · çevrimdışı";
+  el("modalSubtitle").textContent="v7.8.118 · Belge Üretim Merkezi · çevrimdışı";
   const teacherFileReturn=window.__docAssistantOrigin==="teacherFile"?`<div class="teacher-file-return-card"><button type="button" class="secondary" onclick="teacherFileReturnFromAssistant()">← Öğretmen Dosyasına Dön</button></div>`:"";
   el("modalBody").innerHTML=`${teacherFileReturn}
     <div class="doc-assistant-tools887">
@@ -4750,7 +4750,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.117";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.118";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -8120,7 +8120,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.117",
+    appVersion:"v7.8.118",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -8133,7 +8133,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.117",
+    appVersion:"v7.8.118",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -9308,7 +9308,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   }
   window.mmRecordBackup884=function(backup,kind){
     try{localStorage.setItem(HEALTH_KEY,JSON.stringify({
-      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.117',
+      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.118',
       stats:stats(backup?.state||state),
       archives:Array.isArray(backup?.schoolYearArchives)?backup.schoolYearArchives.length:loadSchoolYearArchives().length
     }))}catch(e){console.warn('Yedek sağlık kaydı yazılamadı',e)}
@@ -9434,7 +9434,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     el('modalTitle').textContent='Sistem Sağlığı';el('modalSubtitle').textContent='Salt okunur veri kontrolü, depolama durumu ve yedek doğrulama.';
     el('modalBody').innerHTML=`<div class="mm-health-status884 ${bs.cls}"><span class="dot"></span><div><b>${esc(bs.text)}</b><div class="tiny" style="margin-top:3px">Bu ekran mevcut öğrenci verilerini değiştirmez.</div></div></div>
       <div class="mm-health-grid884">
-        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.117</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
+        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.118</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
         <div class="mm-health-card884"><span>SINIF</span><b>${st.classes}</b></div><div class="mm-health-card884"><span>ÖĞRENCİ</span><b>${st.students}</b></div><div class="mm-health-card884"><span>ÖDEV</span><b>${st.homeworks}</b></div>
         <div class="mm-health-card884"><span>DENEME</span><b>${st.trials}</b></div><div class="mm-health-card884"><span>VELİ GÖRÜŞMESİ</span><b>${st.meetings}</b></div><div class="mm-health-card884"><span>REHBERLİK KAYDI</span><b>${st.guidance}</b></div>
         <div class="mm-health-card884"><span>YEREL VERİ</span><b>${fmtBytes(localBytes())}</b></div><div class="mm-health-card884"><span>ÖDEV GÖRSELİ</span><b id="mmHealthIDB884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA TOPLAM / ÜST SINIR</span><b id="mmHealthStorage884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA ÖNBELLEĞİ</span><b id="mmHealthCaches886">Kontrol…</b></div>
@@ -9444,7 +9444,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
         <label class="btn secondary" style="display:block;width:100%;box-sizing:border-box;text-align:center;cursor:pointer">🔍 Yedek Dosyasını Kontrol Et<input type="file" accept=".json,application/json" hidden onchange="validateBackupFile884(event)"></label>
         <div id="mmBackupCheck884" class="mm-backup-check884">Henüz bir yedek dosyası kontrol edilmedi.</div></div>
       <div class="card" style="padding:12px;margin-top:10px"><b>PWA Önbellek Bakımı</b>
-        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.117</b> ve önceki stabil sürüm <b>v7.8.116</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
+        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.118</b> ve önceki stabil sürüm <b>v7.8.116</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
         <button class="secondary" style="width:100%" onclick="cleanupOldPWACaches886()">🧹 Eski PWA Önbelleklerini Temizle</button>
         <div id="mmCacheMaintenance886" class="tiny" style="margin-top:8px;line-height:1.45">Önbellekler kontrol ediliyor…</div>
       </div>`;
@@ -9458,7 +9458,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   };
 
   window.exportVerifiedBackup884=function(){
-    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.117',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
+    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.118',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
     downloadBlob(JSON.stringify(backup,null,2),'MualliMate_DOGRULANMIS_TAM_YEDEK.json','application/json');mmRecordBackup884(backup,'doğrulanmış tam yedek');setTimeout(()=>openSystemHealth884(),80);
   };
 
@@ -9782,7 +9782,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 </style>
 <script id="v7886-cache-maintenance">
 (function(){
-  const CURRENT_CACHE_886='ots-v7.8.117-test-question-analysis';
+  const CURRENT_CACHE_886='ots-v7.8.118-test-analysis-report-ui';
   const PREVIOUS_STABLE_CACHE_886='ots-v7.8.116-optical-number-frame-phase';
   const KEEP_CACHES_886=new Set([CURRENT_CACHE_886,PREVIOUS_STABLE_CACHE_886]);
 
@@ -9802,7 +9802,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       if(countHost) countHost.textContent=`${keys.length} cache · ${removable.length} eski`;
       if(noteHost){
         if(removable.length){
-          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.117${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.116':' (v7.8.116 cihazda bulunamadı)'}`;
+          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.118${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.116':' (v7.8.116 cihazda bulunamadı)'}`;
         }else{
           noteHost.innerHTML='<span class="mm-cache-ok886">✓ Temizlenecek eski MualliMate önbelleği yok.</span><br>Mevcut ve önceki stabil sürüm korunuyor.';
         }
@@ -9828,7 +9828,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     const versions=info.removable.map(k=>k.replace(/^ots-/,'')).join('\n• ');
     const ok=confirm(
       'Yalnızca eski MualliMate PWA önbellekleri silinecek.\n\n'+
-      'Korunacaklar:\n• v7.8.117 (mevcut sürüm)\n• v7.8.116 (önceki stabil sürüm)\n\n'+
+      'Korunacaklar:\n• v7.8.118 (mevcut sürüm)\n• v7.8.116 (önceki stabil sürüm)\n\n'+
       'Silinecek eski önbellekler:\n• '+versions+'\n\n'+
       'Öğrenci verileri, notlar, ödevler, yedekler, arşivler ve IndexedDB etkilenmez.\n\nDevam edilsin mi?'
     );
@@ -9840,7 +9840,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       }catch(e){ failed++; }
     }
     await refreshPWACacheStatus886();
-    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.117 ve önceki stabil v7.8.116 önbellekleri korundu.`);
+    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.118 ve önceki stabil v7.8.116 önbellekleri korundu.`);
   };
 })();
 </script>
@@ -12618,19 +12618,19 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 
 
 
-<!-- v7.8.117 — Test ödevi soru bazlı analiz ve rapor -->
+<!-- v7.8.118 — Test ödevi soru bazlı analiz ve rapor -->
 <style id="v78117-test-analysis-style">
 .mm-analysis-actions817{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}.mm-analysis-actions817 button{flex:1 1 150px}
 .mm-analysis-note817{padding:12px 14px;border:1px solid #d8cda9;border-radius:14px;background:#fffaf0;color:#52655e;line-height:1.45;margin-bottom:12px}
 .mm-analysis-summary817{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:12px}.mm-analysis-stat817{background:#fffdf8;border:1px solid #d8cda9;border-radius:14px;padding:12px;text-align:center}.mm-analysis-stat817 b{display:block;font-size:24px;color:#164e3f}.mm-analysis-stat817 span{display:block;font-size:11px;color:#64748b;margin-top:3px;font-weight:800}
 .mm-analysis-top817{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}.mm-analysis-box817{background:#fffdf8;border:1px solid #d8cda9;border-radius:16px;padding:12px}.mm-analysis-box817 h3{font-size:14px;margin:0 0 9px;color:#153c35}.mm-analysis-rank817{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-top:1px solid #eee5d2}.mm-analysis-rank817:first-of-type{border-top:0}.mm-analysis-rank817 b{font-size:13px}.mm-analysis-rank817 span{font-size:11px;color:#64748b;text-align:right}
-.mm-analysis-table-wrap817{overflow:auto;border:1px solid #d8cda9;border-radius:16px;background:#fffdf8}.mm-analysis-table817{width:100%;border-collapse:collapse;min-width:560px}.mm-analysis-table817 th,.mm-analysis-table817 td{padding:9px 8px;border-bottom:1px solid #ece5d4;text-align:center;font-size:12px}.mm-analysis-table817 th{position:sticky;top:0;background:#f1ead8;color:#36534b;z-index:1}.mm-analysis-table817 td:first-child,.mm-analysis-table817 th:first-child{text-align:left}.mm-analysis-table817 tr:nth-child(even) td{background:#fbf7ed}.mm-analysis-qbtn817{border:0!important;background:transparent!important;color:#0b6b57!important;padding:2px!important;font-weight:900!important;text-decoration:underline;box-shadow:none!important;min-width:0!important}
+.mm-analysis-table-wrap817{overflow:hidden;border:1px solid #d8cda9;border-radius:16px;background:#fffdf8}.mm-analysis-table817{width:100%;border-collapse:collapse;table-layout:fixed}.mm-analysis-table817 th,.mm-analysis-table817 td{padding:9px 5px;border-bottom:1px solid #ece5d4;text-align:center;font-size:12px;white-space:nowrap}.mm-analysis-table817 th{position:sticky;top:0;background:#f1ead8;color:#36534b;z-index:1}.mm-analysis-table817 th:nth-child(1),.mm-analysis-table817 td:nth-child(1){width:36%;text-align:left}.mm-analysis-table817 th:nth-child(2),.mm-analysis-table817 td:nth-child(2),.mm-analysis-table817 th:nth-child(3),.mm-analysis-table817 td:nth-child(3),.mm-analysis-table817 th:nth-child(4),.mm-analysis-table817 td:nth-child(4){width:12%}.mm-analysis-table817 th:nth-child(5),.mm-analysis-table817 td:nth-child(5){width:28%}.mm-analysis-table817 tr:nth-child(even) td{background:#fbf7ed}.mm-analysis-qbtn817{border:0!important;background:transparent!important;color:#0b6b57!important;padding:2px!important;font-weight:900!important;text-decoration:underline;box-shadow:none!important;min-width:0!important;max-width:100%!important;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left!important}
 .mm-analysis-students817{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mm-analysis-list817{border:1px solid #d8cda9;border-radius:14px;background:#fffdf8;padding:12px}.mm-analysis-list817 h3{margin:0 0 8px;font-size:14px}.mm-analysis-list817 div{padding:7px 0;border-top:1px solid #eee5d2;font-size:12px}.mm-analysis-list817 div:first-of-type{border-top:0}
-@media(max-width:700px){.mm-analysis-summary817{grid-template-columns:repeat(3,1fr)}.mm-analysis-top817{grid-template-columns:1fr}.mm-analysis-students817{grid-template-columns:1fr}.mm-analysis-stat817{padding:9px 5px}.mm-analysis-stat817 b{font-size:20px}.mm-analysis-stat817 span{font-size:9px}}
+@media(max-width:700px){.mm-analysis-summary817{grid-template-columns:repeat(3,1fr)}.mm-analysis-top817{grid-template-columns:1fr}.mm-analysis-students817{grid-template-columns:1fr}.mm-analysis-stat817{padding:9px 5px}.mm-analysis-stat817 b{font-size:20px}.mm-analysis-stat817 span{font-size:9px}.mm-analysis-table817 th,.mm-analysis-table817 td{padding:8px 2px;font-size:11px}.mm-analysis-table817 th:nth-child(1),.mm-analysis-table817 td:nth-child(1){width:34%}.mm-analysis-table817 th:nth-child(2),.mm-analysis-table817 td:nth-child(2),.mm-analysis-table817 th:nth-child(3),.mm-analysis-table817 td:nth-child(3),.mm-analysis-table817 th:nth-child(4),.mm-analysis-table817 td:nth-child(4){width:11%}.mm-analysis-table817 th:nth-child(5),.mm-analysis-table817 td:nth-child(5){width:33%}.mm-analysis-qbtn817{font-size:11px!important}}
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.117';
+ const VERSION='v7.8.118';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -12657,23 +12657,43 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
  window.openTestAnalysis817=function(hid){
    const x=getCtx(hid);if(!x||!isTest817(x.h))return alert('Test ödevi bulunamadı.');if(typeof modalPushCurrent==='function')modalPushCurrent();const{c,h}=x,data=analysis817(h,c);el('modalTitle').textContent='📊 Test Analizi';el('modalSubtitle').textContent=`${c.name} · ${h.name}`;
    const noData=!data.rows.length;
-   el('modalBody').innerHTML=`<div class="mm-analysis-note817">Soru analizi yalnız <b>soru bazlı optik verisi bulunan</b> öğrencileri kullanır. Toplam doğru/yanlış/boş elle girilmiş öğrenciler, hangi soruyu yanlış yaptığı bilinmediği için soru sıralamasına katılmaz.${data.included<data.entered?` Şu anda ${data.entered-data.included} sonuç yalnız toplam puan olarak kayıtlı.`:''}</div><div class="mm-analysis-summary817"><div class="mm-analysis-stat817"><b>${data.included}</b><span>Analize Dahil</span></div><div class="mm-analysis-stat817"><b>${data.entered}</b><span>Sonuç Girilen</span></div><div class="mm-analysis-stat817"><b>${data.rows.length}</b><span>Analiz Edilen Soru</span></div></div>${noData?`<div class="empty card">Henüz soru bazlı analiz verisi yok. Bu testi optik okuyup sonuçlara aktardığınızda analiz otomatik oluşur.</div>`:`<div class="mm-analysis-top817">${rankHtml817('🔴 En Çok Yanlış Yapılan 3',data.topWrong,'wrong',data)}${rankHtml817('🟠 En Çok Boş Bırakılan 3',data.topBlank,'blank',data)}${rankHtml817('📌 En Çok Zorlanılan 3',data.topDifficult,'difficult',data)}</div><div class="mm-analysis-note817"><b>Otomatik özet:</b> ${esc(summaryText817(data)||'Belirgin yanlış veya boş yoğunluğu oluşmadı.')}</div><div class="mm-analysis-table-wrap817"><table class="mm-analysis-table817"><thead><tr><th>Soru</th><th>Doğru</th><th>Yanlış</th><th>Boş</th><th>Başarı</th></tr></thead><tbody>${data.rows.map(q=>`<tr><td><button class="mm-analysis-qbtn817" onclick="openTestQuestionDetail817('${hid}','${encodeURIComponent(q.subject)}',${q.question})">${esc(qLabel817(q,data))}</button></td><td>${q.correct}</td><td>${q.wrong}</td><td>${q.blank}</td><td>%${q.success}</td></tr>`).join('')}</tbody></table></div>`}<div class="mm-analysis-actions817" style="margin-top:12px"><button ${noData?'disabled':''} onclick="exportTestAnalysisPDF817('${hid}')">📄 PDF Raporu</button><button class="secondary" ${noData?'disabled':''} onclick="exportTestAnalysisJPEG817('${hid}')">🖼️ JPEG Raporu</button></div>`;el('modal').classList.add('open');if(typeof modalUpdateBackButton==='function')modalUpdateBackButton()
+   el('modalBody').innerHTML=`<div class="mm-analysis-note817">Soru analizi yalnız <b>soru bazlı optik verisi bulunan</b> öğrencileri kullanır. Toplam doğru/yanlış/boş elle girilmiş öğrenciler, hangi soruyu yanlış yaptığı bilinmediği için soru sıralamasına katılmaz.${data.included<data.entered?` Şu anda ${data.entered-data.included} sonuç yalnız toplam puan olarak kayıtlı.`:''}</div><div class="mm-analysis-summary817"><div class="mm-analysis-stat817"><b>${data.included}</b><span>Analize Dahil</span></div><div class="mm-analysis-stat817"><b>${data.entered}</b><span>Sonuç Girilen</span></div><div class="mm-analysis-stat817"><b>${data.rows.length}</b><span>Analiz Edilen Soru</span></div></div>${noData?`<div class="empty card">Henüz soru bazlı analiz verisi yok. Bu testi optik okuyup sonuçlara aktardığınızda analiz otomatik oluşur.</div>`:`<div class="mm-analysis-top817">${rankHtml817('🔴 En Çok Yanlış Yapılan 3',data.topWrong,'wrong',data)}${rankHtml817('🟠 En Çok Boş Bırakılan 3',data.topBlank,'blank',data)}${rankHtml817('📌 En Çok Zorlanılan 3',data.topDifficult,'difficult',data)}</div><div class="mm-analysis-note817"><b>Otomatik özet:</b> ${esc(summaryText817(data)||'Belirgin yanlış veya boş yoğunluğu oluşmadı.')}</div><div class="mm-analysis-table-wrap817"><table class="mm-analysis-table817"><thead><tr><th>Soru</th><th>D</th><th>Y</th><th>B</th><th>Başarı</th></tr></thead><tbody>${data.rows.map(q=>`<tr><td><button class="mm-analysis-qbtn817" onclick="openTestQuestionDetail817('${hid}','${encodeURIComponent(q.subject)}',${q.question})">${esc(qLabel817(q,data))}</button></td><td>${q.correct}</td><td>${q.wrong}</td><td>${q.blank}</td><td>%${q.success}</td></tr>`).join('')}</tbody></table></div>`}<div class="mm-analysis-actions817" style="margin-top:12px"><button ${noData?'disabled':''} onclick="exportTestAnalysisPDF817('${hid}')">📄 PDF Raporu</button><button class="secondary" ${noData?'disabled':''} onclick="exportTestAnalysisJPEG817('${hid}')">🖼️ JPEG Raporu</button></div>`;el('modal').classList.add('open');if(typeof modalUpdateBackButton==='function')modalUpdateBackButton()
  };
  window.openTestQuestionDetail817=function(hid,subEnc,qnum){const x=getCtx(hid);if(!x)return;const data=analysis817(x.h,x.c),subject=decodeURIComponent(subEnc),q=data.rows.find(r=>r.subject===subject&&Number(r.question)===Number(qnum));if(!q)return;if(typeof modalPushCurrent==='function')modalPushCurrent();const names=ids=>ids.map(id=>{const s=data.studentById.get(String(id));return s?`${s.number?esc(s.number)+' - ':''}${esc(s.name)}`:'Öğrenci'});const list=(title,ids)=>`<div class="mm-analysis-list817"><h3>${title} · ${ids.length}</h3>${ids.length?names(ids).map(n=>`<div>${n}</div>`).join(''):'<div class="tiny">Öğrenci yok.</div>'}</div>`;el('modalTitle').textContent=qLabel817(q,data);el('modalSubtitle').textContent=`${x.c.name} · ${x.h.name} · Başarı %${q.success}`;el('modalBody').innerHTML=`<div class="mm-analysis-summary817"><div class="mm-analysis-stat817"><b>${q.correct}</b><span>Doğru</span></div><div class="mm-analysis-stat817"><b>${q.wrong}</b><span>Yanlış</span></div><div class="mm-analysis-stat817"><b>${q.blank}</b><span>Boş</span></div></div><div class="mm-analysis-students817">${list('❌ Yanlış Yapanlar',q.wrongIds)}${list('○ Boş Bırakanlar',q.blankIds)}</div>`;el('modal').classList.add('open');if(typeof modalUpdateBackButton==='function')modalUpdateBackButton()};
  function drawRound817(ctx,x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect?ctx.roundRect(x,y,w,h,r):(ctx.rect(x,y,w,h));ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1.5;ctx.stroke()}}
  function textLines817(ctx,text,x,y,maxW,lineH,maxLines=3){const words=String(text||'').split(/\s+/);let line='',lines=[];for(const word of words){const t=line?line+' '+word:word;if(ctx.measureText(t).width>maxW&&line){lines.push(line);line=word}else line=t}if(line)lines.push(line);if(lines.length>maxLines){lines=lines.slice(0,maxLines);let last=lines[maxLines-1];while(last&&ctx.measureText(last+'…').width>maxW)last=last.slice(0,-1);lines[maxLines-1]=last+'…'}lines.forEach((l,i)=>ctx.fillText(l,x,y+i*lineH));return lines.length*lineH}
+ function drawReportHeader818(x,w,margin,c,h,data,subtitleExtra=''){
+   x.fillStyle='#064e3b';x.fillRect(0,0,w,165);x.fillStyle='#d6b45b';x.fillRect(0,165,w,5);
+   x.fillStyle='#fff';x.font='bold 32px Arial';x.textAlign='left';x.fillText('TEST ANALİZ RAPORU',margin,56);
+   x.font='bold 20px Arial';x.fillStyle='#eef6f2';x.fillText(`Sınıf: ${c.name}  •  Test: ${h.name}`,margin,93);
+   x.font='16px Arial';x.fillStyle='#dbe7e2';x.fillText(`${Number(h.questionCount||0)} soru  •  ${data.included} öğrenci analize dahil${subtitleExtra?`  •  ${subtitleExtra}`:''}`,margin,124);x.textAlign='left';
+ }
+ function drawAnalysisTop818(x,w,margin,data,by){
+   const gap=14,boxes=[['En Çok Yanlış',data.topWrong,'wrong'],['En Çok Boş',data.topBlank,'blank'],['En Çok Zorlanılan',data.topDifficult,'difficult']],bw=(w-2*margin-gap*2)/3,bh=230;
+   boxes.forEach((b,i)=>{const xx=margin+i*(bw+gap);drawRound817(x,xx,by,bw,bh,16,'#fffdf8','#d8cda9');x.fillStyle='#153c35';x.font='bold 18px Arial';x.fillText(b[0],xx+16,by+30);x.font='15px Arial';(b[1].length?b[1]:[]).forEach((q,j)=>{x.fillStyle='#273c36';x.font='bold 15px Arial';x.fillText(`${j+1}. ${qLabel817(q,data)}`,xx+16,by+68+j*48);x.fillStyle='#64748b';x.font='13px Arial';x.fillText(`${q[b[2]]} öğrenci · %${q.total?Math.round(q[b[2]]*100/q.total):0}`,xx+16,by+88+j*48)});if(!b[1].length){x.fillStyle='#64748b';x.font='14px Arial';x.fillText('Kayıt yok',xx+16,by+70)}});
+ }
  function makeAnalysisCanvas817(c,h,data){
-   const rows=data.rows,cols=rows.length>70?2:1,perCol=Math.ceil(rows.length/cols),w=1240,margin=64,head=245,topBox=300,summary=110,rowH=42,tableTop=head+summary+topBox+90,height=Math.max(1200,tableTop+perCol*rowH+100),cv=document.createElement('canvas');cv.width=w;cv.height=height;const x=cv.getContext('2d');x.fillStyle='#f4f1e7';x.fillRect(0,0,w,height);x.fillStyle='#064e3b';x.fillRect(0,0,w,160);x.fillStyle='#d6b45b';x.fillRect(0,160,w,5);x.fillStyle='#fff';x.font='bold 31px Arial';x.fillText(`${c.name} SINIFI TEST ANALİZ RAPORU`,margin,57);x.font='bold 24px Arial';x.textAlign='right';x.fillText(h.name,w-margin,56);x.font='16px Arial';x.fillStyle='#dbe7e2';x.fillText(`${Number(h.questionCount||0)} soru · ${data.included} öğrenci soru analizine dahil`,w-margin,91);x.textAlign='left';
-   const stats=[['Analize Dahil',data.included],['Sonuç Girilen',data.entered],['Analiz Edilen Soru',data.rows.length]],gap=14,cw=(w-2*margin-gap*2)/3;stats.forEach((a,i)=>{const xx=margin+i*(cw+gap);drawRound817(x,xx,188,cw,82,16,'#fffdf8','#d8cda9');x.textAlign='center';x.fillStyle='#164e3f';x.font='bold 28px Arial';x.fillText(String(a[1]),xx+cw/2,224);x.fillStyle='#64748b';x.font='bold 13px Arial';x.fillText(a[0],xx+cw/2,250)});x.textAlign='left';
-   const boxes=[['En Çok Yanlış',data.topWrong,'wrong'],['En Çok Boş',data.topBlank,'blank'],['En Çok Zorlanılan',data.topDifficult,'difficult']],bw=(w-2*margin-gap*2)/3,by=300,bh=230;boxes.forEach((b,i)=>{const xx=margin+i*(bw+gap);drawRound817(x,xx,by,bw,bh,16,'#fffdf8','#d8cda9');x.fillStyle='#153c35';x.font='bold 18px Arial';x.fillText(b[0],xx+16,by+30);x.font='15px Arial';(b[1].length?b[1]:[]).forEach((q,j)=>{x.fillStyle='#273c36';x.font='bold 15px Arial';x.fillText(`${j+1}. ${qLabel817(q,data)}`,xx+16,by+68+j*48);x.fillStyle='#64748b';x.font='13px Arial';x.fillText(`${q[b[2]]} öğrenci · %${q.total?Math.round(q[b[2]]*100/q.total):0}`,xx+16,by+88+j*48)});if(!b[1].length){x.fillStyle='#64748b';x.font='14px Arial';x.fillText('Kayıt yok',xx+16,by+70)}});
-   x.fillStyle='#52655e';x.font='15px Arial';textLines817(x,summaryText817(data),margin,560,w-2*margin,21,3);
-   const colGap=28,tw=(w-2*margin-(cols-1)*colGap)/cols;for(let col=0;col<cols;col++){const sx=margin+col*(tw+colGap),start=col*perCol,end=Math.min(rows.length,start+perCol);x.fillStyle='#e9e0c9';x.fillRect(sx,tableTop,tw,rowH);x.fillStyle='#36534b';x.font='bold 13px Arial';const xs=[sx+10,sx+tw*.52,sx+tw*.66,sx+tw*.79,sx+tw*.91];['Soru','D','Y','B','Başarı'].forEach((t,i)=>{x.textAlign=i?'center':'left';x.fillText(t,xs[i],tableTop+27)});for(let i=start;i<end;i++){const q=rows[i],yy=tableTop+rowH+(i-start)*rowH;x.fillStyle=(i-start)%2?'#fffdf8':'#f9f4e8';x.fillRect(sx,yy,tw,rowH);x.strokeStyle='#ece5d4';x.beginPath();x.moveTo(sx,yy+rowH);x.lineTo(sx+tw,yy+rowH);x.stroke();x.fillStyle='#263d36';x.font='13px Arial';x.textAlign='left';let lab=qLabel817(q,data);if(lab.length>29)lab=lab.slice(0,28)+'…';x.fillText(lab,xs[0],yy+27);x.textAlign='center';x.fillText(String(q.correct),xs[1],yy+27);x.fillText(String(q.wrong),xs[2],yy+27);x.fillText(String(q.blank),xs[3],yy+27);x.fillText('%'+q.success,xs[4],yy+27)}}x.textAlign='left';x.fillStyle='#64748b';x.font='12px Arial';x.fillText(`MualliMate+ ${VERSION} · Soru bazlı analiz yalnız optik verisi bulunan öğrencileri içerir.`,margin,height-35);return cv
+   const rows=data.rows,cols=rows.length>70?2:1,perCol=Math.ceil(rows.length/cols),w=1240,margin=64,rowH=42,tableTop=690,height=Math.max(1200,tableTop+perCol*rowH+100),cv=document.createElement('canvas');cv.width=w;cv.height=height;const x=cv.getContext('2d');x.fillStyle='#f4f1e7';x.fillRect(0,0,w,height);drawReportHeader818(x,w,margin,c,h,data,'Ayrıntılı rapor');
+   const stats=[['Analize Dahil',data.included],['Sonuç Girilen',data.entered],['Analiz Edilen Soru',data.rows.length]],gap=14,cw=(w-2*margin-gap*2)/3;stats.forEach((a,i)=>{const xx=margin+i*(cw+gap);drawRound817(x,xx,192,cw,82,16,'#fffdf8','#d8cda9');x.textAlign='center';x.fillStyle='#164e3f';x.font='bold 28px Arial';x.fillText(String(a[1]),xx+cw/2,228);x.fillStyle='#64748b';x.font='bold 13px Arial';x.fillText(a[0],xx+cw/2,254)});x.textAlign='left';
+   drawAnalysisTop818(x,w,margin,data,300);
+   x.fillStyle='#52655e';x.font='15px Arial';textLines817(x,summaryText817(data),margin,565,w-2*margin,21,3);
+   const colGap=28,tw=(w-2*margin-(cols-1)*colGap)/cols;for(let col=0;col<cols;col++){const sx=margin+col*(tw+colGap),start=col*perCol,end=Math.min(rows.length,start+perCol);x.fillStyle='#e9e0c9';x.fillRect(sx,tableTop,tw,rowH);x.fillStyle='#36534b';x.font='bold 13px Arial';const xs=[sx+10,sx+tw*.52,sx+tw*.66,sx+tw*.79,sx+tw*.91];['Soru','D','Y','B','Başarı'].forEach((t,i)=>{x.textAlign=i?'center':'left';x.fillText(t,xs[i],tableTop+27)});for(let i=start;i<end;i++){const q=rows[i],yy=tableTop+rowH+(i-start)*rowH;x.fillStyle=(i-start)%2?'#fffdf8':'#f9f4e8';x.fillRect(sx,yy,tw,rowH);x.strokeStyle='#ece5d4';x.beginPath();x.moveTo(sx,yy+rowH);x.lineTo(sx+tw,yy+rowH);x.stroke();x.fillStyle='#263d36';x.font='13px Arial';x.textAlign='left';let lab=qLabel817(q,data);if(lab.length>29)lab=lab.slice(0,28)+'…';x.fillText(lab,xs[0],yy+27);x.textAlign='center';x.fillText(String(q.correct),xs[1],yy+27);x.fillText(String(q.wrong),xs[2],yy+27);x.fillText(String(q.blank),xs[3],yy+27);x.fillText('%'+q.success,xs[4],yy+27)}}x.textAlign='left';x.fillStyle='#64748b';x.font='12px Arial';x.fillText(`MualliMate+ ${VERSION} · Ayrıntılı soru bazlı test analizi`,margin,height-35);return cv
+ }
+ function makeAnalysisSummaryCanvas818(c,h,data){
+   const problemRows=data.rows.filter(q=>q.wrong>0||q.blank>0),w=1240,margin=64,rowH=48,tableTop=690,height=Math.max(1040,tableTop+(problemRows.length+1)*rowH+105),cv=document.createElement('canvas');cv.width=w;cv.height=height;const x=cv.getContext('2d');x.fillStyle='#f4f1e7';x.fillRect(0,0,w,height);drawReportHeader818(x,w,margin,c,h,data,'Özet rapor');
+   const stats=[['Analize Dahil',data.included],['Sonuç Girilen',data.entered],['Sorunlu Soru',problemRows.length]],gap=14,cw=(w-2*margin-gap*2)/3;stats.forEach((a,i)=>{const xx=margin+i*(cw+gap);drawRound817(x,xx,192,cw,82,16,'#fffdf8','#d8cda9');x.textAlign='center';x.fillStyle='#164e3f';x.font='bold 28px Arial';x.fillText(String(a[1]),xx+cw/2,228);x.fillStyle='#64748b';x.font='bold 13px Arial';x.fillText(a[0],xx+cw/2,254)});x.textAlign='left';
+   drawAnalysisTop818(x,w,margin,data,300);
+   x.fillStyle='#52655e';x.font='15px Arial';textLines817(x,summaryText817(data),margin,565,w-2*margin,21,3);
+   x.fillStyle='#153c35';x.font='bold 19px Arial';x.fillText('Sorunlu Sorular',margin,656);
+   const sx=margin,tw=w-2*margin; x.fillStyle='#e9e0c9';x.fillRect(sx,tableTop,tw,rowH);x.fillStyle='#36534b';x.font='bold 14px Arial';const xs=[sx+14,sx+tw*.52,sx+tw*.65,sx+tw*.78,sx+tw*.91];['Soru','D','Y','B','Başarı'].forEach((t,i)=>{x.textAlign=i?'center':'left';x.fillText(t,xs[i],tableTop+31)});
+   if(problemRows.length){problemRows.forEach((q,i)=>{const yy=tableTop+rowH+i*rowH;x.fillStyle=i%2?'#fffdf8':'#f9f4e8';x.fillRect(sx,yy,tw,rowH);x.strokeStyle='#ece5d4';x.beginPath();x.moveTo(sx,yy+rowH);x.lineTo(sx+tw,yy+rowH);x.stroke();x.fillStyle='#263d36';x.font='14px Arial';x.textAlign='left';let lab=qLabel817(q,data);if(lab.length>36)lab=lab.slice(0,35)+'…';x.fillText(lab,xs[0],yy+31);x.textAlign='center';x.fillText(String(q.correct),xs[1],yy+31);x.fillText(String(q.wrong),xs[2],yy+31);x.fillText(String(q.blank),xs[3],yy+31);x.fillText('%'+q.success,xs[4],yy+31)})}else{x.fillStyle='#64748b';x.font='15px Arial';x.textAlign='left';x.fillText('Yanlış veya boş bırakılan soru yok.',sx+14,tableTop+rowH+31)}
+   x.textAlign='left';x.fillStyle='#64748b';x.font='12px Arial';x.fillText(`MualliMate+ ${VERSION} · Özet test analizi`,margin,height-35);return cv
  }
  async function savePdfCanvas817(cv,name){
    const PW=595.28,PH=841.89,M=22,uw=PW-2*M,uh=PH-2*M,pagePx=Math.floor(cv.width*uh/uw),pages=[];for(let y=0;y<cv.height;y+=pagePx){const sh=Math.min(pagePx,cv.height-y),pc=document.createElement('canvas');pc.width=cv.width;pc.height=sh;const px=pc.getContext('2d');px.fillStyle='#fff';px.fillRect(0,0,pc.width,pc.height);px.drawImage(cv,0,y,cv.width,sh,0,0,cv.width,sh);pages.push(pc)}
    const n=pages.length,obj={},kids=[];obj[1]=asciiBytes('<< /Type /Catalog /Pages 2 0 R >>');for(let i=0;i<n;i++){const imageId=3+i*3,contentId=4+i*3,pageId=5+i*3,data=bytesFromDataURL(pages[i].toDataURL('image/jpeg',.94)),dh=uw*pages[i].height/pages[i].width,py=PH-M-dh,stream=`q\n${uw.toFixed(2)} 0 0 ${dh.toFixed(2)} ${M} ${py.toFixed(2)} cm\n/Im${i} Do\nQ\n`,sb=asciiBytes(stream);obj[imageId]=concatBytes([asciiBytes(`<< /Type /XObject /Subtype /Image /Width ${pages[i].width} /Height ${pages[i].height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${data.length} >>\nstream\n`),data,asciiBytes('\nendstream')]);obj[contentId]=concatBytes([asciiBytes(`<< /Length ${sb.length} >>\nstream\n`),sb,asciiBytes('endstream')]);obj[pageId]=asciiBytes(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im${i} ${imageId} 0 R >> >> /Contents ${contentId} 0 R >>`);kids.push(`${pageId} 0 R`)}obj[2]=asciiBytes(`<< /Type /Pages /Count ${n} /Kids [${kids.join(' ')}] >>`);const maxId=2+n*3,parts=[asciiBytes('%PDF-1.4\n%âãÏÓ\n')],offs=[0];let pos=parts[0].length;for(let id=1;id<=maxId;id++){offs[id]=pos;const b=concatBytes([asciiBytes(`${id} 0 obj\n`),obj[id],asciiBytes('\nendobj\n')]);parts.push(b);pos+=b.length}const xr=pos;let xs=`xref\n0 ${maxId+1}\n0000000000 65535 f \n`;for(let id=1;id<=maxId;id++)xs+=String(offs[id]).padStart(10,'0')+' 00000 n \n';xs+=`trailer\n<< /Size ${maxId+1} /Root 1 0 R >>\nstartxref\n${xr}\n%%EOF`;parts.push(asciiBytes(xs));await saveOutputBlob(new Blob(parts,{type:'application/pdf'}),name,'application/pdf')
  }
- window.exportTestAnalysisJPEG817=async function(hid){const x=getCtx(hid);if(!x)return;const data=analysis817(x.h,x.c);if(!data.rows.length)return alert('Soru bazlı analiz verisi yok.');const cv=makeAnalysisCanvas817(x.c,x.h,data);await downloadCanvasJPEG(cv,`${safe(x.c.name)}_${safe(x.h.name)}_Test_Analizi.jpg`)};
+ window.exportTestAnalysisJPEG817=async function(hid){const x=getCtx(hid);if(!x)return;const data=analysis817(x.h,x.c);if(!data.rows.length)return alert('Soru bazlı analiz verisi yok.');const cv=makeAnalysisSummaryCanvas818(x.c,x.h,data);await downloadCanvasJPEG(cv,`${safe(x.c.name)}_${safe(x.h.name)}_Test_Analizi_Ozet.jpg`)};
  window.exportTestAnalysisPDF817=async function(hid){const x=getCtx(hid);if(!x)return;const data=analysis817(x.h,x.c);if(!data.rows.length)return alert('Soru bazlı analiz verisi yok.');const cv=makeAnalysisCanvas817(x.c,x.h,data);await savePdfCanvas817(cv,`${safe(x.c.name)}_${safe(x.h.name)}_Test_Analizi.pdf`)};
 
  /* Optik sonuç aktarılırken, görselleri değil yalnız C/W/B soru durumlarını sakla. */
