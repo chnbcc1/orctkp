@@ -12631,7 +12631,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.122';
+ const VERSION='v7.8.123';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -12898,6 +12898,72 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
   if(window.visualViewport)visualViewport.addEventListener('resize',sync,{passive:true});
   if(mq.addEventListener)mq.addEventListener('change',sync);else if(mq.addListener)mq.addListener(sync);
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
+</script>
+
+
+
+<!-- v7.8.123 — Yatay ders kartı sabit alan + nöbet modalı iOS kaydırma/bounce kilidi -->
+<style id="v78123-layout-duty-lock">
+@media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  /* Ana ekranın iki satırı viewport içine sabitlenir. Ders sayısı artsa da alt kartları aşağı itemez. */
+  body.mm-landscape-home-lock .layout{height:calc(100dvh - 80px)!important;max-height:calc(100dvh - 80px)!important}
+  body.mm-landscape-home-lock main{height:100%!important;max-height:100%!important;box-sizing:border-box!important}
+  body.mm-landscape-home-lock #mobileHomeDashboard{
+    height:100%!important;max-height:100%!important;
+    grid-template-rows:minmax(0,44%) minmax(0,56%)!important;
+    box-sizing:border-box!important;
+  }
+  body.mm-landscape-home-lock .mm-home-card.mm-lessons{height:100%!important;max-height:100%!important;min-height:0!important;overflow:hidden!important}
+  body.mm-landscape-home-lock .mm-home-card.mm-lessons .mm-next-title,
+  body.mm-landscape-home-lock .mm-home-card.mm-lessons .mm-next-row{font-size:9px!important}
+  body.mm-landscape-home-lock .mm-home-card.mm-lessons .mm-next-row{padding:2px 0!important}
+}
+
+/* Okul nöbeti ekleme/düzenleme formunda modal yerinden sürüklenmez; klavye açıldığında arka sayfa/bounce oluşmaz. */
+html.mm-duty-modal-lock,body.mm-duty-modal-lock{
+  width:100%!important;height:100%!important;max-height:100%!important;
+  overflow:hidden!important;overscroll-behavior:none!important;
+}
+body.mm-duty-modal-lock{position:fixed!important;inset:0!important;margin:0!important;touch-action:none!important}
+body.mm-duty-modal-lock #modal.open{position:fixed!important;inset:0!important;overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}
+body.mm-duty-modal-lock #modal.open .modal-box{overscroll-behavior:none!important;-webkit-overflow-scrolling:auto!important;touch-action:manipulation!important}
+body.mm-duty-modal-lock #modal.open .modal-body{overscroll-behavior:none!important}
+</style>
+<script id="v78123-layout-duty-lock-script">
+(function(){
+  const VERSION='v7.8.123';
+  function isDutyEdit(){
+    const m=document.getElementById('modal');
+    if(!m||!m.classList.contains('open'))return false;
+    const t=(document.getElementById('modalTitle')?.textContent||'').trim();
+    return t==='Okul Nöbeti Ekle'||t==='Okul Nöbetini Düzenle';
+  }
+  function syncDutyLock(){
+    const on=isDutyEdit();
+    document.documentElement.classList.toggle('mm-duty-modal-lock',on);
+    document.body.classList.toggle('mm-duty-modal-lock',on);
+    if(on){try{window.scrollTo(0,0)}catch(e){}}
+  }
+  function start(){
+    const m=document.getElementById('modal');
+    if(m)new MutationObserver(()=>requestAnimationFrame(syncDutyLock)).observe(m,{attributes:true,attributeFilter:['class'],subtree:true,childList:true,characterData:true});
+    syncDutyLock();
+  }
+  /* iOS'ta nöbet formu açıkken parmakla modal/sayfa sürüklenmesini kes; form kontrollerine dokunma devam eder. */
+  document.addEventListener('touchmove',function(e){
+    if(!document.body.classList.contains('mm-duty-modal-lock'))return;
+    const target=e.target;
+    if(target&&target.closest&&target.closest('input,select,textarea,button'))return;
+    e.preventDefault();
+  },{passive:false,capture:true});
+  const oldOpenDutyDay=window.openDutyDay;
+  if(typeof oldOpenDutyDay==='function')window.openDutyDay=function(){const r=oldOpenDutyDay.apply(this,arguments);setTimeout(syncDutyLock,0);return r};
+  const oldClose=window.closeModal;
+  if(typeof oldClose==='function')window.closeModal=function(){document.documentElement.classList.remove('mm-duty-modal-lock');document.body.classList.remove('mm-duty-modal-lock');return oldClose.apply(this,arguments)};
+  /* Görünen sürüm rozetini bu paketle eşitle. */
+  function versionBadge(){document.querySelectorAll('.premium-brand .tiny').forEach(x=>{if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION})}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{start();versionBadge()},{once:true});else{start();versionBadge()}
 })();
 </script>
 
