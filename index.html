@@ -12631,7 +12631,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.125';
+ const VERSION='v7.8.126';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -12903,46 +12903,82 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 
 
 
-<!-- v7.8.125 — Nöbet modalı: arka plan sabit, kart içeriği bağımsız kaydırma -->
-<style id="v78125-layout-duty-scroll">
-@media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
-  body.mm-landscape-home-lock .layout{height:calc(100dvh - 80px)!important;max-height:calc(100dvh - 80px)!important}
-  body.mm-landscape-home-lock main{height:100%!important;max-height:100%!important;box-sizing:border-box!important}
-  body.mm-landscape-home-lock #mobileHomeDashboard{height:100%!important;max-height:100%!important;grid-template-rows:minmax(0,44%) minmax(0,56%)!important;box-sizing:border-box!important}
-  body.mm-landscape-home-lock .mm-home-card.mm-lessons{height:100%!important;max-height:100%!important;min-height:0!important;overflow:hidden!important}
-  body.mm-landscape-home-lock .mm-home-card.mm-lessons .mm-next-title,body.mm-landscape-home-lock .mm-home-card.mm-lessons .mm-next-row{font-size:9px!important}
-  body.mm-landscape-home-lock .mm-home-card.mm-lessons .mm-next-row{padding:2px 0!important}
+<!-- v7.8.126 — iOS Nöbet modalı: sabit kabuk + yalnız içerik kaydırma -->
+<style id="v78126-duty-modal-ios">
+html.mm-duty-modal-lock,body.mm-duty-modal-lock{
+  width:100%!important;height:100%!important;overflow:hidden!important;overscroll-behavior:none!important;
 }
-html.mm-duty-modal-lock,body.mm-duty-modal-lock{width:100%!important;height:100%!important;overflow:hidden!important;overscroll-behavior:none!important}
-body.mm-duty-modal-lock{position:fixed!important;left:0!important;right:0!important;margin:0!important}
-body.mm-duty-modal-lock #modal.open{position:fixed!important;inset:0!important;display:flex!important;align-items:center!important;justify-content:center!important;overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important;padding:14px!important}
+body.mm-duty-modal-lock{
+  position:fixed!important;left:0!important;right:0!important;margin:0!important;
+}
+body.mm-duty-modal-lock #modal.open{
+  position:fixed!important;left:0!important;right:0!important;top:var(--mm-vv-top,0px)!important;
+  height:var(--mm-vv-height,100dvh)!important;min-height:0!important;padding:14px!important;
+  box-sizing:border-box!important;overflow:hidden!important;overscroll-behavior:none!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;touch-action:none!important;
+}
 body.mm-duty-modal-lock #modal.open .modal-box{
-  width:min(1100px,100%)!important;height:min(94dvh,var(--mm-duty-vvh,94dvh))!important;max-height:min(94dvh,var(--mm-duty-vvh,94dvh))!important;
-  display:flex!important;flex-direction:column!important;overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important;
+  width:min(1100px,100%)!important;height:min(94%,var(--mm-duty-natural-h,94%))!important;
+  max-height:100%!important;min-height:0!important;margin:0!important;overflow:hidden!important;
+  display:flex!important;flex-direction:column!important;overscroll-behavior:none!important;touch-action:none!important;
 }
-body.mm-duty-modal-lock #modal.open .modal-head{position:relative!important;top:auto!important;flex:0 0 auto!important;z-index:3!important}
+body.mm-duty-modal-lock #modal.open .modal-head{
+  position:relative!important;top:auto!important;flex:0 0 auto!important;z-index:4!important;touch-action:manipulation!important;
+}
 body.mm-duty-modal-lock #modal.open .modal-body{
   flex:1 1 auto!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;
-  overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;padding-bottom:max(22px,env(safe-area-inset-bottom))!important;
+  overscroll-behavior-y:contain!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;
+  scroll-padding-bottom:24px!important;
 }
-body.mm-duty-modal-lock #modal.open input,body.mm-duty-modal-lock #modal.open select,body.mm-duty-modal-lock #modal.open textarea,body.mm-duty-modal-lock #modal.open button{touch-action:manipulation!important}
+body.mm-duty-modal-lock #modal.open .modal-body input,
+body.mm-duty-modal-lock #modal.open .modal-body select,
+body.mm-duty-modal-lock #modal.open .modal-body textarea,
+body.mm-duty-modal-lock #modal.open .modal-body button{touch-action:manipulation!important}
+@media (max-width:700px){
+ body.mm-duty-modal-lock #modal.open{padding:10px!important}
+ body.mm-duty-modal-lock #modal.open .modal-box{height:min(96%,var(--mm-duty-natural-h,96%))!important}
+}
 </style>
-<script id="v78125-layout-duty-scroll-script">
+<script id="v78126-duty-modal-ios-script">
 (function(){
-  const VERSION='v7.8.125'; let lockedY=0;
-  function isDutyEdit(){const m=document.getElementById('modal');if(!m||!m.classList.contains('open'))return false;const t=(document.getElementById('modalTitle')?.textContent||'').trim();return t==='Okul Nöbeti Ekle'||t==='Okul Nöbetini Düzenle'}
-  function setVH(){const vv=window.visualViewport;const h=Math.max(260,Math.floor((vv?.height||window.innerHeight)-28));document.documentElement.style.setProperty('--mm-duty-vvh',h+'px')}
-  function lock(){if(document.body.classList.contains('mm-duty-modal-lock')){setVH();return}lockedY=window.scrollY||0;document.documentElement.classList.add('mm-duty-modal-lock');document.body.classList.add('mm-duty-modal-lock');document.body.style.top=(-lockedY)+'px';setVH()}
-  function unlock(){if(!document.body.classList.contains('mm-duty-modal-lock'))return;document.documentElement.classList.remove('mm-duty-modal-lock');document.body.classList.remove('mm-duty-modal-lock');document.body.style.top='';document.documentElement.style.removeProperty('--mm-duty-vvh');try{window.scrollTo(0,lockedY)}catch(e){}}
-  function sync(){isDutyEdit()?lock():unlock()}
-  function start(){const m=document.getElementById('modal');if(m)new MutationObserver(()=>requestAnimationFrame(sync)).observe(m,{attributes:true,attributeFilter:['class'],subtree:true,childList:true,characterData:true});sync()}
-  document.addEventListener('touchmove',function(e){if(!document.body.classList.contains('mm-duty-modal-lock'))return;const body=e.target&&e.target.closest?e.target.closest('#modal .modal-body'):null;if(!body){e.preventDefault();return}const max=body.scrollHeight-body.clientHeight;if(max<=1){e.preventDefault();return}const y=body.scrollTop;if((y<=0&&e.touches&&e.touches[0])||(y>=max-1&&e.touches&&e.touches[0])){/* contain via CSS */}},{passive:false,capture:true});
-  if(window.visualViewport){visualViewport.addEventListener('resize',()=>{if(isDutyEdit())setVH()},{passive:true});visualViewport.addEventListener('scroll',()=>{if(isDutyEdit())setVH()},{passive:true})}
-  window.addEventListener('orientationchange',()=>setTimeout(()=>{if(isDutyEdit())setVH()},120),{passive:true});
-  const oldOpenDutyDay=window.openDutyDay;if(typeof oldOpenDutyDay==='function')window.openDutyDay=function(){const r=oldOpenDutyDay.apply(this,arguments);setTimeout(sync,0);return r};
-  const oldClose=window.closeModal;if(typeof oldClose==='function')window.closeModal=function(){unlock();return oldClose.apply(this,arguments)};
-  function versionBadge(){document.querySelectorAll('.premium-brand .tiny').forEach(x=>{if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION})}
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{start();versionBadge()},{once:true});else{start();versionBadge()}
+ const VERSION='v7.8.126'; let lockedY=0, active=false, naturalH=0, raf=0;
+ const root=document.documentElement, body=document.body;
+ function modal(){return document.getElementById('modal')}
+ function box(){return document.querySelector('#modal .modal-box')}
+ function content(){return document.getElementById('modalBody')}
+ function isDutyEdit(){const m=modal();if(!m||!m.classList.contains('open'))return false;const t=(document.getElementById('modalTitle')?.textContent||'').trim();return t==='Okul Nöbeti Ekle'||t==='Okul Nöbetini Düzenle'}
+ function viewport(){const vv=window.visualViewport;return vv?{top:Math.max(0,vv.offsetTop||0),height:Math.max(1,vv.height||innerHeight)}:{top:0,height:innerHeight}}
+ function setViewport(){if(!active)return;const v=viewport();root.style.setProperty('--mm-vv-top',v.top+'px');root.style.setProperty('--mm-vv-height',v.height+'px');if(naturalH)root.style.setProperty('--mm-duty-natural-h',naturalH+'px')}
+ function lock(){
+   if(active)return; active=true; lockedY=window.scrollY||0;
+   const b=box(); if(b){const r=b.getBoundingClientRect();naturalH=Math.max(1,Math.round(r.height||b.scrollHeight||0))}
+   root.classList.add('mm-duty-modal-lock');body.classList.add('mm-duty-modal-lock');body.style.top=(-lockedY)+'px';
+   setViewport();requestAnimationFrame(()=>{const c=content();if(c)c.scrollTop=0})
+ }
+ function unlock(){
+   if(!active)return; active=false;
+   root.classList.remove('mm-duty-modal-lock');body.classList.remove('mm-duty-modal-lock');body.style.top='';
+   root.style.removeProperty('--mm-vv-top');root.style.removeProperty('--mm-vv-height');root.style.removeProperty('--mm-duty-natural-h');naturalH=0;
+   try{window.scrollTo(0,lockedY)}catch(e){}
+ }
+ function sync(){cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{if(isDutyEdit())lock();else unlock();if(active)setViewport()})}
+ function keepFieldVisible(e){
+   if(!active)return;const target=e.target;if(!target||!target.matches||!target.matches('#modalBody input,#modalBody textarea,#modalBody select'))return;
+   setTimeout(()=>{if(!active)return;setViewport();const c=content();if(!c)return;const cr=c.getBoundingClientRect(),tr=target.getBoundingClientRect();if(tr.bottom>cr.bottom-12)c.scrollTop+=tr.bottom-cr.bottom+18;else if(tr.top<cr.top+12)c.scrollTop-=cr.top-tr.top+18},180)
+ }
+ function start(){const m=modal();if(m)new MutationObserver(sync).observe(m,{attributes:true,attributeFilter:['class'],subtree:true,childList:true,characterData:true});sync()}
+ document.addEventListener('focusin',keepFieldVisible,true);
+ document.addEventListener('touchmove',function(e){
+   if(!active)return;const c=e.target&&e.target.closest?e.target.closest('#modalBody'):null;
+   if(!c){e.preventDefault();return}
+   if(c.scrollHeight<=c.clientHeight+1)e.preventDefault();
+ },{passive:false,capture:true});
+ if(window.visualViewport){visualViewport.addEventListener('resize',setViewport,{passive:true});visualViewport.addEventListener('scroll',setViewport,{passive:true})}
+ addEventListener('resize',setViewport,{passive:true});
+ const oldOpen=window.openDutyDay;if(typeof oldOpen==='function')window.openDutyDay=function(){const r=oldOpen.apply(this,arguments);setTimeout(sync,0);setTimeout(sync,80);return r};
+ const oldClose=window.closeModal;if(typeof oldClose==='function')window.closeModal=function(){unlock();return oldClose.apply(this,arguments)};
+ function versionBadge(){document.querySelectorAll('.premium-brand .tiny').forEach(x=>{if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION})}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{start();versionBadge()},{once:true});else{start();versionBadge()}
 })();
 </script>
 
