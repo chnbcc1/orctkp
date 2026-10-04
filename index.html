@@ -2504,7 +2504,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.120</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.121</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2696,7 +2696,7 @@ function openDocumentAssistant(origin=""){
   window.__docAssistantOrigin=String(origin||"");
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.8.120 · Belge Üretim Merkezi · çevrimdışı";
+  el("modalSubtitle").textContent="v7.8.121 · Belge Üretim Merkezi · çevrimdışı";
   const teacherFileReturn=window.__docAssistantOrigin==="teacherFile"?`<div class="teacher-file-return-card"><button type="button" class="secondary" onclick="teacherFileReturnFromAssistant()">← Öğretmen Dosyasına Dön</button></div>`:"";
   el("modalBody").innerHTML=`${teacherFileReturn}
     <div class="doc-assistant-tools887">
@@ -4750,7 +4750,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.120";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.121";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -8120,7 +8120,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.120",
+    appVersion:"v7.8.121",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -8133,7 +8133,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.120",
+    appVersion:"v7.8.121",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -9309,7 +9309,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   }
   window.mmRecordBackup884=function(backup,kind){
     try{localStorage.setItem(HEALTH_KEY,JSON.stringify({
-      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.120',
+      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.121',
       stats:stats(backup?.state||state),
       archives:Array.isArray(backup?.schoolYearArchives)?backup.schoolYearArchives.length:loadSchoolYearArchives().length
     }))}catch(e){console.warn('Yedek sağlık kaydı yazılamadı',e)}
@@ -9435,7 +9435,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     el('modalTitle').textContent='Sistem Sağlığı';el('modalSubtitle').textContent='Salt okunur veri kontrolü, depolama durumu ve yedek doğrulama.';
     el('modalBody').innerHTML=`<div class="mm-health-status884 ${bs.cls}"><span class="dot"></span><div><b>${esc(bs.text)}</b><div class="tiny" style="margin-top:3px">Bu ekran mevcut öğrenci verilerini değiştirmez.</div></div></div>
       <div class="mm-health-grid884">
-        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.120</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
+        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.121</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
         <div class="mm-health-card884"><span>SINIF</span><b>${st.classes}</b></div><div class="mm-health-card884"><span>ÖĞRENCİ</span><b>${st.students}</b></div><div class="mm-health-card884"><span>ÖDEV</span><b>${st.homeworks}</b></div>
         <div class="mm-health-card884"><span>DENEME</span><b>${st.trials}</b></div><div class="mm-health-card884"><span>VELİ GÖRÜŞMESİ</span><b>${st.meetings}</b></div><div class="mm-health-card884"><span>REHBERLİK KAYDI</span><b>${st.guidance}</b></div>
         <div class="mm-health-card884"><span>YEREL VERİ</span><b>${fmtBytes(localBytes())}</b></div><div class="mm-health-card884"><span>ÖDEV GÖRSELİ</span><b id="mmHealthIDB884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA TOPLAM / ÜST SINIR</span><b id="mmHealthStorage884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA ÖNBELLEĞİ</span><b id="mmHealthCaches886">Kontrol…</b></div>
@@ -9445,7 +9445,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
         <label class="btn secondary" style="display:block;width:100%;box-sizing:border-box;text-align:center;cursor:pointer">🔍 Yedek Dosyasını Kontrol Et<input type="file" accept=".json,application/json" hidden onchange="validateBackupFile884(event)"></label>
         <div id="mmBackupCheck884" class="mm-backup-check884">Henüz bir yedek dosyası kontrol edilmedi.</div></div>
       <div class="card" style="padding:12px;margin-top:10px"><b>PWA Önbellek Bakımı</b>
-        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.120</b> ve önceki stabil sürüm <b>v7.8.119</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
+        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.121</b> ve önceki stabil sürüm <b>v7.8.119</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
         <button class="secondary" style="width:100%" onclick="cleanupOldPWACaches886()">🧹 Eski PWA Önbelleklerini Temizle</button>
         <div id="mmCacheMaintenance886" class="tiny" style="margin-top:8px;line-height:1.45">Önbellekler kontrol ediliyor…</div>
       </div>`;
@@ -9459,7 +9459,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   };
 
   window.exportVerifiedBackup884=function(){
-    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.120',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
+    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.121',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
     downloadBlob(JSON.stringify(backup,null,2),'MualliMate_DOGRULANMIS_TAM_YEDEK.json','application/json');mmRecordBackup884(backup,'doğrulanmış tam yedek');setTimeout(()=>openSystemHealth884(),80);
   };
 
@@ -9783,7 +9783,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 </style>
 <script id="v7886-cache-maintenance">
 (function(){
-  const CURRENT_CACHE_886='ots-v7.8.120-home-newline-cleanup';
+  const CURRENT_CACHE_886='ots-v7.8.121-mobile-landscape-theme';
   const PREVIOUS_STABLE_CACHE_886='ots-v7.8.119-test-analysis-mobile-table-fit';
   const KEEP_CACHES_886=new Set([CURRENT_CACHE_886,PREVIOUS_STABLE_CACHE_886]);
 
@@ -9803,7 +9803,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       if(countHost) countHost.textContent=`${keys.length} cache · ${removable.length} eski`;
       if(noteHost){
         if(removable.length){
-          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.120${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.119':' (v7.8.119 cihazda bulunamadı)'}`;
+          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.121${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.119':' (v7.8.119 cihazda bulunamadı)'}`;
         }else{
           noteHost.innerHTML='<span class="mm-cache-ok886">✓ Temizlenecek eski MualliMate önbelleği yok.</span><br>Mevcut ve önceki stabil sürüm korunuyor.';
         }
@@ -9829,7 +9829,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     const versions=info.removable.map(k=>k.replace(/^ots-/,'')).join('\n• ');
     const ok=confirm(
       'Yalnızca eski MualliMate PWA önbellekleri silinecek.\n\n'+
-      'Korunacaklar:\n• v7.8.120 (mevcut sürüm)\n• v7.8.119 (önceki stabil sürüm)\n\n'+
+      'Korunacaklar:\n• v7.8.121 (mevcut sürüm)\n• v7.8.119 (önceki stabil sürüm)\n\n'+
       'Silinecek eski önbellekler:\n• '+versions+'\n\n'+
       'Öğrenci verileri, notlar, ödevler, yedekler, arşivler ve IndexedDB etkilenmez.\n\nDevam edilsin mi?'
     );
@@ -9841,7 +9841,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       }catch(e){ failed++; }
     }
     await refreshPWACacheStatus886();
-    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.120 ve önceki stabil v7.8.119 önbellekleri korundu.`);
+    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.121 ve önceki stabil v7.8.119 önbellekleri korundu.`);
   };
 })();
 </script>
@@ -12631,7 +12631,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.120';
+ const VERSION='v7.8.121';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -12710,6 +12710,78 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
  window.openHomework=function(hid){const ret=oldOpen.apply(this,arguments),x=getCtx(hid);if(x&&isTest817(x.h)){setTimeout(()=>{const body=el('modalBody');if(!body)return;let host=body.querySelector('.mm-optic-actions795');if(!host){host=document.createElement('div');host.className='mm-optic-actions795';body.insertBefore(host,body.firstChild)}if(!host.querySelector('[data-analysis817]')){const b=document.createElement('button');b.className='secondary';b.dataset.analysis817='1';b.textContent='📊 Test Analizi';b.onclick=()=>openTestAnalysis817(hid);host.appendChild(b)}},0)}return ret};
 })();
 </script>
+
+
+
+<style id="v78121-mobile-landscape-theme">
+/* v7.8.121 — Telefon yatay kullanımında eski masaüstü temasına düşmeyi engeller.
+   Dikey mobil tema korunur; yatay telefonlarda aynı zümrüt/krem dil, kompakt iki sütunlu ana ekran kullanılır. */
+@media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  :root{--mm-emerald:#032f2b;--mm-emerald2:#06483f;--mm-gold:#e4b85a;--mm-cream:#f5ecd9;--mm-cream2:#eadfc9;--mm-ink:#18352f;--mm-muted:#5f716c}
+  html,body{background:#e6ece6!important;color:#f8f0df!important;min-width:0!important;overflow-x:hidden!important}
+  body{padding-bottom:0!important}
+
+  /* Aynı güncel mobil başlık; yatayda profil kartı tek satıra sıkıştırılır. */
+  header{position:relative!important;display:grid!important;grid-template-columns:42px minmax(170px,230px) minmax(260px,1fr) 46px!important;grid-template-rows:auto!important;align-items:center!important;gap:8px!important;min-height:64px!important;padding:max(8px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) 8px max(12px,env(safe-area-inset-left))!important;background:linear-gradient(135deg,#043c35,#022e29)!important;border-bottom:1px solid rgba(228,184,90,.28)!important;box-shadow:0 8px 26px rgba(0,0,0,.22)!important}
+  .mm-menu-btn{display:flex!important;grid-column:1!important;grid-row:1!important;align-items:center!important;justify-content:center!important;width:40px!important;height:40px!important;padding:0!important;border-radius:12px!important;background:rgba(255,255,255,.06)!important;border:1px solid rgba(228,184,90,.28)!important;color:#f5d47f!important;font-size:25px!important;box-shadow:none!important}
+  .premium-brand{grid-column:2!important;grid-row:1!important;padding:0!important;min-width:0!important;gap:8px!important;color:#fff!important}
+  .premium-brand>img{width:40px!important;height:40px!important;border-radius:12px!important;box-shadow:0 0 0 1px rgba(228,184,90,.42),0 5px 14px rgba(0,0,0,.24)!important}
+  .premium-brand>div{min-width:0!important}.premium-brand strong{font-size:18px!important;color:#fff!important;white-space:nowrap!important}.premium-brand small{display:none!important}.premium-brand .tiny{font-size:10px!important;padding:2px 6px!important;color:#f3ce78!important;background:rgba(228,184,90,.12)!important;border-color:rgba(228,184,90,.34)!important}
+  .mm-alert-bell{display:flex!important;grid-column:4!important;grid-row:1!important;position:relative!important;right:auto!important;top:auto!important;width:42px!important;height:42px!important;margin:0!important;border-radius:14px!important;align-items:center!important;justify-content:center!important;padding:0!important;background:rgba(5,61,54,.96)!important;border:1px solid rgba(228,184,90,.38)!important;box-shadow:0 5px 16px rgba(0,0,0,.16)!important;color:#f4d27f!important;z-index:4!important}
+  .mm-bell-icon{font-size:21px!important;line-height:1!important}.mm-bell-badge{position:absolute!important;right:-4px!important;top:-5px!important;min-width:19px!important;height:19px!important;padding:0 5px!important;border-radius:10px!important;background:#e84b43!important;color:#fff!important;border:2px solid #033832!important;font-size:10px!important;font-weight:900!important;line-height:15px!important;text-align:center!important;box-sizing:border-box!important}
+  #mmTeacherLine{display:none!important}
+  #headerControls,#headerControls.header-controls{display:block!important;grid-column:3!important;grid-row:1!important;height:auto!important;min-height:0!important;margin:0!important;padding:0!important;overflow:visible!important}
+  #headerControls>*:not(#profileChip){display:none!important}
+  #headerControls #profileChip.profile-chip{display:grid!important;grid-template-columns:42px minmax(0,1fr)!important;align-items:center!important;gap:9px!important;width:100%!important;min-height:48px!important;padding:5px 10px!important;margin:0!important;border-radius:14px!important;background:linear-gradient(180deg,#f7eedc,#f2e5cd)!important;border:1px solid rgba(228,184,90,.42)!important;box-shadow:0 5px 16px rgba(0,0,0,.10)!important;color:#17342d!important;box-sizing:border-box!important}
+  #profileChip #headerProfilePhoto,#profileChip #profileAvatarFallback{grid-column:1!important;grid-row:1!important;width:40px!important;height:40px!important;min-width:40px!important;border-radius:50%!important;border:2px solid #d7ad50!important;background:#075f52!important;color:#fff!important;font-size:15px!important;font-weight:900!important;object-fit:cover!important}
+  #profileChip #headerProfilePhoto:not([src]),#profileChip #headerProfilePhoto[src=""]{display:none!important}
+  #profileChip .profile-lines{grid-column:2!important;grid-row:1!important;display:flex!important;flex-direction:column!important;gap:1px!important;width:100%!important;min-width:0!important;line-height:1.15!important}
+  #profileChip .profile-lines b{display:block!important;color:#073f37!important;font-size:13px!important;font-weight:900!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  #profileChip .profile-lines span{display:block!important;color:#685f50!important;font-size:9.5px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  #profileChip #headerSchoolName{display:block!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  #profileChip .mm-profile-meta{display:inline!important}.mm-profile-role,.mm-profile-guide,.mm-profile-sep{display:inline!important}
+  #profileChip .profileScheduleBtn,#profileChip .profileDutyBtn{display:none!important}
+
+  /* Mobil çekmece yatay telefonda da aynen kullanılabilir. */
+  #mmMobileDrawer.mm-mobile-drawer{display:block!important;visibility:visible!important;opacity:1!important;position:fixed!important;z-index:2147483001!important;top:0!important;bottom:0!important;left:0!important;width:min(58vw,330px)!important;padding:calc(10px + env(safe-area-inset-top)) 12px calc(12px + env(safe-area-inset-bottom))!important;background:linear-gradient(180deg,#033c35,#022923)!important;border-right:1px solid rgba(228,184,90,.35)!important;box-shadow:18px 0 45px rgba(0,0,0,.38)!important;transform:translateX(-105%)!important;color:#fff!important;overflow-y:auto!important}
+  #mmMobileDrawer.mm-mobile-drawer.open{transform:translateX(0)!important}
+  #mmDrawerBackdrop{display:none;position:fixed!important;z-index:2147483000!important;inset:0!important;background:rgba(0,0,0,.46)!important}#mmDrawerBackdrop.open{display:block!important}
+  .mm-drawer-head{display:grid!important;grid-template-columns:42px 1fr 34px!important;gap:8px!important;align-items:center!important;padding:4px 4px 10px!important;border-bottom:1px solid rgba(245,236,217,.12)!important}.mm-drawer-head img{width:42px!important;height:42px!important;border-radius:12px!important}.mm-drawer-head b{display:block!important;font-size:17px!important;color:#f3d27d!important}.mm-drawer-head small{display:block!important;color:#d9cfbb!important;margin-top:1px!important}.mm-drawer-head button{padding:0!important;width:32px!important;height:32px!important;background:transparent!important;border:0!important;color:#fff!important;font-size:24px!important;box-shadow:none!important}
+  .mm-drawer-nav{display:grid!important;grid-template-columns:1fr 1fr!important;gap:4px!important;padding:9px 0!important}.mm-drawer-nav button{display:grid!important;grid-template-columns:25px 1fr!important;text-align:left!important;align-items:center!important;width:100%!important;padding:8px 9px!important;background:transparent!important;color:#f8f0df!important;border:1px solid transparent!important;box-shadow:none!important;font-size:12px!important}.mm-drawer-nav button.featured{background:linear-gradient(90deg,rgba(228,184,90,.23),rgba(228,184,90,.09))!important;border-color:rgba(228,184,90,.36)!important;color:#ffe5a0!important}.mm-drawer-foot{font-size:9px!important;color:#bdb6a8!important;border-top:1px solid rgba(245,236,217,.1)!important;padding:9px 5px!important}
+
+  /* Masaüstü yan paneli yerine güncel mobil akış. */
+  .layout{display:block!important;min-height:0!important;height:auto!important;background:transparent!important}
+  aside{display:none!important}
+  main{display:block!important;width:100%!important;max-width:none!important;min-width:0!important;padding:10px max(12px,env(safe-area-inset-right)) 12px max(12px,env(safe-area-inset-left))!important;margin:0!important;background:linear-gradient(180deg,#e7ece6 0%,#e3e9e3 58%,#dde6df 100%)!important;box-sizing:border-box!important}
+  #mobileHomeDashboard{display:grid!important;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)!important;gap:10px!important;margin:0!important;background:transparent!important}
+  #classView{display:none!important}body.mm-class-open #mobileHomeDashboard{display:none!important}body.mm-class-open #classView{display:block!important}body.mm-class-open main{background:linear-gradient(180deg,#eef2ee 0%,#e7eee9 100%)!important}
+  #noClass,.footer-note{display:none!important}
+
+  /* Mevcut zümrüt/krem kart dili. */
+  .mm-home-card{width:100%!important;box-sizing:border-box!important;overflow:hidden!important;background:linear-gradient(180deg,rgba(5,61,54,.98),rgba(3,48,43,.98))!important;border:1px solid rgba(228,184,90,.23)!important;border-radius:18px!important;padding:10px 12px!important;box-shadow:0 8px 24px rgba(0,0,0,.16)!important;color:#fff!important}
+  .mm-home-card.mm-lessons{grid-column:1!important;grid-row:1!important;border-color:#e4b85a!important;box-shadow:0 0 0 1px rgba(228,184,90,.18),0 8px 24px rgba(0,0,0,.18)!important}
+  #mmDutyCard{grid-column:2!important;grid-row:1!important;cursor:pointer!important}
+  #mobileHomeDashboard>.mm-home-card:nth-child(3){grid-column:1!important;grid-row:2!important}
+  #mmClassesCard{grid-column:2!important;grid-row:2!important}
+  .mm-section-head{display:flex!important;justify-content:space-between!important;align-items:center!important;gap:8px!important;margin-bottom:6px!important}.mm-section-head b{font-size:14px!important}.mm-section-head button{background:transparent!important;border:0!important;box-shadow:none!important;color:#e9c777!important;padding:2px 4px!important;font-size:10px!important}
+  .mm-now{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:8px!important;align-items:center!important;padding:7px 0!important;border-top:1px solid rgba(245,236,217,.11)!important;border-bottom:1px solid rgba(245,236,217,.11)!important}.mm-now b{display:block!important;font-size:15px!important;margin-top:1px!important;line-height:1.15!important}.mm-now small,.mm-next-row small,.mm-duty small,.mm-class-chip small{color:#d9cfbb!important}.mm-now .mm-time{display:block!important;color:#f1cd7a!important;font-weight:800!important;font-size:11px!important}.mm-now button{padding:8px 10px!important;background:linear-gradient(180deg,#f2d58e,#d9a746)!important;color:#1f2b27!important;border:0!important}
+  .mm-next-title{font-size:9px!important;font-weight:800!important;color:#d9b761!important;text-transform:uppercase!important;letter-spacing:.08em!important;margin-top:5px!important}.mm-next-row{display:grid!important;grid-template-columns:78px minmax(0,1fr)!important;gap:7px!important;align-items:center!important;padding:4px 0!important;border-bottom:1px solid rgba(245,236,217,.08)!important;font-size:10px!important}.mm-next-row .mm-time{color:#f0d08a!important;font-weight:800!important}
+  .mm-duty{padding:10px 12px!important}.mm-duty-line{display:flex!important;gap:9px!important;align-items:center!important;min-height:34px!important}.mm-duty-icon{font-size:21px!important}.mm-duty-line b{display:block!important;color:#f5d68f!important;font-size:14px!important}.mm-duty-line small{font-size:10px!important}
+  .mm-quick-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:7px!important}.mm-quick-grid button{min-width:0!important;padding:8px 3px!important;border-radius:12px!important;background:rgba(6,77,67,.95)!important;border:1px solid rgba(228,184,90,.22)!important;box-shadow:none!important}.mm-quick-grid button span{display:block!important;font-size:19px!important;margin-bottom:2px!important}.mm-quick-grid button b{font-size:9px!important;line-height:1.1!important}
+  .mm-class-strip{display:grid!important;grid-auto-flow:column!important;grid-auto-columns:minmax(105px,1fr)!important;overflow-x:auto!important;gap:7px!important;padding-bottom:1px!important;scrollbar-width:none!important}.mm-class-strip::-webkit-scrollbar{display:none!important}.mm-class-chip{background:#073d37!important;border:1px solid rgba(228,184,90,.18)!important;border-radius:13px!important;padding:8px!important;text-align:left!important;color:#fff!important;min-height:60px!important}.mm-class-chip.active{border-color:#e4b85a!important;box-shadow:inset 0 0 0 1px rgba(228,184,90,.45)!important}.mm-class-chip b{display:block!important;font-size:15px!important}.mm-class-chip small{font-size:10px!important}.mm-class-chip em{display:block!important;color:#ff796e!important;font-size:9px!important;font-style:normal!important;margin-top:4px!important;font-weight:800!important}
+
+  /* Sınıf/modül ve modal ekranları da eski beyaz desktop paletine dönmez. */
+  .compact-class-summary,.overview-shortcuts,.card,.modal-box,.modal-head,.student-homework-card,.mobile-list-card,.mobile-grade-card,.mobile-matrix-card,.quick-card{background:#f5ecd9!important;color:#1d2c28!important;border-color:#ded1b8!important}
+  .modal-body{background:#efe4ce!important;color:#1d2c28!important}.modal{background:rgba(7,32,28,.48)!important}
+  input,select,textarea{background:#fbf3e3!important;color:#1d2c28!important;border-color:#d7c8aa!important}
+  button.secondary,.btn.secondary{background:#f3e8d2!important;color:#17312b!important;border-color:#d6c5a3!important}
+  .class-module-body{background:#e5eee8!important}.class-module-overlay,.class-module-head{background:#f5f7f4!important}
+  #mmClassHomeBar{display:none;position:sticky!important;top:0!important;z-index:20!important;margin:-2px -2px 8px!important;padding:6px 8px!important;background:rgba(245,236,217,.97)!important;border:1px solid #d8c69f!important;border-radius:13px!important}body.mm-class-open #mmClassHomeBar{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important}#mmClassHomeBar button{margin:0!important;padding:8px 10px!important;border-radius:10px!important;background:#064e43!important;color:#fff!important;border:1px solid #d6a33b!important;font-weight:800!important}#mmClassHomeBar b{color:#064e43!important;font-size:13px!important}
+
+  /* Ana ekranda alt gezinme yatay alanı daraltmasın; menü + kartlar yeterli. */
+  #mmBottomNav{display:none!important}
+}
+</style>
 
 <!-- v7.8.112 — release first-paint guard only after all legacy/appended styles are parsed -->
 <script id="v78100-safari-first-paint-release">
