@@ -12631,7 +12631,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.123';
+ const VERSION='v7.8.124';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -12903,8 +12903,8 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 
 
 
-<!-- v7.8.123 — Yatay ders kartı sabit alan + nöbet modalı iOS kaydırma/bounce kilidi -->
-<style id="v78123-layout-duty-lock">
+<!-- v7.8.124 — Nöbet modalı bağımsız kaydırma + sabit arka plan -->
+<style id="v78124-layout-duty-scroll">
 @media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
   /* Ana ekranın iki satırı viewport içine sabitlenir. Ders sayısı artsa da alt kartları aşağı itemez. */
   body.mm-landscape-home-lock .layout{height:calc(100dvh - 80px)!important;max-height:calc(100dvh - 80px)!important}
@@ -12920,17 +12920,28 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
   body.mm-landscape-home-lock .mm-home-card.mm-lessons .mm-next-row{padding:2px 0!important}
 }
 
-/* Okul nöbeti ekleme/düzenleme formunda modal yerinden sürüklenmez; klavye açıldığında arka sayfa/bounce oluşmaz. */
+/* Nöbet formunda arka sayfa sabit; yalnız öndeki modal kendi sınırları içinde kayar. */
 html.mm-duty-modal-lock,body.mm-duty-modal-lock{
   width:100%!important;height:100%!important;max-height:100%!important;
   overflow:hidden!important;overscroll-behavior:none!important;
 }
-body.mm-duty-modal-lock{position:fixed!important;inset:0!important;margin:0!important;touch-action:none!important}
-body.mm-duty-modal-lock #modal.open{position:fixed!important;inset:0!important;overflow:hidden!important;overscroll-behavior:none!important;touch-action:none!important}
-body.mm-duty-modal-lock #modal.open .modal-box{overscroll-behavior:none!important;-webkit-overflow-scrolling:auto!important;touch-action:manipulation!important}
-body.mm-duty-modal-lock #modal.open .modal-body{overscroll-behavior:none!important}
+body.mm-duty-modal-lock{position:fixed!important;inset:0!important;margin:0!important}
+body.mm-duty-modal-lock #modal.open{
+  position:fixed!important;inset:0!important;overflow:hidden!important;
+  overscroll-behavior:none!important;touch-action:none!important;
+}
+body.mm-duty-modal-lock #modal.open .modal-box{
+  max-height:calc(100dvh - 24px)!important;overflow:hidden!important;
+  overscroll-behavior:none!important;touch-action:auto!important;
+}
+body.mm-duty-modal-lock #modal.open .modal-body{
+  min-height:0!important;max-height:calc(100dvh - 120px)!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch!important;
+  touch-action:pan-y!important;
+}
 </style>
-<script id="v78123-layout-duty-lock-script">
+<script id="v78124-layout-duty-scroll-script">
 (function(){
   const VERSION='v7.8.123';
   function isDutyEdit(){
@@ -12950,11 +12961,11 @@ body.mm-duty-modal-lock #modal.open .modal-body{overscroll-behavior:none!importa
     if(m)new MutationObserver(()=>requestAnimationFrame(syncDutyLock)).observe(m,{attributes:true,attributeFilter:['class'],subtree:true,childList:true,characterData:true});
     syncDutyLock();
   }
-  /* iOS'ta nöbet formu açıkken parmakla modal/sayfa sürüklenmesini kes; form kontrollerine dokunma devam eder. */
+  /* iOS: modal gövdesindeki pan-y serbest, modal dışındaki hareket arka sayfaya geçmez. */
   document.addEventListener('touchmove',function(e){
     if(!document.body.classList.contains('mm-duty-modal-lock'))return;
     const target=e.target;
-    if(target&&target.closest&&target.closest('input,select,textarea,button'))return;
+    if(target&&target.closest&&target.closest('#modal.open .modal-body'))return;
     e.preventDefault();
   },{passive:false,capture:true});
   const oldOpenDutyDay=window.openDutyDay;
