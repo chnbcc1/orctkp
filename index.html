@@ -12631,7 +12631,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.126';
+ const VERSION='v7.8.127';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -12903,7 +12903,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 
 
 
-<!-- v7.8.126 — iOS Nöbet modalı: sabit kabuk + yalnız içerik kaydırma -->
+<!-- v7.8.127 — iOS Nöbet modalı: visual viewport içinde sabit başlık + kaydırılabilir form -->
 <style id="v78126-duty-modal-ios">
 html.mm-duty-modal-lock,body.mm-duty-modal-lock{
   width:100%!important;height:100%!important;overflow:hidden!important;overscroll-behavior:none!important;
@@ -12941,7 +12941,7 @@ body.mm-duty-modal-lock #modal.open .modal-body button{touch-action:manipulation
 </style>
 <script id="v78126-duty-modal-ios-script">
 (function(){
- const VERSION='v7.8.126'; let lockedY=0, active=false, naturalH=0, raf=0;
+ const VERSION='v7.8.127'; let lockedY=0, active=false, naturalH=0, raf=0;
  const root=document.documentElement, body=document.body;
  function modal(){return document.getElementById('modal')}
  function box(){return document.querySelector('#modal .modal-box')}
@@ -12979,6 +12979,62 @@ body.mm-duty-modal-lock #modal.open .modal-body button{touch-action:manipulation
  const oldClose=window.closeModal;if(typeof oldClose==='function')window.closeModal=function(){unlock();return oldClose.apply(this,arguments)};
  function versionBadge(){document.querySelectorAll('.premium-brand .tiny').forEach(x=>{if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION})}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{start();versionBadge()},{once:true});else{start();versionBadge()}
+})();
+</script>
+
+
+<style id="v78127-duty-modal-final">
+body.mm-duty-modal-lock #modal.open{
+  top:var(--mm-vv-top,0px)!important;
+  height:var(--mm-vv-height,100dvh)!important;
+  padding:8px!important;
+  align-items:stretch!important;
+  justify-content:center!important;
+}
+body.mm-duty-modal-lock #modal.open .modal-box{
+  align-self:stretch!important;
+  width:min(1100px,100%)!important;
+  height:100%!important;
+  max-height:none!important;
+  min-height:0!important;
+  margin:0 auto!important;
+  overflow:hidden!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+body.mm-duty-modal-lock #modal.open .modal-head{
+  flex:0 0 auto!important;
+  position:relative!important;
+  z-index:5!important;
+}
+body.mm-duty-modal-lock #modal.open .modal-body{
+  flex:1 1 0!important;
+  min-height:0!important;
+  max-height:none!important;
+  overflow-y:scroll!important;
+  overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  overscroll-behavior-y:contain!important;
+  touch-action:pan-y!important;
+  padding-bottom:max(28px,env(safe-area-inset-bottom))!important;
+  scroll-padding-top:18px!important;
+  scroll-padding-bottom:90px!important;
+}
+@media(max-width:700px){body.mm-duty-modal-lock #modal.open{padding:6px!important}}
+</style>
+<script id="v78127-duty-modal-final-script">
+(function(){
+ const VERSION='v7.8.127';
+ function isDuty(){const m=document.getElementById('modal');if(!m||!m.classList.contains('open'))return false;const t=(document.getElementById('modalTitle')?.textContent||'').trim();return t==='Okul Nöbeti Ekle'||t==='Okul Nöbetini Düzenle'}
+ function vv(){const v=window.visualViewport;return v?{top:Math.max(0,v.offsetTop||0),h:Math.max(1,v.height||innerHeight)}:{top:0,h:innerHeight}}
+ function sync(){if(!isDuty())return;const v=vv();document.documentElement.style.setProperty('--mm-vv-top',v.top+'px');document.documentElement.style.setProperty('--mm-vv-height',v.h+'px');}
+ function reveal(el){if(!isDuty()||!el?.matches?.('#modalBody input,#modalBody textarea,#modalBody select'))return;setTimeout(function(){sync();try{el.scrollIntoView({block:'nearest',inline:'nearest',behavior:'auto'})}catch(e){}},260)}
+ document.addEventListener('focusin',e=>reveal(e.target),true);
+ if(window.visualViewport){visualViewport.addEventListener('resize',sync,{passive:true});visualViewport.addEventListener('scroll',sync,{passive:true})}
+ addEventListener('resize',sync,{passive:true});
+ const mo=new MutationObserver(()=>requestAnimationFrame(sync));
+ function start(){const m=document.getElementById('modal');if(m)mo.observe(m,{attributes:true,attributeFilter:['class'],subtree:true,childList:true});sync();document.querySelectorAll('.premium-brand .tiny').forEach(x=>{if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION})}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();
 </script>
 
