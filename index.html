@@ -9309,7 +9309,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   }
   window.mmRecordBackup884=function(backup,kind){
     try{localStorage.setItem(HEALTH_KEY,JSON.stringify({
-      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.142',
+      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.143',
       stats:stats(backup?.state||state),
       archives:Array.isArray(backup?.schoolYearArchives)?backup.schoolYearArchives.length:loadSchoolYearArchives().length
     }))}catch(e){console.warn('Yedek sağlık kaydı yazılamadı',e)}
@@ -9783,7 +9783,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 </style>
 <script id="v7886-cache-maintenance">
 (function(){
-  const CURRENT_CACHE_886='ots-v7.8.142-optic-v2-wide-bubbles';
+  const CURRENT_CACHE_886='ots-v7.8.143-optic-v3-number-vertical-gap';
   const PREVIOUS_STABLE_CACHE_886='ots-v7.8.119-test-analysis-mobile-table-fit';
   const KEEP_CACHES_886=new Set([CURRENT_CACHE_886,PREVIOUS_STABLE_CACHE_886]);
 
@@ -12336,7 +12336,7 @@ input::placeholder,textarea::placeholder{color:#5c6d67!important;opacity:1!impor
 .ws-toolbar887 .tiny,.ws-draft-row887 .tiny{color:var(--mm-readable-muted)!important}
 </style>
 
-<!-- v7.8.142 — Optik Form V3: A4 dikey, klasik ferah öğrenci-no kodlama + kitapçık türü + 1–6 ders + V1 tarama uyumluluğu; V2 kaldırıldı -->
+<!-- v7.8.143 — Optik Form V3: numara alanı dikey aralığı artırıldı; A4 dikey, klasik öğrenci-no + kitapçık türü + 1–6 ders + V1 tarama uyumluluğu; V2 kaldırıldı -->
 <!-- v7.8.112 — Optik güven/inceleme sistemi + 5 haneli öğrenci no + numara zebra -->
 <!-- v7.8.99 — Optik Form: tek görsel seçici + güçlendirilmiş köşe algılama + dikey/yatay zebra form -->
 <style id="v7895-optical-omr">
@@ -12397,9 +12397,9 @@ function layoutOptical795(cfg){
  const n=clamp795(cfg.subjects.length,1,6),choices=cfg.choices||5,page={orientation:'portrait',w:1754,h:2480,canvasW:2480,canvasH:3508};
  const layout={w:page.w,h:page.h,orientation:'portrait',canvasW:page.canvasW,canvasH:page.canvasH,markers:opticalMarkers795(page.w,page.h),number:[],subjects:[],booklet:[],numberStyle:'classicV3',layoutVersion:5};
  /* Klasik öğrenci numarası: haneler soldan sağa, 0–9 yukarıdan aşağıya. */
- const numberX0=220,colGap=76,rowStartNum=252,rowGap=27.5,rNum=13.8;
+ const numberX0=220,colGap=76,rowStartNum=248,rowGap=31.5,rNum=13.2;
  for(let pos=0;pos<OMR_NUMBER_DIGITS795;pos++){const arr=[];for(let d=0;d<10;d++)arr.push({x:numberX0+pos*colGap,y:rowStartNum+d*rowGap,r:rNum,digit:d});layout.number.push(arr)}
- layout.numberMeta={x:104,y:156,w:510,h:382,labelX:154,headerY:224,colGap,rowGap,r:rNum};
+ layout.numberMeta={x:104,y:154,w:510,h:410,labelX:154,headerY:220,colGap,rowGap,r:rNum};
  /* Kitapçık türü: A–D, büyük ve ferah yatay balonlar. */
  const bookletChoices=(Array.isArray(cfg.bookletChoices)&&cfg.bookletChoices.length?cfg.bookletChoices:['A','B','C','D']).slice(0,4),bx0=820,by=390,bgap=112,br=18;
  layout.booklet=bookletChoices.map((choice,i)=>({x:bx0+i*bgap,y:by,r:br,choice}));
