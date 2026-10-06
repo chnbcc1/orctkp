@@ -15196,22 +15196,23 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </style>
 
 
-<!-- v7.8.159 — Yatay yan menü: tüm seçenekler aynı çerçeveli kart dilinde; ikon + başlık grubu tam merkezde -->
-<style id="v78158-drawer-all-framed-centered">
+<!-- v7.8.160 — Yatay yan menü: tüm seçenekler çerçeveli kalır; ikon + başlık grubu soldan hizalanır -->
+<style id="v78160-drawer-landscape-all-framed-left">
 @media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
-  /* v7.8.157 ölçülerini koru; yalnız bütün menü seçeneklerine aynı kart görünümünü uygula. */
+  /* v7.8.157 ölçülerini koru; yalnız içerik hizasını sola çek. */
   #mmMobileDrawer .mm-drawer-nav button{
     box-sizing:border-box!important;
     min-height:36px!important;
     height:auto!important;
-    display:flex!important;
-    flex-direction:row!important;
-    justify-content:center!important;
+    display:grid!important;
+    grid-template-columns:24px minmax(0,1fr)!important;
     align-items:center!important;
-    gap:7px!important;
+    justify-content:start!important;
+    column-gap:10px!important;
+    row-gap:0!important;
     width:100%!important;
-    padding:8px 9px!important;
-    text-align:center!important;
+    padding:8px 11px!important;
+    text-align:left!important;
     line-height:1.12!important;
     border-radius:9px!important;
     background:linear-gradient(90deg,rgba(228,184,90,.17),rgba(228,184,90,.06))!important;
@@ -15222,11 +15223,10 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   }
   #mmMobileDrawer .mm-drawer-nav button span{
     display:block!important;
-    flex:0 1 auto!important;
     min-width:0!important;
     margin:0!important;
     padding:0!important;
-    text-align:center!important;
+    text-align:left!important;
     line-height:1.12!important;
   }
   #mmMobileDrawer .mm-drawer-nav button.featured{
@@ -15242,10 +15242,10 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 }
 </style>
 
-<!-- v7.8.159 — Dikey yan menü: yataydaki çerçeveli ve ortalı düğme dili portre görünümüne de uygulanır -->
-<style id="v78159-drawer-portrait-all-framed-centered">
+<!-- v7.8.160 — Dikey yan menü: tüm seçenekler çerçeveli kalır; ikon + başlık grubu soldan hizalanır -->
+<style id="v78160-drawer-portrait-all-framed-left">
 @media (orientation:portrait) and (max-width:700px) and (hover:none) and (pointer:coarse){
-  /* Dikey görünümün tek sütunlu yapısını koru; yalnız tüm seçenekleri aynı kart diline al. */
+  /* Dikey görünümün tek sütunlu yapısını koru; içerik hizasını sola çek. */
   #mmMobileDrawer .mm-drawer-nav{
     display:grid!important;
     grid-template-columns:1fr!important;
@@ -15255,14 +15255,15 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
     box-sizing:border-box!important;
     min-height:44px!important;
     height:auto!important;
-    display:flex!important;
-    flex-direction:row!important;
-    justify-content:center!important;
+    display:grid!important;
+    grid-template-columns:26px minmax(0,1fr)!important;
     align-items:center!important;
-    gap:8px!important;
+    justify-content:start!important;
+    column-gap:12px!important;
+    row-gap:0!important;
     width:100%!important;
-    padding:10px 12px!important;
-    text-align:center!important;
+    padding:10px 14px!important;
+    text-align:left!important;
     line-height:1.15!important;
     border-radius:10px!important;
     background:linear-gradient(90deg,rgba(228,184,90,.17),rgba(228,184,90,.06))!important;
@@ -15273,11 +15274,10 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   }
   #mmMobileDrawer .mm-drawer-nav button span{
     display:block!important;
-    flex:0 1 auto!important;
     min-width:0!important;
     margin:0!important;
     padding:0!important;
-    text-align:center!important;
+    text-align:left!important;
     line-height:1.15!important;
   }
   #mmMobileDrawer .mm-drawer-nav button.featured{
