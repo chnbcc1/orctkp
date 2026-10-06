@@ -3,3 +3,4 @@
 - Paragraf yeni sayfaya geçtiğinde 12 punto gövde yazı standardı korunuyor.
 - OLUR bloğu tek parça tutuluyor; Müdür görevinin tek başına boş sayfaya taşması düzeltildi.
 - Görüşmeler ve Alınan Kararlar aynı okunabilir punto düzeninde korunuyor.
+v7.8.146 Pages yeniden yayın tetiklemesi
