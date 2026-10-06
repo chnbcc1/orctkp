@@ -15196,22 +15196,21 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </style>
 
 
-<!-- v7.8.160 — Yatay yan menü: tüm seçenekler çerçeveli kalır; ikon + başlık grubu soldan hizalanır -->
-<style id="v78160-drawer-landscape-all-framed-left">
+<!-- v7.8.161 — Yatay yan menü: v7.8.158 kart ölçüleri korunur; içerik sola hizalı ve düğme içinde dikey ortalı -->
+<style id="v78161-drawer-landscape-left-vertical-center">
 @media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
-  /* v7.8.157 ölçülerini koru; yalnız içerik hizasını sola çek. */
+  /* v7.8.158'deki genişlik/yükseklik hissini koru; yalnız içerik hizasını sola al. */
   #mmMobileDrawer .mm-drawer-nav button{
     box-sizing:border-box!important;
     min-height:36px!important;
     height:auto!important;
-    display:grid!important;
-    grid-template-columns:24px minmax(0,1fr)!important;
+    display:flex!important;
+    flex-direction:row!important;
+    justify-content:flex-start!important;
     align-items:center!important;
-    justify-content:start!important;
-    column-gap:10px!important;
-    row-gap:0!important;
+    gap:7px!important;
     width:100%!important;
-    padding:8px 11px!important;
+    padding:8px 9px!important;
     text-align:left!important;
     line-height:1.12!important;
     border-radius:9px!important;
@@ -15223,11 +15222,13 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   }
   #mmMobileDrawer .mm-drawer-nav button span{
     display:block!important;
+    flex:1 1 auto!important;
     min-width:0!important;
     margin:0!important;
     padding:0!important;
     text-align:left!important;
     line-height:1.12!important;
+    align-self:center!important;
   }
   #mmMobileDrawer .mm-drawer-nav button.featured{
     background:linear-gradient(90deg,rgba(228,184,90,.17),rgba(228,184,90,.06))!important;
