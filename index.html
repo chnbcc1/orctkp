@@ -2504,7 +2504,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.150</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.151</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2696,7 +2696,7 @@ function openDocumentAssistant(origin=""){
   window.__docAssistantOrigin=String(origin||"");
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.8.150 · Belge Üretim Merkezi · çevrimdışı";
+  el("modalSubtitle").textContent="v7.8.151 · Belge Üretim Merkezi · çevrimdışı";
   const teacherFileReturn=window.__docAssistantOrigin==="teacherFile"?`<div class="teacher-file-return-card"><button type="button" class="secondary" onclick="teacherFileReturnFromAssistant()">← Öğretmen Dosyasına Dön</button></div>`:"";
   el("modalBody").innerHTML=`${teacherFileReturn}
     <div class="doc-assistant-tools887">
@@ -4485,6 +4485,10 @@ input,select,textarea{border-radius:12px!important;background:#fffefa!important}
 
 
 
+
+<style id="v78151-homework-list-date-style">
+.homeworks-desktop td.mm-homework-date151{white-space:nowrap!important;font-variant-numeric:tabular-nums!important}
+</style>
 </body></html>`}
 function docPdfWrap(ctx,text,maxW){
  const words=String(text||'').split(/\s+/).filter(Boolean),lines=[];let line='';
@@ -4750,7 +4754,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.150";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.151";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -8120,7 +8124,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.150",
+    appVersion:"v7.8.151",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -8133,7 +8137,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.150",
+    appVersion:"v7.8.151",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -9309,7 +9313,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   }
   window.mmRecordBackup884=function(backup,kind){
     try{localStorage.setItem(HEALTH_KEY,JSON.stringify({
-      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.150',
+      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.151',
       stats:stats(backup?.state||state),
       archives:Array.isArray(backup?.schoolYearArchives)?backup.schoolYearArchives.length:loadSchoolYearArchives().length
     }))}catch(e){console.warn('Yedek sağlık kaydı yazılamadı',e)}
@@ -9435,7 +9439,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     el('modalTitle').textContent='Sistem Sağlığı';el('modalSubtitle').textContent='Salt okunur veri kontrolü, depolama durumu ve yedek doğrulama.';
     el('modalBody').innerHTML=`<div class="mm-health-status884 ${bs.cls}"><span class="dot"></span><div><b>${esc(bs.text)}</b><div class="tiny" style="margin-top:3px">Bu ekran mevcut öğrenci verilerini değiştirmez.</div></div></div>
       <div class="mm-health-grid884">
-        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.150</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
+        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.151</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
         <div class="mm-health-card884"><span>SINIF</span><b>${st.classes}</b></div><div class="mm-health-card884"><span>ÖĞRENCİ</span><b>${st.students}</b></div><div class="mm-health-card884"><span>ÖDEV</span><b>${st.homeworks}</b></div>
         <div class="mm-health-card884"><span>DENEME</span><b>${st.trials}</b></div><div class="mm-health-card884"><span>VELİ GÖRÜŞMESİ</span><b>${st.meetings}</b></div><div class="mm-health-card884"><span>REHBERLİK KAYDI</span><b>${st.guidance}</b></div>
         <div class="mm-health-card884"><span>YEREL VERİ</span><b>${fmtBytes(localBytes())}</b></div><div class="mm-health-card884"><span>ÖDEV GÖRSELİ</span><b id="mmHealthIDB884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA TOPLAM / ÜST SINIR</span><b id="mmHealthStorage884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA ÖNBELLEĞİ</span><b id="mmHealthCaches886">Kontrol…</b></div>
@@ -9445,7 +9449,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
         <label class="btn secondary" style="display:block;width:100%;box-sizing:border-box;text-align:center;cursor:pointer">🔍 Yedek Dosyasını Kontrol Et<input type="file" accept=".json,application/json" hidden onchange="validateBackupFile884(event)"></label>
         <div id="mmBackupCheck884" class="mm-backup-check884">Henüz bir yedek dosyası kontrol edilmedi.</div></div>
       <div class="card" style="padding:12px;margin-top:10px"><b>PWA Önbellek Bakımı</b>
-        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.150</b> ve önceki stabil sürüm <b>v7.8.119</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
+        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.151</b> ve önceki stabil sürüm <b>v7.8.119</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
         <button class="secondary" style="width:100%" onclick="cleanupOldPWACaches886()">🧹 Eski PWA Önbelleklerini Temizle</button>
         <div id="mmCacheMaintenance886" class="tiny" style="margin-top:8px;line-height:1.45">Önbellekler kontrol ediliyor…</div>
       </div>`;
@@ -9459,7 +9463,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   };
 
   window.exportVerifiedBackup884=function(){
-    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.150',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
+    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.151',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
     downloadBlob(JSON.stringify(backup,null,2),'MualliMate_DOGRULANMIS_TAM_YEDEK.json','application/json');mmRecordBackup884(backup,'doğrulanmış tam yedek');setTimeout(()=>openSystemHealth884(),80);
   };
 
@@ -9783,7 +9787,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 </style>
 <script id="v7886-cache-maintenance">
 (function(){
-  const CURRENT_CACHE_886='ots-v7.8.150-ui-landscape-class-fine-polish';
+  const CURRENT_CACHE_886='ots-v7.8.151-ui-landscape-class-fine-polish';
   const PREVIOUS_STABLE_CACHE_886='ots-v7.8.119-test-analysis-mobile-table-fit';
   const KEEP_CACHES_886=new Set([CURRENT_CACHE_886,PREVIOUS_STABLE_CACHE_886]);
 
@@ -9803,7 +9807,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       if(countHost) countHost.textContent=`${keys.length} cache · ${removable.length} eski`;
       if(noteHost){
         if(removable.length){
-          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.150${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.119':' (v7.8.119 cihazda bulunamadı)'}`;
+          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.151${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.119':' (v7.8.119 cihazda bulunamadı)'}`;
         }else{
           noteHost.innerHTML='<span class="mm-cache-ok886">✓ Temizlenecek eski MualliMate önbelleği yok.</span><br>Mevcut ve önceki stabil sürüm korunuyor.';
         }
@@ -9829,7 +9833,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     const versions=info.removable.map(k=>k.replace(/^ots-/,'')).join('\n• ');
     const ok=confirm(
       'Yalnızca eski MualliMate PWA önbellekleri silinecek.\n\n'+
-      'Korunacaklar:\n• v7.8.150 (mevcut sürüm)\n• v7.8.119 (önceki stabil sürüm)\n\n'+
+      'Korunacaklar:\n• v7.8.151 (mevcut sürüm)\n• v7.8.119 (önceki stabil sürüm)\n\n'+
       'Silinecek eski önbellekler:\n• '+versions+'\n\n'+
       'Öğrenci verileri, notlar, ödevler, yedekler, arşivler ve IndexedDB etkilenmez.\n\nDevam edilsin mi?'
     );
@@ -9841,7 +9845,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       }catch(e){ failed++; }
     }
     await refreshPWACacheStatus886();
-    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.150 ve önceki stabil v7.8.119 önbellekleri korundu.`);
+    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.151 ve önceki stabil v7.8.119 önbellekleri korundu.`);
   };
 })();
 </script>
@@ -10698,7 +10702,7 @@ button:disabled,.btn:disabled,input:disabled,select:disabled,textarea:disabled{o
 
 
 
-<!-- v7.8.150 — Yatay Sınıf Kontrol Merkezi görsel sadeleştirme: daha kompakt başlık, tek satır sınıf seçici, hizalı araç/modül kartları -->
+<!-- v7.8.151 — Yatay Sınıf Kontrol Merkezi görsel sadeleştirme: daha kompakt başlık, tek satır sınıf seçici, hizalı araç/modül kartları -->
 <style id="v78144-landscape-class-visual-polish">
 @media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
   /* Üst başlık: profil bilgisi korunur, ekranda sınıf merkezine daha fazla alan bırakılır. */
@@ -11528,7 +11532,7 @@ html.app-locked,body.app-locked{
     const c=cls(),h=c?.homeworks?.find(x=>x.id===hid);if(!c||!h)return;const st=hstat(c,hid),ts=isTest(h)?testStats(c,h):null;
     el('modalTitle').textContent=h.name;el('modalSubtitle').textContent=isTest(h)?`${c.name} · ${ts.entered}/${c.students.length} sonuç · Ort. ${fmt(ts.avgCorrect)} doğru`:`${c.name} · ${st.done}/${st.total} yaptı · %${st.rate}`;
     const testBanner=isTest(h)?`<div class="mm-test-homework-banner"><b>🧪 Test Ödevi</b><span>${qCount(h)} soru</span></div>`:'';
-    el('modalBody').innerHTML=`${testBanner}<div class="form-row"><label>Verilme Tarihi<input id="givenDate" type="date" value="${esc(h.given||'')}"></label><label>Son Teslim<input id="dueDate" type="date" value="${esc(h.due||'')}"></label><button onclick="saveDates('${hid}')">Kaydet</button></div>
+    el('modalBody').innerHTML=`${testBanner}<div class="homework-detail-date-grid151"><label>Verilme Tarihi<div class="homework-date-shell"><span id="givenDateText151" class="homework-date-display ${h.given?'':'is-empty'}">${esc(formatHomeworkDateInput(h.given||''))}</span><input id="givenDate" type="date" value="${esc(h.given||'')}" onchange="syncHomeworkDateDisplay('givenDate','givenDateText151')"></div></label><label>Son Teslim<div class="homework-date-shell"><span id="dueDateText151" class="homework-date-display ${h.due?'':'is-empty'}">${esc(formatHomeworkDateInput(h.due||''))}</span><input id="dueDate" type="date" value="${esc(h.due||'')}" onchange="syncHomeworkDateDisplay('dueDate','dueDateText151')"></div></label><button onclick="saveDates('${hid}')">Kaydet</button></div>
     ${h.imageData?`<div class="homework-image-box" style="margin-bottom:12px"><b>📷 Ödev Görseli</b><img class="homework-image-preview" src="${h.imageData}" alt="Ödev görseli"><div class="homework-image-actions"><button onclick="viewHomeworkImage('${hid}')">Görseli Büyük Aç</button><label class="secondary" style="display:flex;align-items:center;justify-content:center;cursor:pointer;padding:10px;border-radius:10px">Görseli Değiştir<input type="file" accept="image/*" style="display:none" onchange="changeHomeworkImage('${hid}',this)"></label><button class="danger" onclick="removeHomeworkImage('${hid}')">Görseli Kaldır</button></div></div>`:`<div class="homework-image-box" style="margin-bottom:12px"><b>📷 Ödev Görseli</b><div class="tiny" style="margin:5px 0 9px">Bu ödeve henüz görsel eklenmemiş.</div><label class="secondary" style="display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:10px;border-radius:10px">Görsel Ekle<input type="file" accept="image/*" style="display:none" onchange="changeHomeworkImage('${hid}',this)"></label></div>`}
     <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px"><button class="secondary" onclick="openEditHomework('${hid}')">✏️ Ödevi Düzenle</button><button onclick="exportHomeworkJPEG('${hid}')">Bu Ödevin Çıktısı</button><button class="secondary" onclick="openCopyHomework('${hid}')">Diğer Sınıflara Kopyala</button><button class="success" onclick="markAll('${hid}','done')">Tümünü Yaptı</button><button class="danger" onclick="markAll('${hid}','missing')">Tümünü Yapmadı</button></div>
     <div class="quick-grid">${c.students.map(s=>`<div class="quick-card"><span class="student-name-with-dot"><b>${esc(s.number?s.number+' - ':'')}${esc(s.name)}</b><span class="student-status-dot ${status(c,s.id,hid)}" data-status-dot="${s.id}:${hid}" title="${status(c,s.id,hid)==='done'?'Yaptı':status(c,s.id,hid)==='partial'?'Kısmen':status(c,s.id,hid)==='excused'?'Mazeretli':status(c,s.id,hid)==='missing'?'Yapmadı':'Kontrol Edilmedi'}"></span></span>${statusButtons(s.id,hid)}${isTest(h)?testEditorHTML(h,s):''}</div>`).join('')}</div>`;el('modal').classList.add('open')
@@ -11536,8 +11540,8 @@ html.app-locked,body.app-locked{
 
   window.renderHomeworks=function(){
     const c=cls(),q=(el('homeworkSearch')?.value||'').toLocaleLowerCase('tr'),arr=hwPeriod(c).filter(h=>h.name.toLocaleLowerCase('tr').includes(q));el('homeworksBody').innerHTML='';el('homeworksEmpty').style.display=arr.length?'none':'block';
-    arr.forEach(h=>{const st=hstat(c,h.id),ts=isTest(h)?testStats(c,h):null,tr=document.createElement('tr');tr.className='clickable';tr.onclick=()=>openHomework(h.id);const progress=isTest(h)?`${ts.entered}/${st.total} sonuç · Ort. ${fmt(ts.avgCorrect)} D`:`${st.done}/${st.total} (%${st.rate})`;tr.innerHTML=`<td>${h.imageData?`<img class="homework-thumb" src="${h.imageData}" alt="">`:''}<b>${esc(h.name)}</b>${isTest(h)?`<span class="mm-test-badge">🧪 ${qCount(h)} soru</span>`:''}</td><td>${esc(h.given||'-')}</td><td>${esc(h.due||'-')}</td><td>${progress}</td><td><button class="secondary" onclick="event.stopPropagation();openEditHomework('${h.id}')">Düzenle</button> <button class="ghost" onclick="event.stopPropagation();deleteHomework('${h.id}')">Sil</button></td>`;el('homeworksBody').appendChild(tr)});
-    const mobile=el('homeworksMobile');if(mobile)mobile.innerHTML=arr.length?arr.map(h=>{const st=hstat(c,h.id),ts=isTest(h)?testStats(c,h):null,parts=[];if(h.given)parts.push('Verilme: '+esc(h.given));if(h.due)parts.push('Son teslim: '+esc(h.due));parts.push(isTest(h)?`${ts.entered}/${st.total} sonuç · Ort. ${fmt(ts.avgCorrect)} doğru`:`Yaptı: ${st.done}/${st.total}`);return `<div class="mobile-list-card"><div class="mobile-list-head" onclick="openHomework('${h.id}')"><div class="mobile-list-title">${h.imageData?'🖼️ ':''}${esc(h.name)}${isTest(h)?` <span class="mm-test-badge">🧪 ${qCount(h)} soru</span>`:''}</div><span class="avg-pill ${isTest(h)?(ts.entered===st.total?'avg-pass':''):st.rate>=50?'avg-pass':'avg-fail'}">${isTest(h)?ts.entered+'/'+st.total:'%'+st.rate}</span></div><div class="mobile-list-meta">${parts.join(' · ')}</div><div class="mobile-list-actions"><button class="secondary" onclick="openHomework('${h.id}')">Ayrıntı</button><button class="secondary" onclick="openEditHomework('${h.id}')">Düzenle</button><button class="danger" onclick="deleteHomework('${h.id}')">Ödevi Sil</button></div></div>`}).join(''):'<div class="empty card">Bu dönemde ödev yok.</div>';
+    arr.forEach(h=>{const st=hstat(c,h.id),ts=isTest(h)?testStats(c,h):null,tr=document.createElement('tr');tr.className='clickable';tr.onclick=()=>openHomework(h.id);const progress=isTest(h)?`${ts.entered}/${st.total} sonuç · Ort. ${fmt(ts.avgCorrect)} D`:`${st.done}/${st.total} (%${st.rate})`;tr.innerHTML=`<td>${h.imageData?`<img class="homework-thumb" src="${h.imageData}" alt="">`:''}<b>${esc(h.name)}</b>${isTest(h)?`<span class="mm-test-badge">🧪 ${qCount(h)} soru</span>`:''}</td><td class="mm-homework-date151">${esc(h.given?formatHomeworkDateInput(h.given):'-')}</td><td class="mm-homework-date151">${esc(h.due?formatHomeworkDateInput(h.due):'-')}</td><td>${progress}</td><td><button class="secondary" onclick="event.stopPropagation();openEditHomework('${h.id}')">Düzenle</button> <button class="ghost" onclick="event.stopPropagation();deleteHomework('${h.id}')">Sil</button></td>`;el('homeworksBody').appendChild(tr)});
+    const mobile=el('homeworksMobile');if(mobile)mobile.innerHTML=arr.length?arr.map(h=>{const st=hstat(c,h.id),ts=isTest(h)?testStats(c,h):null,parts=[];if(h.given)parts.push('Verilme: '+esc(formatHomeworkDateInput(h.given)));if(h.due)parts.push('Son teslim: '+esc(formatHomeworkDateInput(h.due)));parts.push(isTest(h)?`${ts.entered}/${st.total} sonuç · Ort. ${fmt(ts.avgCorrect)} doğru`:`Yaptı: ${st.done}/${st.total}`);return `<div class="mobile-list-card"><div class="mobile-list-head" onclick="openHomework('${h.id}')"><div class="mobile-list-title">${h.imageData?'🖼️ ':''}${esc(h.name)}${isTest(h)?` <span class="mm-test-badge">🧪 ${qCount(h)} soru</span>`:''}</div><span class="avg-pill ${isTest(h)?(ts.entered===st.total?'avg-pass':''):st.rate>=50?'avg-pass':'avg-fail'}">${isTest(h)?ts.entered+'/'+st.total:'%'+st.rate}</span></div><div class="mobile-list-meta">${parts.join(' · ')}</div><div class="mobile-list-actions"><button class="secondary" onclick="openHomework('${h.id}')">Ayrıntı</button><button class="secondary" onclick="openEditHomework('${h.id}')">Düzenle</button><button class="danger" onclick="deleteHomework('${h.id}')">Ödevi Sil</button></div></div>`}).join(''):'<div class="empty card">Bu dönemde ödev yok.</div>';
   };
 
   const oldCopy=window.commitCopyHomework;
@@ -11640,16 +11644,16 @@ html.app-locked,body.app-locked{
   }
   window.mmTestResultLive7859=function(input,immediate=false){const row=input?.closest('.mm-test-entry-v2');if(!row)return;const v=updateRowVisual(row),key=rowKey(row);clearTimeout(timers.get(key));if(!v.has||v.valid){if(immediate)saveRow(row);else timers.set(key,setTimeout(()=>saveRow(row),280))}};
   window.mmTestKeyNav7859=function(ev,input){if(ev.key!=='Enter')return;ev.preventDefault();mmTestResultLive7859(input,true);const all=[...document.querySelectorAll('.mm-test-entry-v2 input[data-test-score]')],i=all.indexOf(input);if(i>=0&&all[i+1]){all[i+1].focus();all[i+1].select?.()}}
-  function updateSummary(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));if(!c||!h)return;const s=stats(c,h),sub=el('modalSubtitle');if(sub)sub.textContent=`${c.name} · ${s.entered}/${c.students.length} sonuç · Ort. %${Math.round(s.avgPct)} doğru`}
+  function updateSummary(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));if(!c||!h)return;const s=stats(c,h),q=qCount(h),avgNet=s.entered?(Number(s.avgCorrect||0)-Number(s.avgWrong||0)/4):0,netPct=q&&s.entered?Math.max(0,Math.min(100,Math.round(avgNet*100/q))):0,sub=el('modalSubtitle');if(sub)sub.textContent=`${c.name} · ${s.entered}/${c.students.length} sonuç · Ort. Net ${Number(avgNet).toLocaleString('tr-TR',{maximumFractionDigits:2})} · Başarı %${netPct}`}
 
   function testEditorHTML(h,st){const r=resultObj(h,st.id)||{},valid=resultValid(h,r),q=qCount(h),p=pctFor(h,r),f=feedbackInfo(p);return `<div class="quick-card mm-test-student-card"><div class="mm-test-student-head"><b>${esc(st.number?st.number+' - ':'')}${esc(st.name)}</b><span class="mm-test-feedback" style="color:${f.color}">${p===null?'Sonuç girilmedi':`%${p} · ${f.label}`}</span></div><div class="mm-test-entry-v2" data-hid="${h.id}" data-sid="${st.id}" data-q="${q}"><div class="mm-test-entry-grid-v2"><label>Doğru<input data-test-score="correct" type="number" min="0" max="${q}" inputmode="numeric" enterkeyhint="next" value="${r.correct??''}" oninput="mmTestResultLive7859(this)" onblur="mmTestResultLive7859(this,true)" onkeydown="mmTestKeyNav7859(event,this)"></label><label>Yanlış<input data-test-score="wrong" type="number" min="0" max="${q}" inputmode="numeric" enterkeyhint="next" value="${r.wrong??''}" oninput="mmTestResultLive7859(this)" onblur="mmTestResultLive7859(this,true)" onkeydown="mmTestKeyNav7859(event,this)"></label><label>Boş<div class="mm-test-auto-blank" data-test-blank>${valid?Number(r.blank):'—'}</div></label></div><div class="mm-test-save-state ${valid?'saved':''}">${valid?'✓ Otomatik kaydedildi':'Doğru ve yanlış girildiğinde otomatik kaydedilir'}</div></div></div>`}
 
   const oldOpenHomework=window.openHomework;
   window.openHomework=function(hid){
     const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));if(!c||!h||!isTest(h))return oldOpenHomework(hid);
-    window._activeStudentModalId=null;window._activeHomeworkModalId841=hid;const s=stats(c,h);el('modalTitle').textContent=h.name;el('modalSubtitle').textContent=`${c.name} · ${s.entered}/${c.students.length} sonuç · Ort. %${Math.round(s.avgPct)} doğru`;
-    const q=qCount(h),testBanner=`<div class="mm-test-homework-banner"><b>🧪 Test Ödevi</b><span>${q} soru</span></div>`;
-    el('modalBody').innerHTML=`${testBanner}<div class="form-row"><label>Verilme Tarihi<input id="givenDate" type="date" value="${esc(h.given||'')}"></label><label>Son Teslim<input id="dueDate" type="date" value="${esc(h.due||'')}"></label><button onclick="saveDates('${hid}')">Kaydet</button></div>
+    window._activeStudentModalId=null;window._activeHomeworkModalId841=hid;const s=stats(c,h),q=qCount(h),avgNet=s.entered?(Number(s.avgCorrect||0)-Number(s.avgWrong||0)/4):0,netPct=q&&s.entered?Math.max(0,Math.min(100,Math.round(avgNet*100/q))):0;el('modalTitle').textContent=h.name;el('modalSubtitle').textContent=`${c.name} · ${s.entered}/${c.students.length} sonuç · Ort. Net ${Number(avgNet).toLocaleString('tr-TR',{maximumFractionDigits:2})} · Başarı %${netPct}`;
+    const testBanner=`<div class="mm-test-homework-banner"><b>🧪 Test Ödevi</b><span>${q} soru</span></div>`;
+    el('modalBody').innerHTML=`${testBanner}<div class="homework-detail-date-grid151"><label>Verilme Tarihi<div class="homework-date-shell"><span id="givenDateText151" class="homework-date-display ${h.given?'':'is-empty'}">${esc(formatHomeworkDateInput(h.given||''))}</span><input id="givenDate" type="date" value="${esc(h.given||'')}" onchange="syncHomeworkDateDisplay('givenDate','givenDateText151')"></div></label><label>Son Teslim<div class="homework-date-shell"><span id="dueDateText151" class="homework-date-display ${h.due?'':'is-empty'}">${esc(formatHomeworkDateInput(h.due||''))}</span><input id="dueDate" type="date" value="${esc(h.due||'')}" onchange="syncHomeworkDateDisplay('dueDate','dueDateText151')"></div></label><button onclick="saveDates('${hid}')">Kaydet</button></div>
     ${h.imageData?`<div class="homework-image-box" style="margin-bottom:12px"><b>📷 Ödev Görseli</b><img class="homework-image-preview" src="${h.imageData}" alt="Ödev görseli"><div class="homework-image-actions"><button onclick="viewHomeworkImage('${hid}')">Görseli Büyük Aç</button><label class="secondary" style="display:flex;align-items:center;justify-content:center;cursor:pointer;padding:10px;border-radius:10px">Görseli Değiştir<input type="file" accept="image/*" style="display:none" onchange="changeHomeworkImage('${hid}',this)"></label><button class="danger" onclick="removeHomeworkImage('${hid}')">Görseli Kaldır</button></div></div>`:`<div class="homework-image-box" style="margin-bottom:12px"><b>📷 Ödev Görseli</b><div class="tiny" style="margin:5px 0 9px">Bu ödeve henüz görsel eklenmemiş.</div><label class="secondary" style="display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:10px;border-radius:10px">Görsel Ekle<input type="file" accept="image/*" style="display:none" onchange="changeHomeworkImage('${hid}',this)"></label></div>`}
     <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px"><button class="secondary" onclick="openEditHomework('${hid}')">✏️ Ödevi Düzenle</button><button onclick="exportHomeworkJPEG('${hid}')">Bu Ödevin Çıktısı</button><button class="secondary" onclick="openCopyHomework('${hid}')">Diğer Sınıflara Kopyala</button></div>
     <div class="quick-grid">${c.students.map(st=>testEditorHTML(h,st)).join('')}</div>`;el('modal').classList.add('open');
@@ -11657,8 +11661,8 @@ html.app-locked,body.app-locked{
 
   window.renderHomeworks=function(){
     const c=cls(),q=(el('homeworkSearch')?.value||'').toLocaleLowerCase('tr'),arr=hwPeriod(c).filter(h=>h.name.toLocaleLowerCase('tr').includes(q));el('homeworksBody').innerHTML='';el('homeworksEmpty').style.display=arr.length?'none':'block';
-    arr.forEach(h=>{const st=hstat(c,h.id),ts=isTest(h)?stats(c,h):null,tr=document.createElement('tr');tr.className='clickable';tr.onclick=()=>openHomework(h.id);const progress=isTest(h)?`${ts.entered}/${st.total} sonuç · Ort. %${Math.round(ts.avgPct)}`:`${st.done}/${st.total} (%${st.rate})`;tr.innerHTML=`<td>${h.imageData?`<img class="homework-thumb" src="${h.imageData}" alt="">`:''}<b>${esc(h.name)}</b>${isTest(h)?`<span class="mm-test-badge">🧪 ${qCount(h)} soru</span>`:''}</td><td>${esc(h.given||'-')}</td><td>${esc(h.due||'-')}</td><td>${progress}</td><td><button class="secondary" onclick="event.stopPropagation();openEditHomework('${h.id}')">Düzenle</button> <button class="ghost" onclick="event.stopPropagation();deleteHomework('${h.id}')">Sil</button></td>`;el('homeworksBody').appendChild(tr)});
-    const mobile=el('homeworksMobile');if(mobile)mobile.innerHTML=arr.length?arr.map(h=>{const st=hstat(c,h.id),ts=isTest(h)?stats(c,h):null,parts=[];if(h.given)parts.push('Verilme: '+esc(h.given));if(h.due)parts.push('Son teslim: '+esc(h.due));parts.push(isTest(h)?`${ts.entered}/${st.total} sonuç · Ort. %${Math.round(ts.avgPct)} doğru`:`Yaptı: ${st.done}/${st.total}`);return `<div class="mobile-list-card"><div class="mobile-list-head" onclick="openHomework('${h.id}')"><div class="mobile-list-title">${h.imageData?'🖼️ ':''}${esc(h.name)}${isTest(h)?` <span class="mm-test-badge">🧪 ${qCount(h)} soru</span>`:''}</div><span class="avg-pill ${isTest(h)?(ts.avgPct>=60?'avg-pass':'avg-fail'):st.rate>=50?'avg-pass':'avg-fail'}">${isTest(h)?'%'+Math.round(ts.avgPct):'%'+st.rate}</span></div><div class="mobile-list-meta">${parts.join(' · ')}</div><div class="mobile-list-actions"><button class="secondary" onclick="openHomework('${h.id}')">Ayrıntı</button><button class="secondary" onclick="openEditHomework('${h.id}')">Düzenle</button><button class="danger" onclick="deleteHomework('${h.id}')">Ödevi Sil</button></div></div>`}).join(''):'<div class="empty card">Bu dönemde ödev yok.</div>';
+    arr.forEach(h=>{const st=hstat(c,h.id),ts=isTest(h)?stats(c,h):null,tr=document.createElement('tr');tr.className='clickable';tr.onclick=()=>openHomework(h.id);const progress=isTest(h)?`${ts.entered}/${st.total} sonuç · Ort. %${Math.round(ts.avgPct)}`:`${st.done}/${st.total} (%${st.rate})`;tr.innerHTML=`<td>${h.imageData?`<img class="homework-thumb" src="${h.imageData}" alt="">`:''}<b>${esc(h.name)}</b>${isTest(h)?`<span class="mm-test-badge">🧪 ${qCount(h)} soru</span>`:''}</td><td class="mm-homework-date151">${esc(h.given?formatHomeworkDateInput(h.given):'-')}</td><td class="mm-homework-date151">${esc(h.due?formatHomeworkDateInput(h.due):'-')}</td><td>${progress}</td><td><button class="secondary" onclick="event.stopPropagation();openEditHomework('${h.id}')">Düzenle</button> <button class="ghost" onclick="event.stopPropagation();deleteHomework('${h.id}')">Sil</button></td>`;el('homeworksBody').appendChild(tr)});
+    const mobile=el('homeworksMobile');if(mobile)mobile.innerHTML=arr.length?arr.map(h=>{const st=hstat(c,h.id),ts=isTest(h)?stats(c,h):null,parts=[];if(h.given)parts.push('Verilme: '+esc(formatHomeworkDateInput(h.given)));if(h.due)parts.push('Son teslim: '+esc(formatHomeworkDateInput(h.due)));parts.push(isTest(h)?`${ts.entered}/${st.total} sonuç · Ort. %${Math.round(ts.avgPct)} doğru`:`Yaptı: ${st.done}/${st.total}`);return `<div class="mobile-list-card"><div class="mobile-list-head" onclick="openHomework('${h.id}')"><div class="mobile-list-title">${h.imageData?'🖼️ ':''}${esc(h.name)}${isTest(h)?` <span class="mm-test-badge">🧪 ${qCount(h)} soru</span>`:''}</div><span class="avg-pill ${isTest(h)?(ts.avgPct>=60?'avg-pass':'avg-fail'):st.rate>=50?'avg-pass':'avg-fail'}">${isTest(h)?'%'+Math.round(ts.avgPct):'%'+st.rate}</span></div><div class="mobile-list-meta">${parts.join(' · ')}</div><div class="mobile-list-actions"><button class="secondary" onclick="openHomework('${h.id}')">Ayrıntı</button><button class="secondary" onclick="openEditHomework('${h.id}')">Düzenle</button><button class="danger" onclick="deleteHomework('${h.id}')">Ödevi Sil</button></div></div>`}).join(''):'<div class="empty card">Bu dönemde ödev yok.</div>';
   };
 
   const oldExport=window.exportHomeworkJPEG;
@@ -12508,7 +12512,7 @@ input::placeholder,textarea::placeholder{color:#5c6d67!important;opacity:1!impor
 .ws-toolbar887 .tiny,.ws-draft-row887 .tiny{color:var(--mm-readable-muted)!important}
 </style>
 
-<!-- v7.8.150 — Optik Form V3: numara alanı dikey aralığı artırıldı; A4 dikey, klasik öğrenci-no + kitapçık türü + 1–6 ders + V1 tarama uyumluluğu; V2 kaldırıldı -->
+<!-- v7.8.151 — Optik Form V3: numara alanı dikey aralığı artırıldı; A4 dikey, klasik öğrenci-no + kitapçık türü + 1–6 ders + V1 tarama uyumluluğu; V2 kaldırıldı -->
 <!-- v7.8.112 — Optik güven/inceleme sistemi + 5 haneli öğrenci no + numara zebra -->
 <!-- v7.8.99 — Optik Form: tek görsel seçici + güçlendirilmiş köşe algılama + dikey/yatay zebra form -->
 <style id="v7895-optical-omr">
@@ -12891,7 +12895,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.150';
+ const VERSION='v7.8.151';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -13260,7 +13264,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78128-layout-duty-ios-lock-script">
 (function(){
-  const VERSION='v7.8.150';
+  const VERSION='v7.8.151';
   const root=document.documentElement, body=document.body;
   let active=false, baseVvH=0, baseBgTop=0, bgShift=0, touchY=0, raf=0;
 
@@ -13616,7 +13620,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78129-landscape-responsive-final-script">
 (function(){
-  const VERSION='v7.8.150';
+  const VERSION='v7.8.151';
   const mq=window.matchMedia('(orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
 
   function validTestResult(h,sid){
@@ -13971,7 +13975,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78130-landscape-class-center-duty-script">
 (function(){
-  const VERSION='v7.8.150';
+  const VERSION='v7.8.151';
   function syncVersion(){
     document.querySelectorAll('.premium-brand .tiny').forEach(function(x){
       if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION;
@@ -13991,7 +13995,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </script>
 
 
-<!-- v7.8.150 — Yatay Sınıf Kontrol Merkezi: kart çakışması kesin düzeltme; doğal akış + sabit satır yüksekliği -->
+<!-- v7.8.151 — Yatay Sınıf Kontrol Merkezi: kart çakışması kesin düzeltme; doğal akış + sabit satır yüksekliği -->
 <style id="v78145-landscape-class-no-overlap-final">
 @media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
   /* Eski sürümlerde orta satır minmax(0,1fr) ile zorla daraltılıyordu. Üç bölüm artık doğal yüksekliğinde akar. */
@@ -14203,7 +14207,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 
 
-<!-- v7.8.150 — Yatay Sınıf Kontrol Merkezi ince görsel ayar: çakışmasız temel korunarak boşluk, hizalama ve kart oranları dengelendi -->
+<!-- v7.8.151 — Yatay Sınıf Kontrol Merkezi ince görsel ayar: çakışmasız temel korunarak boşluk, hizalama ve kart oranları dengelendi -->
 <style id="v78146-landscape-class-fine-polish">
 @media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
   /* Çakışma düzeltmesinin grid yapısına dokunmadan, üst alanı ve aralıkları biraz sıkılaştır. */
@@ -14383,8 +14387,8 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 
 
-<!-- v7.8.150 — Ödev ilerleme çubuğu: Yaptı + Kısmen katkısı ayrı renklerle gösterilir; toplam tamamlama oranı korunur -->
-<!-- v7.8.150 — Yatay ekran toplu görsel ince ayar: nöbet tarih/saat alanları, ödev ilerleme çubuğu, tema/hiza düzeltmeleri -->
+<!-- v7.8.151 — Ödev ilerleme çubuğu: Yaptı + Kısmen katkısı ayrı renklerle gösterilir; toplam tamamlama oranı korunur -->
+<!-- v7.8.151 — Yatay ekran toplu görsel ince ayar: nöbet tarih/saat alanları, ödev ilerleme çubuğu, tema/hiza düzeltmeleri -->
 <style id="v78147-landscape-review-polish">
 /* Ödevler: Öğrenciler ekranındaki oran göstergesiyle aynı dil. */
 .mm-homework-progress147{min-width:190px;display:grid;gap:5px}
@@ -14465,7 +14469,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78147-landscape-review-polish-script">
 (function(){
   'use strict';
-  const VERSION='v7.8.150';
+  const VERSION='v7.8.151';
 
   function testSummary147(c,h){
     const total=(c?.students||[]).length,q=Math.max(0,Math.floor(Number(h?.questionCount||0)));
@@ -14509,12 +14513,12 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
     arr.forEach(h=>{
       const st=hstat(c,h.id),test=isTest147(h),tr=document.createElement('tr');tr.className='clickable';tr.onclick=()=>openHomework(h.id);
       const progress=test?testProgress147(c,h):normalProgress147(st);
-      tr.innerHTML=`<td>${h.imageData?`<img class="homework-thumb" src="${h.imageData}" alt="">`:''}<b>${esc(h.name)}</b>${test?`<span class="mm-test-badge">🧪 ${Math.max(0,Math.floor(Number(h.questionCount||0)))} soru</span>`:''}</td><td>${esc(h.given||'-')}</td><td>${esc(h.due||'-')}</td><td>${progress}</td><td><button class="secondary" onclick="event.stopPropagation();openEditHomework('${h.id}')">Düzenle</button> <button class="ghost" onclick="event.stopPropagation();deleteHomework('${h.id}')">Sil</button></td>`;
+      tr.innerHTML=`<td>${h.imageData?`<img class="homework-thumb" src="${h.imageData}" alt="">`:''}<b>${esc(h.name)}</b>${test?`<span class="mm-test-badge">🧪 ${Math.max(0,Math.floor(Number(h.questionCount||0)))} soru</span>`:''}</td><td class="mm-homework-date151">${esc(h.given?formatHomeworkDateInput(h.given):'-')}</td><td class="mm-homework-date151">${esc(h.due?formatHomeworkDateInput(h.due):'-')}</td><td>${progress}</td><td><button class="secondary" onclick="event.stopPropagation();openEditHomework('${h.id}')">Düzenle</button> <button class="ghost" onclick="event.stopPropagation();deleteHomework('${h.id}')">Sil</button></td>`;
       body.appendChild(tr);
     });
     const mobile=el('homeworksMobile');if(mobile)mobile.innerHTML=arr.length?arr.map(h=>{
       const st=hstat(c,h.id),test=isTest147(h),s=test?testSummary147(c,h):null,parts=[];
-      if(h.given)parts.push('Verilme: '+esc(h.given));if(h.due)parts.push('Son teslim: '+esc(h.due));
+      if(h.given)parts.push('Verilme: '+esc(formatHomeworkDateInput(h.given)));if(h.due)parts.push('Son teslim: '+esc(formatHomeworkDateInput(h.due)));
       parts.push(test?`${s.entered}/${s.total} sonuç · ${s.avgD}D · ${s.avgW}Y · ${s.avgB}B · Başarı %${s.netPct}`:`Yaptı: ${st.done}/${st.total} · %${st.rate}`);
       const pct=test?s.coverage:st.rate;
       return `<div class="mobile-list-card"><div class="mobile-list-head" onclick="openHomework('${h.id}')"><div class="mobile-list-title">${h.imageData?'🖼️ ':''}${esc(h.name)}${test?` <span class="mm-test-badge">🧪 ${Math.max(0,Math.floor(Number(h.questionCount||0)))} soru</span>`:''}</div><span class="avg-pill ${pct>=60?'avg-pass':'avg-fail'}">%${pct}</span></div><div style="margin:7px 0">${test?testProgress147(c,h):normalProgress147(st)}</div><div class="mobile-list-meta">${parts.join(' · ')}</div><div class="mobile-list-actions"><button class="secondary" onclick="openHomework('${h.id}')">Ayrıntı</button><button class="secondary" onclick="openEditHomework('${h.id}')">Düzenle</button><button class="danger" onclick="deleteHomework('${h.id}')">Ödevi Sil</button></div></div>`;
@@ -14561,7 +14565,17 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </script>
 
 
-<!-- v7.8.150 — Test ödevi: net tabanlı başarı/değerlendirme, rapora NET sütunu + Ort. Net, test ayrıntısı tarih çakışması düzeltmesi -->
+<!-- v7.8.151 — Ödev ayrıntısı tarih alanları ve liste tarih biçimi kesin düzeltme -->
+<style id="v78151-homework-date-layout">
+#modalBody .homework-detail-date-grid151{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto!important;gap:14px!important;align-items:end!important;width:100%!important;min-width:0!important;margin-bottom:14px!important}
+#modalBody .homework-detail-date-grid151>label{display:block!important;min-width:0!important;width:100%!important;margin:0!important;font-weight:800!important}
+#modalBody .homework-detail-date-grid151 .homework-date-shell{width:100%!important;min-width:0!important;max-width:100%!important;height:54px!important;margin-top:7px!important;overflow:hidden!important;border-radius:12px!important;contain:layout paint!important}
+#modalBody .homework-detail-date-grid151 .homework-date-display{height:54px!important;border-radius:12px!important;background:#fffaf0!important;font-weight:800!important;white-space:nowrap!important}
+#modalBody .homework-detail-date-grid151 .homework-date-shell input[type="date"]{inset:0!important;width:100%!important;min-width:0!important;max-width:100%!important;height:54px!important;transform:none!important;clip-path:inset(0 round 12px)!important}
+#modalBody .homework-detail-date-grid151>button{height:54px!important;min-width:118px!important;align-self:end!important}
+@media(max-width:700px){#modalBody .homework-detail-date-grid151{grid-template-columns:1fr!important}#modalBody .homework-detail-date-grid151>button{width:100%!important}}
+</style>
+<!-- v7.8.151 — Test ödevi: net tabanlı başarı/değerlendirme, rapora NET sütunu + Ort. Net, test ayrıntısı tarih çakışması düzeltmesi -->
 <style id="v78150-test-net-report-fix">
 /* Test ödevi ayrıntısındaki iki tarih alanı yatay ekranda asla birbirinin alanına taşmaz. */
 #modalBody .mm-date-row150{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto!important;gap:12px!important;align-items:end!important;width:100%!important;min-width:0!important}
@@ -14575,7 +14589,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78150-test-net-report-script">
 (function(){
 'use strict';
-const VERSION150='v7.8.150';
+const VERSION150='v7.8.151';
 function clamp150(v,a,b){return Math.max(a,Math.min(b,v))}
 function q150(h){const n=Math.floor(Number(h?.questionCount||0));return Number.isFinite(n)&&n>0?n:0}
 function valid150(h,r){const q=q150(h);if(!q||!r||typeof r!=='object')return false;const d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);return[d,w,b].every(Number.isFinite)&&d>=0&&w>=0&&b>=0&&d+w+b===q}
