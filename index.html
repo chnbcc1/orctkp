@@ -2504,7 +2504,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.151</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.152</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2696,7 +2696,7 @@ function openDocumentAssistant(origin=""){
   window.__docAssistantOrigin=String(origin||"");
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.8.151 · Belge Üretim Merkezi · çevrimdışı";
+  el("modalSubtitle").textContent="v7.8.152 · Belge Üretim Merkezi · çevrimdışı";
   const teacherFileReturn=window.__docAssistantOrigin==="teacherFile"?`<div class="teacher-file-return-card"><button type="button" class="secondary" onclick="teacherFileReturnFromAssistant()">← Öğretmen Dosyasına Dön</button></div>`:"";
   el("modalBody").innerHTML=`${teacherFileReturn}
     <div class="doc-assistant-tools887">
@@ -4754,7 +4754,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.151";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.152";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -8124,7 +8124,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.151",
+    appVersion:"v7.8.152",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -8137,7 +8137,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.151",
+    appVersion:"v7.8.152",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -9313,7 +9313,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   }
   window.mmRecordBackup884=function(backup,kind){
     try{localStorage.setItem(HEALTH_KEY,JSON.stringify({
-      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.151',
+      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.152',
       stats:stats(backup?.state||state),
       archives:Array.isArray(backup?.schoolYearArchives)?backup.schoolYearArchives.length:loadSchoolYearArchives().length
     }))}catch(e){console.warn('Yedek sağlık kaydı yazılamadı',e)}
@@ -9439,7 +9439,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     el('modalTitle').textContent='Sistem Sağlığı';el('modalSubtitle').textContent='Salt okunur veri kontrolü, depolama durumu ve yedek doğrulama.';
     el('modalBody').innerHTML=`<div class="mm-health-status884 ${bs.cls}"><span class="dot"></span><div><b>${esc(bs.text)}</b><div class="tiny" style="margin-top:3px">Bu ekran mevcut öğrenci verilerini değiştirmez.</div></div></div>
       <div class="mm-health-grid884">
-        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.151</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
+        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.152</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
         <div class="mm-health-card884"><span>SINIF</span><b>${st.classes}</b></div><div class="mm-health-card884"><span>ÖĞRENCİ</span><b>${st.students}</b></div><div class="mm-health-card884"><span>ÖDEV</span><b>${st.homeworks}</b></div>
         <div class="mm-health-card884"><span>DENEME</span><b>${st.trials}</b></div><div class="mm-health-card884"><span>VELİ GÖRÜŞMESİ</span><b>${st.meetings}</b></div><div class="mm-health-card884"><span>REHBERLİK KAYDI</span><b>${st.guidance}</b></div>
         <div class="mm-health-card884"><span>YEREL VERİ</span><b>${fmtBytes(localBytes())}</b></div><div class="mm-health-card884"><span>ÖDEV GÖRSELİ</span><b id="mmHealthIDB884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA TOPLAM / ÜST SINIR</span><b id="mmHealthStorage884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA ÖNBELLEĞİ</span><b id="mmHealthCaches886">Kontrol…</b></div>
@@ -9449,7 +9449,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
         <label class="btn secondary" style="display:block;width:100%;box-sizing:border-box;text-align:center;cursor:pointer">🔍 Yedek Dosyasını Kontrol Et<input type="file" accept=".json,application/json" hidden onchange="validateBackupFile884(event)"></label>
         <div id="mmBackupCheck884" class="mm-backup-check884">Henüz bir yedek dosyası kontrol edilmedi.</div></div>
       <div class="card" style="padding:12px;margin-top:10px"><b>PWA Önbellek Bakımı</b>
-        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.151</b> ve önceki stabil sürüm <b>v7.8.119</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
+        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.152</b> ve önceki stabil sürüm <b>v7.8.119</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
         <button class="secondary" style="width:100%" onclick="cleanupOldPWACaches886()">🧹 Eski PWA Önbelleklerini Temizle</button>
         <div id="mmCacheMaintenance886" class="tiny" style="margin-top:8px;line-height:1.45">Önbellekler kontrol ediliyor…</div>
       </div>`;
@@ -9463,7 +9463,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   };
 
   window.exportVerifiedBackup884=function(){
-    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.151',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
+    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.152',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
     downloadBlob(JSON.stringify(backup,null,2),'MualliMate_DOGRULANMIS_TAM_YEDEK.json','application/json');mmRecordBackup884(backup,'doğrulanmış tam yedek');setTimeout(()=>openSystemHealth884(),80);
   };
 
@@ -9787,7 +9787,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 </style>
 <script id="v7886-cache-maintenance">
 (function(){
-  const CURRENT_CACHE_886='ots-v7.8.151-ui-landscape-class-fine-polish';
+  const CURRENT_CACHE_886='ots-v7.8.152-class-center-vertical-fill';
   const PREVIOUS_STABLE_CACHE_886='ots-v7.8.119-test-analysis-mobile-table-fit';
   const KEEP_CACHES_886=new Set([CURRENT_CACHE_886,PREVIOUS_STABLE_CACHE_886]);
 
@@ -9807,7 +9807,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       if(countHost) countHost.textContent=`${keys.length} cache · ${removable.length} eski`;
       if(noteHost){
         if(removable.length){
-          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.151${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.119':' (v7.8.119 cihazda bulunamadı)'}`;
+          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.152${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.119':' (v7.8.119 cihazda bulunamadı)'}`;
         }else{
           noteHost.innerHTML='<span class="mm-cache-ok886">✓ Temizlenecek eski MualliMate önbelleği yok.</span><br>Mevcut ve önceki stabil sürüm korunuyor.';
         }
@@ -9833,7 +9833,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     const versions=info.removable.map(k=>k.replace(/^ots-/,'')).join('\n• ');
     const ok=confirm(
       'Yalnızca eski MualliMate PWA önbellekleri silinecek.\n\n'+
-      'Korunacaklar:\n• v7.8.151 (mevcut sürüm)\n• v7.8.119 (önceki stabil sürüm)\n\n'+
+      'Korunacaklar:\n• v7.8.152 (mevcut sürüm)\n• v7.8.119 (önceki stabil sürüm)\n\n'+
       'Silinecek eski önbellekler:\n• '+versions+'\n\n'+
       'Öğrenci verileri, notlar, ödevler, yedekler, arşivler ve IndexedDB etkilenmez.\n\nDevam edilsin mi?'
     );
@@ -9845,7 +9845,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       }catch(e){ failed++; }
     }
     await refreshPWACacheStatus886();
-    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.151 ve önceki stabil v7.8.119 önbellekleri korundu.`);
+    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.152 ve önceki stabil v7.8.119 önbellekleri korundu.`);
   };
 })();
 </script>
@@ -10702,7 +10702,7 @@ button:disabled,.btn:disabled,input:disabled,select:disabled,textarea:disabled{o
 
 
 
-<!-- v7.8.151 — Yatay Sınıf Kontrol Merkezi görsel sadeleştirme: daha kompakt başlık, tek satır sınıf seçici, hizalı araç/modül kartları -->
+<!-- v7.8.152 — Yatay Sınıf Kontrol Merkezi görsel sadeleştirme: daha kompakt başlık, tek satır sınıf seçici, hizalı araç/modül kartları -->
 <style id="v78144-landscape-class-visual-polish">
 @media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
   /* Üst başlık: profil bilgisi korunur, ekranda sınıf merkezine daha fazla alan bırakılır. */
@@ -10886,7 +10886,108 @@ button:disabled,.btn:disabled,input:disabled,select:disabled,textarea:disabled{o
   z-index:2147483647!important;
   overflow:hidden!important;
   overscroll-behavior:none!important;
-  background:#0f172a!important;
+  background:
+
+<!-- v7.8.152 — Yatay Sınıf Kontrol Merkezi: alt boşluğu azaltmak için güvenli dikey doluluk optimizasyonu -->
+<style id="v78152-class-center-vertical-fill">
+@media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  /* Ekranın altındaki kullanılmayan alanı kartları kontrollü büyüterek değerlendir. */
+  body.mm-class-open:not(.class-module-page-open) #classView{
+    height:100%!important;
+    max-height:100%!important;
+    min-height:0!important;
+    display:grid!important;
+    grid-template-rows:38px minmax(0,1fr) 54px!important;
+    align-content:stretch!important;
+    gap:7px!important;
+    overflow:hidden!important;
+  }
+  body.mm-class-open:not(.class-module-page-open) #mmClassHomeBar{
+    height:38px!important;
+    min-height:38px!important;
+    max-height:38px!important;
+  }
+  body.mm-class-open:not(.class-module-page-open) #mmClassHomeBar button{
+    height:31px!important;
+    min-height:31px!important;
+  }
+
+  /* Orta sınıf kartı mevcut boşluğu bütünüyle kullanır; satırlar birbirine binmeden esner. */
+  body.mm-class-open:not(.class-module-page-open) .compact-class-summary{
+    height:100%!important;
+    min-height:0!important;
+    max-height:100%!important;
+    display:grid!important;
+    grid-template-rows:minmax(44px,1.05fr) minmax(46px,1fr) 36px 5px!important;
+    align-content:stretch!important;
+    gap:6px!important;
+    padding:7px 8px!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+  body.mm-class-open:not(.class-module-page-open) .compact-class-head,
+  body.mm-class-open:not(.class-module-page-open) .class-top-actions{
+    height:100%!important;
+    min-height:44px!important;
+    max-height:none!important;
+    align-items:stretch!important;
+  }
+  body.mm-class-open:not(.class-module-page-open) .compact-class-head>div:first-child,
+  body.mm-class-open:not(.class-module-page-open) .mm-class-picker-shell{
+    height:100%!important;
+    min-height:44px!important;
+    max-height:none!important;
+  }
+  body.mm-class-open:not(.class-module-page-open) .class-top-actions button{
+    height:100%!important;
+    min-height:44px!important;
+    max-height:none!important;
+  }
+  body.mm-class-open:not(.class-module-page-open) .class-module-grid{
+    height:100%!important;
+    min-height:46px!important;
+    max-height:none!important;
+    align-items:stretch!important;
+  }
+  body.mm-class-open:not(.class-module-page-open) .class-module-btn{
+    height:100%!important;
+    min-height:46px!important;
+    max-height:none!important;
+  }
+  body.mm-class-open:not(.class-module-page-open) .compact-stats.status-only,
+  body.mm-class-open:not(.class-module-page-open) .compact-stat{
+    height:36px!important;
+    min-height:36px!important;
+    max-height:36px!important;
+  }
+  body.mm-class-open:not(.class-module-page-open) .compact-progress{
+    height:5px!important;
+    min-height:5px!important;
+    max-height:5px!important;
+  }
+
+  /* Alt iki kısayol daha rahat okunur; ekranın dibinde artık büyük ölü alan kalmaz. */
+  body.mm-class-open:not(.class-module-page-open) .overview-shortcuts{
+    height:54px!important;
+    min-height:54px!important;
+    max-height:54px!important;
+    margin:0!important;
+  }
+  body.mm-class-open:not(.class-module-page-open) .overview-shortcut{
+    height:54px!important;
+    min-height:54px!important;
+    max-height:54px!important;
+    padding:5px 10px!important;
+  }
+  body.mm-class-open:not(.class-module-page-open) .overview-shortcut-icon{font-size:18px!important}
+  body.mm-class-open:not(.class-module-page-open) .overview-shortcut-text b{font-size:10.5px!important}
+  body.mm-class-open:not(.class-module-page-open) .overview-shortcut-text small{font-size:8px!important}
+  body.mm-class-open:not(.class-module-page-open) .overview-count{
+    width:29px!important;min-width:29px!important;height:29px!important;line-height:27px!important;font-size:10px!important
+  }
+}
+</style>
+#0f172a!important;
   padding:max(20px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left))!important;
   box-sizing:border-box!important;
 }
@@ -12512,7 +12613,7 @@ input::placeholder,textarea::placeholder{color:#5c6d67!important;opacity:1!impor
 .ws-toolbar887 .tiny,.ws-draft-row887 .tiny{color:var(--mm-readable-muted)!important}
 </style>
 
-<!-- v7.8.151 — Optik Form V3: numara alanı dikey aralığı artırıldı; A4 dikey, klasik öğrenci-no + kitapçık türü + 1–6 ders + V1 tarama uyumluluğu; V2 kaldırıldı -->
+<!-- v7.8.152 — Optik Form V3: numara alanı dikey aralığı artırıldı; A4 dikey, klasik öğrenci-no + kitapçık türü + 1–6 ders + V1 tarama uyumluluğu; V2 kaldırıldı -->
 <!-- v7.8.112 — Optik güven/inceleme sistemi + 5 haneli öğrenci no + numara zebra -->
 <!-- v7.8.99 — Optik Form: tek görsel seçici + güçlendirilmiş köşe algılama + dikey/yatay zebra form -->
 <style id="v7895-optical-omr">
@@ -12895,7 +12996,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.151';
+ const VERSION='v7.8.152';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -13264,7 +13365,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78128-layout-duty-ios-lock-script">
 (function(){
-  const VERSION='v7.8.151';
+  const VERSION='v7.8.152';
   const root=document.documentElement, body=document.body;
   let active=false, baseVvH=0, baseBgTop=0, bgShift=0, touchY=0, raf=0;
 
@@ -13620,7 +13721,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78129-landscape-responsive-final-script">
 (function(){
-  const VERSION='v7.8.151';
+  const VERSION='v7.8.152';
   const mq=window.matchMedia('(orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
 
   function validTestResult(h,sid){
@@ -13975,7 +14076,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78130-landscape-class-center-duty-script">
 (function(){
-  const VERSION='v7.8.151';
+  const VERSION='v7.8.152';
   function syncVersion(){
     document.querySelectorAll('.premium-brand .tiny').forEach(function(x){
       if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION;
@@ -13995,7 +14096,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </script>
 
 
-<!-- v7.8.151 — Yatay Sınıf Kontrol Merkezi: kart çakışması kesin düzeltme; doğal akış + sabit satır yüksekliği -->
+<!-- v7.8.152 — Yatay Sınıf Kontrol Merkezi: kart çakışması kesin düzeltme; doğal akış + sabit satır yüksekliği -->
 <style id="v78145-landscape-class-no-overlap-final">
 @media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
   /* Eski sürümlerde orta satır minmax(0,1fr) ile zorla daraltılıyordu. Üç bölüm artık doğal yüksekliğinde akar. */
@@ -14207,7 +14308,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 
 
-<!-- v7.8.151 — Yatay Sınıf Kontrol Merkezi ince görsel ayar: çakışmasız temel korunarak boşluk, hizalama ve kart oranları dengelendi -->
+<!-- v7.8.152 — Yatay Sınıf Kontrol Merkezi ince görsel ayar: çakışmasız temel korunarak boşluk, hizalama ve kart oranları dengelendi -->
 <style id="v78146-landscape-class-fine-polish">
 @media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
   /* Çakışma düzeltmesinin grid yapısına dokunmadan, üst alanı ve aralıkları biraz sıkılaştır. */
@@ -14387,8 +14488,8 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 
 
-<!-- v7.8.151 — Ödev ilerleme çubuğu: Yaptı + Kısmen katkısı ayrı renklerle gösterilir; toplam tamamlama oranı korunur -->
-<!-- v7.8.151 — Yatay ekran toplu görsel ince ayar: nöbet tarih/saat alanları, ödev ilerleme çubuğu, tema/hiza düzeltmeleri -->
+<!-- v7.8.152 — Ödev ilerleme çubuğu: Yaptı + Kısmen katkısı ayrı renklerle gösterilir; toplam tamamlama oranı korunur -->
+<!-- v7.8.152 — Yatay ekran toplu görsel ince ayar: nöbet tarih/saat alanları, ödev ilerleme çubuğu, tema/hiza düzeltmeleri -->
 <style id="v78147-landscape-review-polish">
 /* Ödevler: Öğrenciler ekranındaki oran göstergesiyle aynı dil. */
 .mm-homework-progress147{min-width:190px;display:grid;gap:5px}
@@ -14469,7 +14570,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78147-landscape-review-polish-script">
 (function(){
   'use strict';
-  const VERSION='v7.8.151';
+  const VERSION='v7.8.152';
 
   function testSummary147(c,h){
     const total=(c?.students||[]).length,q=Math.max(0,Math.floor(Number(h?.questionCount||0)));
@@ -14565,7 +14666,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </script>
 
 
-<!-- v7.8.151 — Ödev ayrıntısı tarih alanları ve liste tarih biçimi kesin düzeltme -->
+<!-- v7.8.152 — Ödev ayrıntısı tarih alanları ve liste tarih biçimi kesin düzeltme -->
 <style id="v78151-homework-date-layout">
 #modalBody .homework-detail-date-grid151{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto!important;gap:14px!important;align-items:end!important;width:100%!important;min-width:0!important;margin-bottom:14px!important}
 #modalBody .homework-detail-date-grid151>label{display:block!important;min-width:0!important;width:100%!important;margin:0!important;font-weight:800!important}
@@ -14575,7 +14676,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 #modalBody .homework-detail-date-grid151>button{height:54px!important;min-width:118px!important;align-self:end!important}
 @media(max-width:700px){#modalBody .homework-detail-date-grid151{grid-template-columns:1fr!important}#modalBody .homework-detail-date-grid151>button{width:100%!important}}
 </style>
-<!-- v7.8.151 — Test ödevi: net tabanlı başarı/değerlendirme, rapora NET sütunu + Ort. Net, test ayrıntısı tarih çakışması düzeltmesi -->
+<!-- v7.8.152 — Test ödevi: net tabanlı başarı/değerlendirme, rapora NET sütunu + Ort. Net, test ayrıntısı tarih çakışması düzeltmesi -->
 <style id="v78150-test-net-report-fix">
 /* Test ödevi ayrıntısındaki iki tarih alanı yatay ekranda asla birbirinin alanına taşmaz. */
 #modalBody .mm-date-row150{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto!important;gap:12px!important;align-items:end!important;width:100%!important;min-width:0!important}
@@ -14589,7 +14690,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78150-test-net-report-script">
 (function(){
 'use strict';
-const VERSION150='v7.8.151';
+const VERSION150='v7.8.152';
 function clamp150(v,a,b){return Math.max(a,Math.min(b,v))}
 function q150(h){const n=Math.floor(Number(h?.questionCount||0));return Number.isFinite(n)&&n>0?n:0}
 function valid150(h,r){const q=q150(h);if(!q||!r||typeof r!=='object')return false;const d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);return[d,w,b].every(Number.isFinite)&&d>=0&&w>=0&&b>=0&&d+w+b===q}
