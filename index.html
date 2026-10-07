@@ -2504,7 +2504,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.181</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.182</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -2696,7 +2696,7 @@ function openDocumentAssistant(origin=""){
   window.__docAssistantOrigin=String(origin||"");
   const x=documentAssistantContext(), rememberedType=settings.docAssistantLastType||"zumre", remembered=(settings.docAssistantLastFormByType||{})[rememberedType]||{};
   el("modalTitle").textContent="🤖 Belge Asistanı";
-  el("modalSubtitle").textContent="v7.8.181 · Belge Üretim Merkezi · çevrimdışı";
+  el("modalSubtitle").textContent="v7.8.182 · Belge Üretim Merkezi · çevrimdışı";
   const teacherFileReturn=window.__docAssistantOrigin==="teacherFile"?`<div class="teacher-file-return-card"><button type="button" class="secondary" onclick="teacherFileReturnFromAssistant()">← Öğretmen Dosyasına Dön</button></div>`:"";
   el("modalBody").innerHTML=`${teacherFileReturn}
     <div class="doc-assistant-tools887">
@@ -4754,7 +4754,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.181";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.182";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -8124,7 +8124,7 @@ function exportData(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.181",
+    appVersion:"v7.8.182",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -8137,7 +8137,7 @@ function exportTransferBackup(){
   const backup={
     backupType:"ogrenci-takip-tam-yedek",
     version:6,
-    appVersion:"v7.8.181",
+    appVersion:"v7.8.182",
     exportedAt:new Date().toISOString(),
     state:state,
     settings:settings,
@@ -9313,7 +9313,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   }
   window.mmRecordBackup884=function(backup,kind){
     try{localStorage.setItem(HEALTH_KEY,JSON.stringify({
-      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.181',
+      createdAt:new Date().toISOString(),kind:kind||'tam',appVersion:'v7.8.182',
       stats:stats(backup?.state||state),
       archives:Array.isArray(backup?.schoolYearArchives)?backup.schoolYearArchives.length:loadSchoolYearArchives().length
     }))}catch(e){console.warn('Yedek sağlık kaydı yazılamadı',e)}
@@ -9439,7 +9439,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     el('modalTitle').textContent='Sistem Sağlığı';el('modalSubtitle').textContent='Salt okunur veri kontrolü, depolama durumu ve yedek doğrulama.';
     el('modalBody').innerHTML=`<div class="mm-health-status884 ${bs.cls}"><span class="dot"></span><div><b>${esc(bs.text)}</b><div class="tiny" style="margin-top:3px">Bu ekran mevcut öğrenci verilerini değiştirmez.</div></div></div>
       <div class="mm-health-grid884">
-        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.181</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
+        <div class="mm-health-card884"><span>SÜRÜM</span><b>v7.8.182</b></div><div class="mm-health-card884"><span>EĞİTİM YILI</span><b>${esc(settings.currentSchoolYear||defaultSchoolYearLabel())}</b></div><div class="mm-health-card884"><span>ÇALIŞMA MODU</span><b>${standalone?'PWA':'Tarayıcı'}</b></div>
         <div class="mm-health-card884"><span>SINIF</span><b>${st.classes}</b></div><div class="mm-health-card884"><span>ÖĞRENCİ</span><b>${st.students}</b></div><div class="mm-health-card884"><span>ÖDEV</span><b>${st.homeworks}</b></div>
         <div class="mm-health-card884"><span>DENEME</span><b>${st.trials}</b></div><div class="mm-health-card884"><span>VELİ GÖRÜŞMESİ</span><b>${st.meetings}</b></div><div class="mm-health-card884"><span>REHBERLİK KAYDI</span><b>${st.guidance}</b></div>
         <div class="mm-health-card884"><span>YEREL VERİ</span><b>${fmtBytes(localBytes())}</b></div><div class="mm-health-card884"><span>ÖDEV GÖRSELİ</span><b id="mmHealthIDB884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA TOPLAM / ÜST SINIR</span><b id="mmHealthStorage884">Kontrol…</b></div><div class="mm-health-card884"><span>PWA ÖNBELLEĞİ</span><b id="mmHealthCaches886">Kontrol…</b></div>
@@ -9449,7 +9449,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
         <label class="btn secondary" style="display:block;width:100%;box-sizing:border-box;text-align:center;cursor:pointer">🔍 Yedek Dosyasını Kontrol Et<input type="file" accept=".json,application/json" hidden onchange="validateBackupFile884(event)"></label>
         <div id="mmBackupCheck884" class="mm-backup-check884">Henüz bir yedek dosyası kontrol edilmedi.</div></div>
       <div class="card" style="padding:12px;margin-top:10px"><b>PWA Önbellek Bakımı</b>
-        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.181</b> ve önceki stabil sürüm <b>v7.8.119</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
+        <div class="tiny" style="margin:5px 0 10px;line-height:1.55">Yalnızca eski MualliMate uygulama önbelleklerini temizler. Mevcut sürüm <b>v7.8.182</b> ve önceki stabil sürüm <b>v7.8.119</b> korunur. Öğrenci verileri, notlar, ödevler, rehberlik kayıtları, arşivler ve IndexedDB silinmez.</div>
         <button class="secondary" style="width:100%" onclick="cleanupOldPWACaches886()">🧹 Eski PWA Önbelleklerini Temizle</button>
         <div id="mmCacheMaintenance886" class="tiny" style="margin-top:8px;line-height:1.45">Önbellekler kontrol ediliyor…</div>
       </div>`;
@@ -9463,7 +9463,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   };
 
   window.exportVerifiedBackup884=function(){
-    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.181',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
+    const backup={backupType:'ogrenci-takip-tam-yedek',version:6,appVersion:'v7.8.182',exportedAt:new Date().toISOString(),state:state,settings:settings,schoolYearArchives:loadSchoolYearArchives(),verification:{generatedBy:'MualliMate Sistem Sağlığı',stats:stats(),dataVersion:APP_DATA_VERSION}};
     downloadBlob(JSON.stringify(backup,null,2),'MualliMate_DOGRULANMIS_TAM_YEDEK.json','application/json');mmRecordBackup884(backup,'doğrulanmış tam yedek');setTimeout(()=>openSystemHealth884(),80);
   };
 
@@ -9787,7 +9787,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
 </style>
 <script id="v7886-cache-maintenance">
 (function(){
-  const CURRENT_CACHE_886='ots-v7.8.181-drawer-landscape-space-version-fix';
+  const CURRENT_CACHE_886='ots-v7.8.182-drawer-landscape-space-version-fix';
   const PREVIOUS_STABLE_CACHE_886='ots-v7.8.119-test-analysis-mobile-table-fit';
   const KEEP_CACHES_886=new Set([CURRENT_CACHE_886,PREVIOUS_STABLE_CACHE_886]);
 
@@ -9807,7 +9807,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       if(countHost) countHost.textContent=`${keys.length} cache · ${removable.length} eski`;
       if(noteHost){
         if(removable.length){
-          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.181${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.119':' (v7.8.119 cihazda bulunamadı)'}`;
+          noteHost.innerHTML=`<span class="mm-cache-warn886">${removable.length} eski MualliMate önbelleği temizlenebilir.</span><br>Korunan: v7.8.182${protectedFound.includes(PREVIOUS_STABLE_CACHE_886)?' + v7.8.119':' (v7.8.119 cihazda bulunamadı)'}`;
         }else{
           noteHost.innerHTML='<span class="mm-cache-ok886">✓ Temizlenecek eski MualliMate önbelleği yok.</span><br>Mevcut ve önceki stabil sürüm korunuyor.';
         }
@@ -9833,7 +9833,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     const versions=info.removable.map(k=>k.replace(/^ots-/,'')).join('\n• ');
     const ok=confirm(
       'Yalnızca eski MualliMate PWA önbellekleri silinecek.\n\n'+
-      'Korunacaklar:\n• v7.8.181 (mevcut sürüm)\n• v7.8.119 (önceki stabil sürüm)\n\n'+
+      'Korunacaklar:\n• v7.8.182 (mevcut sürüm)\n• v7.8.119 (önceki stabil sürüm)\n\n'+
       'Silinecek eski önbellekler:\n• '+versions+'\n\n'+
       'Öğrenci verileri, notlar, ödevler, yedekler, arşivler ve IndexedDB etkilenmez.\n\nDevam edilsin mi?'
     );
@@ -9845,7 +9845,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
       }catch(e){ failed++; }
     }
     await refreshPWACacheStatus886();
-    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.181 ve önceki stabil v7.8.119 önbellekleri korundu.`);
+    alert(`${deleted} eski PWA önbelleği temizlendi.${failed?` ${failed} önbellek silinemedi.`:''}\n\nMevcut v7.8.182 ve önceki stabil v7.8.119 önbellekleri korundu.`);
   };
 })();
 </script>
@@ -12651,7 +12651,7 @@ function defaultSubjects795(ctx){const o=ctx?.obj,c=ctx?.c;if(!o)return[{name:cl
 function opticalConfigValid795(cfg,needKey=true){if(!cfg||!Array.isArray(cfg.subjects)||!cfg.subjects.length)return false;const choices=Number(cfg.choices||5);return cfg.subjects.every(s=>s.name&&Number(s.questions)>0&&Number(s.questions)<=OMR_MAX_Q795&&(!needKey||normKey795(s.key,choices).length===Number(s.questions)))}
 function builderRows795(subjects,count){let h='';for(let i=0;i<6;i++){const s=subjects[i]||{name:'',questions:20,key:''},q=clamp795(Number(s.questions)||20,1,OMR_MAX_Q795);h+=`<div class="mm-optic-subject795" data-omr-row="${i}" ${i>=count?'hidden':''}><label>Ders ${i+1}<input data-omr-name value="${esc(cleanSubjectName795(s.name||''))}" placeholder="Örn. Matematik"></label><label>Soru<input data-omr-q type="number" min="1" max="${OMR_MAX_Q795}" inputmode="numeric" value="${q}"></label><label>Cevap Anahtarı<input data-omr-key class="mm-optic-key795" value="${esc(s.key||'')}" placeholder="Örn. ABCDE..." autocapitalize="characters" autocomplete="off"></label></div>`}return h}
 window.omrBuilderCountChange795=function(){const n=clamp795(Number(document.getElementById('omrCourseCount795')?.value||1),1,6);document.querySelectorAll('#omrSubjects795 [data-omr-row]').forEach((r,i)=>{const hide=i>=n;r.hidden=hide;r.style.display=hide?'none':''})};
-window.openOpticalBuilder795=function(kind,id){const ctx=kindObj795(kind,id);if(!ctx||!ctx.obj)return alert('Optik form için hedef kayıt bulunamadı.');if(kind==='homework'&&!isTest795(ctx.obj))return alert('Optik okuma yalnız Test Ödevi için kullanılabilir.');if(typeof modalPushCurrent==='function')modalPushCurrent();const subs=defaultSubjects795(ctx),cfg=ctx.obj.opticalConfig||{},count=clamp795(subs.length,1,6),digits=OMR_NUMBER_DIGITS795;el('modalTitle').textContent='Optik Form Oluşturucu';el('modalSubtitle').textContent=`${ctx.c.name} · ${kind==='trial'?ctx.obj.name:'Test Ödevi · '+ctx.obj.name}`;el('modalBody').innerHTML=`<div class="mm-optic-builder795"><div class="mm-optic-info795"><b>MualliMate+ Optik Form V3</b><br>Yeni standart form <b>A4 dikey</b> hazırlanır. Öğrenci numarası klasik optik mantığında 5 ayrı hane sütunuyla, 0–9 rakamları yukarıdan aşağıya; <b>Kitapçık Türü A–D</b> ayrı kodlama alanıyla verilir. Dersler 1–6 adet olabilir ve aynı dikey sayfada yan yana sütunlar halinde yerleşir. V2 artık kullanılmaz.</div><div class="mm-optic-grid795"><label>Ders Sayısı<select id="omrCourseCount795" onchange="omrBuilderCountChange795()">${[1,2,3,4,5,6].map(n=>`<option value="${n}" ${n===count?'selected':''}>${n}</option>`).join('')}</select></label><label>Şık Sayısı<select id="omrChoiceCount795"><option value="5" ${Number(cfg.choices||5)===5?'selected':''}>5 Şık (A-E)</option><option value="4" ${Number(cfg.choices||5)===4?'selected':''}>4 Şık (A-D)</option></select></label><div class="full tiny">Öğrenci numarası alanı standart <b>${digits} hane</b> oluşturulur. Numaranızı soldan başlayarak işaretleyin; her sütunda 0–9 rakamları aşağı doğru gider. Kalan sağ haneler boş bırakılır.</div><div class="full tiny">Kitapçık türü formda <b>A / B / C / D</b> olarak kodlanır ve optik okuma sonucuna kaydedilir.</div><div class="full mm-optic-limit795">Her ders için 1–${OMR_MAX_Q795} soru desteklenir. Eski bastığınız optikleri okumak için Optik Oku ekranındaki <b>V1 · Eski basılı form</b> seçeneği korunur.</div></div><div id="omrSubjects795" class="mm-optic-subjects795">${builderRows795(subs,count)}</div><div class="modal-actions"><button onclick="saveOpticalConfig795('${kind}','${id}',true)">📝 Kaydet ve Formu Önizle</button><button class="secondary" onclick="saveOpticalConfig795('${kind}','${id}',false)">Yalnız Kaydet</button></div></div>`;el('modal').classList.add('open');omrBuilderCountChange795();if(typeof modalUpdateBackButton==='function')modalUpdateBackButton()};
+window.openOpticalBuilder795=function(kind,id){const ctx=kindObj795(kind,id);if(!ctx||!ctx.obj)return alert('Optik form için hedef kayıt bulunamadı.');if(kind==='homework'&&!isTest795(ctx.obj))return alert('Optik okuma yalnız Test Ödevi için kullanılabilir.');if(typeof modalPushCurrent==='function')modalPushCurrent();const subs=defaultSubjects795(ctx),cfg=ctx.obj.opticalConfig||{},count=clamp795(subs.length,1,6),digits=OMR_NUMBER_DIGITS795;el('modalTitle').textContent='Optik Form Oluşturucu';el('modalSubtitle').textContent=`${ctx.c.name} · ${kind==='trial'?ctx.obj.name:'Test Ödevi · '+ctx.obj.name}`;el('modalBody').innerHTML=`<div class="mm-optic-builder795"><div class="mm-optic-info795"><b>MualliMate+ Optik Form V3</b><br>Yeni standart form <b>A4 dikey</b> hazırlanır. Öğrenci numarası klasik optik mantığında 5 ayrı hane sütunuyla, 0–9 rakamları yukarıdan aşağıya; <b>Kitapçık Türü A–D</b> ayrı kodlama alanıyla verilir. Dersler 1–6 adet olabilir ve aynı dikey sayfada yan yana sütunlar halinde yerleşir. V2 artık kullanılmaz.</div><div class="mm-optic-grid795"><label>Ders Sayısı<select id="omrCourseCount795" onchange="omrBuilderCountChange795()">${[1,2,3,4,5,6].map(n=>`<option value="${n}" ${n===count?'selected':''}>${n}</option>`).join('')}</select></label><label>Şık Sayısı<select id="omrChoiceCount795"><option value="5" ${Number(cfg.choices||5)===5?'selected':''}>5 Şık (A-E)</option><option value="4" ${Number(cfg.choices||5)===4?'selected':''}>4 Şık (A-D)</option></select></label><div class="full tiny">Öğrenci numarası alanı standart <b>${digits} hane</b> oluşturulur. Kısa öğrenci numaralarında soldaki haneleri boş bırakın; numarayı sağa yaslı işaretleyin. Her sütunda 0–9 rakamları yukarıdan aşağıya gider.</div><div class="full tiny">Kitapçık türü formda <b>A / B / C / D</b> olarak kodlanır ve optik okuma sonucuna kaydedilir.</div><div class="full mm-optic-limit795">Her ders için 1–${OMR_MAX_Q795} soru desteklenir. Eski bastığınız optikleri okumak için Optik Oku ekranındaki <b>V1 · Eski basılı form</b> seçeneği korunur.</div></div><div id="omrSubjects795" class="mm-optic-subjects795">${builderRows795(subs,count)}</div><div class="modal-actions"><button onclick="saveOpticalConfig795('${kind}','${id}',true)">📝 Kaydet ve Formu Önizle</button><button class="secondary" onclick="saveOpticalConfig795('${kind}','${id}',false)">Yalnız Kaydet</button></div></div>`;el('modal').classList.add('open');omrBuilderCountChange795();if(typeof modalUpdateBackButton==='function')modalUpdateBackButton()};
 window.saveOpticalConfig795=function(kind,id,preview){const ctx=kindObj795(kind,id);if(!ctx||!ctx.obj)return;const count=Number(el('omrCourseCount795')?.value||1),choices=Number(el('omrChoiceCount795')?.value||5),rows=[...document.querySelectorAll('#omrSubjects795 [data-omr-row]')].slice(0,count),subjects=[];const seen=new Set();for(const r of rows){const name=cleanSubjectName795(r.querySelector('[data-omr-name]')?.value||''),questions=Math.floor(Number(r.querySelector('[data-omr-q]')?.value||0)),key=normKey795(r.querySelector('[data-omr-key]')?.value||'',choices);if(!name)return alert('Tüm ders adlarını girin.');if(seen.has(name.toLocaleLowerCase('tr')))return alert('Ders adları birbirinden farklı olmalı.');seen.add(name.toLocaleLowerCase('tr'));if(!Number.isFinite(questions)||questions<1||questions>OMR_MAX_Q795)return alert(`${name} için soru sayısını 1–${OMR_MAX_Q795} arasında girin.`);if(key.length!==questions)return alert(`${name} cevap anahtarı ${questions} cevap içermeli. Şu an ${key.length} cevap var.`);subjects.push({name,questions,key})}const cfg={version:6,layoutVersion:5,formStyle:'classic-v3',orientation:'portrait',choices,numberDigits:OMR_NUMBER_DIGITS795,bookletChoices:['A','B','C','D'],subjects,updatedAt:new Date().toISOString()};ctx.obj.opticalConfig=cfg;if(kind==='trial'){ctx.obj.subjects=subjects.map(s=>s.name);ctx.obj.opticalQuestionCounts=Object.fromEntries(subjects.map(s=>[s.name,s.questions]));ctx.obj.results=ctx.obj.results&&typeof ctx.obj.results==='object'?ctx.obj.results:{};(ctx.c.students||[]).forEach(st=>{const r=ctx.obj.results[st.id]||(ctx.obj.results[st.id]={attended:true,subjects:{}});r.subjects=r.subjects&&typeof r.subjects==='object'?r.subjects:{};subjects.forEach(s=>r.subjects[s.name]=r.subjects[s.name]||{})})}else{ctx.obj.questionCount=subjects.reduce((a,s)=>a+s.questions,0);ctx.obj.testResults=ctx.obj.testResults&&typeof ctx.obj.testResults==='object'?ctx.obj.testResults:{}}save();render();if(preview)openOpticalPreview795(kind,id);else{alert('Optik form ayarları kaydedildi · V3 A4 dikey düzen.');if(kind==='trial')openTrial(id);else openHomework(id)}};
 function drawBubble795(x,cx,cy,r,label){x.beginPath();x.arc(cx,cy,r,0,Math.PI*2);x.fillStyle='#fff';x.fill();x.strokeStyle='#111';x.lineWidth=2.35;x.stroke();if(label){x.fillStyle='#111';x.font=`bold ${Math.max(14,Math.round(r*.9))}px Arial`;x.textAlign='center';x.textBaseline='middle';x.fillText(label,cx,cy+.5)}}
 function layoutOpticalLegacy795(cfg){
@@ -12739,10 +12739,10 @@ function omrRenderSelectedFiles795(source){
  const names=a.slice(0,3).map(f=>esc(f.name||'Fotoğraf')).join(' · ')+(a.length>3?` · +${a.length-3}`:'');
  box.innerHTML=`<b>${a.length} görsel hazır.</b><div class="mm-optic-file-list795">${names}</div><button type="button" class="secondary" style="margin-top:7px;padding:7px 10px;min-height:0" onclick="omrClearSelectedFiles795()">Seçimi Temizle</button>`;
 }
-window.startOpticalScan795=function(kind,id){const ctx=kindObj795(kind,id);if(!ctx||!ctx.obj)return;const cfg=currentConfig795(kind,id);if(!cfg){if(confirm('Bu kayıt için geçerli optik form ve cevap anahtarı yok. Şimdi oluşturalım mı?'))openOpticalBuilder795(kind,id);return}if(typeof modalPushCurrent==='function')modalPushCurrent();window._omrPendingFiles795=[];const defaultLayout=(cfg.formStyle==='legacy-v1'||Number(cfg.layoutVersion||5)<=3)?3:5;el('modalTitle').textContent='Optik Oku';el('modalSubtitle').textContent=`${ctx.c.name} · ${ctx.obj.name}`;el('modalBody').innerHTML=`<div class="mm-optic-info795"><b>🖼️ Optik Görsel Okuma</b><br>Formun dört köşe karesinin tamamı görüntüde görünsün. Eğik çekimler perspektif olarak düzeltilir. Yeni standart <b>V3 A4 dikey</b> form, <b>V4 şablon tabanlı okuma motoru</b> ile okunur; çok dersli formlarda her ders bloğu ayrı hizalanır. Daha önce bastığınız <b>V1 eski form</b> da okunabilir. V2 kullanılmaz.</div><div class="mm-optic-grid795" style="margin-top:10px"><label class="full">Okunacak Form Düzeni<select id="omrScanLayout795"><option value="5" ${defaultLayout===5?'selected':''}>V3 · Klasik dikey (yeni)</option><option value="3" ${defaultLayout===3?'selected':''}>V1 · Eski basılı form</option></select></label></div><div class="mm-optic-pickers795"><label class="mm-optic-pick795">🖼️ Optik Görseli Seç<input id="omrPicker795" type="file" accept="image/*" multiple hidden onchange="omrAddSelectedFiles795(event,'picker')"></label></div><div id="omrSelected795" class="mm-optic-selected795"><b>Henüz görsel seçilmedi.</b><div class="mm-optic-file-list795">Fotoğraf Arşivi, Fotoğraf Çek veya Dosyalar seçeneklerinden optik görselleri ekleyebilirsiniz.</div></div><div class="modal-actions"><button onclick="processOpticalFiles795(window._omrPendingFiles795,'${kind}','${id}')">Optikleri Analiz Et</button><button class="secondary" onclick="openOpticalPreview795('${kind}','${id}')">Formu Gör</button></div><div class="tiny" style="margin-top:8px">İşlem tamamen cihazda yapılır; görseller dışarı gönderilmez.</div>`;el('modal').classList.add('open');if(typeof modalUpdateBackButton==='function')modalUpdateBackButton()};
+window.startOpticalScan795=function(kind,id){const ctx=kindObj795(kind,id);if(!ctx||!ctx.obj)return;const cfg=currentConfig795(kind,id);if(!cfg){if(confirm('Bu kayıt için geçerli optik form ve cevap anahtarı yok. Şimdi oluşturalım mı?'))openOpticalBuilder795(kind,id);return}if(typeof modalPushCurrent==='function')modalPushCurrent();window._omrPendingFiles795=[];const defaultLayout=(cfg.formStyle==='legacy-v1'||Number(cfg.layoutVersion||5)<=3)?3:5;el('modalTitle').textContent='Optik Oku';el('modalSubtitle').textContent=`${ctx.c.name} · ${ctx.obj.name}`;el('modalBody').innerHTML=`<div class="mm-optic-info795"><b>🖼️ Optik Görsel Okuma</b><br>Formun dört köşe karesinin tamamı görüntüde görünsün. Eğik çekimler perspektif olarak düzeltilir. Yeni standart <b>V3 A4 dikey</b> form, <b>V4.1 kanonik OMR motoru</b> ile okunur; çok dersli formlarda her ders bloğu ayrı hizalanır. Daha önce bastığınız <b>V1 eski form</b> da okunabilir.</div><div class="mm-optic-grid795" style="margin-top:10px"><label class="full">Okunacak Form Düzeni<select id="omrScanLayout795"><option value="5" ${defaultLayout===5?'selected':''}>V3 · Klasik dikey (yeni)</option><option value="3" ${defaultLayout===3?'selected':''}>V1 · Eski basılı form</option></select></label></div><div class="mm-optic-pickers795"><label class="mm-optic-pick795">🖼️ Optik Görseli Seç<input id="omrPicker795" type="file" accept="image/*" multiple hidden onchange="omrAddSelectedFiles795(event,'picker')"></label></div><div id="omrSelected795" class="mm-optic-selected795"><b>Henüz görsel seçilmedi.</b><div class="mm-optic-file-list795">Fotoğraf Arşivi, Fotoğraf Çek veya Dosyalar seçeneklerinden optik görselleri ekleyebilirsiniz.</div></div><div class="modal-actions"><button onclick="processOpticalFiles795(window._omrPendingFiles795,'${kind}','${id}')">Optikleri Analiz Et</button><button class="secondary" onclick="openOpticalPreview795('${kind}','${id}')">Formu Gör</button></div><div class="tiny" style="margin-top:8px">İşlem tamamen cihazda yapılır; görseller dışarı gönderilmez.</div>`;el('modal').classList.add('open');if(typeof modalUpdateBackButton==='function')modalUpdateBackButton()};
 
 
-/* v7.8.181 — Optik motor çekirdek yardımcıları geri yüklendi.
+/* v7.8.182 — Optik motor çekirdek yardımcıları geri yüklendi.
    Kaynak: v7.8.134 gerçek kağıt üzerinde doğrulanmış OMR çekirdeği.
    v7.8.135+ öğrenci numarası / V3 düzen geliştirmeleri korunur. */
 function dark795(d,i,t=115){return (d[i]*.299+d[i+1]*.587+d[i+2]*.114)<t}
@@ -12770,7 +12770,7 @@ function repairClippedMarker795(m,w,h){
  q.edgeAdjusted=fixed;q.effectiveArea=fixed?side*side*m.fill:m.area;return q
 }
 function markerPoints795(img,w,h){
-  /* v7.8.181: Köşeleri önce fiziksel ekran konumuna göre TL/TR/BL/BR olarak tut.
+  /* v7.8.182: Köşeleri önce fiziksel ekran konumuna göre TL/TR/BL/BR olarak tut.
      Önceki sürümde en büyük kareye göre erken döndürme bazen perspektif/kırpılma
      yüzünden yanlış yön seçebiliyordu. Yön seçimi artık form balonlarının gerçek
      hizasına bakılarak ayrıca yapılır. */
@@ -12800,7 +12800,7 @@ function answerBubbleScore795(img,w,h,H,b){
 }
 function regionScore795(img,w,h,H,cx,cy,rr){const p=mapP795(H,{x:cx,y:cy}),px=mapP795(H,{x:cx+rr,y:cy}),py=mapP795(H,{x:cx,y:cy+rr}),rx=Math.max(2,Math.hypot(px.x-p.x,px.y-p.y)),ry=Math.max(2,Math.hypot(py.x-p.x,py.y-p.y)),minx=Math.max(0,Math.floor(p.x-rx)),maxx=Math.min(w-1,Math.ceil(p.x+rx)),miny=Math.max(0,Math.floor(p.y-ry)),maxy=Math.min(h-1,Math.ceil(p.y+ry)),d=img.data;let sum=0,n=0,darkN=0;for(let yy=miny;yy<=maxy;yy++)for(let xx=minx;xx<=maxx;xx++){const dx=(xx-p.x)/rx,dy=(yy-p.y)/ry;if(dx*dx+dy*dy>1)continue;const i=(yy*w+xx)*4,g=d[i]*.299+d[i+1]*.587+d[i+2]*.114;sum+=g;n++;if(g<155)darkN++}if(!n)return 0;return Math.max(darkN/n,(235-sum/n)/220)}
 function betweenInk795(img,w,h,H,row){
- /* v7.8.181: Basılı gri zebra satırı "iki şık arası işaret" sayılmasın.
+ /* v7.8.182: Basılı gri zebra satırı "iki şık arası işaret" sayılmasın.
     Merkez koyuluğunu aynı bölgenin çevresindeki yerel zeminle karşılaştırırız.
     Gerçek kalem izi merkezde yerel zeminden belirgin koyu kalır; baskı şeridi ise merkez/çevreyi birlikte koyulaştırır. */
  let best=0;const bs=row?.bubbles||[],d=img.data;
@@ -12845,7 +12845,7 @@ function classifyAnswer795(scores,between){
        rel=a.v-median;
  if(strong.length>=2)return{type:'double',index:-1,indices:strong.map(z=>z.i),score:a.v,second:b.v,between,reason:'İki koyu işaret'};
  if(candidate.length>=2)return{type:'review',index:-1,indices:candidate.map(z=>z.i),score:a.v,second:b.v,between,reason:strong.length===1?'Koyu + silik çift işaret':'Silik / belirsiz çift işaret'};
- /* v7.8.181: temiz gerçek kâğıtta silik kurşun kalem, mutlak eşikten düşük olsa bile
+ /* v7.8.182: temiz gerçek kâğıtta silik kurşun kalem, mutlak eşikten düşük olsa bile
     aynı satırdaki diğer dört boş balondan açıkça ayrılıyorsa tek cevap kabul edilir.
     Bu karar cevap anahtarına bakmaz. Gerçek boş satırda beş balon birbirine yakın kaldığı için tetiklenmez. */
  const relativeFaint=a.v>=.175&&rel>=.050&&gap>=.032&&ratio>=1.18&&b.v<=.205&&between<.145;
@@ -12865,7 +12865,7 @@ function classifyAnswer795(scores,between){
  return{type:'answer',index:a.i,score:a.v,second:b.v,between,reason:'Net tek işaret'}
 }
 
-/* v7.8.181 — Optik çekirdek yardımcıları yeniden bütünlendi.
+/* v7.8.182 — Optik çekirdek yardımcıları yeniden bütünlendi.
    Bu fonksiyonlar yeni geometri/kitapçık/numara iyileştirmelerini değiştirmez;
    yalnız daha önce kaybolmuş temel çalışma zincirini geri getirir. */
 function recomputeOpticalRow795(r){
@@ -13083,7 +13083,7 @@ function readStudentNumberWideV2795(img,w,h,H,L,c){
 }
 function readBookletV3795(img,w,h,H,L){
  if(!Array.isArray(L.booklet)||!L.booklet.length)return{value:'',ambiguous:false,blank:true,quality:0};
- /* v7.8.181: Kitapçık alanı öğrenci-numarası eşiğiyle okunmaz.
+ /* v7.8.182: Kitapçık alanı öğrenci-numarası eşiğiyle okunmaz.
     Boş basılı çemberleri A/B/C/D sanmamak için doğrudan balonun iç doluluk kontrastı kullanılır. */
  const pool=[];
  for(const dx of[0,-3,3])for(const dy of[0,-3,3]){
@@ -13126,7 +13126,7 @@ function loadImageFile795(file){
 }
 
 
-/* v7.8.181 — V3 gerçek kâğıt otomatik yön + içerik hizalama */
+/* v7.8.182 — V3 gerçek kâğıt otomatik yön + içerik hizalama */
 function omrOutlineScore169(img,w,h,H,b){
   const p=mapP795(H,b),
         px=mapP795(H,{x:b.x+b.r,y:b.y}),
@@ -13201,7 +13201,7 @@ function bestFormTransform169(img,w,h,L,rawMarks){
 }
 
 
-/* v7.8.181 — Gerçek kâğıt: köşelerdeki küçük perspektif hatasını balon ızgarasının kendisiyle düzelt. */
+/* v7.8.182 — Gerçek kâğıt: köşelerdeki küçük perspektif hatasını balon ızgarasının kendisiyle düzelt. */
 function omrGroupOutlineScore170(img,w,h,H,bubbles,dx,dy){
   if(!Array.isArray(bubbles)||!bubbles.length)return 0;
   let sum=0,n=0;
@@ -13247,7 +13247,7 @@ function numberColumnReadWide170(img,w,h,H,col){
   return{ch,scores:raw,centerScores:center,dx:cal.dx,dy:cal.dy,outline:Number((cal.rawScore??cal.score??0).toFixed(4))}
 }
 
-/* v7.8.181 — Kısa öğrenci numarasında tek kaçan son/ilk haneyi güvenli kurtarma.
+/* v7.8.182 — Kısa öğrenci numarasında tek kaçan son/ilk haneyi güvenli kurtarma.
    Fiziksel ana okuma değişmez. Yalnız mevcut okuma sınıfta eşleşmiyorsa, hemen komşu boş hanedeki
    güçlü fakat eşik-altı aday gerçek bir öğrenci numarası oluşturuyorsa kurtarılır. */
 function weakDigitCandidate172(read,L,colIndex){
@@ -13299,7 +13299,7 @@ function readStudentNumberWide170(img,w,h,H,L,c){
   return recoverAdjacentStudentDigit172({reads,num,amb,student,quality,dx:0,dy:0,frame:0,recoveredLeading:0,leadingTolerance:0},L,c)
 }
 
-/* v7.8.181 — Tek köşe kesik/eğik algılanırsa üç sağlam köşeden alternatif dördüncü köşe kur.
+/* v7.8.182 — Tek köşe kesik/eğik algılanırsa üç sağlam köşeden alternatif dördüncü köşe kur.
    Doğrudan onarılmış köşe ile 3-köşe geometrik tahmini, balon çemberlerinin gerçek hizasına göre karşılaştırılır. */
 function inferFourthFromThree171(marks,idx,w,h){
   const m=marks.map(x=>({...x}));
@@ -13401,7 +13401,7 @@ function bestFormTransform170(img,w,h,L,rawMarks){
   return best
 }
 
-/* v7.8.181 — V3 gerçek kâğıt kök düzeltmesi:
+/* v7.8.182 — V3 gerçek kâğıt kök düzeltmesi:
    Temiz fotoğrafta kaba ışık normalizasyonu küçük öğrenci-no balonlarını silebiliyordu.
    Ham ve normalize görüntü fiziksel balon ayrışmasına göre karşılaştırılır.
    V3 cevap/numara ızgarası ayrıca satır-sütun bazında gereksiz kaydırılmaz;
@@ -13465,7 +13465,7 @@ function readStudentNumberDirect175(img,w,h,H,L,c){
 }
 
 
-/* v7.8.181 — Çoklu gerçek kâğıt stabilizasyonu.
+/* v7.8.182 — Çoklu gerçek kâğıt stabilizasyonu.
    Hedefler:
    1) 123 gibi kısa numarada soldaki boş/şüpheli kolonları numaraya katmamak.
    2) Karanlık fotoğrafta öğrenci noyu ham/normalize görüntü + tek ortak mikro hizalama ile karşılaştırmak.
@@ -13524,7 +13524,7 @@ function readStudentNumberCandidate177(img,w,h,H,L,c,dx=0,dy=0){
 }
 function readStudentNumberRobust177(rawImg,normImg,w,h,H,L,c){
   const base=readStudentNumberCandidate177(rawImg,w,h,H,L,c,0,0);
-  /* Temiz ve eşleşmiş okuma varsa başarılı v7.8.181 yoluna dokunma. */
+  /* Temiz ve eşleşmiş okuma varsa başarılı v7.8.182 yoluna dokunma. */
   if(base.student&&!base.amb.length)return{...base,source:'raw',fallback:false};
   const candidates=[{img:rawImg,source:'raw'}];
   if(normImg)candidates.push({img:normImg,source:'normalized'});
@@ -13633,7 +13633,7 @@ function readAnswerRowRobust177(rawImg,normImg,w,h,H,row){
 }
 
 
-/* v7.8.181 — Kirli/fotokopi izli gerçek kâğıt dayanıklılık katmanı.
+/* v7.8.182 — Kirli/fotokopi izli gerçek kâğıt dayanıklılık katmanı.
    Temiz ve zaten doğru okunan formların normal yoluna dokunmaz.
    Yalnız düşük ışık / yoğun zemin dokusu / öğrenci-no eşleşmeme durumunda
    yerel arka planı kaldırılmış üçüncü bir görüntü ile ikinci fiziksel okuma yapar. */
@@ -13728,7 +13728,7 @@ function readAnswerRowRobust178(rawImg,normImg,localImg,w,h,H,row,dirtyMode){
   return useLocal?{...local,source:'local',robust178:true}:{...base,robust178:false}
 }
 
-/* v7.8.181 — Kirli kâğıt kurtarma motoru.
+/* v7.8.182 — Kirli kâğıt kurtarma motoru.
    Normal okuma başarılıysa hiçbir şey değişmez.
    Yalnız düşük güven / yoğun kir / öğrenci eşleşmeme durumunda,
    balonun yalnız iç merkezindeki kompakt doluluğu kendi yakın zeminine göre ölçen
@@ -13862,46 +13862,145 @@ function readAnswerRowRescue179(base,img,w,h,H,row,dirtyMode){
 }
 
 /* ============================================================
-   MualliMate OMR V4 · v7.8.181
-   Şablon tabanlı, çok dersli ve kirli baskıya dayanıklı okuyucu.
-   - Dört köşe ile mevcut homografiyi kullanır.
-   - Öğrenci no, kitapçık ve HER DERS BLOĞU ayrı yerel hizalanır.
-   - Her balon sabit şablon koordinatında kendi yakın zeminine göre okunur.
-   - Uzun toner/çizgi/kir, balon merkezine yayılmış kompakt doluluk olmadığı
-     sürece cevap sayılmaz.
-   - Cevap anahtarı fiziksel okumaya karışmaz; yalnız D/Y hesabında kullanılır.
+   MualliMate OMR V4.1 · v7.8.182
+   GERÇEK KANONİK OMR HATTI
+   ------------------------------------------------------------
+   1) Dört köşe ile fotoğraf sabit şablon düzlemine gerçekten warp edilir.
+   2) Kanonik gri görüntü üzerinde 3 kutu bulanıklığı ile Gaussian-benzeri
+      yerel zemin tahmini ve adaptif eşikleme yapılır.
+   3) Uzun yatay/dikey toner çizgileri morfolojik/run tabanlı temizlenir.
+   4) Öğrenci no, kitapçık ve her ders bloğu AYRI yerel hizalanır.
+   5) Balon kararı yalnız koyuluğa değil:
+      - adaptif iç doluluk,
+      - merkez doluluğu,
+      - dört bölgeye yayılım,
+      - kendi çevresine göre gri kontrast
+      birlikte değerlendirilerek verilir.
+   6) Cevap anahtarı fiziksel okumayı ASLA yönlendirmez.
+   7) Çok dersli formda aynı motor her ders bloğunu ayrı okur.
    ============================================================ */
 
-function v4Gray181(img,w,h,x,y){
-  if(!Number.isFinite(x)||!Number.isFinite(y))return 255;
-  x=clamp795(x,0,w-1);y=clamp795(y,0,h-1);
+function v4182HCoef(src,dst){
+  const A=[],b=[];
+  for(let i=0;i<4;i++){
+    const X=src[i].x,Y=src[i].y,u=dst[i].x,v=dst[i].y;
+    A.push([X,Y,1,0,0,0,-u*X,-u*Y]);b.push(u);
+    A.push([0,0,0,X,Y,1,-v*X,-v*Y]);b.push(v)
+  }
+  return solve795(A,b)
+}
+function v4182SampleGray(src,w,h,x,y){
+  if(!Number.isFinite(x)||!Number.isFinite(y)||x<0||y<0||x>w-1||y>h-1)return 255;
   const x0=Math.floor(x),y0=Math.floor(y),x1=Math.min(w-1,x0+1),y1=Math.min(h-1,y0+1),
-        tx=x-x0,ty=y-y0,d=img.data;
-  const g=(xx,yy)=>{const i=(yy*w+xx)*4;return d[i]*.299+d[i+1]*.587+d[i+2]*.114},
-        g00=g(x0,y0),g10=g(x1,y0),g01=g(x0,y1),g11=g(x1,y1);
-  return (g00*(1-tx)+g10*tx)*(1-ty)+(g01*(1-tx)+g11*tx)*ty
+        tx=x-x0,ty=y-y0,d=src.data,
+        g=(xx,yy)=>{const i=(yy*w+xx)*4;return d[i]*.299+d[i+1]*.587+d[i+2]*.114},
+        a=g(x0,y0)*(1-tx)+g(x1,y0)*tx,
+        b=g(x0,y1)*(1-tx)+g(x1,y1)*tx;
+  return a*(1-ty)+b*ty
 }
-function v4Median181(a){
-  if(!a?.length)return 0;
-  const s=[...a].sort((x,y)=>x-y),m=Math.floor(s.length/2);
-  return s.length%2?s[m]:(s[m-1]+s[m])/2
+function v4182WarpGray(src,w,h,L,marks,scale=.60){
+  const cw=Math.max(600,Math.round(L.w*scale)),ch=Math.max(850,Math.round(L.h*scale)),
+        hc=v4182HCoef(L.markers,marks),out=new Uint8Array(cw*ch);
+  let k=0;
+  for(let y=0;y<ch;y++){
+    const Y=(y+.5)/scale;
+    for(let x=0;x<cw;x++,k++){
+      const X=(x+.5)/scale,z=hc[6]*X+hc[7]*Y+1,
+            sx=(hc[0]*X+hc[1]*Y+hc[2])/z,
+            sy=(hc[3]*X+hc[4]*Y+hc[5])/z;
+      out[k]=Math.round(v4182SampleGray(src,w,h,sx,sy))
+    }
+  }
+  return{gray:out,w:cw,h:ch,scale}
 }
-function v4Outline181(img,w,h,H,b,dx=0,dy=0){
-  let ring=0,out=0,n=0;
-  const cx=b.x+dx,cy=b.y+dy,r=b.r;
+function v4182BoxBlur(src,w,h,r){
+  const tmp=new Float32Array(w*h),out=new Float32Array(w*h);
+  for(let y=0;y<h;y++){
+    const off=y*w;let sum=0,lo=0,hi=Math.min(w-1,r);
+    for(let x=0;x<=hi;x++)sum+=src[off+x];
+    for(let x=0;x<w;x++){
+      const a=Math.max(0,x-r),b=Math.min(w-1,x+r);
+      if(x>0){
+        const add=x+r,rem=x-r-1;
+        if(add<w)sum+=src[off+add];
+        if(rem>=0)sum-=src[off+rem]
+      }
+      tmp[off+x]=sum/(b-a+1)
+    }
+  }
+  for(let x=0;x<w;x++){
+    let sum=0,hi=Math.min(h-1,r);
+    for(let y=0;y<=hi;y++)sum+=tmp[y*w+x];
+    for(let y=0;y<h;y++){
+      const a=Math.max(0,y-r),b=Math.min(h-1,y+r);
+      if(y>0){
+        const add=y+r,rem=y-r-1;
+        if(add<h)sum+=tmp[add*w+x];
+        if(rem>=0)sum-=tmp[rem*w+x]
+      }
+      out[y*w+x]=sum/(b-a+1)
+    }
+  }
+  return out
+}
+function v4182AdaptiveBinary(gray,w,h){
+  /* 3 x 9px kutu bulanıklığı Gaussian adaptif eşiklemeye yakın davranır. */
+  let bg=gray;
+  bg=v4182BoxBlur(bg,w,h,4);
+  bg=v4182BoxBlur(bg,w,h,4);
+  bg=v4182BoxBlur(bg,w,h,4);
+  const bin=new Uint8Array(w*h);
+  for(let i=0;i<bin.length;i++)bin[i]=gray[i]<bg[i]-5?1:0;
+  return bin
+}
+function v4182RemoveLongLines(bin,w,h,minLen=26){
+  const art=new Uint8Array(w*h);
+  for(let y=0;y<h;y++){
+    const off=y*w;let x=0;
+    while(x<w){
+      while(x<w&&!bin[off+x])x++;
+      const s=x;
+      while(x<w&&bin[off+x])x++;
+      if(x-s>=minLen)for(let q=s;q<x;q++)art[off+q]=1
+    }
+  }
+  for(let x=0;x<w;x++){
+    let y=0;
+    while(y<h){
+      while(y<h&&!bin[y*w+x])y++;
+      const s=y;
+      while(y<h&&bin[y*w+x])y++;
+      if(y-s>=minLen)for(let q=s;q<y;q++)art[q*w+x]=1
+    }
+  }
+  const clean=new Uint8Array(bin.length);let removed=0;
+  for(let i=0;i<bin.length;i++){
+    clean[i]=bin[i]&&!art[i]?1:0;
+    if(bin[i]&&art[i])removed++
+  }
+  return{clean,removed}
+}
+function v4182Median(a){
+  if(!a.length)return 0;
+  a.sort((x,y)=>x-y);
+  const m=Math.floor(a.length/2);
+  return a.length%2?a[m]:(a[m-1]+a[m])/2
+}
+function v4182Outline(can,x,y,r,dx=0,dy=0){
+  const {gray,w,h}=can;let ring=0,out=0,n=0;
   for(let i=0;i<16;i++){
     const a=Math.PI*2*i/16,ca=Math.cos(a),sa=Math.sin(a),
-          pr=mapP795(H,{x:cx+ca*r,y:cy+sa*r}),
-          po=mapP795(H,{x:cx+ca*r*1.42,y:cy+sa*r*1.42});
-    ring+=v4Gray181(img,w,h,pr.x,pr.y);
-    out+=v4Gray181(img,w,h,po.x,po.y);
-    n++
+          rx=Math.round(x+dx+ca*r),ry=Math.round(y+dy+sa*r),
+          ox=Math.round(x+dx+ca*r*1.43),oy=Math.round(y+dy+sa*r*1.43);
+    if(rx<0||rx>=w||ry<0||ry>=h||ox<0||ox>=w||oy<0||oy>=h)continue;
+    ring+=gray[ry*w+rx];out+=gray[oy*w+ox];n++
   }
-  return n?clamp795(((out/n)-(ring/n))/80,0,1):0
+  return n?Math.max(0,(out/n-ring/n)/80):0
 }
-function v4ZoneShift181(img,w,h,H,bubbles,opt={}){
-  const list=(bubbles||[]).filter(Boolean),maxSamples=Number(opt.maxSamples||30),
-        maxDx=Number(opt.maxDx??12),maxDy=Number(opt.maxDy??12),step=Number(opt.step||2);
+function v4182ZoneShift(can,bubbles,opt={}){
+  const sc=can.scale,list=(bubbles||[]).filter(Boolean),
+        mdx=Number(opt.maxDx||15),mdy=Number(opt.maxDy||12),step=Number(opt.step||1.5),
+        maxSamples=Number(opt.maxSamples||30);
   if(!list.length)return{dx:0,dy:0,score:0};
   const sample=[];
   if(list.length<=maxSamples)sample.push(...list);
@@ -13910,141 +14009,153 @@ function v4ZoneShift181(img,w,h,H,bubbles,opt={}){
     for(let i=0;i<maxSamples;i++)sample.push(list[Math.round(i*stride)])
   }
   let best={dx:0,dy:0,score:-1};
-  for(let dx=-maxDx;dx<=maxDx+1e-9;dx+=step){
-    for(let dy=-maxDy;dy<=maxDy+1e-9;dy+=step){
+  for(let dx=-mdx;dx<=mdx+.01;dx+=step){
+    for(let dy=-mdy;dy<=mdy+.01;dy+=step){
       let sum=0;
-      for(const b of sample)sum+=v4Outline181(img,w,h,H,b,dx,dy);
-      const raw=sum/Math.max(1,sample.length),
-            score=raw-Math.hypot(dx/Math.max(1,maxDx),dy/Math.max(1,maxDy))*.003;
-      if(score>best.score)best={dx,dy,score:raw}
+      for(const b of sample)sum+=v4182Outline(can,b.x*sc,b.y*sc,b.r*sc,dx,dy);
+      const raw=sum/sample.length,pen=Math.hypot(dx/Math.max(1,mdx),dy/Math.max(1,mdy))*.001;
+      if(raw-pen>best.score)best={dx,dy,score:raw-pen,raw}
     }
   }
   return best
 }
-function v4BubbleMetric181(img,w,h,H,b,dx=0,dy=0){
-  const inner=[],core=[],ring=[],quads=[[],[],[],[]],
-        cx=b.x+dx,cy=b.y+dy,r=b.r,step=.14;
-  for(let iy=-12;iy<=12;iy++){
-    const ny=iy*step;
-    for(let ix=-12;ix<=12;ix++){
-      const nx=ix*step,q=Math.hypot(nx,ny);
-      if(q>.0+1.70)continue;
-      if(!(q<=.62||(q>=1.15&&q<=1.70)))continue;
-      const p=mapP795(H,{x:cx+nx*r,y:cy+ny*r}),g=v4Gray181(img,w,h,p.x,p.y);
-      if(q<=.62){
-        inner.push(g);
-        if(q<=.32)core.push(g);
-        quads[(nx>=0?1:0)+(ny>=0?2:0)].push(g)
-      }else ring.push(g)
-    }
+function v4182Bubble(can,b,shift){
+  const {gray,clean,w,h,scale}=can,
+        cx=b.x*scale+shift.dx,cy=b.y*scale+shift.dy,r=Math.max(3,b.r*scale),
+        x0=Math.max(0,Math.floor(cx-r*1.7)),x1=Math.min(w-1,Math.ceil(cx+r*1.7)),
+        y0=Math.max(0,Math.floor(cy-r*1.7)),y1=Math.min(h-1,Math.ceil(cy+r*1.7)),
+        innerGray=[],ringGray=[],quad=[0,0,0,0],quadN=[0,0,0,0];
+  let innerN=0,innerDark=0,coreN=0,coreDark=0;
+  for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){
+    const nx=(x-cx)/r,ny=(y-cy)/r,q=Math.hypot(nx,ny),idx=y*w+x;
+    if(q<=.55){
+      innerN++;innerDark+=clean[idx]?1:0;innerGray.push(gray[idx]);
+      if(q<=.30){coreN++;coreDark+=clean[idx]?1:0}
+      const qi=(nx>=0?1:0)+(ny>=0?2:0);quadN[qi]++;quad[qi]+=clean[idx]?1:0
+    }else if(q>=1.15&&q<=1.65)ringGray.push(gray[idx])
   }
-  if(inner.length<8||ring.length<12)return{score:0,inner:0,core:0,quad:0,contrast:0,bg:255,mad:0};
-  const bg=v4Median181(ring),mad=v4Median181(ring.map(v=>Math.abs(v-bg))),
-        delta=Math.max(14,Math.min(32,2.5*mad+8)),th=bg-delta,
-        frac=a=>a.length?a.filter(v=>v<th).length/a.length:0,
-        innerFrac=frac(inner),coreFrac=frac(core),quad=Math.min(...quads.map(frac)),
-        mean=inner.reduce((s,v)=>s+v,0)/inner.length,
-        contrast=clamp795((bg-mean)/80,0,1),
-        score=clamp795(.40*innerFrac+.28*coreFrac+.18*quad+.14*contrast,0,1);
-  return{score,inner:innerFrac,core:coreFrac,quad,contrast,bg,mad}
+  if(!innerN||ringGray.length<6)return{score:0,grayDiff:-99,confidence:0,filled:false};
+  const innerFrac=innerDark/innerN,coreFrac=coreN?coreDark/coreN:0,
+        qmin=Math.min(...quad.map((v,i)=>quadN[i]?v/quadN[i]:0)),
+        bg=v4182Median(ringGray),mean=innerGray.reduce((s,v)=>s+v,0)/innerGray.length,
+        grayDiff=bg-mean,
+        score=clamp795(.50*innerFrac+.30*coreFrac+.20*qmin,0,1),
+        filled=(score>=.20&&grayDiff>=40)||(score>=.45&&grayDiff>=22),
+        confidence=clamp795(.55*score+.45*clamp795((grayDiff-10)/80,0,1),0,1);
+  return{score,grayDiff,confidence,filled,innerFrac,coreFrac,qmin,bg,mean}
 }
-function v4NumberColumn181(img,w,h,H,col,shift){
-  const vals=(col||[]).map(b=>v4BubbleMetric181(img,w,h,H,b,shift.dx,shift.dy).score),
-        rank=vals.map((v,i)=>({v:Number(v)||0,i})).sort((a,b)=>b.v-a.v),
-        a=rank[0]||{v:0,i:-1},b=rank[1]||{v:0,i:-1},gap=a.v-b.v,
-        strong=(a.v>=.45&&gap>=.18)||(a.v>=.62&&gap>=.12),
-        weak=!strong&&a.v>=.32&&gap>=.11,
-        kind=strong?'strong':weak?'weak':'blank',
-        ch=strong
-          ?{index:a.i,blank:false,ambiguous:false,score:a.v,second:b.v,center:a.v,v4:true}
-          :weak
-            ?{index:a.i,blank:false,ambiguous:true,score:a.v,second:b.v,center:a.v,v4:true}
-            :{index:-1,blank:true,ambiguous:false,score:a.v,second:b.v,center:a.v,v4:true};
-  return{kind,ch,scores:vals,centerScores:vals,top:a.v,second:b.v,gap,digit:a.i}
-}
-function v4ReadNumber181(img,w,h,H,L,c){
-  const all=(L.number||[]).flat(),shift=v4ZoneShift181(img,w,h,H,all,{maxDx:14,maxDy:22,step:2,maxSamples:50}),
-        cols=(L.number||[]).map((col,i)=>({...v4NumberColumn181(img,w,h,H,col,shift),col:i+1}));
+function v4182ReadNumber(can,L,c){
+  const all=(L.number||[]).flat(),
+        shift=v4182ZoneShift(can,all,{maxDx:18,maxDy:14,step:1.5,maxSamples:28}),
+        cols=(L.number||[]).map((col,ci)=>{
+          const metrics=col.map(b=>v4182Bubble(can,b,shift)),
+                ranked=metrics.map((m,i)=>({i,m})).sort((a,b)=>b.m.confidence-a.m.confidence),
+                fills=ranked.filter(x=>x.m.filled),top=ranked[0],second=ranked[1],
+                strong=fills.length===1,
+                ambiguous=fills.length>1,
+                ch=strong
+                  ?{index:fills[0].i,blank:false,ambiguous:false,score:fills[0].m.confidence,second:second?.m?.confidence||0,v4:true}
+                  :ambiguous
+                    ?{index:top.i,blank:false,ambiguous:true,score:top.m.confidence,second:second?.m?.confidence||0,v4:true}
+                    :{index:-1,blank:true,ambiguous:false,score:top?.m?.confidence||0,second:second?.m?.confidence||0,v4:true};
+          return{col:ci+1,ch,metrics,scores:metrics.map(m=>m.confidence),centerScores:metrics.map(m=>m.confidence),active:strong||ambiguous}
+        });
+  /* Kısa öğrenci numarası formda sağa yaslıdır; soldaki boş haneler numaraya katılmaz. */
   const runs=[];
   for(let i=0;i<cols.length;){
-    if(cols[i].kind==='blank'){i++;continue}
-    let j=i,score=0;
-    while(j<cols.length&&cols[j].kind!=='blank'){
-      score+=cols[j].top+cols[j].gap+(cols[j].kind==='strong'?.35:-.12);
-      j++
-    }
-    const end=j-1;
-    if(end===cols.length-1)score+=.70; // basılı kullanım: kısa numara sağa yaslı
-    runs.push({start:i,end,score});
-    i=j
+    if(!cols[i].active){i++;continue}
+    let j=i,q=0;
+    while(j<cols.length&&cols[j].active){q+=Number(cols[j].ch.score||0)+(cols[j].ch.ambiguous?-.35:.25);j++}
+    if(j-1===cols.length-1)q+=.75;
+    runs.push({start:i,end:j-1,quality:q});i=j
   }
-  let num='',amb=[],selected=null;
+  let num='',amb=[],run=null;
   if(runs.length){
-    selected=runs.sort((a,b)=>b.score-a.score)[0];
-    for(let i=selected.start;i<=selected.end;i++){
-      const cc=cols[i];
-      if(cc.kind==='strong'){
-        const digit=L.number?.[i]?.[cc.ch.index]?.digit;
-        num+=String(Number.isFinite(Number(digit))?Number(digit):cc.ch.index)
+    run=[...runs].sort((a,b)=>b.quality-a.quality)[0];
+    for(let i=run.start;i<=run.end;i++){
+      const ch=cols[i].ch;
+      if(ch.index>=0&&!ch.ambiguous){
+        const digit=L.number?.[i]?.[ch.index]?.digit;
+        num+=String(Number.isFinite(Number(digit))?Number(digit):ch.index)
       }else{num+='?';amb.push(i+1)}
     }
     num=num.replace(/^0+/,'')
   }
-  const student=(!num.includes('?')&&num)?matchStudent795(c,num):null,
-        quality=selected?selected.score/(selected.end-selected.start+1):0;
-  return{
-    reads:cols.map(cc=>({col:cc.col,ch:cc.ch,scores:cc.scores,centerScores:cc.centerScores})),
-    num,amb,student,quality,dx:shift.dx,dy:shift.dy,alignment:shift.score,
-    source:'V4 şablon',engine:'V4',selectedRun:selected
-  }
+  const student=(!num.includes('?')&&num)?matchStudent795(c,num):null;
+  return{reads:cols,num,amb,student,shift,quality:run?.quality||0}
 }
-function v4ReadBooklet181(img,w,h,H,L){
-  if(!Array.isArray(L.booklet)||!L.booklet.length)return{value:'',ambiguous:false,blank:true,quality:0,dx:0,dy:0};
-  const shift=v4ZoneShift181(img,w,h,H,L.booklet,{maxDx:12,maxDy:14,step:2,maxSamples:8}),
-        vals=L.booklet.map(b=>v4BubbleMetric181(img,w,h,H,b,shift.dx,shift.dy).score),
-        rank=vals.map((v,i)=>({v:Number(v)||0,i})).sort((a,b)=>b.v-a.v),
-        a=rank[0]||{v:0,i:-1},b=rank[1]||{v:0,i:-1},gap=a.v-b.v,
-        marked=(a.v>=.45&&gap>=.18)||(a.v>=.62&&gap>=.12),
-        ambiguous=!marked&&a.v>=.32&&gap>=.10;
-  if(!marked)return{value:'',ambiguous,blank:true,quality:a.v+gap,dx:shift.dx,dy:shift.dy,scores:vals,alignment:shift.score};
-  return{value:L.booklet[a.i]?.choice||'',ambiguous:false,blank:false,quality:a.v+gap,dx:shift.dx,dy:shift.dy,scores:vals,alignment:shift.score}
+function v4182ReadBooklet(can,L){
+  if(!Array.isArray(L.booklet)||!L.booklet.length)return{value:'',ambiguous:false,blank:true};
+  const shift=v4182ZoneShift(can,L.booklet,{maxDx:12,maxDy:10,step:1.5,maxSamples:8}),
+        metrics=L.booklet.map(b=>v4182Bubble(can,b,shift)),
+        fills=metrics.map((m,i)=>({m,i})).filter(x=>x.m.filled).sort((a,b)=>b.m.confidence-a.m.confidence);
+  if(fills.length===1)return{value:L.booklet[fills[0].i]?.choice||'',ambiguous:false,blank:false,shift,metrics};
+  if(fills.length>1)return{value:'',ambiguous:true,blank:false,shift,metrics};
+  return{value:'',ambiguous:false,blank:true,shift,metrics}
 }
-function v4ClassifyRow181(scores){
-  const rank=(scores||[]).map((v,i)=>({v:Number(v)||0,i})).sort((a,b)=>b.v-a.v),
-        a=rank[0]||{v:0,i:-1},b=rank[1]||{v:0,i:-1},gap=a.v-b.v,
-        strong=rank.filter(x=>x.v>=.45);
-  if(strong.length>=2)return{type:'double',index:-1,indices:strong.map(x=>x.i),score:a.v,second:b.v,gap,reason:'V4 · iki net dolu balon'};
-  if(a.v>=.45&&gap>=.18)return{type:'answer',index:a.i,indices:[a.i],score:a.v,second:b.v,gap,reason:'V4 · net tek işaret'};
-  if(a.v<.32)return{type:'blank',index:-1,indices:[],score:a.v,second:b.v,gap,reason:'V4 · boş'};
-  if(a.v<.40&&gap<.12)return{type:'blank',index:-1,indices:[],score:a.v,second:b.v,gap,reason:'V4 · zemin/kir, işaret değil'};
-  if(a.v>=.38&&gap>=.18)return{type:'answer',index:a.i,indices:[a.i],score:a.v,second:b.v,gap,reason:'V4 · silik ama ayrışmış tek işaret'};
-  return{type:'review',index:a.i,indices:a.i>=0?[a.i]:[],score:a.v,second:b.v,gap,reason:'V4 · düşük güvenli fiziksel işaret'}
+function v4182Classify(metrics){
+  const ranked=metrics.map((m,i)=>({m,i})).sort((a,b)=>b.m.confidence-a.m.confidence),
+        fills=ranked.filter(x=>x.m.filled),top=ranked[0],second=ranked[1];
+  if(fills.length>=2)return{type:'double',index:-1,indices:fills.map(x=>x.i),reason:'V4.1 · iki fiziksel dolu balon'};
+  if(fills.length===1)return{type:'answer',index:fills[0].i,indices:[fills[0].i],reason:'V4.1 · fiziksel dolu balon'};
+  /* Kirli zeminde koyuluk var ama balon içi gerçek dolgu ölçütünü geçmiyorsa boş kabul et.
+     Yalnız sınırda kalan kompakt bir iz varsa öğretmen kararına bırak. */
+  if(top&&top.m.score>=.16&&top.m.grayDiff>=30)
+    return{type:'review',index:top.i,indices:[top.i],reason:'V4.1 · düşük güvenli fiziksel işaret'};
+  return{type:'blank',index:-1,indices:[],reason:'V4.1 · boş'}
 }
-function v4ReadSubject181(img,w,h,H,s){
+function v4182ReadSubject(can,s){
   const all=(s.rows||[]).flatMap(r=>r.bubbles||[]),
-        shift=v4ZoneShift181(img,w,h,H,all,{maxDx:12,maxDy:14,step:2,maxSamples:32}),
+        shift=v4182ZoneShift(can,all,{maxDx:15,maxDy:12,step:1.5,maxSamples:30}),
         rows=(s.rows||[]).map(row=>{
-          const scores=(row.bubbles||[]).map(b=>v4BubbleMetric181(img,w,h,H,b,shift.dx,shift.dy).score),
-                ch=v4ClassifyRow181(scores);
-          return{scores,ch,dx:shift.dx,dy:shift.dy,alignment:shift.score}
+          const metrics=(row.bubbles||[]).map(b=>v4182Bubble(can,b,shift));
+          return{metrics,ch:v4182Classify(metrics)}
         });
-  return{rows,shift}
+  return{shift,rows}
 }
-function v4ScanPrepared181(file,cfg,c,img,w,h,L,rawMarks,marks,reg,H,lighting){
-  const numberRead=v4ReadNumber181(img,w,h,H,L,c),
-        bookletRead=v4ReadBooklet181(img,w,h,H,L),
+async function scanOneV4182(file,cfg,c){
+  const im=await loadImageFile795(file),
+        fit=Math.min(1,1400/Math.max(im.naturalWidth,im.naturalHeight)),
+        cv=document.createElement('canvas');
+  cv.width=Math.max(500,Math.round(im.naturalWidth*fit));
+  cv.height=Math.max(350,Math.round(im.naturalHeight*fit));
+  const x=cv.getContext('2d',{willReadFrequently:true});
+  x.fillStyle='#fff';x.fillRect(0,0,cv.width,cv.height);x.drawImage(im,0,0,cv.width,cv.height);
+  const lighting=opticalLightingStats795(cv),rawImg=x.getImageData(0,0,cv.width,cv.height),
+        L=layoutOptical795(cfg);
+  let markerImg=rawImg,rawMarks;
+  try{rawMarks=markerPoints795(rawImg,cv.width,cv.height)}
+  catch(e){
+    const norm=normalizeOpticalLighting795(cv,lighting);
+    x.putImageData(rawImg,0,0);
+    rawMarks=markerPoints795(norm,cv.width,cv.height);
+    markerImg=norm
+  }
+  const reg=bestFormTransform171(markerImg,cv.width,cv.height,L,rawMarks),
+        marks=reg.marks,
+        warp=v4182WarpGray(rawImg,cv.width,cv.height,L,marks,.60),
+        bin=v4182AdaptiveBinary(warp.gray,warp.w,warp.h),
+        cleaned=v4182RemoveLongLines(bin,warp.w,warp.h,26),
+        can={...warp,clean:cleaned.clean};
+
+  const numberRead=v4182ReadNumber(can,L,c),
+        bookletRead=v4182ReadBooklet(can,L),
         subjectResults={},raw={},ambiguous=[],reviewItems=[],questionStates={},
         subjectAlignments={};
+
   L.subjects.forEach((s,si)=>{
-    const vr=v4ReadSubject181(img,w,h,H,s);
-    subjectAlignments[s.name]={dx:vr.shift.dx,dy:vr.shift.dy,score:Number(vr.shift.score.toFixed(4))};
+    const sr=v4182ReadSubject(can,s);
+    subjectAlignments[s.name]={dx:Number((sr.shift.dx/can.scale).toFixed(2)),dy:Number((sr.shift.dy/can.scale).toFixed(2)),score:Number((sr.shift.raw||sr.shift.score||0).toFixed(4))};
     raw[s.name]=[];questionStates[s.name]=[];
-    vr.rows.forEach((rr,qi)=>{
-      const ch=rr.ch,key=String(cfg.subjects?.[si]?.key||'')[qi]||'',issueId=`${si}:${qi}`,
+    sr.rows.forEach((rr,qi)=>{
+      const ch=rr.ch,key=String(cfg.subjects[si].key||'')[qi]||'',issueId=`${si}:${qi}`,
+            scores=rr.metrics.map(m=>m.confidence),
             st={subject:s.name,question:qi+1,key,status:'blank',decision:null,detected:'',reason:ch.reason,issueId,
-                scores:rr.scores.map(v=>Number(v.toFixed(4))),between:0,
-                gridDx:rr.dx,gridDy:rr.dy,gridOutline:Number(rr.alignment||0),
-                readSource:'V4 şablon',horizontalStripe:0,engine:'V4'};
+                scores:scores.map(v=>Number(v.toFixed(4))),between:0,
+                gridDx:Number((sr.shift.dx/can.scale).toFixed(2)),gridDy:Number((sr.shift.dy/can.scale).toFixed(2)),
+                gridOutline:Number((sr.shift.raw||sr.shift.score||0).toFixed(4)),
+                readSource:'V4.1 kanonik',horizontalStripe:0,engine:'V4.1',
+                v41Metrics:rr.metrics.map(m=>({score:Number(m.score.toFixed(3)),grayDiff:Number(m.grayDiff.toFixed(1)),confidence:Number(m.confidence.toFixed(3))}))};
       if(ch.type==='double'){
         st.status='double';st.detected=(ch.indices||[]).map(j=>OMR_CHOICES795[j]).join('/');st.decision='wrong';
         reviewItems.push({id:issueId,subject:s.name,question:qi+1,reason:'Çift işaret',fixed:true,decision:'wrong',detected:st.detected,key});
@@ -14061,14 +14172,17 @@ function v4ScanPrepared181(file,cfg,c,img,w,h,L,rawMarks,marks,reg,H,lighting){
       raw[s.name].push(st.detected);questionStates[s.name].push(st)
     })
   });
-  const preprocess={
-    engine:'V4 · Şablon Tabanlı',mode:'canonical-local-adaptive',
-    subjectAlignments,
-    numberAlignment:{dx:numberRead.dx,dy:numberRead.dy,score:Number(numberRead.alignment||0)},
-    bookletAlignment:{dx:bookletRead.dx||0,dy:bookletRead.dy||0,score:Number(bookletRead.alignment||0)},
-    stats:{mean:Number(lighting.mean.toFixed(1)),p10:Number(lighting.p10.toFixed(1)),p50:Number(lighting.p50.toFixed(1)),p90:Number(lighting.p90.toFixed(1)),spread:Number(lighting.spread.toFixed(1))}
-  };
+
   const num=numberRead.num,numAmb=numberRead.amb,student=numberRead.student,
+        preprocess={
+          engine:'V4.1 · Kanonik Warp + Adaptif Eşik',
+          canonicalW:can.w,canonicalH:can.h,canonicalScale:can.scale,
+          linePixelsRemoved:cleaned.removed,
+          subjectAlignments,
+          numberAlignment:{dx:Number((numberRead.shift.dx/can.scale).toFixed(2)),dy:Number((numberRead.shift.dy/can.scale).toFixed(2)),score:Number((numberRead.shift.raw||numberRead.shift.score||0).toFixed(4))},
+          bookletAlignment:{dx:Number(((bookletRead.shift?.dx||0)/can.scale).toFixed(2)),dy:Number(((bookletRead.shift?.dy||0)/can.scale).toFixed(2)),score:Number((bookletRead.shift?.raw||bookletRead.shift?.score||0).toFixed(4))},
+          stats:{mean:Number(lighting.mean.toFixed(1)),p10:Number(lighting.p10.toFixed(1)),p50:Number(lighting.p50.toFixed(1)),p90:Number(lighting.p90.toFixed(1)),spread:Number(lighting.spread.toFixed(1))}
+        },
         out={
           fileName:file.name||'Optik',studentNo:num,studentId:student?.id||'',studentName:student?.name||'',
           bookletType:bookletRead.value||'',bookletAmbiguous:!!bookletRead.ambiguous,
@@ -14080,8 +14194,10 @@ function v4ScanPrepared181(file,cfg,c,img,w,h,L,rawMarks,marks,reg,H,lighting){
             digit:(rr.ch&&rr.ch.index>=0)?(L.number?.[ix]?.[rr.ch.index]?.digit??rr.ch.index):null
           })),
           numberCalibration:{
-            dx:Number(numberRead.dx||0),dy:Number(numberRead.dy||0),source:'V4 şablon',
-            alignment:Number(numberRead.alignment||0),fallback:false,engine:'V4'
+            dx:Number((numberRead.shift.dx/can.scale).toFixed(2)),
+            dy:Number((numberRead.shift.dy/can.scale).toFixed(2)),
+            source:'V4.1 kanonik',fallback:false,engine:'V4.1',
+            alignment:Number((numberRead.shift.raw||numberRead.shift.score||0).toFixed(4))
           },
           markerQuality:marks.map(m=>m.fill),
           markerCorrection:{
@@ -14096,12 +14212,24 @@ function v4ScanPrepared181(file,cfg,c,img,w,h,L,rawMarks,marks,reg,H,lighting){
   const totalStates=Object.values(out.questionStates||{}).flat(),
         detectedCount=totalStates.filter(st=>st.status!=='blank').length;
   if(totalStates.length>=10&&detectedCount===0){
-    out.ok=false;out.gridWarning='V4 cevap ızgarasında işaret algılanamadı; sonuç aktarılmadan önce optiği kontrol edin.'
+    out.ok=false;out.gridWarning='V4.1 cevap ızgarasında işaret algılanamadı; sonuç aktarılmadan önce optiği kontrol edin.'
   }
   return out
 }
 
+/* V3 / çok dersli yeni formda V4.1 birincil motordur.
+   Herhangi bir çalışma zamanı hatasında doğrulanmış v7.8.182 motoruna geri dönülür.
+   V1 eski form doğrudan eski motorda kalır. */
 async function scanOne795(file,cfg,c){
+  const isV3=Number(cfg?.layoutVersion||3)>3&&cfg?.formStyle!=='legacy-v1';
+  if(isV3){
+    try{return await scanOneV4182(file,cfg,c)}
+    catch(e){console.warn('MualliMate OMR V4.1 fallback → v7.8.182',e)}
+  }
+  return await scanOneLegacy180(file,cfg,c)
+}
+
+async function scanOneLegacy180(file,cfg,c){
  const im=await loadImageFile795(file),scale=Math.min(1,1400/Math.max(im.naturalWidth,im.naturalHeight)),cv=document.createElement('canvas');cv.width=Math.max(500,Math.round(im.naturalWidth*scale));cv.height=Math.max(350,Math.round(im.naturalHeight*scale));const x=cv.getContext('2d',{willReadFrequently:true});x.fillStyle='#fff';x.fillRect(0,0,cv.width,cv.height);x.drawImage(im,0,0,cv.width,cv.height);
  const lighting=opticalLightingStats795(cv),rawImg=x.getImageData(0,0,cv.width,cv.height),L=layoutOptical795(cfg);
  let normImg=null;
@@ -14120,12 +14248,6 @@ async function scanOne795(file,cfg,c){
    markerImg=normImg;
  }
  const reg=bestFormTransform171(markerImg,cv.width,cv.height,L,rawMarks),marks=reg.marks,H=reg.H;
- /* v7.8.181: Yeni V4 motoru yalnız yeni V3/çok dersli şablonlarda birincil okuyucudur.
-    Bir çalışma zamanı hatası olursa mevcut v7.8.181 motoruna otomatik geri düşer. */
- if(L.numberStyle==='classicV3'){
-   try{return v4ScanPrepared181(file,cfg,c,rawImg,cv.width,cv.height,L,rawMarks,marks,reg,H,lighting)}
-   catch(v4e){console.warn('MualliMate OMR V4 fallback:',v4e)}
- }
  let img=rawImg,normalized=false,rawQuality=omrContentQuality175(rawImg,cv.width,cv.height,H,L),normQuality=-1;
  if(normImg){
    normQuality=omrContentQuality175(normImg,cv.width,cv.height,H,L);
@@ -14209,7 +14331,7 @@ window.openRealPaperDiag795=function(i){
  const cal=r.numberCalibration||{},light=r.preprocess?.stats||{};
  const issues=(r.reviewItems||[]).map(x=>`${esc(x.subject)} ${x.question}: ${esc(reviewReasonLabel795(x))}`).join('<br>')||'Yok';
  const dlg=document.createElement('div');dlg.id='omrRealPaperDiag795';dlg.className='mm-optic-review795';
- dlg.innerHTML=`<div class="mm-optic-review-bar795"><b>🔬 Gerçek Kâğıt Teşhisi · ${esc(r.fileName||'Optik')}</b><div class="mm-optic-review-bar-actions795"><button class="secondary" onclick="document.getElementById('omrRealPaperDiag795')?.remove()">Kapat</button></div></div><div class="mm-optic-review-body795"><div class="mm-optic-review-panel795" style="max-width:980px;margin:0 auto"><div class="mm-optic-info795"><b>Bu ekran yalnız gerçek kâğıt testleri için teşhis verir.</b><br>Veriler kaydedilmez. Başarılı sayılma ölçütü sentetik örnek değil, gerçek baskı ve telefon fotoğrafıdır.</div><div class="card" style="margin-top:10px"><b>Okuma motoru:</b> ${esc(r.preprocess?.engine||'Klasik')}<br><b>Okunan öğrenci no:</b> ${esc(r.studentNo||'—')}<br><b>Eşleşen öğrenci:</b> ${esc(r.studentName||'—')}<br><b>Numara bölgesi hizalama:</b> dx ${Number(cal.dx||0).toFixed(1)} · dy ${Number(cal.dy||0).toFixed(1)}${Number.isFinite(cal.alignment)?` · skor ${Number(cal.alignment).toFixed(3)}`:''}<br><b>Form yönü:</b> ${esc(r.markerCorrection?.rotation||'—')} · <b>ızgara skoru:</b> ${Number(r.markerCorrection?.alignment||0).toFixed(3)}<br><b>Köşe çözümü:</b> ${r.markerCorrection?.edgeAdjusted?`${esc(cornerName176(r.markerCorrection?.cornerIndex))} · `:''}${esc(r.markerCorrection?.cornerStrategy||'doğrudan')}${r.markerCorrection?.cornerReconstructed?' · 3 sağlam köşeden yeniden kuruldu':''}<br><b>Köşe skorları:</b> Sol üst ${Number(r.markerQuality?.[0]||0).toFixed(2)} · Sağ üst ${Number(r.markerQuality?.[1]||0).toFixed(2)} · Sol alt ${Number(r.markerQuality?.[2]||0).toFixed(2)} · Sağ alt ${Number(r.markerQuality?.[3]||0).toFixed(2)}<br><b>Numara okuma:</b> ${esc(r.numberCalibration?.source||'raw')}${r.numberCalibration?.fallback?' · alternatif hizalama':''}${r.numberCalibration?.robust178?' · kirli kâğıt dayanıklı geçiş':''}${r.numberCalibration?.robust179?' · kompakt balon kurtarma':''}<br><b>Kâğıt dokusu:</b> ${Number(r.preprocess?.texture?.score||0).toFixed(3)}${r.preprocess?.dirtyMode179?' · kirli kâğıt kurtarma aktif':(r.preprocess?.dirtyMode?' · dayanıklı okuma aktif':'')}<br><b>Numara kurtarma:</b> ${r.numberCalibration?.recoveredAdjacent?`komşu hane ${r.numberCalibration.recoveredAdjacentCol} · sınıf listesiyle doğrulandı`:'yok'}<br><b>Kitapçık:</b> ${r.bookletType?esc(r.bookletType):(r.bookletAmbiguous?'belirsiz':'işaret yok')}<br><b>Işık:</b> ${Number.isFinite(light.mean)?Math.round(light.mean)+'/255':'—'}</div><div class="card" style="margin-top:10px;overflow:auto"><b>Numara hanesi fiziksel okuma</b><table class="mm-analysis-table817" style="margin-top:8px"><thead><tr><th>Hane</th><th>Algılanan</th><th>Skor</th><th>2. skor</th><th>Merkez</th><th>Durum</th></tr></thead><tbody>${numRows}</tbody></table></div><div class="card" style="margin-top:10px"><b>Karar bekleyen / şüpheli sorular</b><div class="tiny" style="margin-top:6px;line-height:1.55">${issues}</div></div><div class="card" style="margin-top:10px"><b>Gerçek kâğıt doğrulama notu</b><div class="tiny" style="margin-top:6px;line-height:1.55">Bu fotoğrafı değerlendirirken dört şeyi karşılaştırın: gerçek öğrenci numarası, gerçekten boş sorular, gerçekten işaretli sorular ve gereksiz karar bekleyenler. Bir hata varsa bu ekranın görüntüsü, algoritmayı doğrudan gerçek baskıya göre ayarlamak için yeterlidir.</div></div></div></div>`;
+ dlg.innerHTML=`<div class="mm-optic-review-bar795"><b>🔬 Gerçek Kâğıt Teşhisi · ${esc(r.fileName||'Optik')}</b><div class="mm-optic-review-bar-actions795"><button class="secondary" onclick="document.getElementById('omrRealPaperDiag795')?.remove()">Kapat</button></div></div><div class="mm-optic-review-body795"><div class="mm-optic-review-panel795" style="max-width:980px;margin:0 auto"><div class="mm-optic-info795"><b>Bu ekran yalnız gerçek kâğıt testleri için teşhis verir.</b><br>Veriler kaydedilmez. Başarılı sayılma ölçütü sentetik örnek değil, gerçek baskı ve telefon fotoğrafıdır.</div><div class="card" style="margin-top:10px"><b>Okuma motoru:</b> ${esc(r.preprocess?.engine||'Klasik')}<br><b>Okunan öğrenci no:</b> ${esc(r.studentNo||'—')}<br><b>Eşleşen öğrenci:</b> ${esc(r.studentName||'—')}<br><b>Hizalama:</b> dx ${Number(cal.dx||0).toFixed(1)} · dy ${Number(cal.dy||0).toFixed(1)}<br><b>Form yönü:</b> ${esc(r.markerCorrection?.rotation||'—')} · <b>ızgara skoru:</b> ${Number(r.markerCorrection?.alignment||0).toFixed(3)}<br><b>Köşe çözümü:</b> ${r.markerCorrection?.edgeAdjusted?`${esc(cornerName176(r.markerCorrection?.cornerIndex))} · `:''}${esc(r.markerCorrection?.cornerStrategy||'doğrudan')}${r.markerCorrection?.cornerReconstructed?' · 3 sağlam köşeden yeniden kuruldu':''}<br><b>Köşe skorları:</b> Sol üst ${Number(r.markerQuality?.[0]||0).toFixed(2)} · Sağ üst ${Number(r.markerQuality?.[1]||0).toFixed(2)} · Sol alt ${Number(r.markerQuality?.[2]||0).toFixed(2)} · Sağ alt ${Number(r.markerQuality?.[3]||0).toFixed(2)}<br><b>Numara okuma:</b> ${esc(r.numberCalibration?.source||'raw')}${r.numberCalibration?.fallback?' · alternatif hizalama':''}${r.numberCalibration?.robust178?' · kirli kâğıt dayanıklı geçiş':''}${r.numberCalibration?.robust179?' · kompakt balon kurtarma':''}<br><b>Kâğıt dokusu:</b> ${Number(r.preprocess?.texture?.score||0).toFixed(3)}${r.preprocess?.dirtyMode179?' · kirli kâğıt kurtarma aktif':(r.preprocess?.dirtyMode?' · dayanıklı okuma aktif':'')}<br><b>Numara kurtarma:</b> ${r.numberCalibration?.recoveredAdjacent?`komşu hane ${r.numberCalibration.recoveredAdjacentCol} · sınıf listesiyle doğrulandı`:'yok'}<br><b>Kitapçık:</b> ${r.bookletType?esc(r.bookletType):(r.bookletAmbiguous?'belirsiz':'işaret yok')}<br><b>Işık:</b> ${Number.isFinite(light.mean)?Math.round(light.mean)+'/255':'—'}</div><div class="card" style="margin-top:10px;overflow:auto"><b>Numara hanesi fiziksel okuma</b><table class="mm-analysis-table817" style="margin-top:8px"><thead><tr><th>Hane</th><th>Algılanan</th><th>Skor</th><th>2. skor</th><th>Merkez</th><th>Durum</th></tr></thead><tbody>${numRows}</tbody></table></div><div class="card" style="margin-top:10px"><b>Karar bekleyen / şüpheli sorular</b><div class="tiny" style="margin-top:6px;line-height:1.55">${issues}</div></div><div class="card" style="margin-top:10px"><b>Gerçek kâğıt doğrulama notu</b><div class="tiny" style="margin-top:6px;line-height:1.55">Bu fotoğrafı değerlendirirken dört şeyi karşılaştırın: gerçek öğrenci numarası, gerçekten boş sorular, gerçekten işaretli sorular ve gereksiz karar bekleyenler. Bir hata varsa bu ekranın görüntüsü, algoritmayı doğrudan gerçek baskıya göre ayarlamak için yeterlidir.</div></div></div></div>`;
  document.body.appendChild(dlg);
 };
 window.openOpticalImage795=function(i){const q=window._omrBatch795,r=q?.rows?.[i];if(!r||!r._file)return alert('Bu optiğin geçici görseli artık bulunmuyor.');closeOpticalImage795(true);const u=URL.createObjectURL(r._file);window._omrReviewUrl795=u;window._omrReviewIndex795=i;window._omrZoom795={scale:1,min:1,max:4,baseW:0,baseH:0,pinch:null};const sh=document.createElement('div');sh.id='omrImageReview795';sh.className='mm-optic-review795';const items=r.reviewItems||[];const issueHtml=items.length?items.map(x=>`<div class="mm-optic-review-issue795"><b>${esc(x.subject)} · Soru ${x.question}</b><div class="mm-optic-review-reason795">${esc(reviewReasonLabel795(x))}${x.detected?` · Algılanan: ${esc(x.detected)}`:''}${x.key?` · Anahtar: ${esc(x.key)}`:''}</div>${x.fixed?'<div class="mm-optic-review-fixed795">İki koyu işaret kuralı: Bu soru otomatik olarak YANLIŞ sayılır.</div>':`<div class="mm-optic-review-buttons795"><button class="${x.decision==='correct'?'active':''}" onclick="omrSetReviewDecision795(${i},'${x.id}','correct')">✓ Doğru</button><button class="${x.decision==='wrong'?'active':''}" onclick="omrSetReviewDecision795(${i},'${x.id}','wrong')">✕ Yanlış</button><button class="secondary ${x.decision==='blank'?'active':''}" onclick="omrSetReviewDecision795(${i},'${x.id}','blank')">○ Boş</button></div>`}</div>`).join(''):'<div class="mm-optic-resolved795">✓ Bu optikte şüpheli cevap işareti yok.</div>';sh.innerHTML=`<div class="mm-optic-review-bar795"><b>${esc(r.fileName)} · Okunan no: ${esc(r.studentNo||'—')}</b><div class="mm-optic-review-bar-actions795"><div class="mm-optic-zoom-controls795"><button class="secondary" type="button" onclick="omrZoomStep795(-.25)" aria-label="Uzaklaştır">−</button><span id="omrZoomLevel795" class="mm-optic-zoom-level795">100%</span><button class="secondary" type="button" onclick="omrZoomStep795(.25)" aria-label="Yakınlaştır">+</button><button class="secondary" type="button" onclick="omrZoomReset795()">Sıfırla</button></div><button class="secondary" onclick="closeOpticalImage795()">Kapat</button></div></div><div class="mm-optic-review-body795"><div id="omrReviewBox795" class="mm-optic-review-image795"><div id="omrZoomStage795" class="mm-optic-zoom-stage795"><img id="omrReviewImg795" src="${u}" alt="Optik form görseli" onload="omrInitZoom795()"></div></div><div class="mm-optic-review-panel795"><b>Optik İnceleme</b><div class="tiny" style="margin-top:4px">İki parmakla yakınlaştırabilir veya + / − düğmelerini kullanabilirsiniz. Yakınlaştırınca tek parmakla sağa-sola ve yukarı-aşağı sürükleyerek inceleyin. Görsel yalnız bu sonuç kontrolü boyunca bellekte tutulur; sonuçları aktardıktan sonra saklanmaz.</div>${issueHtml}</div></div>`;document.body.appendChild(sh);setTimeout(omrBindPinch795,0)};
@@ -14278,7 +14400,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.181';
+ const VERSION='v7.8.182';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -14647,7 +14769,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78128-layout-duty-ios-lock-script">
 (function(){
-  const VERSION='v7.8.181';
+  const VERSION='v7.8.182';
   const root=document.documentElement, body=document.body;
   let active=false, baseVvH=0, baseBgTop=0, bgShift=0, touchY=0, raf=0;
 
@@ -15003,7 +15125,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78129-landscape-responsive-final-script">
 (function(){
-  const VERSION='v7.8.181';
+  const VERSION='v7.8.182';
   const mq=window.matchMedia('(orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
 
   function validTestResult(h,sid){
@@ -15358,7 +15480,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78130-landscape-class-center-duty-script">
 (function(){
-  const VERSION='v7.8.181';
+  const VERSION='v7.8.182';
   function syncVersion(){
     document.querySelectorAll('.premium-brand .tiny').forEach(function(x){
       if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION;
@@ -15852,7 +15974,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78147-landscape-review-polish-script">
 (function(){
   'use strict';
-  const VERSION='v7.8.181';
+  const VERSION='v7.8.182';
 
   function testSummary147(c,h){
     const total=(c?.students||[]).length,q=Math.max(0,Math.floor(Number(h?.questionCount||0)));
@@ -15972,7 +16094,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78150-test-net-report-script">
 (function(){
 'use strict';
-const VERSION150='v7.8.181';
+const VERSION150='v7.8.182';
 function clamp150(v,a,b){return Math.max(a,Math.min(b,v))}
 function q150(h){const n=Math.floor(Number(h?.questionCount||0));return Number.isFinite(n)&&n>0?n:0}
 function valid150(h,r){const q=q150(h);if(!q||!r||typeof r!=='object')return false;const d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);return[d,w,b].every(Number.isFinite)&&d>=0&&w>=0&&b>=0&&d+w+b===q}
@@ -16577,7 +16699,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </style>
 
 
-<!-- v7.8.181 — Yatay yan menü: işaretlenen sağ boşluk kullanıma açıldı; sol çentik güvenliği korunur -->
+<!-- v7.8.182 — Yatay yan menü: işaretlenen sağ boşluk kullanıma açıldı; sol çentik güvenliği korunur -->
 <style id="v78162-drawer-landscape-use-right-space">
 @media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
   #mmMobileDrawer.mm-mobile-drawer{
@@ -16604,7 +16726,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </style>
 
 
-<!-- v7.8.181 — Yatay yan menü: sağ alan kullanılır, üçüncü görseldeki görünüm sabitlenir -->
+<!-- v7.8.182 — Yatay yan menü: sağ alan kullanılır, üçüncü görseldeki görünüm sabitlenir -->
 <style id="v78163-drawer-landscape-final-lock">
 @media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
   #mmMobileDrawer.mm-mobile-drawer{
@@ -16698,7 +16820,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </script>
 
 
-<!-- v7.8.181 — Test ödevi tarih düzenleme görünümü: çift tarih kabuğu ve iOS odak çizgisi giderildi -->
+<!-- v7.8.182 — Test ödevi tarih düzenleme görünümü: çift tarih kabuğu ve iOS odak çizgisi giderildi -->
 <style id="v78166-homework-date-focus-fix">
 #modalBody .homework-detail-date-grid151 .homework-date-shell{isolation:isolate!important;overflow:hidden!important}
 #modalBody .homework-detail-date-grid151 .homework-date-display{position:relative!important;z-index:1!important}
@@ -16720,7 +16842,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </style>
 
 
-<!-- v7.8.181 — iPhone dikey ana ekran: alt tarafta ikinci safe-area bandı oluşmasını engelle -->
+<!-- v7.8.182 — iPhone dikey ana ekran: alt tarafta ikinci safe-area bandı oluşmasını engelle -->
 <style id="v78170-ios-bottom-safearea-fix">
 @media (orientation:portrait) and (max-width:700px){
   html{min-height:100%;background:#e6ece6!important}
