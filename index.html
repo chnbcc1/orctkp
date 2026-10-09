@@ -15071,9 +15071,91 @@ function v4197RefineAnswer(metrics,cal,decision){
   }
   return decision;
 }
+/* v7.8.203 · V4.10 — human review for partial/edge-only pencil marks.
+   The original V4.9 physical classifier, geometry, threshold calibration,
+   student number and booklet reader are untouched. Measurements are transient.
+   Printed outlines are common to other bubbles in the same column; look for
+   an isolated dark THREE-SECTOR stroke just INSIDE the outline, not darkness
+   of an entire row/column, and never auto-grade an edge-only stroke. */
+function v4203EdgeSectors(can,b,shift){
+ const {gray,w,h,scale}=can,cx=b.x*scale+(shift?.dx||0),cy=b.y*scale+(shift?.dy||0),r=Math.max(3,b.r*scale);
+ const sum=new Array(12).fill(0),n=new Array(12).fill(0);
+ const x0=Math.max(0,Math.floor(cx-r)),x1=Math.min(w-1,Math.ceil(cx+r));
+ const y0=Math.max(0,Math.floor(cy-r)),y1=Math.min(h-1,Math.ceil(cy+r));
+ for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){
+  const nx=(x-cx)/r,ny=(y-cy)/r,d=Math.hypot(nx,ny);
+  if(d<.52||d>.85)continue;
+  const angle=(Math.atan2(ny,nx)+Math.PI*2)%(Math.PI*2),k=Math.min(11,Math.floor(angle*12/(2*Math.PI)));
+  sum[k]+=gray[y*w+x];n[k]++;
+ }
+ return sum.map((v,k)=>n[k]?v/n[k]:255);
+}
+function v4203EdgeCandidates(can,s,shift){
+ const rows=s.rows||[],bands=rows.map(row=>(row.bubbles||[]).map(b=>v4203EdgeSectors(can,b,shift)));
+ const out=rows.map(()=>[]);
+ for(let qi=0;qi<rows.length;qi++)for(let bi=0;bi<(rows[qi].bubbles||[]).length;bi++){
+  const cur=bands[qi]?.[bi];if(!cur)continue;
+  const drop=cur.map((value,k)=>{
+    // Robust column template; also require difference from near neighbours.
+    const global=[],neighbors=[];
+    for(let ri=0;ri<rows.length;ri++){
+      if(ri===qi||!bands[ri]?.[bi])continue;
+      global.push(bands[ri][bi][k]);
+      if(Math.abs(ri-qi)<=2)neighbors.push(bands[ri][bi][k]);
+    }
+    const reference=Math.min(v4185Quantile(global,.50),neighbors.length?v4185Quantile(neighbors,.50):255);
+    return reference-value;
+  });
+  let best=0;
+  for(let k=0;k<12;k++){
+    const ids=[k,(k+1)%12,(k+2)%12],ds=ids.map(j=>drop[j]),mn=Math.min(...ds),mean=ds.reduce((a,b)=>a+b,0)/3;
+    const darkest=ids.filter(j=>cur[j]<=125).length;
+    // A 3-sector local stroke is much harder to mimic than a toner streak;
+    // a blank printed ring alone follows the template in neighbouring rows.
+    if(mn>=35&&mean>=55&&ds.filter(x=>x>=50).length>=2&&darkest>=2)best=Math.max(best,mean);
+  }
+  if(best>0)out[qi].push({index:bi,strength:best});
+ }
+ return out;
+}
+function v4203PartialDecision(metrics,cal,ch,edge){
+ if(!ch||ch.type==='double')return ch; // verified double marks stay wrong
+ const arcs=(edge||[]).slice().sort((a,b)=>b.strength-a.strength),best=arcs[0];
+ if(ch.type==='blank'&&best){
+  return {...ch,type:'review',index:best.index,indices:arcs.map(x=>x.index),
+   reason:'V4.10 · balon kenarında kısmi işaret olasılığı; öğretmen kontrolü',v410Checked:true};
+ }
+ if(ch.type==='answer'){
+  const secondary=arcs.filter(x=>x.index!==ch.index);
+  if(secondary.length){
+   return {...ch,type:'review',indices:[ch.index,...secondary.map(x=>x.index)],
+    reason:'V4.10 · ikinci balonda kısmi işaret olasılığı; öğretmen kontrolü',v410Checked:true};
+  }
+  const m=metrics[ch.index],g=Number(m?.grayDiff)||0,c=Number(m?.coreFrac)||0,
+        inn=Number(m?.innerFrac)||0,q=Number(m?.qmin)||0;
+  // A weak, one-sided outline (e.g. 603/23 C) is not a fully confirmed mark.
+  if(g<cal.markThreshold+3 && c<.35 && q<.035 && inn>=.20 && inn<=.53){
+   return {...ch,type:'review',indices:[ch.index],
+    reason:'V4.10 · tek taraflı/silik dolgu; öğretmen kontrolü',v410Checked:true};
+  }
+ }
+ if(ch.type==='review'&&!arcs.length){
+  const ls=(metrics||[]).map(m=>({g:Number(m?.grayDiff)||0,c:Number(m?.coreFrac)||0,
+     inn:Number(m?.innerFrac)||0,q:Number(m?.qmin)||0})).sort((a,b)=>b.g-a.g),a=ls[0];
+  // Constrain blank recovery to low-contrast, physically empty centres.
+  // A 710/22 style toner rim must not demand teacher time.
+  if(a&&a.g<cal.markThreshold&&a.c<=.12&&a.inn<.29&&a.q<=.025&&
+     ls.every(x=>x.c<.14&&x.q<.045)&&ls[1]?.g<cal.markThreshold){
+   return {...ch,type:'blank',index:-1,indices:[],
+    reason:'V4.10 · zayıf baskı izi, yerel kısmi işaret yok',v410Checked:true};
+  }
+ }
+ return ch;
+}
 function v4182ReadSubject(can,s,cal){
   const shift=cal?.subjectShifts?.[s.name]||v4183ZoneShift(can,(s.rows||[]).flatMap(r=>r.bubbles||[]),{maxDx:4,maxDy:4,hardCap:4,step:1,minGain:.010,maxSamples:30}),
-        rows=(s.rows||[]).map(row=>{
+        edgeCandidates=v4203EdgeCandidates(can,s,shift),
+        rows=(s.rows||[]).map((row,qi)=>{
           const metrics=(row.bubbles||[]).map(b=>v4182Bubble(can,b,shift));
           const localCal=cal?.subjectCalibrations?.[s.name]||cal;
           const baseline=v4186ClassifyAnswer(metrics,localCal);
@@ -15081,7 +15163,8 @@ function v4182ReadSubject(can,s,cal){
           const checked=v4192RefineAnswer(metrics,localCal,refined);
           const v49=v4197RefineAnswer(metrics,localCal,checked);
           const diffuseBlank=v4190DiffuseNoiseBlank(metrics,localCal,v49);
-          return{metrics,ch:diffuseBlank||v49};
+          const v410=v4203PartialDecision(metrics,localCal,diffuseBlank||v49,edgeCandidates[qi]);
+          return{metrics,ch:v410,edge:edgeCandidates[qi]};
         });
   return{shift,rows}
 }
@@ -15170,7 +15253,7 @@ async function scanOneV4182(file,cfg,c){
 
   const num=numberRead.num,numAmb=numberRead.amb,student=numberRead.student,
         preprocess={
-          engine:'V4.8 · Bağımsız Fiziksel İşaret Kontrolü',
+          engine:'V4.10 · Kısmi İşaret Öğretmen Kontrolü',
           canonicalW:can.w,canonicalH:can.h,canonicalScale:can.scale,
           linePixelsRemoved:cleaned.removed,
           paperCalibration:{
@@ -15393,7 +15476,7 @@ window.openRealPaperDiag795=function(i){
  // are the decision inputs, rather than a recreated scan of compressed imagery.
  if(r._omrMetrics196&&Object.keys(r._omrMetrics196).length){
   dlg.querySelector('.mm-optic-review-panel795')?.insertAdjacentHTML('afterbegin',
-   `<div class="card" id="omrMetricsBox196" style="margin:10px 0;padding:12px"><b>V4.9 · Telefonda Ölçüm Kontrolü</b><p class="tiny" style="margin:6px 0">Okuma farklılıklarını çözmek için anonim balon ölçümlerini kopyalayabilirsiniz. Fotoğraf, öğrenci adı ve numarası rapora alınmaz. Veriler yalnızca bu kontrol sırasında bellekte tutulur.</p><button type="button" class="secondary" onclick="omrShowMetrics196()">📋 Ölçümleri Göster / Kopyala</button><div id="omrMetricsOutput196" hidden style="margin-top:9px"><textarea id="omrMetricsText196" readonly rows="9" style="width:100%;font-size:12px;white-space:pre;user-select:text;-webkit-user-select:text" aria-label="Anonim optik ölçüm raporu"></textarea><button type="button" class="secondary" onclick="omrSelectMetrics196()">Tüm Metni Seç</button><span class="tiny" id="omrMetricsState196"></span></div></div>`);
+   `<div class="card" id="omrMetricsBox196" style="margin:10px 0;padding:12px"><b>V4.10 · Telefonda Ölçüm Kontrolü</b><p class="tiny" style="margin:6px 0">Okuma farklılıklarını çözmek için anonim balon ölçümlerini kopyalayabilirsiniz. Fotoğraf, öğrenci adı ve numarası rapora alınmaz. Veriler yalnızca bu kontrol sırasında bellekte tutulur.</p><button type="button" class="secondary" onclick="omrShowMetrics196()">📋 Ölçümleri Göster / Kopyala</button><div id="omrMetricsOutput196" hidden style="margin-top:9px"><textarea id="omrMetricsText196" readonly rows="9" style="width:100%;font-size:12px;white-space:pre;user-select:text;-webkit-user-select:text" aria-label="Anonim optik ölçüm raporu"></textarea><button type="button" class="secondary" onclick="omrSelectMetrics196()">Tüm Metni Seç</button><span class="tiny" id="omrMetricsState196"></span></div></div>`);
  }
  document.body.appendChild(dlg);
  document.body.classList.add("mm-optic-diag-active198");
@@ -15407,7 +15490,7 @@ window.omrShowMetrics196=async function(){
        r=window._omrBatch795?.rows?.[ix],m=r?._omrMetrics196;
  if(!dlg||!m)return;
  const round=x=>Number.isFinite(Number(x))?Number(x).toFixed(2):'—';
- const lines=['MualliMate v7.8.202 — anonim optik ölçüm raporu',
+ const lines=['MualliMate v7.8.203 — anonim optik ölçüm raporu',
    'Motor: '+String(r.preprocess?.engine||'—'),
    'Yön: '+String(r.markerCorrection?.rotation??'—')+', hizalama: '+String(r.markerCorrection?.alignment??'—')];
  for(const [subject,rows] of Object.entries(m)){
@@ -15590,7 +15673,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.202';
+ const VERSION='v7.8.203';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -15959,7 +16042,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78128-layout-duty-ios-lock-script">
 (function(){
-  const VERSION='v7.8.202';
+  const VERSION='v7.8.203';
   const root=document.documentElement, body=document.body;
   let active=false, baseVvH=0, baseBgTop=0, bgShift=0, touchY=0, raf=0;
 
@@ -16315,7 +16398,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78129-landscape-responsive-final-script">
 (function(){
-  const VERSION='v7.8.202';
+  const VERSION='v7.8.203';
   const mq=window.matchMedia('(orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
 
   function validTestResult(h,sid){
@@ -16670,7 +16753,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78130-landscape-class-center-duty-script">
 (function(){
-  const VERSION='v7.8.202';
+  const VERSION='v7.8.203';
   function syncVersion(){
     document.querySelectorAll('.premium-brand .tiny').forEach(function(x){
       if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION;
@@ -17164,7 +17247,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78147-landscape-review-polish-script">
 (function(){
   'use strict';
-  const VERSION='v7.8.202';
+  const VERSION='v7.8.203';
 
   function testSummary147(c,h){
     const total=(c?.students||[]).length,q=Math.max(0,Math.floor(Number(h?.questionCount||0)));
@@ -17294,7 +17377,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78150-test-net-report-script">
 (function(){
 'use strict';
-const VERSION150='v7.8.202';
+const VERSION150='v7.8.203';
 function clamp150(v,a,b){return Math.max(a,Math.min(b,v))}
 function q150(h){const n=Math.floor(Number(h?.questionCount||0));return Number.isFinite(n)&&n>0?n:0}
 function valid150(h,r){const q=q150(h);if(!q||!r||typeof r!=='object')return false;const d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);return[d,w,b].every(Number.isFinite)&&d>=0&&w>=0&&b>=0&&d+w+b===q}
