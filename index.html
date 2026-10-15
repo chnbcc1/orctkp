@@ -2571,7 +2571,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.213</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.215</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4838,7 +4838,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.213";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.215";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -4895,7 +4895,24 @@ function cls(){return state.classes.find(c=>c.id===currentClassId)||null}
 function el(id){return document.getElementById(id)}
 let modalHistory=[]; let modalPageScrollY=0; let modalPageLocked=false; let modalDataRevision=0;
 function modalUpdateBackButton(){const b=el("modalBackBtn");if(!b)return;/* v7.8.99: Belge Asistanı taslağının bıraktığı özel onclick başka modüllere sızmasın. */b.setAttribute("onclick","modalGoBack()");const title=el("modalTitle")?.textContent||"";b.style.display=(title!=="🤖 Belge Asistanı"&&(modalHistory.length||title==="Sınıf Nöbeti"))?"inline-flex":"none"}
-function modalSnapshot(){const box=document.querySelector("#modal .modal-box");return {title:el("modalTitle")?.textContent||"",subtitle:el("modalSubtitle")?.textContent||"",body:el("modalBody")?.innerHTML||"",scrollTop:box?.scrollTop||0,activeStudentId:window._activeStudentModalId||null,revision:modalDataRevision,classId:currentClassId,period:currentPeriod}}
+// v7.8.215 — Belge formları ve taslaklar aynı gezinme ailesinde kalır; canlı alan değerleri korunur.
+function modalSnapshot(){
+ const box=document.querySelector("#modal .modal-box"),body=el("modalBody"),title=el("modalTitle")?.textContent||"";
+ const family=modalNavFamily(title,body?.innerHTML||"");let html=body?.innerHTML||"",documentContext=null;
+ if(family==="document"&&body){
+  if(typeof sokEditorSync==="function")sokEditorSync();
+  if(typeof zumreEditorApply==="function")zumreEditorApply();
+  if(typeof veliEditorApply==="function")veliEditorApply();
+  const copy=body.cloneNode(true),live=body.querySelectorAll("input,textarea,select,details"),saved=copy.querySelectorAll("input,textarea,select,details");
+  live.forEach((field,i)=>{const node=saved[i];if(field.tagName==="TEXTAREA")node.textContent=field.value;
+   else if(field.tagName==="SELECT")Array.from(node.options).forEach((o,j)=>o.toggleAttribute("selected",field.options[j].selected));
+   else if(field.tagName==="DETAILS")node.toggleAttribute("open",field.open);
+   else {node.setAttribute("value",field.value);node.toggleAttribute("checked",field.checked)}});
+  html=copy.innerHTML;
+  documentContext={};for(const key of ["_docAssistantLastValues","_docHistoryCurrentId887","__docAssistantOrigin","_docCustomAgendas","_docCustomAgendaTopicIds"]){if(window[key]!==undefined)documentContext[key]=JSON.parse(JSON.stringify(window[key]))}
+ }
+ return {title,subtitle:el("modalSubtitle")?.textContent||"",body:html,navFamily:family,documentContext,scrollTop:box?.scrollTop||0,activeStudentId:window._activeStudentModalId||null,revision:modalDataRevision,classId:currentClassId,period:currentPeriod}
+}
 function modalPushCurrent(){if(!el("modal")?.classList.contains("open"))return;modalHistory.push(modalSnapshot());if(modalHistory.length>20)modalHistory.shift();modalUpdateBackButton()}
 function findStudentIdFromSnapshot(x){const c=state.classes.find(z=>z.id===(x.classId||currentClassId));if(!c)return null;const sub=String(x.subtitle||"").trim();const byActive=x.activeStudentId&&c.students.find(st=>st.id===x.activeStudentId);if(byActive)return byActive.id;const st=c.students.find(st=>sub===`${st.number?st.number+" - ":""}${st.name}`||sub===st.name);return st?.id||null}
 function modalRefreshSnapshot(x){
@@ -4942,9 +4959,10 @@ function modalRefreshSnapshot(x){
   }catch(err){console.warn("Modal canlı geri yenileme:",err)}
   return false
 }
-function modalNavFamily(title){
+function modalNavFamily(title,body=""){
   title=String(title||"");
-  if(/Belge Asistan|PDF.den Gündem|Şablon|Gündem Metin|Katılımcılar \/ İmza/.test(title))return "document";
+  if(/id=["']docAssistantDraft["']|doc-history887|doc-wizard887/.test(body)||Object.values(documentAssistantTypes).some(x=>title===`${x.icon} ${x.label}`))return "document";
+  if(/Belge Asistan|Son Belgeler|Belge Sihirbazı|PDF.den Gündem|Şablon|Gündem Metin|Katılımcılar \/ İmza/.test(title))return "document";
   if(/Nöbet Programı|Okul Nöbeti|Pansiyon Nöbeti|Nöbet Programı Bilgileri/.test(title))return "duty";
   if(/Günlük Öğretmen Paneli|Ders Ayrıntısı|Ders Bilgisi|Ders Programı|Program Bilgileri|Eski Programlar|Hızlı Ders|Yıllık Plan/.test(title))return "lesson";
   if(/Sınıf Nöbeti|Nöbetçi Değiştir/.test(title))return "classDuty";
@@ -4954,10 +4972,10 @@ function modalGoBack(){
   const curTitle=el("modalTitle")?.textContent||"";
   if(curTitle==="Nöbetçi Değiştir"){const ym=(window._dutySwapDate||dutyToday()).slice(0,7);modalHistory=modalHistory.filter(x=>x.title!=="Sınıf Nöbeti"&&x.title!=="Nöbetçi Değiştir");openClassDuty(ym);modalUpdateBackButton();return}
   if(!modalHistory.length){if(curTitle==="Sınıf Nöbeti")closeModal();return}
-  const family=modalNavFamily(curTitle);
+  const family=modalNavFamily(curTitle,el("modalBody")?.innerHTML||"");
   let x=null;
   while(modalHistory.length){
-    const cand=modalHistory.pop(),cf=modalNavFamily(cand.title);
+    const cand=modalHistory.pop(),cf=cand.navFamily||modalNavFamily(cand.title,cand.body);
     // Belge Asistanı kendi gezinme alanıdır. Başka modüllerin Geri işlemi eski/stale Belge Asistanı ekranına düşemez.
     if(cf==="document" && family!=="document")continue;
     // Belge Asistanı içindeyken de başka modüllerin eski ekranlarına taşma olmasın.
@@ -4965,7 +4983,9 @@ function modalGoBack(){
     x=cand;break;
   }
   if(!x){modalUpdateBackButton();return}
-  const needsRefresh=x.revision!==modalDataRevision;let refreshed=false;if(needsRefresh)refreshed=modalRefreshSnapshot(x);if(!refreshed){el("modalTitle").textContent=x.title;el("modalSubtitle").textContent=x.subtitle;el("modalBody").innerHTML=x.body;window._activeStudentModalId=x.activeStudentId||null;el("modal").classList.add("open")}modalUpdateBackButton();requestAnimationFrame(()=>{const box=document.querySelector("#modal .modal-box");if(box)box.scrollTop=x.scrollTop||0})
+  if(x.documentContext){for(const [key,value] of Object.entries(x.documentContext))window[key]=value}
+  const needsRefresh=x.revision!==modalDataRevision;let refreshed=false;if(needsRefresh)refreshed=modalRefreshSnapshot(x);if(!refreshed){el("modalTitle").textContent=x.title;el("modalSubtitle").textContent=x.subtitle;el("modalBody").innerHTML=x.body;window._activeStudentModalId=x.activeStudentId||null;el("modal").classList.add("open")}if(x.documentContext){const agenda=el("sokAgendaEditor");if(agenda)agenda.addEventListener("input",sokEditorSync)}
+  modalUpdateBackButton();requestAnimationFrame(()=>{const box=document.querySelector("#modal .modal-box");if(box)box.scrollTop=x.scrollTop||0})
 }
 function lockModalPage(){if(modalPageLocked)return;modalPageScrollY=window.scrollY||document.documentElement.scrollTop||0;document.body.style.position="fixed";document.body.style.top=`-${modalPageScrollY}px`;document.body.style.left="0";document.body.style.right="0";document.body.style.width="100%";document.body.classList.add("modal-page-locked");modalPageLocked=true}
 function unlockModalPage(){if(!modalPageLocked)return;document.body.classList.remove("modal-page-locked");document.body.style.position="";document.body.style.top="";document.body.style.left="";document.body.style.right="";document.body.style.width="";modalPageLocked=false;window.scrollTo(0,modalPageScrollY)}
@@ -8320,7 +8340,7 @@ migrateHomeworkImagesToIDB().then(()=>hydrateHomeworkImages()).catch(()=>{});
 <script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
   // v7.6.64-JPEG — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
   // ve aktif oturum güncelleme nedeniyle yeniden yüklenmez.
-  navigator.serviceWorker.register("./sw.js?v=7.8.213",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.8.215",{updateViaCache:"none"}).then(reg=>{
     reg.update().catch(()=>{});
     setInterval(()=>reg.update().catch(()=>{}),60*60*1000);
   }).catch(()=>{});
@@ -15803,7 +15823,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.213';
+ const VERSION='v7.8.215';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -16172,7 +16192,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78128-layout-duty-ios-lock-script">
 (function(){
-  const VERSION='v7.8.213';
+  const VERSION='v7.8.215';
   const root=document.documentElement, body=document.body;
   let active=false, baseVvH=0, baseBgTop=0, bgShift=0, touchY=0, raf=0;
 
@@ -16528,7 +16548,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78129-landscape-responsive-final-script">
 (function(){
-  const VERSION='v7.8.213';
+  const VERSION='v7.8.215';
   const mq=window.matchMedia('(orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
 
   function validTestResult(h,sid){
@@ -16883,7 +16903,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78130-landscape-class-center-duty-script">
 (function(){
-  const VERSION='v7.8.213';
+  const VERSION='v7.8.215';
   function syncVersion(){
     document.querySelectorAll('.premium-brand .tiny').forEach(function(x){
       if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION;
@@ -17377,7 +17397,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78147-landscape-review-polish-script">
 (function(){
   'use strict';
-  const VERSION='v7.8.213';
+  const VERSION='v7.8.215';
 
   function testSummary147(c,h){
     const total=(c?.students||[]).length,q=Math.max(0,Math.floor(Number(h?.questionCount||0)));
@@ -17507,7 +17527,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78150-test-net-report-script">
 (function(){
 'use strict';
-const VERSION150='v7.8.213';
+const VERSION150='v7.8.215';
 function clamp150(v,a,b){return Math.max(a,Math.min(b,v))}
 function q150(h){const n=Math.floor(Number(h?.questionCount||0));return Number.isFinite(n)&&n>0?n:0}
 function valid150(h,r){const q=q150(h);if(!q||!r||typeof r!=='object')return false;const d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);return[d,w,b].every(Number.isFinite)&&d>=0&&w>=0&&b>=0&&d+w+b===q}
@@ -18375,7 +18395,7 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
 #omrRealPaperDiag795 summary{touch-action:manipulation!important}
 </style>
 
-<!-- v7.8.213 — Sınıf / tüm sınıflar test sıralaması. Yalnızca sunum ve ilişki ID'si; optik motoru değişmez. -->
+<!-- v7.8.215 — Sınıf / tüm sınıflar test sıralaması. Yalnızca sunum ve ilişki ID'si; optik motoru değişmez. -->
 <style id="mm206-ranking-style">
 .mm206-rank-controls{display:flex;gap:9px;flex-wrap:wrap;align-items:end;margin:0 0 12px}
 .mm206-rank-controls label{min-width:155px;flex:1 1 170px;font-weight:750;font-size:12px;color:#39574c}
