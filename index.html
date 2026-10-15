@@ -2571,7 +2571,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.207</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.208</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4838,7 +4838,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.207";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.208";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -15802,7 +15802,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.207';
+ const VERSION='v7.8.208';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -16171,7 +16171,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78128-layout-duty-ios-lock-script">
 (function(){
-  const VERSION='v7.8.207';
+  const VERSION='v7.8.208';
   const root=document.documentElement, body=document.body;
   let active=false, baseVvH=0, baseBgTop=0, bgShift=0, touchY=0, raf=0;
 
@@ -16527,7 +16527,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78129-landscape-responsive-final-script">
 (function(){
-  const VERSION='v7.8.207';
+  const VERSION='v7.8.208';
   const mq=window.matchMedia('(orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
 
   function validTestResult(h,sid){
@@ -16882,7 +16882,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78130-landscape-class-center-duty-script">
 (function(){
-  const VERSION='v7.8.207';
+  const VERSION='v7.8.208';
   function syncVersion(){
     document.querySelectorAll('.premium-brand .tiny').forEach(function(x){
       if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION;
@@ -17376,7 +17376,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78147-landscape-review-polish-script">
 (function(){
   'use strict';
-  const VERSION='v7.8.207';
+  const VERSION='v7.8.208';
 
   function testSummary147(c,h){
     const total=(c?.students||[]).length,q=Math.max(0,Math.floor(Number(h?.questionCount||0)));
@@ -17506,7 +17506,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78150-test-net-report-script">
 (function(){
 'use strict';
-const VERSION150='v7.8.207';
+const VERSION150='v7.8.208';
 function clamp150(v,a,b){return Math.max(a,Math.min(b,v))}
 function q150(h){const n=Math.floor(Number(h?.questionCount||0));return Number.isFinite(n)&&n>0?n:0}
 function valid150(h,r){const q=q150(h);if(!q||!r||typeof r!=='object')return false;const d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);return[d,w,b].every(Number.isFinite)&&d>=0&&w>=0&&b>=0&&d+w+b===q}
@@ -18374,7 +18374,7 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
 #omrRealPaperDiag795 summary{touch-action:manipulation!important}
 </style>
 
-<!-- v7.8.207 — Sınıf / tüm sınıflar test sıralaması. Yalnızca sunum ve ilişki ID'si; optik motoru değişmez. -->
+<!-- v7.8.208 — Sınıf / tüm sınıflar test sıralaması. Yalnızca sunum ve ilişki ID'si; optik motoru değişmez. -->
 <style id="mm206-ranking-style">
 .mm206-rank-controls{display:flex;gap:9px;flex-wrap:wrap;align-items:end;margin:0 0 12px}
 .mm206-rank-controls label{min-width:155px;flex:1 1 170px;font-weight:750;font-size:12px;color:#39574c}
@@ -18395,6 +18395,25 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
 .mm206-link-list label{display:block;font-size:12px;font-weight:750;color:#315449}
 .mm206-link-list select{width:100%;margin-top:5px;padding:10px 9px;border-radius:9px;border:1px solid #bfd4c9;background:white}
 @media(max-width:580px){.mm206-rank-controls label{min-width:0;flex-basis:100%}.mm206-rank-table table{font-size:12px;min-width:480px}.mm206-rank-table th,.mm206-rank-table td{padding:9px 6px}.mm206-rank-actions button{flex:1 1 100%}}
+</style>
+<style id="mm208-ranking-mobile">
+@media(max-width:580px){
+ #modalBody .mm206-rank-table{width:100%;max-width:100%;min-width:0;box-sizing:border-box;overflow-x:hidden}
+ #modalBody .mm206-rank-table table{width:100%!important;min-width:0!important;max-width:100%;table-layout:fixed;font-size:11px}
+ #modalBody .mm206-rank-table th,#modalBody .mm206-rank-table td{box-sizing:border-box;padding:9px 2px;text-align:center;white-space:normal}
+ #modalBody .mm206-rank-table th{font-size:9px}
+ #modalBody .mm206-rank-table td:first-child{font-size:12px;width:auto}
+ #modalBody .mm206-rank-table th:nth-child(1){width:7%}
+ #modalBody .mm206-rank-table th:nth-child(2){width:34%}
+ #modalBody .mm206-rank-table th:nth-child(3){width:11%}
+ #modalBody .mm206-rank-table th:nth-child(4),#modalBody .mm206-rank-table th:nth-child(5){width:11%}
+ #modalBody .mm206-rank-table th:nth-child(6){width:10%}
+ #modalBody .mm206-rank-table th:nth-child(7){width:16%}
+ #modalBody .mm206-rank-table td:nth-child(2){text-align:left;overflow-wrap:anywhere;line-height:1.35}
+ #modalBody .mm206-rank-table td:not(:nth-child(2)){white-space:nowrap}
+ #modalBody .mm206-rank-table .tiny{font-size:9px}
+ #modalBody .mm206-rank-actions button{min-width:0;white-space:normal}
+}
 </style>
 <script id="mm206-ranking-script">
 (function(){
@@ -18529,7 +18548,7 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
  };
  // Paginate whole rows before PDF creation; repeat the homework report style on A4 pages.
  function rankPages207(rows,h,scopeName,metric){
-   const W=1240,H=1754,M=58,RH=58,TY=307,TH=58,PER=21,pages=[];
+   const W=1240,H=1754,M=58,RH=58,TY=285,TH=58,PER=21,pages=[];
    const teacher=String(settings?.profile?.name||'').trim(),avg=k=>rows.reduce((n,r)=>n+r[k],0)/rows.length;
    const widths=[70,80,390,120,100,100,100,164],labels=['SIRA','NO','ÖĞRENCİ ADI SOYADI','SINIF','D','Y','B','NET'];
    const count=Math.ceil(rows.length/PER),metricName=metric==='correct'?'Doğru sayısı':'Net';
@@ -18537,13 +18556,15 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
      const cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d');
      const text=(v,xx,yy,size,color='#253b35',bold=false,align='left',max)=>{x.font=`${bold?'bold ':''}${size}px Arial`;x.fillStyle=color;x.textAlign=align;if(max)x.fillText(String(v),xx,yy,max);else x.fillText(String(v),xx,yy)};
      x.fillStyle='#f4f1e7';x.fillRect(0,0,W,H);x.fillStyle='#064e3b';x.fillRect(0,0,W,156);x.fillStyle='#d6b45b';x.fillRect(0,156,W,5);
-     text('TEST ÖDEVİ SIRALAMA RAPORU',M,49,31,'#fff',true);
-     text(h.name||'Test',M,89,27,'#fff',true,'left',W-2*M);
+     text('TEST ÖDEVİ SIRALAMA RAPORU',M,49,31,'#fff',true,'left',760);
+     text(h.name||'Test',M,89,27,'#fff',true,'left',760);
      text(teacher?'Ders Öğretmeni: '+teacher:'MualliMate+ · Öğrenci Takip Sistemi',M,128,21,'#eef4f1',false,'left',740);
+     const date=v=>/^\d{4}-\d{2}-\d{2}$/.test(String(v||''))?String(v).split('-').reverse().join('.'):String(v||'');
+     if(h.given)text('Verilme: '+date(h.given),W-M,49,18,'#dbe7e2',false,'right',330);
+     if(h.due)text('Son teslim: '+date(h.due),W-M,88,18,'#dbe7e2',false,'right',330);
      text(`${Number(h.questionCount)} soru`,W-M,128,20,'#dbe7e2',false,'right');
      const cards=[['Sonuç Girilen',rows.length,'#15803d'],['Ort. Doğru',fmt206(avg('d')),'#15803d'],['Ort. Yanlış',fmt206(avg('w')),'#c62828'],['Ort. Boş',fmt206(avg('b')),'#64748b'],['Ort. Net',fmt206(avg('net')),'#075f52'],['Ölçüt',metricName,'#075f52']],gap=10,cw=(W-2*M-gap*5)/6;
      cards.forEach(([label,value,color],i)=>{const cx=M+i*(cw+gap);x.fillStyle='#fffdf8';roundRectCanvas(x,cx,178,cw,86,15);x.fill();x.strokeStyle='#d8cda9';x.lineWidth=1.4;x.stroke();text(value,cx+cw/2,215,label==='Ölçüt'?21:26,color,true,'center',cw-14);text(label,cx+cw/2,242,14,'#33443e',true,'center')});
-     text(`Kapsam: ${scopeName}  ·  ${metricName} büyükten küçüğe`,M,291,18,'#435a52',true,'left',W-2*M);
      x.fillStyle='#ddd3b7';x.fillRect(M,TY,W-2*M,TH);
      let xx=M;labels.forEach((label,i)=>{text(label,i===2?xx+12:xx+widths[i]/2,TY+36,i===2?18:19,'#173d33',true,i===2?'left':'center');xx+=widths[i]});
      const subset=rows.slice(page*PER,(page+1)*PER);
@@ -18551,10 +18572,7 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
        vals.forEach((v,j)=>{if(j===2){x.textAlign='left';x.fillStyle='#253b35';drawFullStudentName(x,r.name,cx+12,y+RH/2,widths[j]-24,RH-8,{maxFont:22,minFont:14,maxLines:2,weight:'normal',align:'left'})}else{text(v,cx+widths[j]/2,y+36,j===0?24:21,j===4?'#15803d':j===5?'#c62828':j===6?'#64748b':j===7?'#075f52':'#253b35',j===0||j===(metric==='correct'?4:7),'center',widths[j]-12)}cx+=widths[j]});
        x.strokeStyle='#dde5e0';x.lineWidth=1;x.beginPath();x.moveTo(M,y+RH);x.lineTo(W-M,y+RH);x.stroke();
      });
-     text('Eşit sonuçlar aynı dereceyi paylaşır; ad soyadına göre Türkçe alfabetik sıralanır.',M,1622,17,'#435a52');
-     text('Net = Doğru − Yanlış / 4 · Sonuç girilmemiş veya geçersiz kayıtlar dahil edilmez.',M,1650,17,'#64748b');
-     const date=v=>/^\d{4}-\d{2}-\d{2}$/.test(String(v||''))?String(v).split('-').reverse().join('.'):String(v||'');
-     text([h.given?'Verilme: '+date(h.given):'',h.due?'Son teslim: '+date(h.due):''].filter(Boolean).join('   ·   '),M,1684,17,'#435a52');
+
      text(`MualliMate+  ·  Sayfa ${page+1} / ${count}`,W-M,1714,17,'#274f43',true,'right');pages.push(cv);
    }
    return pages;

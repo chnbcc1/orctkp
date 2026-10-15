@@ -1,11 +1,10 @@
-# MualliMate+ v7.8.207 — Test sıralaması PDF çıktısı
+# MualliMate+ v7.8.208 — Dikey ekran ve PDF düzeni
 
-Test ödevi → Test Sıralaması → sınıf/tüm sınıflar ve net/doğru seçimi → PDF İndir.
+- Dikey telefon ekranında test sıralama tablosunun sabit minimum genişliği kaldırıldı. Tüm sütunlar ekran genişliğine göre yerleşir; uzun adlar satıra bölünür.
+- PDF'de kapsam/sıralama satırı ve sol alt açıklamalar kaldırıldı.
+- Verilme ve son teslim tarihleri sağ üstte, soru sayısının üzerinde gösterilir.
+- Sıralama, eşitlikte Türkçe alfabetik sıra, CSV ve optik okuma kodları korunur.
 
-PDF, ödev raporlarındaki yeşil başlık, altın çizgi, krem zemin ve dönüşümlü tablo satırlarını kullanır. A4 dikey sayfalarda başlık, özet, sütun adları ve sayfa numarası tekrarlanır. Her sayfaya 21 öğrenci yerleştirilir; satırlar bölünmez.
+Paket yalnız değişen index.html ve bu açıklamayı içerir. Mevcut uygulama klasöründeki index.html dosyasını güncelleyin; diğer dosyaları koruyun.
 
-Sütunlar: Sıra, No, Öğrenci Adı Soyadı, Sınıf, Doğru, Yanlış, Boş, Net. Eşit sonuçlar Türkçe alfabetik sıralanır ve aynı dereceyi paylaşır. Seçili kapsam ve ölçüt PDF'ye yansır. Mevcut CSV çıktısı korunur. İnternet ya da harici PDF kütüphanesi gerekmez.
-
-Paket yalnız değişen index.html ve bu açıklamayı içerir. Mevcut uygulama klasöründeki index.html yerine kullanılır; diğer dosyalar korunur. v7.8.206 temel alınmıştır. Optik okuma ve kayıt algoritmaları değiştirilmemiştir.
-
-Doğrulama: net/doğru sıralaması, eşitlik, sınıf filtresi, PDF düğmesi ve seçili ölçüt; 1/21/22/42/43 öğrenci sayfa sınırları; 45 öğrencili 3 sayfalık A4 PDF'nin tüm sayfalarında görsel inceleme. Gerçek telefon/PWA indirme akışı bu ortamda denenmemiştir.
+Doğrulama: sıralama testleri, PDF sayfalama sınırları ve üç sayfalık A4 çıktı. Gerçek telefon görünümü bu ortamda doğrulanamadı.
