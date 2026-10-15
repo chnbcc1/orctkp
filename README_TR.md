@@ -1,25 +1,11 @@
-# MualliMate+ v7.8.206 — Test Sıralaması (ön test)
+# MualliMate+ v7.8.207 — Test sıralaması PDF çıktısı
 
-Bu paket v7.8.205 Sistem Sağlığı düzeltmesindeki **index.html** üzerine hazırlanmıştır. **Optik okuma algoritması değiştirilmemiştir.**
+Test ödevi → Test Sıralaması → sınıf/tüm sınıflar ve net/doğru seçimi → PDF İndir.
 
-## Yeni özellikler
-- Test ödevi içinden **🏆 Test Sıralaması** açılır.
-- Ölçüt: **Net** (Doğru − Yanlış / 4) veya **Doğru sayısı**.
-- Kapsam: **Tüm sınıflar** veya ilgili sınıflardan biri.
-- Tüm sınıflar listesinde öğrenci adının yanında ayrı bir **Sınıf** sütunu bulunur.
-- Eşit puanlı öğrenciler **aynı dereceyi** paylaşır; ad soyadlarına göre **Türkçe alfabetik sırayla** listelenir.
-- Sonuç girilmemiş veya geçersiz kayıtlar sıralanmaz; kayıtları değiştirilmez.
-- **Diğer Sınıflara Kopyala** ile kopyalanan yeni testler, `testGroupId` alanı sayesinde otomatik bağlanır.
-- Önceden ayrı ayrı eklenen/kopyalanan aynı testler **Diğer sınıfların testlerini bağla** ekranından bir kez eşleştirilir. **Sadece isim benzerliğiyle otomatik birleştirme yapılmaz.**
-- CSV olarak dışa aktarılabilir.
+PDF, ödev raporlarındaki yeşil başlık, altın çizgi, krem zemin ve dönüşümlü tablo satırlarını kullanır. A4 dikey sayfalarda başlık, özet, sütun adları ve sayfa numarası tekrarlanır. Her sayfaya 21 öğrenci yerleştirilir; satırlar bölünmez.
 
-## Güvenli deneme
-1. Önce doğrulanmış tam yedeğinizi cihaz dışında saklayın.
-2. Yalnız **MualliMate TEST** profilinde deneyin. Öğrenci sayısı vb. kayıtları karşılaştırın.
-3. Test ödevine girip **Test Sıralaması** düğmesine basın.
-4. Sınıf / Tüm sınıflar ve Net / Doğru seçimlerini, eşitlik durumlarını kontrol edin.
-5. Bir test ödevini diğer sınıfa kopyalayıp birden çok sınıfın sonuçlarını doğrulayın.
-6. Eski testler için bağlantıyı elle kurun. Başka bir gruba bağlı testleri birleştirme engellenir.
-7. Test ortamındaki doğrulamadan sonra GitHub'da mevcut çalışan `index.html` dosyasını saklayarak yayımlayın.
+Sütunlar: Sıra, No, Öğrenci Adı Soyadı, Sınıf, Doğru, Yanlış, Boş, Net. Eşit sonuçlar Türkçe alfabetik sıralanır ve aynı dereceyi paylaşır. Seçili kapsam ve ölçüt PDF'ye yansır. Mevcut CSV çıktısı korunur. İnternet ya da harici PDF kütüphanesi gerekmez.
 
-**Önemli:** Paket test edilmeden canlı GitHub/PWA kaynağının üzerine yüklenmemelidir. `testGroupId` haricinde öğrenci/test verisi şeması değiştirilmemiştir.
+Paket yalnız değişen index.html ve bu açıklamayı içerir. Mevcut uygulama klasöründeki index.html yerine kullanılır; diğer dosyalar korunur. v7.8.206 temel alınmıştır. Optik okuma ve kayıt algoritmaları değiştirilmemiştir.
+
+Doğrulama: net/doğru sıralaması, eşitlik, sınıf filtresi, PDF düğmesi ve seçili ölçüt; 1/21/22/42/43 öğrenci sayfa sınırları; 45 öğrencili 3 sayfalık A4 PDF'nin tüm sayfalarında görsel inceleme. Gerçek telefon/PWA indirme akışı bu ortamda denenmemiştir.
