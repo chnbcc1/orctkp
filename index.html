@@ -2571,7 +2571,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.212</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.213</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4838,7 +4838,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.212";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.213";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -8320,7 +8320,7 @@ migrateHomeworkImagesToIDB().then(()=>hydrateHomeworkImages()).catch(()=>{});
 <script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
   // v7.6.64-JPEG — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
   // ve aktif oturum güncelleme nedeniyle yeniden yüklenmez.
-  navigator.serviceWorker.register("./sw.js?v=7.8.212",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.8.213",{updateViaCache:"none"}).then(reg=>{
     reg.update().catch(()=>{});
     setInterval(()=>reg.update().catch(()=>{}),60*60*1000);
   }).catch(()=>{});
@@ -15803,7 +15803,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.212';
+ const VERSION='v7.8.213';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -16172,7 +16172,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78128-layout-duty-ios-lock-script">
 (function(){
-  const VERSION='v7.8.212';
+  const VERSION='v7.8.213';
   const root=document.documentElement, body=document.body;
   let active=false, baseVvH=0, baseBgTop=0, bgShift=0, touchY=0, raf=0;
 
@@ -16528,7 +16528,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78129-landscape-responsive-final-script">
 (function(){
-  const VERSION='v7.8.212';
+  const VERSION='v7.8.213';
   const mq=window.matchMedia('(orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
 
   function validTestResult(h,sid){
@@ -16883,7 +16883,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78130-landscape-class-center-duty-script">
 (function(){
-  const VERSION='v7.8.212';
+  const VERSION='v7.8.213';
   function syncVersion(){
     document.querySelectorAll('.premium-brand .tiny').forEach(function(x){
       if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION;
@@ -17377,7 +17377,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78147-landscape-review-polish-script">
 (function(){
   'use strict';
-  const VERSION='v7.8.212';
+  const VERSION='v7.8.213';
 
   function testSummary147(c,h){
     const total=(c?.students||[]).length,q=Math.max(0,Math.floor(Number(h?.questionCount||0)));
@@ -17507,7 +17507,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78150-test-net-report-script">
 (function(){
 'use strict';
-const VERSION150='v7.8.212';
+const VERSION150='v7.8.213';
 function clamp150(v,a,b){return Math.max(a,Math.min(b,v))}
 function q150(h){const n=Math.floor(Number(h?.questionCount||0));return Number.isFinite(n)&&n>0?n:0}
 function valid150(h,r){const q=q150(h);if(!q||!r||typeof r!=='object')return false;const d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);return[d,w,b].every(Number.isFinite)&&d>=0&&w>=0&&b>=0&&d+w+b===q}
@@ -18375,7 +18375,7 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
 #omrRealPaperDiag795 summary{touch-action:manipulation!important}
 </style>
 
-<!-- v7.8.212 — Sınıf / tüm sınıflar test sıralaması. Yalnızca sunum ve ilişki ID'si; optik motoru değişmez. -->
+<!-- v7.8.213 — Sınıf / tüm sınıflar test sıralaması. Yalnızca sunum ve ilişki ID'si; optik motoru değişmez. -->
 <style id="mm206-ranking-style">
 .mm206-rank-controls{display:flex;gap:9px;flex-wrap:wrap;align-items:end;margin:0 0 12px}
 .mm206-rank-controls label{min-width:155px;flex:1 1 170px;font-weight:750;font-size:12px;color:#39574c}
@@ -18737,52 +18737,3 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
 #modalBody .mm210-date-shell>input::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:100%;height:100%;padding:0;margin:0;opacity:0;cursor:pointer}
 #modalBody .mm210-date-shell:focus-within{outline:2px solid #0f766e;outline-offset:2px}
 </style>
-
-<!-- MualliMate v7.8.212: content-aware viewport layout -->
-<style id="mm212-responsive-home">
-html.mm212-home,body.mm212-home{height:auto!important;max-height:none!important;min-height:100%!important;overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior-y:auto!important}
-body.mm212-home{padding-bottom:0!important}
-body.mm212-home .layout,body.mm212-home main{height:auto!important;max-height:none!important;min-height:0!important;overflow:visible!important}
-body.mm212-home main{padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))!important}
-body.mm212-home #mobileHomeDashboard{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:none!important;grid-auto-rows:minmax(min-content,1fr)!important;align-content:stretch!important;align-items:stretch!important;height:auto!important;max-height:none!important;min-height:calc(var(--mm212-home-space,0px) - env(safe-area-inset-bottom,0px))!important;gap:10px!important;padding-bottom:0!important;margin-bottom:0!important;overflow:visible!important}
-body.mm212-home #mobileHomeDashboard>.mm-home-card{grid-column:auto!important;grid-row:auto!important;min-width:0!important;height:auto!important;min-height:min-content!important;max-height:none!important;overflow:visible!important;display:flex!important;flex-direction:column!important;justify-content:center!important;box-sizing:border-box!important}
-body.mm212-home #mobileHomeDashboard .mm-quick-grid,body.mm212-home #mobileHomeDashboard .mm-class-strip{min-width:0!important}
-body.mm212-home #mobileHomeDashboard .mm-class-strip{overflow-x:auto!important;flex-shrink:0!important}
-@media(min-width:701px){body.mm212-home #mobileHomeDashboard{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
-@media(prefers-reduced-motion:reduce){body.mm212-home #mobileHomeDashboard{scroll-behavior:auto!important}}
-</style>
-<script id="mm212-responsive-home-script">
-(function(){
- 'use strict';
- let frame=0;
- function viewport212(){return window.visualViewport?Math.min(window.innerHeight,window.visualViewport.height):window.innerHeight}
- function available212(height,top){return Math.max(0,Math.floor(height-Math.max(0,top)-12))}
- function sync212(){
-  frame=0;
-  const d=document.getElementById('mobileHomeDashboard'),b=document.body,r=document.documentElement;
-  if(!b||!d)return;
-  const focus=document.activeElement,typing=focus&&(focus.matches('input,textarea,select')||focus.isContentEditable);
-  const visible=getComputedStyle(d).display!=='none'&&!d.hidden;
-  const on=visible&&matchMedia('(max-width:1100px)').matches&&!typing&&!b.classList.contains('mm-class-open')&&!b.classList.contains('mm-all-classes-open')&&!b.classList.contains('mm-modal-open');
-  for(const e of [r,b])if(e.classList.contains('mm212-home')!==on)e.classList.toggle('mm212-home',on);
-  if(on){
-   const top=d.getBoundingClientRect().top+window.scrollY;
-   const value=available212(viewport212(),top)+'px';
-   if(d.style.getPropertyValue('--mm212-home-space')!==value)d.style.setProperty('--mm212-home-space',value);
-  }
- }
- function schedule212(){if(!frame)frame=requestAnimationFrame(sync212)}
- function start212(){
-  const d=document.getElementById('mobileHomeDashboard');
-  new MutationObserver(schedule212).observe(document.body,{attributes:true,attributeFilter:['class']});
-  if(d)new MutationObserver(schedule212).observe(d,{childList:true,subtree:true,characterData:true});
-  if(window.ResizeObserver){const ro=new ResizeObserver(schedule212);for(const e of document.querySelectorAll('header,#profileChip'))ro.observe(e)}
-  schedule212();
- }
- for(const name of ['resize','orientationchange','pageshow'])window.addEventListener(name,schedule212,{passive:true});
- if(window.visualViewport)window.visualViewport.addEventListener('resize',schedule212,{passive:true});
- for(const name of ['focusin','focusout'])document.addEventListener(name,schedule212);
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start212,{once:true});else start212();
- window._mm212LayoutTest={available:available212};
-})();
-</script>
