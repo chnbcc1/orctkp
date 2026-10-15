@@ -2571,7 +2571,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.205</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.206</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4838,7 +4838,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.205";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.206";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -11755,7 +11755,7 @@ html.app-locked,body.app-locked{
   };
 
   const oldCopy=window.commitCopyHomework;
-  window.commitCopyHomework=function(hid){const c=cls(),h=c?.homeworks?.find(x=>x.id===hid),ids=[...document.querySelectorAll('.copyClass:checked')].map(x=>x.value);if(!c||!h||!ids.length)return;pushUndo();ids.forEach(id=>{const t=state.classes.find(x=>x.id===id);if(!t)return;t.homeworks.push({id:uid(),name:h.name,given:h.given,due:h.due,period:currentPeriod,imageData:h.imageData||'',type:isTest(h)?'test':'normal',questionCount:isTest(h)?qCount(h):0,testResults:{},createdAt:new Date().toISOString(),opticalConfig:isTest(h)&&h.opticalConfig?JSON.parse(JSON.stringify(h.opticalConfig)):undefined})});save();closeModal();render();alert('Ödev kopyalandı.')};
+  window.commitCopyHomework=function(hid){const c=cls(),h=c?.homeworks?.find(x=>x.id===hid),ids=[...document.querySelectorAll('.copyClass:checked')].map(x=>x.value);if(!c||!h||!ids.length)return;pushUndo();const groupId=isTest(h)?(h.testGroupId||('mmtest-'+String(h.id))):'';if(isTest(h))h.testGroupId=groupId;ids.forEach(id=>{const t=state.classes.find(x=>x.id===id);if(!t)return;t.homeworks.push({id:uid(),name:h.name,given:h.given,due:h.due,period:currentPeriod,imageData:h.imageData||'',type:isTest(h)?'test':'normal',questionCount:isTest(h)?qCount(h):0,testResults:{},createdAt:new Date().toISOString(),testGroupId:isTest(h)?groupId:undefined,opticalConfig:isTest(h)&&h.opticalConfig?JSON.parse(JSON.stringify(h.opticalConfig)):undefined})});save();closeModal();render();alert('Ödev kopyalandı.')};
 
   const oldDeleteStudent=window.deleteStudent;
   if(typeof oldDeleteStudent==='function')window.deleteStudent=function(id){const c=cls(),before=!!c?.students?.find(s=>String(s.id)===String(id));oldDeleteStudent.apply(this,arguments);if(before&&c&&!c.students.find(s=>String(s.id)===String(id))){(c.homeworks||[]).forEach(h=>{if(h.testResults&&typeof h.testResults==='object')delete h.testResults[id]});save();render()}};
@@ -15802,7 +15802,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.205';
+ const VERSION='v7.8.206';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -16171,7 +16171,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78128-layout-duty-ios-lock-script">
 (function(){
-  const VERSION='v7.8.205';
+  const VERSION='v7.8.206';
   const root=document.documentElement, body=document.body;
   let active=false, baseVvH=0, baseBgTop=0, bgShift=0, touchY=0, raf=0;
 
@@ -16527,7 +16527,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78129-landscape-responsive-final-script">
 (function(){
-  const VERSION='v7.8.205';
+  const VERSION='v7.8.206';
   const mq=window.matchMedia('(orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
 
   function validTestResult(h,sid){
@@ -16882,7 +16882,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78130-landscape-class-center-duty-script">
 (function(){
-  const VERSION='v7.8.205';
+  const VERSION='v7.8.206';
   function syncVersion(){
     document.querySelectorAll('.premium-brand .tiny').forEach(function(x){
       if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION;
@@ -17376,7 +17376,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78147-landscape-review-polish-script">
 (function(){
   'use strict';
-  const VERSION='v7.8.205';
+  const VERSION='v7.8.206';
 
   function testSummary147(c,h){
     const total=(c?.students||[]).length,q=Math.max(0,Math.floor(Number(h?.questionCount||0)));
@@ -17506,7 +17506,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78150-test-net-report-script">
 (function(){
 'use strict';
-const VERSION150='v7.8.205';
+const VERSION150='v7.8.206';
 function clamp150(v,a,b){return Math.max(a,Math.min(b,v))}
 function q150(h){const n=Math.floor(Number(h?.questionCount||0));return Number.isFinite(n)&&n>0?n:0}
 function valid150(h,r){const q=q150(h);if(!q||!r||typeof r!=='object')return false;const d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);return[d,w,b].every(Number.isFinite)&&d>=0&&w>=0&&b>=0&&d+w+b===q}
@@ -18373,3 +18373,160 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
 #omrRealPaperDiag795 button,
 #omrRealPaperDiag795 summary{touch-action:manipulation!important}
 </style>
+
+<!-- v7.8.206 — Sınıf / tüm sınıflar test sıralaması. Yalnızca sunum ve ilişki ID'si; optik motoru değişmez. -->
+<style id="mm206-ranking-style">
+.mm206-rank-controls{display:flex;gap:9px;flex-wrap:wrap;align-items:end;margin:0 0 12px}
+.mm206-rank-controls label{min-width:155px;flex:1 1 170px;font-weight:750;font-size:12px;color:#39574c}
+.mm206-rank-controls select{width:100%;margin-top:5px;min-height:43px;padding:8px 9px;border-radius:10px;border:1px solid #c7d7cd;background:#fff;color:#173d33}
+.mm206-rank-info{background:#edf4ef;border:1px solid #cce0d3;border-radius:12px;padding:10px 12px;margin:9px 0;font-size:13px;color:#274f43}
+.mm206-rank-actions{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
+.mm206-rank-actions button{flex:1 1 auto;min-height:41px}
+.mm206-rank-table{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid #d5ddcf;border-radius:11px;background:#fff}
+.mm206-rank-table table{width:100%;min-width:545px;border-collapse:collapse;font-size:13px}
+.mm206-rank-table th{background:#e8f0e8;text-align:left;color:#315145;font-size:12px;padding:10px 8px;white-space:nowrap}
+.mm206-rank-table td{padding:11px 8px;border-bottom:1px solid #ebeee9;vertical-align:middle}
+.mm206-rank-table tr:nth-child(even) td{background:#fbfcf9}
+.mm206-rank-table td:first-child{font-size:17px;font-weight:900;color:#105c4a;width:42px}
+.mm206-rank-student{font-weight:800;color:#213d34}
+.mm206-rank-student small{display:inline;color:#63786e;font-size:12px;font-weight:700}
+.mm206-rank-highlight{font-weight:900;color:#075f52}
+.mm206-link-list{display:grid;gap:11px;margin-top:12px}
+.mm206-link-list label{display:block;font-size:12px;font-weight:750;color:#315449}
+.mm206-link-list select{width:100%;margin-top:5px;padding:10px 9px;border-radius:9px;border:1px solid #bfd4c9;background:white}
+@media(max-width:580px){.mm206-rank-controls label{min-width:0;flex-basis:100%}.mm206-rank-table table{font-size:12px;min-width:480px}.mm206-rank-table th,.mm206-rank-table td{padding:9px 6px}.mm206-rank-actions button{flex:1 1 100%}}
+</style>
+<script id="mm206-ranking-script">
+(function(){
+ 'use strict';
+ const esc206=(v)=>esc(String(v??''));
+ const isTest206=(h)=>!!h&&h.type==='test'&&Number.isInteger(Number(h.questionCount))&&Number(h.questionCount)>0;
+ const get206=(cid,hid)=>{const c=(state?.classes||[]).find(c=>String(c.id)===String(cid));return c?{c,h:(c.homeworks||[]).find(h=>String(h.id)===String(hid))}:null};
+ const group206=(c,h)=>{
+   if(!c||!isTest206(h))return [];
+   const groupId=String(h.testGroupId||''),items=[];
+   for(const cc of (state?.classes||[]))for(const hh of (cc.homeworks||[])){
+     if(!isTest206(hh))continue;
+     if(String(cc.id)===String(c.id)&&String(hh.id)===String(h.id))items.push({c:cc,h:hh});
+     else if(groupId&&String(hh.testGroupId||'')===groupId&&Number(hh.questionCount)===Number(h.questionCount)&&String(hh.period||'1')===String(h.period||'1'))items.push({c:cc,h:hh});
+   }
+   return items;
+ };
+ const valid206=(h,r)=>{
+   if(!r||typeof r!=='object')return false;
+   const q=Number(h.questionCount),d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);
+   return Number.isInteger(q)&&q>0&&[d,w,b].every(Number.isInteger)&&d>=0&&w>=0&&b>=0&&d+w+b===q;
+ };
+ function ranked206(items,scope,metric){
+   const rows=[],seen=new Set(),warnings=[];
+   for(const {c,h} of items){
+     if(scope!=='all'&&String(c.id)!==String(scope))continue;
+     for(const st of (c.students||[])){
+       const r=h.testResults?.[st.id];if(!valid206(h,r))continue;
+       const key=String(c.id)+'|'+String(st.id);
+       if(seen.has(key)){if(!warnings.includes(c.name))warnings.push(c.name);continue}
+       seen.add(key);
+       const d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);
+       rows.push({name:st.name||'',number:st.number||'',className:c.name||'',classId:c.id,studentId:st.id,d,w,b,net:d-w/4});
+     }
+   }
+   const field=metric==='correct'?'d':'net';
+   rows.sort((a,b)=>b[field]-a[field]||a.name.localeCompare(b.name,'tr')||a.className.localeCompare(b.className,'tr')||String(a.number).localeCompare(String(b.number),'tr'));
+   rows.forEach((r,i)=>{r.rank=(i&&Math.abs(r[field]-rows[i-1][field])<1e-8)?rows[i-1].rank:i+1});
+   return {rows,warnings};
+ }
+ const fmt206=(n)=>(Number(n)||0).toLocaleString('tr-TR',{maximumFractionDigits:2});
+ const ref206=()=>window._mm206RankContext||null;
+ window.openTestRanking206=function(hid){
+   const c=cls(),h=c?.homeworks?.find(h=>String(h.id)===String(hid));if(!c||!isTest206(h))return;
+   const related=group206(c,h);
+   window._mm206RankContext={cid:c.id,hid:h.id,scope:related.length>1?'all':String(c.id),metric:'net'};
+   window._activeHomeworkModalId841=null; // Keep the live homework subtitle updater off the ranking screen.
+   window.renderTestRanking206();
+ };
+ window.mm206RankSet=function(prop,value){const ctx=ref206();if(!ctx||!['scope','metric'].includes(prop))return;ctx[prop]=value;window.renderTestRanking206()};
+ window.renderTestRanking206=function(){
+   const x=ref206();if(!x)return;
+   const z=get206(x.cid,x.hid);if(!z||!isTest206(z.h))return;
+   const {c,h}=z,items=group206(c,h),allClasses=[...new Map(items.map(e=>[String(e.c.id),e.c])).values()];
+   if(x.scope!=='all'&&!allClasses.some(cc=>String(cc.id)===String(x.scope)))x.scope=String(c.id);
+   const {rows,warnings}=ranked206(items,x.scope,x.metric),total=items.filter(e=>x.scope==='all'||String(e.c.id)===String(x.scope)).reduce((n,e)=>n+(e.c.students||[]).length,0);
+   const pending=Math.max(0,total-rows.length),classesDesc=items.map(e=>e.c.name).join(', ');
+   el('modalTitle').textContent='🏆 Test Sıralaması';
+   el('modalSubtitle').textContent=h.name+' · '+Number(h.questionCount)+' soru';
+   el('modalBody').innerHTML=`<div class="mm206-rank-controls">
+      <label>Kapsam<select id="mm206Scope" onchange="mm206RankSet('scope',this.value)"><option value="all" ${x.scope==='all'?'selected':''}>Tüm sınıflar (${allClasses.length})</option>${allClasses.map(cc=>`<option value="${esc206(cc.id)}" ${String(x.scope)===String(cc.id)?'selected':''}>${esc206(cc.name)}</option>`).join('')}</select></label>
+      <label>Sıralama ölçütü<select id="mm206Metric" onchange="mm206RankSet('metric',this.value)"><option value="net" ${x.metric==='net'?'selected':''}>Net sayısına göre</option><option value="correct" ${x.metric==='correct'?'selected':''}>Doğru sayısına göre</option></select></label>
+      </div>
+      <div class="mm206-rank-info"><b>${rows.length} öğrencinin sonucu</b> · ${pending} sonuç bekleniyor<br>${esc206(classesDesc)}<br><small>Net = Doğru − Yanlış / 4. Puanı eşit öğrenciler aynı dereceyi paylaşır ve ad soyadlarına göre Türkçe alfabetik sırayla listelenir. Eksik/geçersiz sonuçlar sıralamaya katılmaz.</small></div>
+      ${warnings.length?`<div class="notice">Aynı sınıftaki bir öğrenciye ait birden fazla bağlı sonuç var (${esc206(warnings.join(', '))}). Çift kayıt eklenmedi; test bağlantılarını gözden geçirin.</div>`:''}
+      <div class="mm206-rank-actions"><button class="secondary" onclick="openTestRankLink206()">🔗 Diğer sınıfların testlerini bağla</button><button class="secondary" onclick="exportTestRankCSV206()" ${rows.length?'':'disabled'}>⬇️ CSV İndir</button></div>
+      <div class="mm206-rank-table"><table><thead><tr><th>Sıra</th><th>Öğrenci</th><th>Sınıf</th><th>Doğru</th><th>Yanlış</th><th>Boş</th><th>Net</th></tr></thead><tbody>${rows.length?rows.map(r=>`<tr><td>${r.rank}.</td><td><span class="mm206-rank-student">${esc206(r.name)}</span>${r.number?`<div class="tiny">No: ${esc206(r.number)}</div>`:''}</td><td>${esc206(r.className)}</td><td class="${x.metric==='correct'?'mm206-rank-highlight':''}">${r.d}</td><td>${r.w}</td><td>${r.b}</td><td class="${x.metric==='net'?'mm206-rank-highlight':''}">${fmt206(r.net)}</td></tr>`).join(''):'<tr><td colspan="7">Sıralanabilecek kaydedilmiş sonuç bulunmuyor.</td></tr>'}</tbody></table></div>
+      <div class="mm206-rank-actions"><button class="secondary" onclick="mm206BackToTest()">← Test ödevine dön</button></div>`;
+   el('modal').classList.add('open');if(typeof modalUpdateBackButton==='function')modalUpdateBackButton();
+ };
+ window.mm206BackToTest=function(){const x=ref206(),z=x&&get206(x.cid,x.hid);if(!z)return;currentClassId=z.c.id;window.openHomework(z.h.id)};
+ window.openTestRankLink206=function(){
+   const x=ref206(),z=x&&get206(x.cid,x.hid);if(!z)return;
+   const {c,h}=z,q=Number(h.questionCount),period=String(h.period||'1'),gid=String(h.testGroupId||''),other=(state.classes||[]).filter(cc=>String(cc.id)!==String(c.id));
+   el('modalTitle').textContent='🔗 Aynı Testi Eşleştir';el('modalSubtitle').textContent=h.name+' · '+q+' soru';
+   el('modalBody').innerHTML=`<div class="mm206-rank-info">Yalnızca <b>gerçekten aynı soruların</b> uygulandığı testleri bağlayın. Aynı isimli farklı testler yanlışlıkla birleşmesin diye otomatik eşleştirme yapılmaz. Sonuçlar taşınmaz veya silinmez.</div>
+   <div class="mm206-link-list">${other.map(cc=>{
+     const opts=(cc.homeworks||[]).filter(t=>isTest206(t)&&Number(t.questionCount)===q&&String(t.period||'1')===period);
+     const joined=gid?opts.find(t=>String(t.testGroupId||'')===gid):null;
+     const suggested=opts.find(t=>String(t.name||'').trim().toLocaleLowerCase('tr-TR')===String(h.name||'').trim().toLocaleLowerCase('tr-TR')&&String(t.given||'')===String(h.given||''));
+     const selected=joined||suggested;
+     return `<label>${esc206(cc.name)}<select data-mm206-link-class="${esc206(cc.id)}"><option value="">Bu sınıftan test bağlama</option>${opts.map(t=>`<option value="${esc206(t.id)}" ${selected&&String(t.id)===String(selected.id)?'selected':''}>${esc206(t.name)}${t.given?' · '+esc206(t.given):''}${gid&&String(t.testGroupId||'')===gid?' · Bağlı':''}</option>`).join('')}</select></label>`;
+   }).join('')}</div>
+   <div class="mm206-rank-actions"><button onclick="saveTestRankLinks206()">Bağlantıları Kaydet</button><button class="secondary" onclick="renderTestRanking206()">Vazgeç</button></div>`;
+   el('modal').classList.add('open');
+ };
+ window.saveTestRankLinks206=function(){
+   const x=ref206(),z=x&&get206(x.cid,x.hid);if(!z)return;
+   const {c,h}=z,q=Number(h.questionCount),period=String(h.period||'1'),gid=String(h.testGroupId||('mmtest-'+h.id)),selected=[];
+   for(const node of document.querySelectorAll('[data-mm206-link-class]')){
+     if(!node.value)continue;
+     const cc=(state.classes||[]).find(t=>String(t.id)===String(node.dataset.mm206LinkClass));
+     const t=cc?.homeworks?.find(t=>String(t.id)===String(node.value));
+     if(!cc||!isTest206(t)||Number(t.questionCount)!==q||String(t.period||'1')!==period)return alert('Geçersiz test bağlantısı.');
+     if(t.testGroupId&&String(t.testGroupId)!==gid)return alert(cc.name+' sınıfındaki bu test başka bir sıralama grubuna bağlı. Önce o bağlantıyı kaldırın.');
+     selected.push({cc,t});
+   }
+   if(typeof pushUndo==='function')pushUndo();
+   h.testGroupId=gid;
+   const selectedKeys=new Set(selected.map(a=>String(a.cc.id)+'|'+String(a.t.id)));
+   for(const cc of(state.classes||[]))for(const t of(cc.homeworks||[])){
+     if(String(cc.id)===String(c.id)&&String(t.id)===String(h.id))continue;
+     if(String(t.testGroupId||'')===gid&&!selectedKeys.has(String(cc.id)+'|'+String(t.id)))delete t.testGroupId;
+   }
+   for(const {t} of selected)t.testGroupId=gid;
+   if(save()===false)return alert('Bağlantılar kaydedilemedi. Mevcut yedeğinizi koruyun.');
+   window._mm206RankContext.scope=selected.length?'all':String(c.id);
+   window.renderTestRanking206();
+ };
+ window.exportTestRankCSV206=function(){
+   const x=ref206(),z=x&&get206(x.cid,x.hid);if(!z)return;
+   const {c,h}=z,{rows}=ranked206(group206(c,h),x.scope,x.metric);
+   if(!rows.length)return;
+   const cell=(v)=>{let value=String(v??'');if(/^[\s]*[=+@-]/.test(value)&&!/^\-?\d+(?:[.,]\d+)?$/.test(value.trim()))value="'"+value;return '"'+value.replace(/"/g,'""')+'"'};
+   const lines=[['Sıra','Öğrenci','Sınıf','Öğrenci No','Doğru','Yanlış','Boş','Net']].concat(rows.map(r=>[r.rank,r.name,r.className,r.number,r.d,r.w,r.b,fmt206(r.net)]));
+   const csv='\uFEFF'+lines.map(row=>row.map(cell).join(';')).join('\r\n');
+   downloadBlob(csv,'MualliMate_Test_Siralamasi_'+(x.scope==='all'?'Tum_Siniflar':String(c.name).replace(/[^\w-]+/g,'_'))+'.csv','text/csv;charset=utf-8');
+ };
+ // Display-only control on the existing test edit panel. All OMR hooks are untouched.
+ const oldOpenHomework206=window.openHomework;
+ if(typeof oldOpenHomework206==='function')window.openHomework=function(hid){
+   const result=oldOpenHomework206.apply(this,arguments),h=cls()?.homeworks?.find(x=>String(x.id)===String(hid));
+   if(isTest206(h)){
+     const body=el('modalBody'),banner=body?.querySelector('.mm-test-homework-banner');
+     if(banner&&!body.querySelector('#mm206RankOpen')){
+       const bar=document.createElement('div');bar.className='mm206-rank-actions';bar.style.marginTop='8px';
+       const btn=document.createElement('button');btn.id='mm206RankOpen';btn.type='button';btn.textContent='🏆 Test Sıralaması · Sınıf / Tüm Öğrenciler';
+       btn.addEventListener('click',()=>window.openTestRanking206(hid));bar.appendChild(btn);banner.after(bar);
+     }
+   }
+   return result;
+ };
+ window._mm206RankingTestAPI={ranked:ranked206,group:group206,valid:valid206};
+})();
+</script>
