@@ -1,7 +1,7 @@
-# MualliMate+ v7.8.210 — iPhone deneme tarihi alanı
+# MualliMate+ v7.8.211 — Deneme ekranında geri dönüş
 
-Yeni Deneme ekranındaki Uygulama tarihi alanı sabit genişlikli bir tarih kabına alındı. iOS tarih denetimi bu alanın içinde açılır; alanın dışına taşmaz. Tarihe dokunarak gün seçilir ve görünen tarih güncellenir.
+Deneme Uygulaması bölümündeki sınıf geçişi ve optik düğmelerinin geri geldikten sonra çalışmama sorunu düzeltildi. Geri düğmesi önceki ekranı HTML olarak geri yüklediğinde kaybolan geçici olay bağlantıları yerine geri yüklemeye dayanıklı eylemler kullanılır. Düğmelerin hedef sınıf ve deneme kimliği korunur.
 
-Paket yalnız değişen index.html ve bu açıklamayı içerir. Mevcut uygulamadaki index.html dosyasını güncelleyin; diğer dosyaları koruyun. Deneme, optik, sıralama ve kayıt işlevleri korunur.
+Paket yalnız index.html ve bu açıklamayı içerir. Mevcut uygulamadaki index.html dosyasını güncelleyin; diğer dosyalar korunur.
 
-Doğrulama: önceki sürümle kod farkı yalnız tarih alanı sunumu, ek CSS ve sürüm numaralarıdır. Çok sınıflı deneme testleri tekrar geçti. Gerçek iPhone/Safari görünümü bu ortamda denenemedi.
+Deneme ve optik kayıtları, fiziksel optik okuma algoritması ve tarih alanı düzeltmesi korunur. Çok sınıflı deneme testleri ve HTML geri yükleme sonrası sınıf/optik eylem testleri uygulanmıştır. Gerçek iPhone/Safari geri dönüşü bu ortamda denenemedi.

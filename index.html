@@ -2571,7 +2571,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.210</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.211</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4838,7 +4838,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.210";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.211";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -15803,7 +15803,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.210';
+ const VERSION='v7.8.211';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -16172,7 +16172,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78128-layout-duty-ios-lock-script">
 (function(){
-  const VERSION='v7.8.210';
+  const VERSION='v7.8.211';
   const root=document.documentElement, body=document.body;
   let active=false, baseVvH=0, baseBgTop=0, bgShift=0, touchY=0, raf=0;
 
@@ -16528,7 +16528,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78129-landscape-responsive-final-script">
 (function(){
-  const VERSION='v7.8.210';
+  const VERSION='v7.8.211';
   const mq=window.matchMedia('(orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
 
   function validTestResult(h,sid){
@@ -16883,7 +16883,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78130-landscape-class-center-duty-script">
 (function(){
-  const VERSION='v7.8.210';
+  const VERSION='v7.8.211';
   function syncVersion(){
     document.querySelectorAll('.premium-brand .tiny').forEach(function(x){
       if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION;
@@ -17377,7 +17377,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78147-landscape-review-polish-script">
 (function(){
   'use strict';
-  const VERSION='v7.8.210';
+  const VERSION='v7.8.211';
 
   function testSummary147(c,h){
     const total=(c?.students||[]).length,q=Math.max(0,Math.floor(Number(h?.questionCount||0)));
@@ -17507,7 +17507,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78150-test-net-report-script">
 (function(){
 'use strict';
-const VERSION150='v7.8.210';
+const VERSION150='v7.8.211';
 function clamp150(v,a,b){return Math.max(a,Math.min(b,v))}
 function q150(h){const n=Math.floor(Number(h?.questionCount||0));return Number.isFinite(n)&&n>0?n:0}
 function valid150(h,r){const q=q150(h);if(!q||!r||typeof r!=='object')return false;const d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);return[d,w,b].every(Number.isFinite)&&d>=0&&w>=0&&b>=0&&d+w+b===q}
@@ -18375,7 +18375,7 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
 #omrRealPaperDiag795 summary{touch-action:manipulation!important}
 </style>
 
-<!-- v7.8.210 — Sınıf / tüm sınıflar test sıralaması. Yalnızca sunum ve ilişki ID'si; optik motoru değişmez. -->
+<!-- v7.8.211 — Sınıf / tüm sınıflar test sıralaması. Yalnızca sunum ve ilişki ID'si; optik motoru değişmez. -->
 <style id="mm206-ranking-style">
 .mm206-rank-controls{display:flex;gap:9px;flex-wrap:wrap;align-items:end;margin:0 0 12px}
 .mm206-rank-controls label{min-width:155px;flex:1 1 170px;font-weight:750;font-size:12px;color:#39574c}
@@ -18617,6 +18617,7 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
  'use strict';
  const optic=window._mm209OpticalBridge,MAX=optic.maxQuestions;
  const e=v=>esc(String(v??'')),copy=v=>JSON.parse(JSON.stringify(v));
+ const arg=v=>encodeURIComponent(String(v??'')).replace(/'/g,'%27');
  const get=id=>(cls()?.trials||[]).find(t=>String(t.id)===String(id));
  function members(t,c=cls()){
    if(!t||!c)return [];
@@ -18680,16 +18681,24 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
    const ret=oldOpen.apply(this,arguments),t=get(id);if(!t)return ret;
    const body=el('modalBody');if(!body||body.querySelector('[data-mm209-workflow]'))return ret;
    const linked=members(t),ready=configReady(t),panel=document.createElement('section');panel.dataset.mm209Workflow='1';panel.className='mm209-workflow';
-   panel.innerHTML=`<div class="mm209-heading"><b>Deneme Uygulaması</b><span>${e(groupLabel(t))}</span></div><div class="mm209-class-links">${linked.map(({c,t:tt},i)=>`<button type="button" class="secondary" data-mm209-member="${i}" ${String(c.id)===String(cls()?.id)?'disabled':''}>${e(c.name)}</button>`).join('')}</div><div class="tiny">${ready?'✓ Cevap anahtarları hazır':'Cevap anahtarları henüz tamamlanmadı'} · ${(t.subjects||[]).map(n=>e(n)+' '+Number(t.opticalQuestionCounts?.[n]||t.opticalConfig?.subjects?.find(s=>s.name===n)?.questions||0)+' soru').join(' · ')}</div><div class="mm209-actions"><button type="button" data-mm209-optic>📝 Optik ve Cevap Anahtarları</button><button type="button" class="secondary" data-mm209-preview>👁 Optik Form / PDF</button><button type="button" class="secondary" data-mm209-scan>📷 Bu Sınıfın Optiklerini Oku</button></div>`;
-   panel.querySelectorAll('[data-mm209-member]').forEach(b=>b.addEventListener('click',()=>{const x=linked[Number(b.dataset.mm209Member)];if(!x)return;currentClassId=x.c.id;render();window.openTrial(x.t.id)}));
-   panel.querySelector('[data-mm209-optic]').addEventListener('click',()=>window.openOpticalBuilder795('trial',t.id));
-   panel.querySelector('[data-mm209-preview]').addEventListener('click',()=>t.opticalConfig?window.openOpticalPreview795('trial',t.id):window.openOpticalBuilder795('trial',t.id));
-   panel.querySelector('[data-mm209-scan]').addEventListener('click',()=>{if(!configReady(t))return window.openOpticalBuilder795('trial',t.id);window.startOpticalScan795('trial',t.id)});
+   panel.innerHTML=`<div class="mm209-heading"><b>Deneme Uygulaması</b><span>${e(groupLabel(t))}</span></div><div class="mm209-class-links">${linked.map(({c,t:tt},i)=>`<button type="button" class="secondary" data-mm209-member="${i}" onclick="mm211TrialAction('class','${arg(c.id)}','${arg(tt.id)}')" ${String(c.id)===String(cls()?.id)?'disabled':''}>${e(c.name)}</button>`).join('')}</div><div class="tiny">${ready?'✓ Cevap anahtarları hazır':'Cevap anahtarları henüz tamamlanmadı'} · ${(t.subjects||[]).map(n=>e(n)+' '+Number(t.opticalQuestionCounts?.[n]||t.opticalConfig?.subjects?.find(s=>s.name===n)?.questions||0)+' soru').join(' · ')}</div><div class="mm209-actions"><button type="button" data-mm209-optic onclick="mm211TrialAction('optic','${arg(cls()?.id)}','${arg(t.id)}')">📝 Optik ve Cevap Anahtarları</button><button type="button" class="secondary" data-mm209-preview onclick="mm211TrialAction('preview','${arg(cls()?.id)}','${arg(t.id)}')">👁 Optik Form / PDF</button><button type="button" class="secondary" data-mm209-scan onclick="mm211TrialAction('scan','${arg(cls()?.id)}','${arg(t.id)}')">📷 Bu Sınıfın Optiklerini Oku</button></div>`;
    body.prepend(panel);
    // The original optical hook runs on a timer; it sees this marker and avoids duplicate buttons.
    const top=body.querySelector('.trial-top-actions');if(top){const marker=document.createElement('span');marker.dataset.omr795='1';marker.hidden=true;top.appendChild(marker)}
    const del=body.querySelector('.modal-actions .danger');if(del)del.textContent='Bu Sınıftaki Denemeyi Sil';
    return ret;
+ };
+ // Snapshot navigation restores HTML; action attributes survive that restore.
+ window.mm211TrialAction=function(action,encodedCid,encodedTid){
+   let cid,tid;try{cid=decodeURIComponent(encodedCid);tid=decodeURIComponent(encodedTid)}catch(error){return}
+   const c=(state.classes||[]).find(c=>String(c.id)===String(cid)),t=(c?.trials||[]).find(t=>String(t.id)===String(tid));
+   if(!c||!t||!['class','optic','preview','scan'].includes(action))return;
+   currentClassId=c.id;
+   if(action==='class'){render();return window.openTrial(t.id)}
+   if(action==='optic')return window.openOpticalBuilder795('trial',t.id);
+   if(action==='preview')return t.opticalConfig?window.openOpticalPreview795('trial',t.id):window.openOpticalBuilder795('trial',t.id);
+   if(!configReady(t))return window.openOpticalBuilder795('trial',t.id);
+   return window.startOpticalScan795('trial',t.id);
  };
  const oldSaveOptical=window.saveOpticalConfig795;
  window.saveOpticalConfig795=function(kind,id,preview){
