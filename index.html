@@ -2571,7 +2571,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.208</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.209</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4838,7 +4838,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.208";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.209";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -15747,6 +15747,7 @@ window.omrZoomStep795=function(delta){const z=window._omrZoom795;if(!z)return;om
 window.omrZoomReset795=function(){omrSetZoom795(1,true)};
 window.omrBindPinch795=function(){const box=document.getElementById('omrReviewBox795'),z=window._omrZoom795;if(!box||!z||box.dataset.pinch795==='1')return;box.dataset.pinch795='1';const dist=t=>Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);box.addEventListener('touchstart',e=>{if(e.touches.length===2){z.pan=null;z.pinch={distance:dist(e.touches),scale:z.scale||1};e.preventDefault();return}if(e.touches.length===1&&(z.scale||1)>1){const t=e.touches[0];z.pinch=null;z.pan={x:t.clientX,y:t.clientY,left:box.scrollLeft,top:box.scrollTop};e.preventDefault()}},{passive:false});box.addEventListener('touchmove',e=>{if(e.touches.length===2){if(!z.pinch)z.pinch={distance:dist(e.touches),scale:z.scale||1};const d=dist(e.touches);if(z.pinch.distance>0)omrSetZoom795(z.pinch.scale*(d/z.pinch.distance),false);z.pan=null;e.preventDefault();return}if(e.touches.length===1&&z.pan&&(z.scale||1)>1){const t=e.touches[0],dx=t.clientX-z.pan.x,dy=t.clientY-z.pan.y;box.scrollLeft=z.pan.left-dx;box.scrollTop=z.pan.top-dy;e.preventDefault()}},{passive:false});box.addEventListener('touchend',e=>{if(e.touches.length<2)z.pinch=null;if(e.touches.length===0)z.pan=null;else if(e.touches.length===1&&(z.scale||1)>1){const t=e.touches[0];z.pan={x:t.clientX,y:t.clientY,left:box.scrollLeft,top:box.scrollTop}}},{passive:false});box.addEventListener('touchcancel',()=>{z.pinch=null;z.pan=null},{passive:true})};
 window.omrRefitZoom795=function(){const z=window._omrZoom795;if(!z||!document.getElementById('omrImageReview795'))return;if((z.scale||1)===1)omrInitZoom795()};
+window._mm209OpticalBridge={maxQuestions:OMR_MAX_Q795,valid:opticalConfigValid795,collect:collectOpticalBuilder200};
 function addOpticButtonsTrial795(id){const top=document.querySelector('#modalBody .trial-top-actions');if(!top||top.querySelector('[data-omr795]'))return;const b1=document.createElement('button');b1.className='secondary';b1.dataset.omr795='1';b1.textContent='📝 Optik Form';b1.onclick=()=>openOpticalBuilder795('trial',id);const b2=document.createElement('button');b2.className='secondary';b2.dataset.omr795='1';b2.textContent='📷 Optik Oku';b2.onclick=()=>startOpticalScan795('trial',id);top.append(b1,b2)}
 const oldOpenTrial795=window.openTrial;window.openTrial=function(id){const r=oldOpenTrial795.apply(this,arguments);setTimeout(()=>addOpticButtonsTrial795(id),0);return r};
 const oldOpenHomework795=window.openHomework;window.openHomework=function(id){const r=oldOpenHomework795.apply(this,arguments);const ctx=kindObj795('homework',id);if(ctx?.obj&&isTest795(ctx.obj)){setTimeout(()=>{const body=el('modalBody');if(!body||body.querySelector('.mm-optic-actions795'))return;const box=document.createElement('div');box.className='mm-optic-actions795';box.innerHTML=`<button class="secondary" onclick="openOpticalBuilder795('homework','${id}')">📝 Optik Form</button><button class="secondary" onclick="startOpticalScan795('homework','${id}')">📷 Optik Oku</button>`;body.insertBefore(box,body.firstChild)},0)}return r};
@@ -15802,7 +15803,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.208';
+ const VERSION='v7.8.209';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -16171,7 +16172,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78128-layout-duty-ios-lock-script">
 (function(){
-  const VERSION='v7.8.208';
+  const VERSION='v7.8.209';
   const root=document.documentElement, body=document.body;
   let active=false, baseVvH=0, baseBgTop=0, bgShift=0, touchY=0, raf=0;
 
@@ -16527,7 +16528,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78129-landscape-responsive-final-script">
 (function(){
-  const VERSION='v7.8.208';
+  const VERSION='v7.8.209';
   const mq=window.matchMedia('(orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
 
   function validTestResult(h,sid){
@@ -16882,7 +16883,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78130-landscape-class-center-duty-script">
 (function(){
-  const VERSION='v7.8.208';
+  const VERSION='v7.8.209';
   function syncVersion(){
     document.querySelectorAll('.premium-brand .tiny').forEach(function(x){
       if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION;
@@ -17376,7 +17377,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78147-landscape-review-polish-script">
 (function(){
   'use strict';
-  const VERSION='v7.8.208';
+  const VERSION='v7.8.209';
 
   function testSummary147(c,h){
     const total=(c?.students||[]).length,q=Math.max(0,Math.floor(Number(h?.questionCount||0)));
@@ -17506,7 +17507,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78150-test-net-report-script">
 (function(){
 'use strict';
-const VERSION150='v7.8.208';
+const VERSION150='v7.8.209';
 function clamp150(v,a,b){return Math.max(a,Math.min(b,v))}
 function q150(h){const n=Math.floor(Number(h?.questionCount||0));return Number.isFinite(n)&&n>0?n:0}
 function valid150(h,r){const q=q150(h);if(!q||!r||typeof r!=='object')return false;const d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);return[d,w,b].every(Number.isFinite)&&d>=0&&w>=0&&b>=0&&d+w+b===q}
@@ -18374,7 +18375,7 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
 #omrRealPaperDiag795 summary{touch-action:manipulation!important}
 </style>
 
-<!-- v7.8.208 — Sınıf / tüm sınıflar test sıralaması. Yalnızca sunum ve ilişki ID'si; optik motoru değişmez. -->
+<!-- v7.8.209 — Sınıf / tüm sınıflar test sıralaması. Yalnızca sunum ve ilişki ID'si; optik motoru değişmez. -->
 <style id="mm206-ranking-style">
 .mm206-rank-controls{display:flex;gap:9px;flex-wrap:wrap;align-items:end;margin:0 0 12px}
 .mm206-rank-controls label{min-width:155px;flex:1 1 170px;font-weight:750;font-size:12px;color:#39574c}
@@ -18404,14 +18405,14 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
  #modalBody .mm206-rank-table th{font-size:9px}
  #modalBody .mm206-rank-table td:first-child{font-size:12px;width:auto}
  #modalBody .mm206-rank-table th:nth-child(1){width:7%}
- #modalBody .mm206-rank-table th:nth-child(2){width:34%}
- #modalBody .mm206-rank-table th:nth-child(3){width:11%}
- #modalBody .mm206-rank-table th:nth-child(4),#modalBody .mm206-rank-table th:nth-child(5){width:11%}
- #modalBody .mm206-rank-table th:nth-child(6){width:10%}
- #modalBody .mm206-rank-table th:nth-child(7){width:16%}
- #modalBody .mm206-rank-table td:nth-child(2){text-align:left;overflow-wrap:anywhere;line-height:1.35}
- #modalBody .mm206-rank-table td:not(:nth-child(2)){white-space:nowrap}
- #modalBody .mm206-rank-table .tiny{font-size:9px}
+ #modalBody .mm206-rank-table th:nth-child(2){width:11%}
+ #modalBody .mm206-rank-table th:nth-child(3){width:10%}
+ #modalBody .mm206-rank-table th:nth-child(4){width:30%}
+ #modalBody .mm206-rank-table th:nth-child(5),#modalBody .mm206-rank-table th:nth-child(6){width:10%}
+ #modalBody .mm206-rank-table th:nth-child(7){width:8%}
+ #modalBody .mm206-rank-table th:nth-child(8){width:14%}
+ #modalBody .mm206-rank-table td:nth-child(4){text-align:left;overflow-wrap:anywhere;line-height:1.35}
+ #modalBody .mm206-rank-table td:not(:nth-child(4)){white-space:nowrap}
  #modalBody .mm206-rank-actions button{min-width:0;white-space:normal}
 }
 </style>
@@ -18480,7 +18481,7 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
       <div class="mm206-rank-info"><b>${rows.length} öğrencinin sonucu</b> · ${pending} sonuç bekleniyor<br>${esc206(classesDesc)}<br><small>Net = Doğru − Yanlış / 4. Puanı eşit öğrenciler aynı dereceyi paylaşır ve ad soyadlarına göre Türkçe alfabetik sırayla listelenir. Eksik/geçersiz sonuçlar sıralamaya katılmaz.</small></div>
       ${warnings.length?`<div class="notice">Aynı sınıftaki bir öğrenciye ait birden fazla bağlı sonuç var (${esc206(warnings.join(', '))}). Çift kayıt eklenmedi; test bağlantılarını gözden geçirin.</div>`:''}
       <div class="mm206-rank-actions"><button class="secondary" onclick="openTestRankLink206()">🔗 Diğer sınıfların testlerini bağla</button><button id="mm207RankPDF" onclick="exportTestRankPDF207()" ${rows.length?'':'disabled'}>📄 PDF İndir</button><button class="secondary" onclick="exportTestRankCSV206()" ${rows.length?'':'disabled'}>⬇️ CSV İndir</button></div>
-      <div class="mm206-rank-table"><table><thead><tr><th>Sıra</th><th>Öğrenci</th><th>Sınıf</th><th>Doğru</th><th>Yanlış</th><th>Boş</th><th>Net</th></tr></thead><tbody>${rows.length?rows.map(r=>`<tr><td>${r.rank}.</td><td><span class="mm206-rank-student">${esc206(r.name)}</span>${r.number?`<div class="tiny">No: ${esc206(r.number)}</div>`:''}</td><td>${esc206(r.className)}</td><td class="${x.metric==='correct'?'mm206-rank-highlight':''}">${r.d}</td><td>${r.w}</td><td>${r.b}</td><td class="${x.metric==='net'?'mm206-rank-highlight':''}">${fmt206(r.net)}</td></tr>`).join(''):'<tr><td colspan="7">Sıralanabilecek kaydedilmiş sonuç bulunmuyor.</td></tr>'}</tbody></table></div>
+      <div class="mm206-rank-table"><table><thead><tr><th>Sıra</th><th>Sınıf</th><th>No</th><th>Öğrenci</th><th>Doğru</th><th>Yanlış</th><th>Boş</th><th>Net</th></tr></thead><tbody>${rows.length?rows.map(r=>`<tr><td>${r.rank}.</td><td>${esc206(r.className)}</td><td>${esc206(r.number||'—')}</td><td><span class="mm206-rank-student">${esc206(r.name)}</span></td><td class="${x.metric==='correct'?'mm206-rank-highlight':''}">${r.d}</td><td>${r.w}</td><td>${r.b}</td><td class="${x.metric==='net'?'mm206-rank-highlight':''}">${fmt206(r.net)}</td></tr>`).join(''):'<tr><td colspan="8">Sıralanabilecek kaydedilmiş sonuç bulunmuyor.</td></tr>'}</tbody></table></div>
       <div class="mm206-rank-actions"><button class="secondary" onclick="mm206BackToTest()">← Test ödevine dön</button></div>`;
    el('modal').classList.add('open');if(typeof modalUpdateBackButton==='function')modalUpdateBackButton();
  };
@@ -18528,7 +18529,7 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
    const {c,h}=z,{rows}=ranked206(group206(c,h),x.scope,x.metric);
    if(!rows.length)return;
    const cell=(v)=>{let value=String(v??'');if(/^[\s]*[=+@-]/.test(value)&&!/^\-?\d+(?:[.,]\d+)?$/.test(value.trim()))value="'"+value;return '"'+value.replace(/"/g,'""')+'"'};
-   const lines=[['Sıra','Öğrenci','Sınıf','Öğrenci No','Doğru','Yanlış','Boş','Net']].concat(rows.map(r=>[r.rank,r.name,r.className,r.number,r.d,r.w,r.b,fmt206(r.net)]));
+   const lines=[['Sıra','Sınıf','Öğrenci No','Öğrenci','Doğru','Yanlış','Boş','Net']].concat(rows.map(r=>[r.rank,r.className,r.number,r.name,r.d,r.w,r.b,fmt206(r.net)]));
    const csv='\uFEFF'+lines.map(row=>row.map(cell).join(';')).join('\r\n');
    downloadBlob(csv,'MualliMate_Test_Siralamasi_'+(x.scope==='all'?'Tum_Siniflar':String(c.name).replace(/[^\w-]+/g,'_'))+'.csv','text/csv;charset=utf-8');
  };
@@ -18550,7 +18551,7 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
  function rankPages207(rows,h,scopeName,metric){
    const W=1240,H=1754,M=58,RH=58,TY=285,TH=58,PER=21,pages=[];
    const teacher=String(settings?.profile?.name||'').trim(),avg=k=>rows.reduce((n,r)=>n+r[k],0)/rows.length;
-   const widths=[70,80,390,120,100,100,100,164],labels=['SIRA','NO','ÖĞRENCİ ADI SOYADI','SINIF','D','Y','B','NET'];
+   const widths=[70,120,80,390,100,100,100,164],labels=['SIRA','SINIF','NO','ÖĞRENCİ ADI SOYADI','D','Y','B','NET'];
    const count=Math.ceil(rows.length/PER),metricName=metric==='correct'?'Doğru sayısı':'Net';
    for(let page=0;page<count;page++){
      const cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d');
@@ -18566,10 +18567,10 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
      const cards=[['Sonuç Girilen',rows.length,'#15803d'],['Ort. Doğru',fmt206(avg('d')),'#15803d'],['Ort. Yanlış',fmt206(avg('w')),'#c62828'],['Ort. Boş',fmt206(avg('b')),'#64748b'],['Ort. Net',fmt206(avg('net')),'#075f52'],['Ölçüt',metricName,'#075f52']],gap=10,cw=(W-2*M-gap*5)/6;
      cards.forEach(([label,value,color],i)=>{const cx=M+i*(cw+gap);x.fillStyle='#fffdf8';roundRectCanvas(x,cx,178,cw,86,15);x.fill();x.strokeStyle='#d8cda9';x.lineWidth=1.4;x.stroke();text(value,cx+cw/2,215,label==='Ölçüt'?21:26,color,true,'center',cw-14);text(label,cx+cw/2,242,14,'#33443e',true,'center')});
      x.fillStyle='#ddd3b7';x.fillRect(M,TY,W-2*M,TH);
-     let xx=M;labels.forEach((label,i)=>{text(label,i===2?xx+12:xx+widths[i]/2,TY+36,i===2?18:19,'#173d33',true,i===2?'left':'center');xx+=widths[i]});
+     let xx=M;labels.forEach((label,i)=>{text(label,i===3?xx+12:xx+widths[i]/2,TY+36,i===3?18:19,'#173d33',true,i===3?'left':'center');xx+=widths[i]});
      const subset=rows.slice(page*PER,(page+1)*PER);
-     subset.forEach((r,i)=>{const y=TY+TH+i*RH; x.fillStyle=i%2?'#fffdf8':'#eef3ef';x.fillRect(M,y,W-2*M,RH);const vals=[r.rank+'.',r.number||'—',r.name,r.className,r.d,r.w,r.b,fmt206(r.net)];let cx=M;
-       vals.forEach((v,j)=>{if(j===2){x.textAlign='left';x.fillStyle='#253b35';drawFullStudentName(x,r.name,cx+12,y+RH/2,widths[j]-24,RH-8,{maxFont:22,minFont:14,maxLines:2,weight:'normal',align:'left'})}else{text(v,cx+widths[j]/2,y+36,j===0?24:21,j===4?'#15803d':j===5?'#c62828':j===6?'#64748b':j===7?'#075f52':'#253b35',j===0||j===(metric==='correct'?4:7),'center',widths[j]-12)}cx+=widths[j]});
+     subset.forEach((r,i)=>{const y=TY+TH+i*RH; x.fillStyle=i%2?'#fffdf8':'#eef3ef';x.fillRect(M,y,W-2*M,RH);const vals=[r.rank+'.',r.className,r.number||'—',r.name,r.d,r.w,r.b,fmt206(r.net)];let cx=M;
+       vals.forEach((v,j)=>{if(j===3){x.textAlign='left';x.fillStyle='#253b35';drawFullStudentName(x,r.name,cx+12,y+RH/2,widths[j]-24,RH-8,{maxFont:22,minFont:14,maxLines:2,weight:'normal',align:'left'})}else{text(v,cx+widths[j]/2,y+36,j===0?24:21,j===4?'#15803d':j===5?'#c62828':j===6?'#64748b':j===7?'#075f52':'#253b35',j===0||j===(metric==='correct'?4:7),'center',widths[j]-12)}cx+=widths[j]});
        x.strokeStyle='#dde5e0';x.lineWidth=1;x.beginPath();x.moveTo(M,y+RH);x.lineTo(W-M,y+RH);x.stroke();
      });
 
@@ -18606,4 +18607,114 @@ body.mm-optic-diag-active198.modal-page-locked{touch-action:auto!important}
 
  window._mm206RankingTestAPI={ranked:ranked206,group:group206,valid:valid206,pages:rankPages207,pdf:saveRankPdf207};
 })();
+</script>
+
+<style id="mm209-trial-style">
+.mm209-form{display:grid;gap:14px}.mm209-form>label,.mm209-grid>label,.mm209-subject>label{display:flex;flex-direction:column;gap:6px;font-weight:700;font-size:13px;min-width:0}.mm209-form input:not([type=checkbox]),.mm209-form select{display:block;box-sizing:border-box;width:100%;max-width:100%;min-width:0;padding:10px;border:1px solid #c8d4c8;border-radius:9px;font-size:16px}.mm209-form fieldset{min-width:0;margin:0;border:1px solid #d5cba9;border-radius:12px;padding:12px}.mm209-form legend{font-weight:800;font-size:13px;color:#315449}.mm209-classes{display:flex;flex-wrap:wrap;gap:10px 18px}.mm209-classes label{display:flex;align-items:center;gap:5px}.mm209-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.mm209-subject{display:grid;grid-template-columns:minmax(0,1fr) 95px 38px;gap:8px;align-items:end;margin-bottom:10px}.mm209-subject button{height:42px;min-width:0;padding:4px}.mm209-form .mm209-check{display:flex;flex-direction:row;align-items:center;gap:8px;line-height:1.5}.mm209-form input[type=checkbox]{width:18px;height:18px;flex:none}.mm209-workflow{padding:12px;border:1px solid #d4c59e;border-radius:12px;background:#f3efdf;margin-bottom:14px}.mm209-heading{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:#244a3f}.mm209-heading span{font-size:12px}.mm209-class-links,.mm209-actions{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}.mm209-actions button{flex:1 1 170px;min-width:0;white-space:normal}.mm209-class-links button:disabled{background:#075e4c!important;color:#fff!important;opacity:1}.mm209-note{padding:10px;background:#edf4ef;border:1px solid #cce0d3;border-radius:9px;margin-bottom:12px;color:#274f43;font-size:13px}@media(max-width:580px){.mm209-grid{grid-template-columns:1fr}.mm209-subject{grid-template-columns:minmax(0,1fr) 80px 32px;gap:6px}.mm209-subject>label{font-size:11px}.mm209-workflow .tiny{line-height:1.6}}
+</style>
+<script id="mm209-trial-script">
+(function(){
+ 'use strict';
+ const optic=window._mm209OpticalBridge,MAX=optic.maxQuestions;
+ const e=v=>esc(String(v??'')),copy=v=>JSON.parse(JSON.stringify(v));
+ const get=id=>(cls()?.trials||[]).find(t=>String(t.id)===String(id));
+ function members(t,c=cls()){
+   if(!t||!c)return [];
+   if(!t.trialGroupId)return [{c,t}];
+   return (state.classes||[]).flatMap(cc=>(cc.trials||[]).filter(tt=>String(tt.trialGroupId||'')===String(t.trialGroupId)).map(tt=>({c:cc,t:tt})));
+ }
+ function entered(t){return Object.values(t.results||{}).some(r=>Object.values(r?.subjects||{}).some(s=>['correct','wrong','blank'].some(k=>s[k]!==undefined&&s[k]!==null&&String(s[k]).trim()!=='')))||Object.keys(t.opticalReads||{}).length>0}
+ function compatible(t,cfg){
+   if(JSON.stringify(t.subjects||[])!==JSON.stringify(cfg.subjects.map(s=>s.name)))return false;
+   return cfg.subjects.every(s=>{const old=Number(t.opticalQuestionCounts?.[s.name]||t.opticalConfig?.subjects?.find(x=>x.name===s.name)?.questions||0);
+     if(old&&old!==Number(s.questions))return false;
+     return Object.values(t.results||{}).every(r=>{const a=r?.subjects?.[s.name];if(!a)return true;return ['correct','wrong','blank'].reduce((sum,k)=>sum+(Number(a[k])||0),0)<=Number(s.questions)})});
+ }
+ function schema(t){return JSON.stringify((t.subjects||[]).map(n=>[n,Number(t.opticalQuestionCounts?.[n]||t.opticalConfig?.subjects?.find(s=>s.name===n)?.questions||0)]))}
+ function transaction(change){
+   const before=copy(state.classes);if(typeof pushUndo==='function')pushUndo();
+   try{change();if(save()===false){state.classes=before;return false}return true}
+   catch(error){state.classes=before;console.error(error);alert('İşlem kaydedilemedi. Önceki kayıtlar korundu.');return false}
+ }
+ const groups=t=>Array.isArray(t?.opticalConfig?.bookletGroups)?t.opticalConfig.bookletGroups:[];
+ const groupLabel=t=>groups(t).length?groups(t).join(' / ')+' kitapçıkları':'Kitapçık grubu yok';
+ const configReady=t=>!!t.opticalConfig&&optic.valid(t.opticalConfig,true);
+ window.mmTrial209Draft=null;
+ window.openNewTrial=function(){
+   const c=cls();if(!c)return;
+   window.mmTrial209Draft=[{name:'Türkçe',questions:40},{name:'Matematik',questions:40},{name:'Fen',questions:20},{name:'Sosyal',questions:20}];
+   el('modalTitle').textContent='Yeni Deneme';el('modalSubtitle').textContent='Sınıflar · Kitapçık · Optik';
+   el('modalBody').innerHTML=`<div class="mm209-form">
+    <label>Deneme adı<input id="trialName" placeholder="Örn. TYT Deneme 1" autocomplete="off"></label>
+    <label>Uygulama tarihi<input id="trialDateValue" type="date" value="${e(trialTodayISO())}"></label>
+    <fieldset><legend>Uygulanacak sınıflar</legend><div class="mm209-classes">${(state.classes||[]).map(cc=>`<label><input type="checkbox" data-mm209-class="${e(cc.id)}" ${String(cc.id)===String(c.id)?'checked':''}> ${e(cc.name)} <small>(${(cc.students||[]).length} öğrenci)</small></label>`).join('')}</div></fieldset>
+    <div class="mm209-grid"><label>Kitapçık grubu<select id="mm209Booklets"><option value="none">Yok — tek cevap anahtarı</option><option value="AB">Var — A / B</option><option value="ABCD">Var — A / B / C / D</option></select></label><label>Şık sayısı<select id="mm209Choices"><option value="5">5 şık (A–E)</option><option value="4">4 şık (A–D)</option></select></label></div>
+    <fieldset><legend>Dersler ve soru sayıları</legend><div id="mm209Subjects"></div><button type="button" class="secondary" onclick="mm209AddSubject()">+ Ders ekle</button></fieldset>
+    <div class="mm209-grid"><label>Net hesabı<select id="mm209Penalty"><option value="4">4 yanlış 1 doğruyu götürür</option><option value="3">3 yanlış 1 doğruyu götürür</option><option value="2">2 yanlış 1 doğruyu götürür</option><option value="5">5 yanlış 1 doğruyu götürür</option><option value="none">Yanlış doğruyu götürmez</option></select></label></div>
+    <label class="mm209-check"><input id="mm209PrepareOptic" type="checkbox" checked> Oluşturduktan sonra optik form ve cevap anahtarlarını hazırla</label>
+   </div><div class="modal-actions"><button onclick="saveNewTrial()">Denemeyi Oluştur</button><button class="secondary" onclick="closeModal()">Vazgeç</button></div>`;
+   window.mm209RenderSubjects();el('modal').classList.add('open');if(typeof modalUpdateBackButton==='function')modalUpdateBackButton();
+ };
+ window.mm209RenderSubjects=function(){const draft=window.mmTrial209Draft||[];el('mm209Subjects').innerHTML=draft.map((s,i)=>`<div class="mm209-subject" data-mm209-subject><label>Ders adı<input data-mm209-name value="${e(s.name)}"></label><label>Soru sayısı<input data-mm209-questions type="number" min="1" max="${MAX}" inputmode="numeric" value="${e(s.questions)}"></label><button class="secondary" type="button" aria-label="Dersi kaldır" onclick="mm209RemoveSubject(${i})" ${draft.length===1?'disabled':''}>×</button></div>`).join('')};
+ function readSubjects(){return [...document.querySelectorAll('[data-mm209-subject]')].map(row=>({name:String(row.querySelector('[data-mm209-name]')?.value||'').trim(),questions:Number(row.querySelector('[data-mm209-questions]')?.value)}))}
+ window.mm209AddSubject=function(){const rows=readSubjects();if(rows.length>=6)return alert('Bir optik formda en çok 6 ders olabilir.');window.mmTrial209Draft=[...rows,{name:'',questions:20}];window.mm209RenderSubjects()};
+ window.mm209RemoveSubject=function(i){const rows=readSubjects();if(rows.length<2)return;rows.splice(i,1);window.mmTrial209Draft=rows;window.mm209RenderSubjects()};
+ window.saveNewTrial=function(){
+   const name=el('trialName')?.value.trim(),date=el('trialDateValue')?.value,subjects=readSubjects();
+   const selected=[...document.querySelectorAll('[data-mm209-class]:checked')].map(n=>String(n.dataset.mm209Class)),classes=(state.classes||[]).filter(c=>selected.includes(String(c.id)));
+   if(!name)return alert('Deneme adını girin.');if(!/^\d{4}-\d{2}-\d{2}$/.test(date||''))return alert('Uygulama tarihini seçin.');if(!classes.length)return alert('En az bir sınıf seçin.');
+   if(subjects.length<1||subjects.length>6||subjects.some(s=>!s.name||!Number.isInteger(s.questions)||s.questions<1||s.questions>MAX))return alert('Her ders için bir ad ve geçerli soru sayısı girin.');
+   if(new Set(subjects.map(s=>s.name.toLocaleLowerCase('tr'))).size!==subjects.length)return alert('Ders adları birbirinden farklı olmalı.');
+   const mode=el('mm209Booklets').value,booklets=mode==='AB'?['A','B']:mode==='ABCD'?['A','B','C','D']:[],choices=Number(el('mm209Choices').value),penalty=el('mm209Penalty').value;
+   if(!['none','AB','ABCD'].includes(mode)||![4,5].includes(choices)||!['none','2','3','4','5'].includes(penalty))return alert('Deneme ayarlarını kontrol edin.');
+   const cfg={version:8,layoutVersion:6,formStyle:'classic-v4-safe',orientation:'portrait',choices,numberDigits:5,bookletChoices:['A','B','C','D'],...(booklets.length?{bookletGroups:booklets}:{}),subjects:subjects.map(s=>({...s,key:'',...(booklets.length?{keys:Object.fromEntries(booklets.map(g=>[g,'']))}:{})})),updatedAt:new Date().toISOString()};
+   const gid='mmtrial-'+uid(),created=[],origin=String(cls()?.id),prepare=!!el('mm209PrepareOptic').checked;
+   if(!transaction(()=>{for(const cc of classes){const t={id:uid(),trialGroupId:gid,name,date,subjects:subjects.map(s=>s.name),wrongPenalty:penalty!=='none',wrongDivisor:penalty==='none'?4:Number(penalty),results:{},opticalQuestionCounts:Object.fromEntries(subjects.map(s=>[s.name,s.questions])),opticalConfig:copy(cfg),createdAt:new Date().toISOString()};
+     for(const st of(cc.students||[]))t.results[st.id]={attended:true,subjects:{}};
+     if(!Array.isArray(cc.trials))cc.trials=[];cc.trials.push(t);created.push({c:cc,t})}}))return;
+   const active=created.find(x=>String(x.c.id)===origin)||created[0];currentClassId=active.c.id;render();window.openTrial(active.t.id);
+   if(prepare)window.openOpticalBuilder795('trial',active.t.id);
+ };
+ const oldOpen=window.openTrial;
+ window.openTrial=function(id){
+   const ret=oldOpen.apply(this,arguments),t=get(id);if(!t)return ret;
+   const body=el('modalBody');if(!body||body.querySelector('[data-mm209-workflow]'))return ret;
+   const linked=members(t),ready=configReady(t),panel=document.createElement('section');panel.dataset.mm209Workflow='1';panel.className='mm209-workflow';
+   panel.innerHTML=`<div class="mm209-heading"><b>Deneme Uygulaması</b><span>${e(groupLabel(t))}</span></div><div class="mm209-class-links">${linked.map(({c,t:tt},i)=>`<button type="button" class="secondary" data-mm209-member="${i}" ${String(c.id)===String(cls()?.id)?'disabled':''}>${e(c.name)}</button>`).join('')}</div><div class="tiny">${ready?'✓ Cevap anahtarları hazır':'Cevap anahtarları henüz tamamlanmadı'} · ${(t.subjects||[]).map(n=>e(n)+' '+Number(t.opticalQuestionCounts?.[n]||t.opticalConfig?.subjects?.find(s=>s.name===n)?.questions||0)+' soru').join(' · ')}</div><div class="mm209-actions"><button type="button" data-mm209-optic>📝 Optik ve Cevap Anahtarları</button><button type="button" class="secondary" data-mm209-preview>👁 Optik Form / PDF</button><button type="button" class="secondary" data-mm209-scan>📷 Bu Sınıfın Optiklerini Oku</button></div>`;
+   panel.querySelectorAll('[data-mm209-member]').forEach(b=>b.addEventListener('click',()=>{const x=linked[Number(b.dataset.mm209Member)];if(!x)return;currentClassId=x.c.id;render();window.openTrial(x.t.id)}));
+   panel.querySelector('[data-mm209-optic]').addEventListener('click',()=>window.openOpticalBuilder795('trial',t.id));
+   panel.querySelector('[data-mm209-preview]').addEventListener('click',()=>t.opticalConfig?window.openOpticalPreview795('trial',t.id):window.openOpticalBuilder795('trial',t.id));
+   panel.querySelector('[data-mm209-scan]').addEventListener('click',()=>{if(!configReady(t))return window.openOpticalBuilder795('trial',t.id);window.startOpticalScan795('trial',t.id)});
+   body.prepend(panel);
+   // The original optical hook runs on a timer; it sees this marker and avoids duplicate buttons.
+   const top=body.querySelector('.trial-top-actions');if(top){const marker=document.createElement('span');marker.dataset.omr795='1';marker.hidden=true;top.appendChild(marker)}
+   const del=body.querySelector('.modal-actions .danger');if(del)del.textContent='Bu Sınıftaki Denemeyi Sil';
+   return ret;
+ };
+ const oldSaveOptical=window.saveOpticalConfig795;
+ window.saveOpticalConfig795=function(kind,id,preview){
+   if(kind!=='trial')return oldSaveOptical.apply(this,arguments);
+   const t=get(id);if(!t)return;const cfg=optic.collect(true);if(!cfg)return;
+   const linked=members(t),names=cfg.subjects.map(s=>s.name),counts=Object.fromEntries(cfg.subjects.map(s=>[s.name,s.questions])),next={subjects:names,opticalQuestionCounts:counts};
+   for(const {t:tt} of linked){
+     if(entered(tt)&&!compatible(tt,cfg))return alert('Sonuç girilmiş denemede ders adları veya soru sayıları değiştirilemez. Yeni bir deneme oluşturun.');
+   }
+   if(!transaction(()=>{for(const {c,t:tt} of linked){tt.opticalConfig=copy(cfg);tt.subjects=names.slice();tt.opticalQuestionCounts={...counts};tt.results=tt.results||{};for(const st of(c.students||[])){const r=tt.results[st.id]||(tt.results[st.id]={attended:true,subjects:{}});r.subjects=r.subjects||{}}}}))return;
+   render();if(preview)window.openOpticalPreview795('trial',id);else{alert(linked.length>1?'Cevap anahtarları denemenin uygulandığı '+linked.length+' sınıfta kaydedildi.':'Cevap anahtarları kaydedildi.');window.openTrial(id)}
+ };
+ const oldEdit=window.editTrialInfo;
+ window.editTrialInfo=function(id){const ret=oldEdit.apply(this,arguments),t=get(id);if(t&&members(t).length>1){const note=document.createElement('div');note.className='mm209-note';note.textContent='Ad, tarih ve net hesabı bu denemenin uygulandığı sınıflarda birlikte güncellenir.';el('modalBody').prepend(note)}return ret};
+ const oldSaveInfo=window.saveTrialInfo;
+ window.saveTrialInfo=function(id){
+   const t=get(id);if(!t)return;
+   const linked=members(t);if(linked.length===1&&!t.opticalConfig)return oldSaveInfo.apply(this,arguments);
+   const names=el('trialEditSubjects').value.split(',').map(x=>x.trim()).filter(Boolean);
+   if(JSON.stringify(names)!==JSON.stringify(t.subjects||[]))return alert('Ders ve soru düzenini Optik ve Cevap Anahtarları ekranından değiştirin.');
+   const name=el('trialEditName').value.trim(),date=el('trialEditDate').value,penalty=!!el('trialEditPenalty')?.checked,div=Number(el('trialEditDiv')?.value)||4;
+   if(!name||!date)return alert('Deneme adı ve tarihi gerekli.');
+   if(transaction(()=>linked.forEach(({t:tt})=>{tt.name=name;tt.date=date;tt.wrongPenalty=penalty;tt.wrongDivisor=div}))){render();window.openTrial(id)}
+ };
+ window._mm209TrialAPI={members,entered,schema,compatible,transaction,groupLabel};
+})();
+
 </script>
