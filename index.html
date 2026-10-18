@@ -2571,7 +2571,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.244</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.245</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4841,7 +4841,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.244";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.245";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -5005,7 +5005,7 @@ document.addEventListener("click",function(e){
   const txt=String(t.textContent||"").trim().toLocaleLowerCase("tr");
   if(/closeModal\s*\(/.test(oc))return;
   // Mevcut karttan başka bir kart/ayrıntı açılıyorsa önceki görünümü sakla.
-  if(/(?:open|show)[A-ZÇĞİÖŞÜa-zçğıöşü0-9_]*\s*\(/.test(oc) && !/(vazgeç|dön)/i.test(txt) && !/openTodayHomeworkControl\s*\(/.test(oc) && !/openDutySwap(?:For)?\s*\(/.test(oc) && !/openClassDuty\s*\(/.test(oc) && !/openOpticalBuilder795\s*\(/.test(oc) && !/startOpticalScan795\s*\(/.test(oc) && !/openOpticalPreview795\s*\(/.test(oc) && !/openOpticalImage795\s*\(/.test(oc) && !/openRealPaperDiag795\s*\(/.test(oc)) modalPushCurrent();
+  if(/(?:open|show)[A-ZÇĞİÖŞÜa-zçğıöşü0-9_]*\s*\(/.test(oc) && !/(vazgeç|dön|^\s*(?:←\s*)?geri(?:\s|$))/i.test(txt) && !/openTodayHomeworkControl\s*\(/.test(oc) && !/openDutySwap(?:For)?\s*\(/.test(oc) && !/openClassDuty\s*\(/.test(oc) && !/openOpticalBuilder795\s*\(/.test(oc) && !/startOpticalScan795\s*\(/.test(oc) && !/openOpticalPreview795\s*\(/.test(oc) && !/openOpticalImage795\s*\(/.test(oc) && !/openRealPaperDiag795\s*\(/.test(oc)) modalPushCurrent();
   // Kaydet/Sil gibi işlemler formdan bir önceki listeyi doğrudan yeniden açabilir.
   // İşlem bittikten sonra geçmişin tepesinde aynı ekran kaldıysa onu kaldır; böylece Geri tek basışta gerçek üst ekrana döner.
   if(/(?:save|delete|remove|update)[A-ZÇĞİÖŞÜa-zçğıöşü0-9_]*\s*\(/i.test(oc)){
@@ -8290,7 +8290,7 @@ function exportTransferBackup(){
 function importRecoveryBackup(ev){
   const f=ev.target.files&&ev.target.files[0]; if(!f)return false;
   const r=new FileReader();
-  r.onload=()=>{
+  r.onload=async()=>{
     try{
       const d=JSON.parse(r.result);
       if(!d || d.backupType!=="ogrenci-takip-tam-yedek" || !d.state || !Array.isArray(d.state.classes))
@@ -8304,9 +8304,7 @@ function importRecoveryBackup(ev){
       restoredState.currentPeriod=restoredState.currentPeriod||"1";
       const studentCount=restoredState.classes.reduce((n,c)=>n+(Array.isArray(c.students)?c.students.length:0),0);
       if(!confirm(`Yedek doğrulandı: ${restoredState.classes.length} sınıf · ${studentCount} öğrenci${Array.isArray(d.schoolYearArchives)?` · ${d.schoolYearArchives.length} eğitim yılı arşivi`:''}. Bu verileri bu uygulamaya geri yükleyelim mi?`)) return;
-      localStorage.setItem(STORAGE_KEY,JSON.stringify(restoredState));
-      localStorage.setItem(SETTINGS_KEY,JSON.stringify(restoredSettings));
-      if(Array.isArray(d.schoolYearArchives)) localStorage.setItem(SCHOOL_ARCHIVE_KEY,JSON.stringify(d.schoolYearArchives));
+      await window.MualliMateBackup245.apply(restoredState,restoredSettings,d.schoolYearArchives,d);
       if(typeof mmRecordRestore884==='function') mmRecordRestore884(d,'tam yedekten kurtarma');
       alert("Tam yedek başarıyla kurtarıldı. Verileriniz geri geldi. Şimdi bu cihaz için yeni bir PIN belirleyebilirsiniz.");
       location.reload();
@@ -8321,7 +8319,7 @@ function importRecoveryBackup(ev){
 function importTransferBackup(ev){
   const f=ev.target.files[0];if(!f)return;
   const r=new FileReader();
-  r.onload=()=>{
+  r.onload=async()=>{
     try{
       const d=JSON.parse(r.result);
       let incomingState=null,incomingSettings=null,kind="";
@@ -8346,9 +8344,7 @@ function importTransferBackup(ev){
       restoredState.currentPeriod=restoredState.currentPeriod||"1";
 
       try{
-        localStorage.setItem(STORAGE_KEY,JSON.stringify(restoredState));
-        localStorage.setItem(SETTINGS_KEY,JSON.stringify(restoredSettings));
-        if(Array.isArray(d.schoolYearArchives)) localStorage.setItem(SCHOOL_ARCHIVE_KEY,JSON.stringify(d.schoolYearArchives));
+        await window.MualliMateBackup245.apply(restoredState,restoredSettings,d.schoolYearArchives,d);
       }catch(storageError){
         console.error("Yedek yerel depolamaya kaydedilemedi:",storageError);
         throw new Error("Yedek okundu ancak bu cihazın yerel depolamasına kaydedilemedi: "+(storageError?.message||storageError));
@@ -8377,7 +8373,7 @@ migrateHomeworkImagesToIDB().then(()=>hydrateHomeworkImages()).catch(()=>{});
 <script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
   // v7.6.64-JPEG — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
   // ve aktif oturum güncelleme nedeniyle yeniden yüklenmez.
-  navigator.serviceWorker.register("./sw.js?v=7.8.244",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.8.245",{updateViaCache:"none"}).then(reg=>{
     reg.update().catch(()=>{});
     setInterval(()=>reg.update().catch(()=>{}),60*60*1000);
   }).catch(()=>{});
@@ -9912,6 +9908,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
     const f=ev.target.files?.[0];if(!f)return;const host=el('mmBackupCheck884'),r=new FileReader();if(host)host.innerHTML='Yedek okunuyor…';
     r.onload=()=>{try{
       const d=JSON.parse(r.result);if(!d||d.backupType!=='ogrenci-takip-tam-yedek'||!d.state||!Array.isArray(d.state.classes))throw new Error('Geçerli MualliMate tam yedeği değil.');
+      window.MualliMateBackup245?.validate(d.additionalData);
       const s=stats(d.state),a=Array.isArray(d.schoolYearArchives)?d.schoolYearArchives.length:0,profile=d.settings?.profile?.name||'';
       if(host)host.innerHTML=`<b style="color:#166534">✓ Yedek yapısı geçerli</b><div class="tiny" style="margin-top:6px;line-height:1.55">${esc(f.name)}<br>${s.classes} sınıf · ${s.students} öğrenci · ${s.homeworks} ödev · ${s.trials} deneme · ${s.meetings} veli görüşmesi · ${s.guidance} rehberlik kaydı · ${a} eğitim yılı arşivi${profile?`<br>Profil: ${esc(profile)}`:''}${d.exportedAt?`<br>Yedek tarihi: ${esc(trDate(d.exportedAt))}`:''}</div><div class="tiny" style="margin-top:7px"><b>Hiçbir veri geri yüklenmedi.</b></div>`;
     }catch(e){if(host)host.innerHTML=`<b style="color:#b91c1c">✕ Yedek doğrulanamadı</b><div class="tiny" style="margin-top:5px">${esc(e?.message||e)}</div>`}finally{ev.target.value=''}};
@@ -16145,7 +16142,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.244';
+ const VERSION='v7.8.245';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -16514,7 +16511,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78128-layout-duty-ios-lock-script">
 (function(){
-  const VERSION='v7.8.244';
+  const VERSION='v7.8.245';
   const root=document.documentElement, body=document.body;
   let active=false, baseVvH=0, baseBgTop=0, bgShift=0, touchY=0, raf=0;
 
@@ -16870,7 +16867,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78129-landscape-responsive-final-script">
 (function(){
-  const VERSION='v7.8.244';
+  const VERSION='v7.8.245';
   const mq=window.matchMedia('(orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
 
   function validTestResult(h,sid){
@@ -17225,7 +17222,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78130-landscape-class-center-duty-script">
 (function(){
-  const VERSION='v7.8.244';
+  const VERSION='v7.8.245';
   function syncVersion(){
     document.querySelectorAll('.premium-brand .tiny').forEach(function(x){
       if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION;
@@ -17719,7 +17716,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78147-landscape-review-polish-script">
 (function(){
   'use strict';
-  const VERSION='v7.8.244';
+  const VERSION='v7.8.245';
 
   function testSummary147(c,h){
     const total=(c?.students||[]).length,q=Math.max(0,Math.floor(Number(h?.questionCount||0)));
@@ -17849,7 +17846,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78150-test-net-report-script">
 (function(){
 'use strict';
-const VERSION150='v7.8.244';
+const VERSION150='v7.8.245';
 function clamp150(v,a,b){return Math.max(a,Math.min(b,v))}
 function q150(h){const n=Math.floor(Number(h?.questionCount||0));return Number.isFinite(n)&&n>0?n:0}
 function valid150(h,r){const q=q150(h);if(!q||!r||typeof r!=='object')return false;const d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);return[d,w,b].every(Number.isFinite)&&d>=0&&w>=0&&b>=0&&d+w+b===q}
@@ -19274,3 +19271,5 @@ body.mm229-fresh-home #mobileHomeDashboard>.mm-home-card{height:auto!important;m
 <script id="mm-menu240" src="menu240.js"></script>
 
 <script id="mm-home242" src="home242.js"></script>
+
+<script id="mm-backup245" src="backup245.js"></script>
