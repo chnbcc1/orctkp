@@ -2571,7 +2571,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.238</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.239</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4841,7 +4841,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.238";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.239";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -9625,7 +9625,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
  }
  window.teacherFileSectionPdf235=async function(id){
   const item=ITEMS.find(x=>x[0]===id);if(!item)return;
-  try{await window.MualliMateTeacherTheme237.previewSections([id])}catch(e){console.error(e);alert('Ön izleme açılamadı: '+(e?.message||e))}
+  try{await window.MualliMateTeacherTheme239.previewSections([id])}catch(e){console.error(e);alert('Ön izleme açılamadı: '+(e?.message||e))}
  };
  window.teacherFileOpenSection235=function(id){
   if(id===1)return teacherFileOpenCover();
@@ -9648,13 +9648,13 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
   const old=load().legacyV1?.years?.[year()]||{},ids=Object.keys(LEGACY_TITLES).filter(id=>old.status?.[id]||String(old.notes?.[id]||'').trim());
   const intro='<p class="mm-teacher-card-intro">Önceki listedeki durum ve notlarınız burada korunur. Eşleşen bölümlerin kayıtları yeni listeye de aktarılmıştır.</p>';
   const records=ids.length?ids.map(id=>'<div class="mm-teacher-legacy-record"><b>'+esc(LEGACY_TITLES[id])+'</b>'+(old.status?.[id]?'<div>'+esc(old.status[id])+'</div>':'')+'<div style="white-space:pre-wrap;overflow-wrap:anywhere">'+esc(old.notes?.[id]||'')+'</div></div>').join(''):'<div class="mm-teacher-empty">Bu eğitim yılına ait önceki bölüm kaydı bulunmuyor.</div>';
-  window.MualliMateTeacherTheme237.openCard('Önceki Bölüm Kayıtları',intro+records,year());
+  window.MualliMateTeacherTheme239.openCard('Önceki Bölüm Kayıtları',intro+records,year());
  };
  window.openTeacherFileCenter=function(){modalHistory=[];modalUpdateBackButton();const c=counts(),p=profile();el('modalTitle').textContent='🗃️ Öğretmen Dosyası Oluşturucu';el('modalSubtitle').textContent=`${p.name||'Öğretmen'} · ${p.branch||'Branş bilgisi yok'} · ${p.year}`;el('modalBody').innerHTML=`<div class="teacher-file-toolbar"><button onclick="teacherFileComplete()">✓ Dosyayı Tamamla</button><button class="secondary" onclick="teacherFileSummaryPdf()">📄 Dosya Özeti PDF</button><button class="secondary" onclick="teacherFileOpenAssistant('zumre')">📁 Belge Asistanı</button><button class="secondary" onclick="teacherFileOpenInfo()">Öğretmen Bilgileri</button><button class="secondary" onclick="teacherFileOpenTermReport()">Dönem Raporu</button><button class="ghost" onclick="teacherFileLegacy235()">Önceki Kayıtlar</button></div><div class="teacher-file-summary"><div class="teacher-file-stat"><b>${c.ready}</b><span>Hazır</span></div><div class="teacher-file-stat"><b>${c.missing}</b><span>Eksik</span></div><div class="teacher-file-stat"><b>${ITEMS.length}</b><span>Toplam</span></div></div><div class="teacher-file-list">${ITEMS.map(([id,title,note])=>{const s=status(id);return`<div class="teacher-file-item"><div class="teacher-file-no">${id}</div><div><div class="teacher-file-title">${esc(title)}</div><div class="teacher-file-note">${esc(note)}</div></div><div class="teacher-file-item-actions"><span class="teacher-file-status ${statusClass(s)}">${esc(s)}</span>${action(id)}<button class="ghost" onclick="teacherFileNote(${id})">Not</button><button class="ghost" onclick="teacherFileStatusMenu(${id})">Durum</button></div></div>`}).join('')}</div>`;el('modal').classList.add('open')}
- window.teacherFileStatusMenu=function(id){const item=ITEMS.find(x=>x[0]===id);if(!item)return;window.MualliMateTeacherTheme237.openCard('Belge Durumu',`<div class="card"><b>Mevcut durum: ${esc(status(id))}</b><p>Otomatik durum, uygulamadaki mevcut verilere göre hesaplanır.</p></div><div class="modal-actions"><button onclick="teacherFileSetStatus(${id},'Hazır')">Hazır</button><button class="secondary" onclick="teacherFileSetStatus(${id},'Eksik')">Eksik</button><button class="secondary" onclick="teacherFileSetStatus(${id},'Muaf')">Muaf</button><button class="ghost" onclick="teacherFileSetStatus(${id},'')">Otomatik</button></div>`,item[1])}
- window.teacherFileSetStatus=function(id,s){const {all,d}=data();d.status=d.status||{};if(s)d.status[id]=s;else delete d.status[id];saveStore(all);window.MualliMateTeacherTheme237.returnToList(true)}
- window.teacherFileNote=function(id){const item=ITEMS.find(x=>x[0]===id),{d}=data();if(!item)return;window.MualliMateTeacherTheme237.openCard('Bölüm Notu',`<div class="teacher-file-note-editor"><textarea id="teacherFileNoteText" aria-label="Bölüm notu" placeholder="Bu bölümle ilgili notunuzu yazın...">${esc(d.notes?.[id]||'')}</textarea></div><div class="modal-actions"><button onclick="teacherFileSaveNote(${id})">Kaydet</button><button class="secondary" onclick="MualliMateTeacherTheme237.returnToList()">Vazgeç</button></div>`,item[1])}
- window.teacherFileSaveNote=function(id){const {all,d}=data();d.notes=d.notes||{};d.notes[id]=el('teacherFileNoteText')?.value||'';saveStore(all);window.MualliMateTeacherTheme237.returnToList(true)}
+ window.teacherFileStatusMenu=function(id){const item=ITEMS.find(x=>x[0]===id);if(!item)return;window.MualliMateTeacherTheme239.openCard('Belge Durumu',`<div class="card"><b>Mevcut durum: ${esc(status(id))}</b><p>Otomatik durum, uygulamadaki mevcut verilere göre hesaplanır.</p></div><div class="modal-actions"><button onclick="teacherFileSetStatus(${id},'Hazır')">Hazır</button><button class="secondary" onclick="teacherFileSetStatus(${id},'Eksik')">Eksik</button><button class="secondary" onclick="teacherFileSetStatus(${id},'Muaf')">Muaf</button><button class="ghost" onclick="teacherFileSetStatus(${id},'')">Otomatik</button></div>`,item[1])}
+ window.teacherFileSetStatus=function(id,s){const {all,d}=data();d.status=d.status||{};if(s)d.status[id]=s;else delete d.status[id];saveStore(all);window.MualliMateTeacherTheme239.returnToList(true)}
+ window.teacherFileNote=function(id){const item=ITEMS.find(x=>x[0]===id),{d}=data();if(!item)return;window.MualliMateTeacherTheme239.openCard('Bölüm Notu',`<div class="teacher-file-note-editor"><textarea id="teacherFileNoteText" aria-label="Bölüm notu" placeholder="Bu bölümle ilgili notunuzu yazın...">${esc(d.notes?.[id]||'')}</textarea></div><div class="modal-actions"><button onclick="teacherFileSaveNote(${id})">Kaydet</button><button class="secondary" onclick="MualliMateTeacherTheme239.returnToList()">Vazgeç</button></div>`,item[1])}
+ window.teacherFileSaveNote=function(id){const {all,d}=data();d.notes=d.notes||{};d.notes[id]=el('teacherFileNoteText')?.value||'';saveStore(all);window.MualliMateTeacherTheme239.returnToList(true)}
  window.teacherFileComplete=function(){const miss=ITEMS.filter(x=>status(x[0])==='Eksik');el('modalTitle').textContent='✓ Dosyayı Tamamla';el('modalSubtitle').textContent=miss.length?`${miss.length} eksik bölüm`:'Dosya tamamlandı';el('modalBody').innerHTML=miss.length?`<div class="teacher-file-missing-list">${miss.map(([id,t,n])=>`<div class="teacher-file-missing-row"><div><b>${id}. ${esc(t)}</b><small>${esc(n)}</small></div><button onclick="teacherFileMissingAction(${id})">Aç</button></div>`).join('')}</div><div class="modal-actions"><button class="secondary" onclick="openTeacherFileCenter()">← Öğretmen Dosyası</button></div>`:`<div class="notice"><b>✓ Öğretmen dosyasında eksik bölüm görünmüyor.</b></div><div class="modal-actions"><button onclick="openTeacherFileCenter()">Öğretmen Dosyasına Dön</button></div>`;el('modal').classList.add('open')}
  window.teacherFileMissingAction=function(id){return teacherFileOpenSection235(id)}
  window.teacherFileOpenAssistant=function(type){window.__teacherFileReturnScroll=document.querySelector('#modal .modal-box')?.scrollTop||0;openDocumentAssistant('teacherFile');setTimeout(()=>{const s=el('docAssistantType');if(s){s.value=type||'serbest';try{documentAssistantTypeChanged(true)}catch(e){}}},0)}
@@ -16145,7 +16145,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.238';
+ const VERSION='v7.8.239';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -16514,7 +16514,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78128-layout-duty-ios-lock-script">
 (function(){
-  const VERSION='v7.8.238';
+  const VERSION='v7.8.239';
   const root=document.documentElement, body=document.body;
   let active=false, baseVvH=0, baseBgTop=0, bgShift=0, touchY=0, raf=0;
 
@@ -16870,7 +16870,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78129-landscape-responsive-final-script">
 (function(){
-  const VERSION='v7.8.238';
+  const VERSION='v7.8.239';
   const mq=window.matchMedia('(orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
 
   function validTestResult(h,sid){
@@ -17225,7 +17225,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78130-landscape-class-center-duty-script">
 (function(){
-  const VERSION='v7.8.238';
+  const VERSION='v7.8.239';
   function syncVersion(){
     document.querySelectorAll('.premium-brand .tiny').forEach(function(x){
       if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION;
@@ -17719,7 +17719,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78147-landscape-review-polish-script">
 (function(){
   'use strict';
-  const VERSION='v7.8.238';
+  const VERSION='v7.8.239';
 
   function testSummary147(c,h){
     const total=(c?.students||[]).length,q=Math.max(0,Math.floor(Number(h?.questionCount||0)));
@@ -17849,7 +17849,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78150-test-net-report-script">
 (function(){
 'use strict';
-const VERSION150='v7.8.238';
+const VERSION150='v7.8.239';
 function clamp150(v,a,b){return Math.max(a,Math.min(b,v))}
 function q150(h){const n=Math.floor(Number(h?.questionCount||0));return Number.isFinite(n)&&n>0?n:0}
 function valid150(h,r){const q=q150(h);if(!q||!r||typeof r!=='object')return false;const d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);return[d,w,b].every(Number.isFinite)&&d>=0&&w>=0&&b>=0&&d+w+b===q}
@@ -19269,5 +19269,5 @@ body.mm229-fresh-home #mobileHomeDashboard{height:auto!important;max-height:none
 body.mm229-fresh-home #mobileHomeDashboard>#mmTodayLessons,body.mm229-fresh-home #mobileHomeDashboard>#mmDutyCard,body.mm229-fresh-home #mobileHomeDashboard>#mmClassesCard{display:none!important}
 body.mm229-fresh-home #mobileHomeDashboard>.mm-home-card{height:auto!important;min-height:0!important;max-height:none!important;flex:0 0 auto!important;grid-row:auto!important;grid-column:auto!important}
 </style>
-<script id="mm-teacher-theme237" src="teacher-file-theme237.js"></script>
-<script id="mm-guidance-theme238" src="guidance-file-theme238.js"></script>
+<script id="mm-teacher-theme239" src="teacher-file-theme239.js"></script>
+<script id="mm-guidance-theme239" src="guidance-file-theme239.js"></script>
