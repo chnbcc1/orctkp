@@ -92,7 +92,7 @@
  const originalCenter=window.openGuidanceFileCenter;
  window.openGuidanceFileCenter=function(){const result=originalCenter.apply(this,arguments);if(!window.guidanceDossierData238?.()||!document.querySelector('#modalBody .guidance-list'))return result;
   const toolbar=document.querySelector('#modalBody .guidance-toolbar');if(toolbar&&!toolbar.querySelector('[data-guidance-dossier]')){const button=document.createElement('button');button.dataset.guidanceDossier='238';button.textContent='☑ Rehberlik Dosyası Oluştur';button.onclick=selection;toolbar.appendChild(button)}
-  document.querySelectorAll('#modalBody .guidance-item').forEach((row,i)=>{if(i<3)return;const b=document.createElement('button');b.className='secondary';b.dataset.guidanceSection=String(i+1);b.textContent='Temalı Ön İzleme';b.onclick=()=>preview([i+1]);row.querySelector('.guidance-item-actions')?.appendChild(b)});return result;
+  document.querySelectorAll('#modalBody .guidance-item').forEach((row,i)=>{if(i<3)return;const b=document.createElement('button');b.className='secondary';b.dataset.guidanceSection=String(i+1);b.textContent='Kapak Ön İzleme';b.onclick=()=>preview([i+1]);row.querySelector('.guidance-item-actions')?.appendChild(b)});return result;
  };
  window.guidanceOpenCover=()=>preview([1]);window.guidanceOpenAtaturk7881=()=>preview([2]);window.guidanceOpenIstiklal7881=()=>preview([3]);
  const dismiss=window.teacherFileDismiss236;
