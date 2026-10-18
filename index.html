@@ -964,7 +964,7 @@ input[type="file"]:focus, select:focus, textarea:focus{
 <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; worker-src 'self' blob: https://cdn.jsdelivr.net; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; worker-src 'self' blob: https://cdn.jsdelivr.net; object-src 'none'; frame-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
 <style>
 /* ===== v7.5.1 FINAL MOBILE HEADER OVERRIDE ===== */
 @media(max-width:700px){
@@ -2571,7 +2571,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.229</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.234</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openSmartAlertsOverview()" title="Akıllı Uyarılar" aria-label="Akıllı Uyarılar"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4841,7 +4841,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.229";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.234";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -8376,7 +8376,7 @@ migrateHomeworkImagesToIDB().then(()=>hydrateHomeworkImages()).catch(()=>{});
 <script>if("serviceWorker" in navigator && (location.protocol==="https:" || location.hostname==="localhost")){
   // v7.6.64-JPEG — Sessiz PWA güncellemesi: kullanıcıya güncelleme uyarısı gösterilmez
   // ve aktif oturum güncelleme nedeniyle yeniden yüklenmez.
-  navigator.serviceWorker.register("./sw.js?v=7.8.229",{updateViaCache:"none"}).then(reg=>{
+  navigator.serviceWorker.register("./sw.js?v=7.8.234",{updateViaCache:"none"}).then(reg=>{
     reg.update().catch(()=>{});
     setInterval(()=>reg.update().catch(()=>{}),60*60*1000);
   }).catch(()=>{});
@@ -9365,6 +9365,7 @@ const oldDaily=window.openDailyTeacherPanel;if(typeof oldDaily==='function')wind
  function status(id){const {d}=data(),m=d.status?.[id];if(m==='Hazır'||m==='Eksik'||m==='Muaf')return m;return autoReady(id)?'Hazır':'Eksik'}
  function statusClass(s){return s==='Hazır'?'ready':s==='Muaf'?'exempt':'missing'}
  function counts(){let ready=0,missing=0,exempt=0;ITEMS.forEach(x=>{const s=status(x[0]);if(s==='Hazır')ready++;else if(s==='Muaf')exempt++;else missing++});return{ready,missing,exempt}}
+ window.teacherFileThemeData234=function(){return {profile:profile(),items:ITEMS.map(([id,title])=>({id,title,status:status(id)}))}};
  function safeClose(){try{closeModal()}catch(e){document.getElementById('modal')?.classList.remove('open')}}
  function action(id){if(id===1)return`<button onclick="teacherFileOpenCover()">Oluştur</button>`;if(id===2)return`<button onclick="teacherFileOpenInfo()">Oluştur</button>`;if(id===3)return`<button onclick="openSchedule()">Aç</button>`;if(id===4)return`<button onclick="openAnnualPlans()">Aç</button>`;if(id===5)return`<button onclick="openDailyTeacherPanel()">Bugünü Aç</button>`;if(id===6||id===7)return`<button onclick="teacherFileOpenAssistant('zumre')">Belge Asistanı</button>`;if([8,9,11,18,19,22].includes(id))return`<button onclick="teacherFileOpenAssistant('serbest')">Belge Asistanı</button>`;if(id===10||id===12)return`<button onclick="teacherFileOpenClassModule('grades')">Notlar</button>`;if(id===13)return`<button onclick="teacherFileOpenClassModule('homeworks')">Ödevler</button>`;if(id===14)return`<button onclick="teacherFileOpenClassModule('reports')">Raporlar</button>`;if(id===15)return`<button onclick="openAllParentMeetings()">Görüşmeler</button>`;if(id===16)return`<button onclick="teacherFileOpenClasses()">Sınıflarım</button>`;if(id===17)return`<button onclick="openDutySchedule()">Nöbet</button>`;if(id===20)return`<button onclick="openGuidanceFileCenter()">Rehberlik Dosyası</button>`;if(id===24)return`<button onclick="teacherFileOpenTermReport()">Oluştur</button>`;return''}
  window.openTeacherFileCenter=function(){const c=counts(),p=profile();el('modalTitle').textContent='🗃️ Öğretmen Dosyası Oluşturucu';el('modalSubtitle').textContent=`${p.name||'Öğretmen'} · ${p.branch||'Branş bilgisi yok'} · ${p.year}`;el('modalBody').innerHTML=`<div class="teacher-file-toolbar"><button onclick="teacherFileComplete()">✓ Dosyayı Tamamla</button><button class="secondary" onclick="teacherFileSummaryPdf()">📄 Dosya Özeti PDF</button><button class="secondary" onclick="teacherFileOpenAssistant('zumre')">📁 Belge Asistanı</button></div><div class="teacher-file-summary"><div class="teacher-file-stat"><b>${c.ready}</b><span>Hazır</span></div><div class="teacher-file-stat"><b>${c.missing}</b><span>Eksik</span></div><div class="teacher-file-stat"><b>${ITEMS.length}</b><span>Toplam</span></div></div><div class="teacher-file-list">${ITEMS.map(([id,title,note])=>{const s=status(id);return`<div class="teacher-file-item"><div class="teacher-file-no">${id}</div><div><div class="teacher-file-title">${esc(title)}</div><div class="teacher-file-note">${esc(note)}</div></div><div class="teacher-file-item-actions"><span class="teacher-file-status ${statusClass(s)}">${esc(s)}</span>${action(id)}<button class="ghost" onclick="teacherFileNote(${id})">Not</button><button class="ghost" onclick="teacherFileStatusMenu(${id})">Durum</button></div></div>`}).join('')}</div>`;el('modal').classList.add('open')}
@@ -15861,7 +15862,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.229';
+ const VERSION='v7.8.234';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -16230,7 +16231,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78128-layout-duty-ios-lock-script">
 (function(){
-  const VERSION='v7.8.229';
+  const VERSION='v7.8.234';
   const root=document.documentElement, body=document.body;
   let active=false, baseVvH=0, baseBgTop=0, bgShift=0, touchY=0, raf=0;
 
@@ -16586,7 +16587,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78129-landscape-responsive-final-script">
 (function(){
-  const VERSION='v7.8.229';
+  const VERSION='v7.8.234';
   const mq=window.matchMedia('(orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
 
   function validTestResult(h,sid){
@@ -16941,7 +16942,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78130-landscape-class-center-duty-script">
 (function(){
-  const VERSION='v7.8.229';
+  const VERSION='v7.8.234';
   function syncVersion(){
     document.querySelectorAll('.premium-brand .tiny').forEach(function(x){
       if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION;
@@ -17435,7 +17436,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78147-landscape-review-polish-script">
 (function(){
   'use strict';
-  const VERSION='v7.8.229';
+  const VERSION='v7.8.234';
 
   function testSummary147(c,h){
     const total=(c?.students||[]).length,q=Math.max(0,Math.floor(Number(h?.questionCount||0)));
@@ -17565,7 +17566,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78150-test-net-report-script">
 (function(){
 'use strict';
-const VERSION150='v7.8.229';
+const VERSION150='v7.8.234';
 function clamp150(v,a,b){return Math.max(a,Math.min(b,v))}
 function q150(h){const n=Math.floor(Number(h?.questionCount||0));return Number.isFinite(n)&&n>0?n:0}
 function valid150(h,r){const q=q150(h);if(!q||!r||typeof r!=='object')return false;const d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);return[d,w,b].every(Number.isFinite)&&d>=0&&w>=0&&b>=0&&d+w+b===q}
@@ -18985,3 +18986,4 @@ body.mm229-fresh-home #mobileHomeDashboard{height:auto!important;max-height:none
 body.mm229-fresh-home #mobileHomeDashboard>#mmTodayLessons,body.mm229-fresh-home #mobileHomeDashboard>#mmDutyCard,body.mm229-fresh-home #mobileHomeDashboard>#mmClassesCard{display:none!important}
 body.mm229-fresh-home #mobileHomeDashboard>.mm-home-card{height:auto!important;min-height:0!important;max-height:none!important;flex:0 0 auto!important;grid-row:auto!important;grid-column:auto!important}
 </style>
+<script id="mm-teacher-theme234" src="teacher-file-theme234.js"></script>
