@@ -27,8 +27,10 @@ function sync(){frame=0;const on=enabled(),lock=$('lockScreen'),locked=lock&&!lo
  if(!on){guard.remove();lastActive=false;return;}
  const nextSurface=locked?'lock':$('mmMobileDrawer')?.classList.contains('open')?'drawer':$('modal')?.classList.contains('open')?'modal':body.classList.contains('class-module-page-open')?'module':'app';
  if(nextSurface!==surface)surface=nextSurface;
- const topSurface=surface==='lock'?lock:surface==='drawer'?$('mmMobileDrawer'):surface==='modal'?document.querySelector('#modal .modal-head'):surface==='module'?document.querySelector('.class-module-head'):header;
- const fallback=({lock:'#0f172a',drawer:'#043c35',modal:'#fbf3df',module:'#f6f8fc',app:'#043c35'})[surface];
+ // Overlays are inset below this edge. Match the underlying header even while
+ // a cream modal or module is open; sampling its title paints a visible line.
+ const topSurface=locked?lock:header;
+ const fallback=locked?'#0f172a':'#043c35';
  const color=topSurface?getComputedStyle(topSurface).backgroundColor:'',channels=color.match(/[\d.]+/g),opaque=channels&&(channels.length===3||Number(channels[3])===1);
  value(root,'--mm-edge-color279',opaque?color:fallback);
  if(!active){lastActive=false;return;}
@@ -48,5 +50,5 @@ if(window.ResizeObserver){const ro=new ResizeObserver(schedule);if(header)ro.obs
 for(const event of ['pageshow','popstate','hashchange','orientationchange','resize'])addEventListener(event,schedule,{passive:true});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)schedule();});if(window.visualViewport){visualViewport.addEventListener('resize',schedule,{passive:true});visualViewport.addEventListener('scroll',schedule,{passive:true});}
 standalone.addEventListener?.('change',schedule);mobile.addEventListener?.('change',schedule);if(document.fonts?.ready)document.fonts.ready.then(schedule);sync();
-window.MualliMateReturn279={version:281,refresh:schedule,inspect:()=>({enabled:enabled(),active:body.classList.contains('mm-ios-frame279'),surface,route:currentRoute,edgeConnected:guard.isConnected,edgeTop:guard.isConnected?guard.getBoundingClientRect().top:null,edgeHeight:guard.isConnected?guard.getBoundingClientRect().height:null,documentScroll:scrollY,contentScroll:main?.scrollTop||0})};
+window.MualliMateReturn279={version:282,refresh:schedule,inspect:()=>({enabled:enabled(),active:body.classList.contains('mm-ios-frame279'),surface,route:currentRoute,edgeConnected:guard.isConnected,edgeTop:guard.isConnected?guard.getBoundingClientRect().top:null,edgeHeight:guard.isConnected?guard.getBoundingClientRect().height:null,documentScroll:scrollY,contentScroll:main?.scrollTop||0})};
 })();
