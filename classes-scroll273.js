@@ -1,9 +1,13 @@
 /* Keep the classes page in the viewport; only its list scrolls when necessary. */
 (()=>{'use strict';if(window.MualliMateClassesScroll273)return;
 const root=document.documentElement,body=document.body,mq=matchMedia('(max-width:700px), (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
+const header=document.querySelector('body>header'),spacer=document.createElement('div');spacer.id='mm276headerSpace';spacer.setAttribute('aria-hidden','true');if(header)header.before(spacer);
 const style=document.createElement('style');style.id='mm-classes-scroll273';style.textContent=`
 html.mm-classes-scroll273,body.mm-classes-scroll273{height:100%!important;max-height:100%!important;overflow:hidden!important;overscroll-behavior:none!important}
-body.mm-classes-scroll273{height:100dvh!important;max-height:100dvh!important;padding-bottom:0!important}
+body.mm-classes-scroll273{position:fixed!important;inset:0!important;width:100%!important;height:auto!important;max-height:none!important;padding-bottom:0!important}
+#mm276headerSpace{display:none}
+body.mm-classes-scroll273 #mm276headerSpace{display:block;height:var(--mm-header-height276,0px);flex:none}
+body.mm-classes-scroll273>header{position:fixed!important;top:var(--safe-top,0px)!important;left:0!important;right:0!important;width:100%!important;z-index:20;background:#043c35!important;filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 body.mm-classes-scroll273 .layout,body.mm-classes-scroll273 main{height:auto!important;max-height:none!important;min-height:0!important;overflow:visible!important}
 body.mm-classes-scroll273 main{padding-bottom:0!important;margin-bottom:0!important}
 body.mm-classes-scroll273 #mmAllClassesScreen{box-sizing:border-box!important;display:block!important;height:var(--mm-classes-height273)!important;max-height:var(--mm-classes-height273)!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;touch-action:pan-y!important;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))!important;scroll-padding-top:86px}
@@ -15,6 +19,7 @@ function sync(){frame=0;const host=document.getElementById('mmAllClassesScreen')
  const active=mq.matches&&body.classList.contains('mm-all-classes-open')&&host&&!host.hidden&&!blocked;
  setClass(root,!!active);setClass(body,!!active);
  if(!active)return;
+ if(header){const h=header.getBoundingClientRect().height+'px';if(body.style.getPropertyValue('--mm-header-height276')!==h)body.style.setProperty('--mm-header-height276',h);}
  // Use the visible viewport, including Safari/PWA rotation and browser chrome.
  const v=window.visualViewport,bottom=v?v.offsetTop+v.height:innerHeight,top=host.getBoundingClientRect().top,height=Math.max(0,Math.floor(bottom-top)),value=height+'px';
  if(host.style.getPropertyValue('--mm-classes-height273')!==value)host.style.setProperty('--mm-classes-height273',value);
@@ -26,5 +31,5 @@ const host=document.getElementById('mmAllClassesScreen');if(host)new MutationObs
 const modal=document.getElementById('modal');if(modal)new MutationObserver(schedule).observe(modal,{attributes:true,attributeFilter:['class']});
 addEventListener('resize',schedule,{passive:true});addEventListener('orientationchange',schedule,{passive:true});
 if(window.visualViewport){visualViewport.addEventListener('resize',schedule,{passive:true});visualViewport.addEventListener('scroll',schedule,{passive:true});}
-if(document.fonts?.ready)document.fonts.ready.then(schedule);schedule();window.MualliMateClassesScroll273={version:273,refresh:schedule};
+if(document.fonts?.ready)document.fonts.ready.then(schedule);schedule();window.MualliMateClassesScroll273={version:276,refresh:schedule};
 })();
