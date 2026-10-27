@@ -22,7 +22,7 @@ function describe(node){
  if(node.id==='teacherFileCard236')return {node,container:node.querySelector('.mm-teacher-card'),owner:node.querySelector('.mm-teacher-card-body'),head:node.querySelector('.mm-teacher-card-head')};
  const container=node.querySelector(':scope > section,:scope > .s271dialog,:scope > .mm274dialog,:scope > .s272dialog,:scope > [role=dialog]')||node;
  const owner=node.id==='worksheetStudio887'?node.querySelector('.ws-stage887'):node.querySelector('.mm-optic-review-body795,.mm-optic-preview-stage795,.guidance-preview-stage,.exact-form-stage7862,.blank-exact-stage7863')||container;
- return {node,container,owner:owner||container,head:container.querySelector(':scope > header,:scope > .ws255-panelhead,:scope > .mm274head'),card:container!==node};
+ return {node,container,owner:owner||container,head:container.querySelector(':scope > header,:scope > .ws255-panelhead,:scope > .mm274head'),card:container!==node,popover:node.hasAttribute('data-mm-popover')};
 }
 function choose(){
  // A role on a card inside a known backdrop describes that same layer.
@@ -46,7 +46,8 @@ function freezeBackground(front,v){
   frozen.set(node,{styles,scrolls});
   // Keep layout intact. Do not translate, resize or clone the underlying app.
   // An opaque foreground screen owns editing; the background is simply hidden.
-  write(node,'opacity','0',styles);write(node,'pointer-events','none',styles);write(node,'overflow','hidden',styles);write(node,'touch-action','none',styles);
+  const context=front.hasAttribute('data-mm-popover')&&node.matches('#modal.open,#classModuleOverlay.open,#teacherFileCard236,#worksheetStudio887,#schedule266');
+  if(!context)write(node,'opacity','0',styles);write(node,'pointer-events','none',styles);write(node,'overflow','hidden',styles);write(node,'touch-action','none',styles);
  }
  holdBackground(v);
 }
@@ -62,7 +63,7 @@ function fit(l,v){
  else{
   write(node,'position','fixed');write(node,'inset',l.side?'auto auto auto 0':'auto 0 auto 0');write(node,'top',v.top+'px');write(node,'height',v.height+'px');write(node,'max-height',v.height+'px');if(!l.side)write(node,'width','100%');write(node,'box-sizing','border-box');write(node,'overflow','hidden');write(node,'touch-action','auto');
   write(node,'padding-top','max(12px, calc(var(--safe-top, env(safe-area-inset-top, 0px)) - '+v.top+'px + 12px))');write(node,'padding-bottom','12px');
-  if(!l.side){const color=getComputedStyle(node).backgroundColor,parts=color.match(/[\d.]+/g);if(!parts||parts.length===4&&Number(parts[3])<1)write(node,'background','#efe4ce');}
+  if(!l.side&&!l.popover){const color=getComputedStyle(node).backgroundColor,parts=color.match(/[\d.]+/g);if(!parts||parts.length===4&&Number(parts[3])<1)write(node,'background','#efe4ce');}
   if(l.card){if(node.id!=='modal')write(node,'display','flex');write(node,'align-items','center');write(node,'justify-content','center');}
   if(container!==node){write(container,'max-height','100%');write(container,'box-sizing','border-box');if(!l.card)write(container,'height','100%');}
   if(node.id==='modal'){
@@ -88,7 +89,7 @@ function sync(){
  frame=0;if(!enabled()){restore(managed);for(const [n,e]of frozen)clearFrozen(n,e);for(const e of parents.values())restore(e.styles);parents.clear();layer=null;return;}
  const v=viewport();
  const next=choose(),changed=next?.node!==layer?.node;
- if(changed){restore(managed);layer=next;pending=editable(document.activeElement);window.MualliMateReturn279?.refresh();}
+ if(changed){if(!next?.popover)restore(managed);layer=next;pending=editable(document.activeElement);window.MualliMateReturn279?.refresh();}
  if(!layer){if(v.full-v.height<100&&!editable(document.activeElement)){for(const [n,e]of frozen)clearFrozen(n,e);for(const e of parents.values())restore(e.styles);parents.clear();}else holdBackground(v);lastHeight=v.height;return;}
  freezeBackground(layer.node,v);fit(layer,v);
  if(Math.abs(lastHeight-v.height)>2&&!touching)pending=true;lastHeight=v.height;reveal(layer);holdBackground(v);
@@ -118,5 +119,5 @@ new MutationObserver(schedule).observe(body,{childList:true,subtree:true,attribu
 for(const name of ['resize','orientationchange','pageshow','popstate','hashchange'])addEventListener(name,schedule,{passive:true});
 if(window.visualViewport){visualViewport.addEventListener('resize',schedule,{passive:true});visualViewport.addEventListener('scroll',schedule,{passive:true});}
 const style=document.createElement('style');style.textContent='body.mm-ios-frame279.modal-page-locked{touch-action:auto!important}body.mm-ios-frame279 :is(input:not([type=checkbox]):not([type=radio]),textarea,select){font-size:max(16px,1em)!important;scroll-margin-block:16px!important}body.mm-ios-frame279 #modal.open .modal-box::-webkit-scrollbar{display:none!important}';document.head.appendChild(style);
-window.MualliMateKeyboard285={version:287,refresh:schedule,viewport,hasLayer:()=>!!layer,inspect:()=>({surface:layer?.node.id||layer?.node.className||'',frozen:frozen.size,editing:editable(document.activeElement),height:viewport().height,top:viewport().top})};sync();
+window.MualliMateKeyboard285={version:288,refresh:schedule,viewport,hasLayer:()=>!!layer,inspect:()=>({surface:layer?.node.id||layer?.node.className||'',frozen:frozen.size,editing:editable(document.activeElement),height:viewport().height,top:viewport().top})};sync();
 })();
