@@ -1,0 +1,33 @@
+/* v7.8.290 — one button palette in both phone orientations.
+   Only paint changes here; landscape grids, hit targets, scroll and safe areas
+   continue to be owned by their existing layout rules. */
+@media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  body.mm-class-open:not(.class-module-page-open) .class-module-btn{
+    background:linear-gradient(180deg,#0a6b5d,#075448)!important;
+    color:#fff!important;
+    border-color:#cba34e!important;
+    box-shadow:0 4px 12px rgba(7,95,82,.07)!important;
+  }
+  body.mm-class-open:not(.class-module-page-open) .class-module-btn :is(span,b){color:#fff!important}
+  body.mm-class-open:not(.class-module-page-open) .class-module-btn em{
+    background:transparent!important;color:#f0cf78!important;
+  }
+  body.mm-class-open:not(.class-module-page-open) .class-top-actions button{
+    box-shadow:0 4px 12px rgba(7,95,82,.07)!important;
+  }
+  body.mm-class-open:not(.class-module-page-open) .overview-shortcut{
+    color:#18352f!important;border-color:#d8c792!important;
+    box-shadow:0 4px 12px rgba(7,95,82,.07)!important;
+  }
+  body.mm-class-open:not(.class-module-page-open) .overview-shortcut :is(.overview-shortcut-icon,.overview-shortcut-text,b){color:#18352f!important}
+  body.mm-class-open:not(.class-module-page-open) .overview-shortcut small,
+  body.mm-class-open:not(.class-module-page-open) .compact-missing>span{color:#6d675d!important}
+  body>header .mm-menu-btn{color:#f8f0df!important}
+  body>header .mm-alert-bell .mm-bell-badge{background-color:#c93731!important}
+  body>header .premium-brand .tiny{color:#6f5418!important}
+  #mobileHomeDashboard :is(.mm-duty,.mm-class-chip){color:#f8f0df!important}
+  #mobileHomeDashboard .mm-duty .mm-section-head b,
+  #mobileHomeDashboard .mm-duty .mm-duty-icon,
+  #mobileHomeDashboard .mm-class-chip b{color:inherit!important}
+  #mmAllClassesScreen .mm-all-class-card{box-shadow:0 7px 18px rgba(2,44,34,.12)!important}
+}
