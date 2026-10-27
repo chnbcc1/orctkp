@@ -1,0 +1,55 @@
+/* v7.8.291 — equal, bottom-aligned homework choices in landscape. */
+@media (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse){
+  #modalBody .quick-grid:has(>.quick-card>.status-group){
+    grid-auto-rows:auto!important;
+    align-items:stretch!important;
+  }
+  #modalBody .quick-grid>.quick-card:has(>.status-group){
+    display:flex!important;
+    flex-direction:column!important;
+    gap:14px!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+  }
+  #modalBody .quick-card>.student-name-with-dot{
+    flex:0 0 auto!important;
+    min-width:0!important;
+  }
+  #modalBody .quick-card>.student-name-with-dot b{
+    min-width:0!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+    margin-bottom:0!important;
+  }
+  #modalBody .quick-card>.status-group{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-template-rows:repeat(2,44px)!important;
+    grid-auto-flow:row!important;
+    gap:12px 10px!important;
+    width:100%!important;
+    margin-top:auto!important;
+    flex:0 0 auto!important;
+    align-items:stretch!important;
+  }
+  #modalBody .quick-card>.status-group>.status-btn{
+    width:100%!important;
+    min-width:0!important;
+    height:44px!important;
+    min-height:44px!important;
+    max-height:44px!important;
+    box-sizing:border-box!important;
+    margin:0!important;
+    padding:8px 4px!important;
+    font-size:12px!important;
+    line-height:1.2!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    transform:none!important;
+  }
+  #modalBody .quick-card>.status-group>[data-status=done]{grid-area:1/1!important}
+  #modalBody .quick-card>.status-group>[data-status=partial]{grid-area:1/2!important}
+  #modalBody .quick-card>.status-group>[data-status=excused]{grid-area:2/1!important}
+  #modalBody .quick-card>.status-group>[data-status=missing]{grid-area:2/2!important}
+}
