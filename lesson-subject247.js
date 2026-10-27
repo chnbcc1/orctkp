@@ -23,9 +23,11 @@
  function chooseCourse(){
   const c=cls();if(!c)return;
   const options=courses(c.name),selected=classLessonCourse(c.name);
-  el('modalTitle').textContent='Sınıfın Dersi';
-  el('modalSubtitle').textContent=c.name;
-  el('modalBody').innerHTML=`<div class="notice">${options.length>1?'Bu sınıf için birden fazla ders var. Görüntülemek istediğiniz dersi seçin veya yazın.':'Bu sınıfta takip edeceğiniz dersin adını veya kısa kodunu girin.'} Ders otomatik olarak matematik kabul edilmez.</div><label style="display:block;margin-top:16px">Ders / Kısa Kod<input id="lessonCourse247" list="lessonCourses247" maxlength="80" value="${esc(selected)}" placeholder="Örn. Fizik, Türkçe, MAT" style="box-sizing:border-box;width:100%;min-width:0;margin-top:8px"></label><datalist id="lessonCourses247">${options.map(x=>`<option value="${esc(x)}"></option>`).join('')}</datalist><div class="modal-actions"><button id="lessonSave247">Dersi Kaydet</button><button id="lessonCancel247" class="secondary">Vazgeç</button></div>`;
+  const hero=el('modalTitle')?.textContent==='Ders Bilgisi'?el('modalBody').querySelector('.quick-lesson-hero'):null;
+  let editor=el('lessonCourseEditor286');if(editor)return;
+  if(hero){editor=document.createElement('section');editor.id='lessonCourseEditor286';editor.style.marginTop='12px';hero.appendChild(editor);hero.querySelector('[data-lesson-subject247]').hidden=true;}
+  else{el('modalTitle').textContent='Sınıfın Dersi';el('modalSubtitle').textContent=c.name;editor=el('modalBody');}
+  editor.innerHTML=`<label style="display:block;margin-top:16px">Ders / Kısa Kod<input id="lessonCourse247" list="lessonCourses247" maxlength="80" value="${esc(selected)}" placeholder="Örn. Fizik, Türkçe, MAT" style="box-sizing:border-box;width:100%;min-width:0;margin-top:8px"></label><datalist id="lessonCourses247">${options.map(x=>`<option value="${esc(x)}"></option>`).join('')}</datalist><div class="modal-actions"><button id="lessonSave247">Dersi Kaydet</button><button id="lessonCancel247" class="secondary">Vazgeç</button></div>`;
   el('lessonSave247').onclick=()=>{
    const value=clean(el('lessonCourse247').value);if(!value)return alert('Ders adını veya kısa kodunu girin.');
    if(cls()?.id!==c.id)return;
@@ -33,8 +35,9 @@
    try{if(save()===false){c.lessonCourse247=previous;return;}}catch(error){c.lessonCourse247=previous;alert('Ders kaydedilemedi: '+error.message);return;}
    originalOpen();
   };
-  el('lessonCancel247').onclick=()=>{if(selected)originalOpen();else closeModal();};
+  el('lessonCancel247').onclick=()=>{if(hero){editor.remove();hero.querySelector('[data-lesson-subject247]').hidden=false;}else if(selected)originalOpen();else closeModal();};
   el('modal').classList.add('open');
+  if(hero)requestAnimationFrame(()=>{const box=document.querySelector('#modal .modal-box'),r=editor.getBoundingClientRect(),b=box?.getBoundingClientRect();if(box&&r.bottom>b.bottom-16)box.scrollTop+=r.bottom-b.bottom+16;});
  }
  const detail=window.openLessonDetail;
  window.openLessonDetail=function(){
