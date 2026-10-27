@@ -3,7 +3,7 @@
 const root=document.documentElement,body=document.body,header=document.querySelector('body>header'),main=document.querySelector('main'),$=id=>document.getElementById(id);
 const ios=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1),standalone=matchMedia('(display-mode:standalone)'),mobile=matchMedia('(max-width:700px), (orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
 let frame=0,currentRoute='',surface='',lastActive=false;
-let revealPending=false,touching=false,lastModalBody=null,lastViewportHeight=0;
+let revealPending=false,touching=false,lastModalBody=null,lastViewportHeight=0,touchX=0,touchY=0;
 const focusTimers=[],positions=new Map(),guard=document.createElement('div');guard.id='mmIosEdge279';guard.setAttribute('aria-hidden','true');guard.setAttribute('inert','');
 const style=document.createElement('style');style.id='mm-ios-return279';style.textContent=`
 #mmIosEdge279{display:none}
@@ -23,6 +23,7 @@ body.mm-ios-frame279 .class-module-overlay{padding-top:calc(env(safe-area-inset-
 /* One scrolling owner, sized to the visible area above the software keyboard.
    Keep .modal-box as that owner so existing back/restore scroll positions work. */
 body.mm-ios-frame279.modal-page-locked{touch-action:auto!important}
+body.mm-ios-frame279:has(#modal.open) main,body.mm-ios-frame279:has(#modal.open) .class-module-overlay{overflow:hidden!important;touch-action:none!important}
 body.mm-ios-frame279 #modal.open{position:fixed!important;inset:auto 0 auto 0!important;top:var(--mm-modal-top283,0px)!important;height:var(--mm-modal-height283,100dvh)!important;max-height:var(--mm-modal-height283,100dvh)!important;width:100%!important;box-sizing:border-box!important;padding-top:max(12px,calc(var(--safe-top,env(safe-area-inset-top,0px)) - var(--mm-modal-top283,0px) + 12px))!important;padding-bottom:12px!important;overflow:hidden!important;touch-action:auto!important;overscroll-behavior:none!important}
 body.mm-ios-frame279 #modal.open>.modal-box{box-sizing:border-box!important;display:block!important;flex:none!important;min-height:0!important;height:auto!important;max-height:100%!important;margin:0 auto!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain!important;touch-action:pan-y!important;scroll-behavior:auto!important;overflow-anchor:none!important;scroll-padding-top:var(--mm-modal-head283,80px)!important;scroll-padding-bottom:24px!important;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 body.mm-ios-frame279 #modal.open>.modal-box::-webkit-scrollbar{display:none!important}
@@ -88,7 +89,26 @@ document.addEventListener('focusin',e=>{
  for(const ms of [80,200,420])focusTimers.push(setTimeout(()=>{if(!touching&&document.activeElement===e.target){revealPending=true;schedule();}},ms));
 },true);
 document.addEventListener('focusout',()=>{focusTimers.splice(0).forEach(clearTimeout);schedule();},true);
-document.addEventListener('touchstart',()=>{touching=true;revealPending=false;focusTimers.splice(0).forEach(clearTimeout);},{passive:true});
+document.addEventListener('touchstart',e=>{touching=true;revealPending=false;focusTimers.splice(0).forEach(clearTimeout);if(e.touches.length===1){touchX=e.touches[0].clientX;touchY=e.touches[0].clientY;}},{passive:true,capture:true});
+document.addEventListener('touchmove',e=>{
+ if(!enabled()||!$('modal')?.classList.contains('open')||e.touches.length!==1||!e.cancelable)return;
+ const t=e.touches[0],dx=t.clientX-touchX,dy=t.clientY-touchY;touchX=t.clientX;touchY=t.clientY;
+ if(Math.max(Math.abs(dx),Math.abs(dy))<1)return;
+ const box=$('modal').querySelector('.modal-box'),inside=box?.contains(e.target),vertical=Math.abs(dy)>=Math.abs(dx),delta=vertical?dy:dx;
+ // A short form has no scroll range: contain alone cannot stop iOS from
+ // panning its visual viewport. Cancel only gestures with no local destination.
+ if(inside){
+  if(!vertical&&e.target.closest?.('input,textarea,[contenteditable=true]'))return;
+  for(let node=e.target;node&&box.contains(node);node=node.parentElement){
+   if(node.nodeType!==1)continue;
+   const css=getComputedStyle(node),overflow=vertical?css.overflowY:css.overflowX;
+   const max=vertical?node.scrollHeight-node.clientHeight:node.scrollWidth-node.clientWidth,pos=vertical?node.scrollTop:node.scrollLeft;
+   if(/auto|scroll|overlay/.test(overflow)&&max>1&&((delta>0&&pos>0.5)||(delta<0&&pos<max-0.5)))return;
+   if(node===box)break;
+  }
+ }
+ e.preventDefault();
+},{passive:false,capture:true});
 for(const name of ['touchend','touchcancel'])document.addEventListener(name,()=>{touching=false;},{passive:true});
 main?.addEventListener('scroll',()=>{if(lastActive&&currentRoute===route())positions.set(currentRoute,main.scrollTop);},{passive:true});
 const mo=new MutationObserver(records=>{if(records.every(r=>r.target===guard))return;schedule();});mo.observe(body,{childList:true,subtree:true,attributes:true,attributeFilter:['class','hidden']});
@@ -97,5 +117,5 @@ if(window.ResizeObserver){const ro=new ResizeObserver(schedule);if(header)ro.obs
 for(const event of ['pageshow','popstate','hashchange','orientationchange','resize'])addEventListener(event,schedule,{passive:true});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)schedule();});if(window.visualViewport){visualViewport.addEventListener('resize',schedule,{passive:true});visualViewport.addEventListener('scroll',schedule,{passive:true});}
 standalone.addEventListener?.('change',schedule);mobile.addEventListener?.('change',schedule);if(document.fonts?.ready)document.fonts.ready.then(schedule);sync();
-window.MualliMateReturn279={version:283,refresh:schedule,inspect:()=>({enabled:enabled(),active:body.classList.contains('mm-ios-frame279'),surface,route:currentRoute,edgeConnected:guard.isConnected,edgeTop:guard.isConnected?guard.getBoundingClientRect().top:null,edgeHeight:guard.isConnected?guard.getBoundingClientRect().height:null,documentScroll:scrollY,contentScroll:main?.scrollTop||0})};
+window.MualliMateReturn279={version:284,refresh:schedule,inspect:()=>({enabled:enabled(),active:body.classList.contains('mm-ios-frame279'),surface,route:currentRoute,edgeConnected:guard.isConnected,edgeTop:guard.isConnected?guard.getBoundingClientRect().top:null,edgeHeight:guard.isConnected?guard.getBoundingClientRect().height:null,documentScroll:scrollY,contentScroll:main?.scrollTop||0})};
 })();
