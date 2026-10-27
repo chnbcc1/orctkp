@@ -7,7 +7,8 @@ const enabled=()=>!!window.MualliMateReturn279?.inspect().enabled;
 // Safari can shrink innerHeight AND pan the visual viewport when opening its
 // keyboard. Clamping that pan to innerHeight-height incorrectly discarded it.
 const viewport=()=>{const v=window.visualViewport,rawHeight=v?.height||innerHeight,scale=v?.scale||1,key=innerWidth,full=Math.max(fullHeights.get(key)||0,innerHeight,rawHeight<=innerHeight+2?rawHeight:0),height=Math.min(rawHeight,full);fullHeights.set(key,full);return {top:full-height>100||scale>1.05?Math.max(0,v?.offsetTop||0):0,height,scale,full};};
-const editable=e=>!!(e?.matches?.('textarea,input:not([type=button]):not([type=submit]):not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=hidden]),select,[contenteditable=true]')&&!e.disabled&&e.getClientRects().length);
+// Native option pickers do not open the text keyboard or need an editing page.
+const editable=e=>!!(e?.matches?.('textarea,input:not([type=button]):not([type=submit]):not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=hidden]),[contenteditable=true]')&&!e.disabled&&e.getClientRects().length);
 const visible=e=>!!(e&&!e.hidden&&!e.closest('[hidden],[inert],#modal:not(.open),#classModuleOverlay:not(.open),#mmMobileDrawer:not(.open)')&&e.getClientRects().length&&getComputedStyle(e).visibility!=='hidden'&&getComputedStyle(e).display!=='none'&&getComputedStyle(e).opacity!=='0');
 function write(node,key,value,map=managed){let saved=map.get(node);if(!saved){saved=new Map();map.set(node,saved);}if(!saved.has(key))saved.set(key,[node.style.getPropertyValue(key),node.style.getPropertyPriority(key)]);if(node.style.getPropertyValue(key)!==value||node.style.getPropertyPriority(key)!=='important')node.style.setProperty(key,value,'important');}
 function restore(map){for(const [node,saved]of map)for(const [key,[value,priority]]of saved)if(value)node.style.setProperty(key,value,priority);else node.style.removeProperty(key);map.clear();}
@@ -117,5 +118,5 @@ new MutationObserver(schedule).observe(body,{childList:true,subtree:true,attribu
 for(const name of ['resize','orientationchange','pageshow','popstate','hashchange'])addEventListener(name,schedule,{passive:true});
 if(window.visualViewport){visualViewport.addEventListener('resize',schedule,{passive:true});visualViewport.addEventListener('scroll',schedule,{passive:true});}
 const style=document.createElement('style');style.textContent='body.mm-ios-frame279.modal-page-locked{touch-action:auto!important}body.mm-ios-frame279 :is(input:not([type=checkbox]):not([type=radio]),textarea,select){font-size:max(16px,1em)!important;scroll-margin-block:16px!important}body.mm-ios-frame279 #modal.open .modal-box::-webkit-scrollbar{display:none!important}';document.head.appendChild(style);
-window.MualliMateKeyboard285={version:286,refresh:schedule,viewport,hasLayer:()=>!!layer,inspect:()=>({surface:layer?.node.id||layer?.node.className||'',frozen:frozen.size,editing:editable(document.activeElement),height:viewport().height,top:viewport().top})};sync();
+window.MualliMateKeyboard285={version:287,refresh:schedule,viewport,hasLayer:()=>!!layer,inspect:()=>({surface:layer?.node.id||layer?.node.className||'',frozen:frozen.size,editing:editable(document.activeElement),height:viewport().height,top:viewport().top})};sync();
 })();
