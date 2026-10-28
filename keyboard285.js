@@ -39,14 +39,13 @@ function freezeBackground(front,v){
  const ancestors=new Set();for(let n=front.parentElement;n&&n!==body;n=n.parentElement)ancestors.add(n);
  for(const [node,e]of parents)if(!ancestors.has(node)){restore(e.styles);if(node.isConnected){node.scrollTop=e.top;node.scrollLeft=e.left;}parents.delete(node);}
  for(const node of ancestors)if(!parents.has(node)){const styles=new Map();parents.set(node,{top:node.scrollTop,left:node.scrollLeft,styles});write(node,'overflow','hidden',styles);write(node,'touch-action','auto',styles);}
- const wanted=new Set(backgroundNodes(front));
+ const drawer=front.id==='mmMobileDrawer',wanted=new Set(backgroundNodes(front).filter(n=>!drawer||n.id!=='mmDrawerBackdrop')); 
  for(const [node,entry]of frozen)if(!wanted.has(node)||!node.isConnected)clearFrozen(node,entry);
- for(const node of wanted){if(frozen.has(node))continue;const styles=new Map(),scrolls=new Map();
+ for(const node of wanted){const context=drawer||(front.hasAttribute('data-mm-popover')&&node.matches('#modal.open,#classModuleOverlay.open,#teacherFileCard236,#worksheetStudio887,#schedule266'));const old=frozen.get(node);if(old?.context===context)continue;if(old)clearFrozen(node,old);const styles=new Map(),scrolls=new Map();
   for(const s of [node,...node.querySelectorAll('*')])if(s===node||s.matches('main,.modal-box,.class-module-body,.s266body,.mm-teacher-card-body,.ws-stage887,#mmAllClassesScreen')||s.scrollHeight>s.clientHeight+1||s.scrollWidth>s.clientWidth+1)scrolls.set(s,{top:s.scrollTop,left:s.scrollLeft});
-  frozen.set(node,{styles,scrolls});
+  frozen.set(node,{styles,scrolls,context});
   // Keep layout intact. Do not translate, resize or clone the underlying app.
-  // An opaque foreground screen owns editing; the background is simply hidden.
-  const context=front.hasAttribute('data-mm-popover')&&node.matches('#modal.open,#classModuleOverlay.open,#teacherFileCard236,#worksheetStudio887,#schedule266');
+  // Drawers retain the live page beneath their scrim; editing pages stay opaque.
   if(!context)write(node,'opacity','0',styles);write(node,'pointer-events','none',styles);write(node,'overflow','hidden',styles);write(node,'touch-action','none',styles);
  }
  holdBackground(v);
@@ -89,7 +88,7 @@ function sync(){
  frame=0;if(!enabled()){restore(managed);for(const [n,e]of frozen)clearFrozen(n,e);for(const e of parents.values())restore(e.styles);parents.clear();layer=null;return;}
  const v=viewport();
  const next=choose(),changed=next?.node!==layer?.node;
- if(changed){if(!next?.popover)restore(managed);layer=next;pending=editable(document.activeElement);window.MualliMateReturn279?.refresh();}
+ if(changed){if(!next?.popover&&!next?.side)restore(managed);layer=next;pending=editable(document.activeElement);window.MualliMateReturn279?.refresh();}
  if(!layer){if(v.full-v.height<100&&!editable(document.activeElement)){for(const [n,e]of frozen)clearFrozen(n,e);for(const e of parents.values())restore(e.styles);parents.clear();}else holdBackground(v);lastHeight=v.height;return;}
  freezeBackground(layer.node,v);fit(layer,v);
  if(Math.abs(lastHeight-v.height)>2&&!touching)pending=true;lastHeight=v.height;reveal(layer);holdBackground(v);
@@ -119,5 +118,5 @@ new MutationObserver(schedule).observe(body,{childList:true,subtree:true,attribu
 for(const name of ['resize','orientationchange','pageshow','popstate','hashchange'])addEventListener(name,schedule,{passive:true});
 if(window.visualViewport){visualViewport.addEventListener('resize',schedule,{passive:true});visualViewport.addEventListener('scroll',schedule,{passive:true});}
 const style=document.createElement('style');style.textContent='body.mm-ios-frame279.modal-page-locked{touch-action:auto!important}body.mm-ios-frame279 :is(input:not([type=checkbox]):not([type=radio]),textarea,select){font-size:max(16px,1em)!important;scroll-margin-block:16px!important}body.mm-ios-frame279 #modal.open .modal-box::-webkit-scrollbar{display:none!important}';document.head.appendChild(style);
-window.MualliMateKeyboard285={version:288,refresh:schedule,viewport,hasLayer:()=>!!layer,inspect:()=>({surface:layer?.node.id||layer?.node.className||'',frozen:frozen.size,editing:editable(document.activeElement),height:viewport().height,top:viewport().top})};sync();
+window.MualliMateKeyboard285={version:292,refresh:schedule,viewport,hasLayer:()=>!!layer,inspect:()=>({surface:layer?.node.id||layer?.node.className||'',frozen:frozen.size,editing:editable(document.activeElement),height:viewport().height,top:viewport().top})};sync();
 })();

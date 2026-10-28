@@ -26,7 +26,7 @@ let frame=0,observed=null,ro=null;
 function setClassShell(node,on){if(node.classList.contains('mm-shell278')!==on)node.classList.toggle('mm-shell278',on);}
 function setClass(node,on){if(node.classList.contains('mm-classes-scroll273')!==on)node.classList.toggle('mm-classes-scroll273',on);}
 function visibleBottom(){const b=window.MualliMateKeyboard285?.viewport(),v=window.visualViewport;return b?b.top+b.height:v?v.offsetTop+v.height:innerHeight;}
-function sync(){frame=0;const host=document.getElementById('mmAllClassesScreen'),lock=document.getElementById('lockScreen'),blocked=body.classList.contains('modal-page-locked')||!!document.querySelector('#modal.open,#mmMobileDrawer.open,.class-module-overlay.open')||!!(lock&&!lock.classList.contains('hidden'));
+function sync(){frame=0;const host=document.getElementById('mmAllClassesScreen'),lock=document.getElementById('lockScreen'),blocked=body.classList.contains('modal-page-locked')||!!document.querySelector('#modal.open,.class-module-overlay.open')||!!(lock&&!lock.classList.contains('hidden'));
  const shell=mq.matches&&(body.classList.contains('mm-class-open')||body.classList.contains('mm-all-classes-open'))&&!(lock&&!lock.classList.contains('hidden'));
  setClassShell(root,shell);setClassShell(body,shell);
  if(shell&&header){const h=header.getBoundingClientRect().height+'px';if(body.style.getPropertyValue('--mm-header-height276')!==h)body.style.setProperty('--mm-header-height276',h);const main=document.querySelector('main'),v=window.visualViewport;if(main){const available=Math.max(0,Math.floor(visibleBottom()-main.getBoundingClientRect().top))+'px';if(body.style.getPropertyValue('--mm-class-main-height278')!==available)body.style.setProperty('--mm-class-main-height278',available);}}
@@ -48,5 +48,5 @@ if(window.visualViewport){visualViewport.addEventListener('resize',schedule,{pas
 // The legacy return path scrollIntoView() moves the document underneath the header.
 const oldClose=window.closeClassModule;
 window.closeClassModule=function(scrollBack=true){if(mq.matches&&body.classList.contains('mm-class-open')&&activeClassModuleOrigin==='class'){const main=document.querySelector('main'),top=main?.scrollTop||0;const r=oldClose.call(this,false);if(scrollBack)requestAnimationFrame(()=>{if(body.classList.contains('mm-class-open')&&!body.classList.contains('class-module-page-open')){if(main)main.scrollTop=top;window.scrollTo(0,0);schedule();}});return r;}return oldClose.apply(this,arguments);};
-if(document.fonts?.ready)document.fonts.ready.then(schedule);schedule();window.MualliMateClassesScroll273={version:285,refresh:schedule};
+if(document.fonts?.ready)document.fonts.ready.then(schedule);schedule();window.MualliMateClassesScroll273={version:292,refresh:schedule};
 })();
