@@ -79,10 +79,10 @@ function fit(l,v){
 }
 function reveal(l){
  const field=document.activeElement;if(!pending||touching||!editable(field)||!l.owner?.contains(field))return;pending=false;
- const r=l.owner.getBoundingClientRect(),h=l.head?.getBoundingClientRect(),f=field.getBoundingClientRect(),v=viewport(),top=Math.max(r.top,v.top,l.owner.contains(l.head)?h.bottom:r.top)+12,bottom=Math.min(r.bottom,v.top+v.height)-20;
+ const r=l.owner.getBoundingClientRect(),h=l.head?.getBoundingClientRect(),f=field.getBoundingClientRect(),card=field.closest('.mm-test-student-card'),c=card?.getBoundingClientRect(),v=viewport(),top=Math.max(r.top,v.top,l.owner.contains(l.head)?h.bottom:r.top)+12,bottom=Math.min(r.bottom,v.top+v.height)-20;
  if(bottom<=top)return;let delta=0;if(f.height>bottom-top||f.top<top)delta=f.top-top;else if(f.bottom>bottom)delta=f.bottom-bottom;
  // Scroll the nearest form owner only, never scrollIntoView on the document.
- if(delta)l.owner.scrollTop+=delta;
+ if(c&&c.height<=bottom-top)delta=c.top<top?c.top-top:c.bottom>bottom?c.bottom-bottom:0;if(delta)l.owner.scrollTop+=delta;
 }
 function sync(){
  frame=0;if(!enabled()){restore(managed);for(const [n,e]of frozen)clearFrozen(n,e);for(const e of parents.values())restore(e.styles);parents.clear();layer=null;return;}
@@ -94,7 +94,7 @@ function sync(){
  if(Math.abs(lastHeight-v.height)>2&&!touching)pending=true;lastHeight=v.height;reveal(layer);holdBackground(v);
 }
 function schedule(){if(!frame)frame=requestAnimationFrame(sync);}
-function focus(e){if(!enabled()||!editable(e.target))return;timers.splice(0).forEach(clearTimeout);pending=true;sync();if(layer?.owner?.contains(e.target)){const o=layer.owner,r=o.getBoundingClientRect(),h=layer.head?.getBoundingClientRect(),top=Math.max(r.top,o.contains(layer.head)?h.bottom:r.top)+16,anchor=e.target.closest('label')||e.target;o.scrollTop+=anchor.getBoundingClientRect().top-top;}for(const ms of [80,200,420])timers.push(setTimeout(()=>{if(document.activeElement===e.target&&!touching){pending=true;schedule();}},ms));}
+function focus(e){if(!enabled()||!editable(e.target))return;timers.splice(0).forEach(clearTimeout);pending=true;sync();if(layer?.owner?.contains(e.target)){const o=layer.owner,r=o.getBoundingClientRect(),h=layer.head?.getBoundingClientRect(),top=Math.max(r.top,o.contains(layer.head)?h.bottom:r.top)+16,anchor=e.target.closest('.mm-test-student-card')||e.target.closest('label')||e.target;o.scrollTop+=anchor.getBoundingClientRect().top-top;}for(const ms of [80,200,420])timers.push(setTimeout(()=>{if(document.activeElement===e.target&&!touching){pending=true;schedule();}},ms));}
 document.addEventListener('focusin',focus,true);
 document.addEventListener('focusout',()=>{timers.splice(0).forEach(clearTimeout);schedule();},true);
 document.addEventListener('touchstart',e=>{touching=true;pending=false;timers.splice(0).forEach(clearTimeout);if(e.touches.length===1){tx=e.touches[0].clientX;ty=e.touches[0].clientY;}if(enabled())sync();},{capture:true,passive:true});
@@ -118,5 +118,5 @@ new MutationObserver(schedule).observe(body,{childList:true,subtree:true,attribu
 for(const name of ['resize','orientationchange','pageshow','popstate','hashchange'])addEventListener(name,schedule,{passive:true});
 if(window.visualViewport){visualViewport.addEventListener('resize',schedule,{passive:true});visualViewport.addEventListener('scroll',schedule,{passive:true});}
 const style=document.createElement('style');style.textContent='body.mm-ios-frame279.modal-page-locked{touch-action:auto!important}body.mm-ios-frame279 :is(input:not([type=checkbox]):not([type=radio]),textarea,select){font-size:max(16px,1em)!important;scroll-margin-block:16px!important}body.mm-ios-frame279 #modal.open .modal-box::-webkit-scrollbar{display:none!important}';document.head.appendChild(style);
-window.MualliMateKeyboard285={version:292,refresh:schedule,viewport,hasLayer:()=>!!layer,inspect:()=>({surface:layer?.node.id||layer?.node.className||'',frozen:frozen.size,editing:editable(document.activeElement),height:viewport().height,top:viewport().top})};sync();
+window.MualliMateKeyboard285={version:299,refresh:schedule,viewport,hasLayer:()=>!!layer,inspect:()=>({surface:layer?.node.id||layer?.node.className||'',frozen:frozen.size,editing:editable(document.activeElement),height:viewport().height,top:viewport().top})};sync();
 })();

@@ -2571,7 +2571,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.298</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openBellNotifications296()" title="Bildirimler" aria-label="Bildirimler"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.299</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openBellNotifications296()" title="Bildirimler" aria-label="Bildirimler"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4841,7 +4841,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.298";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.299";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -4853,7 +4853,7 @@ function safetyRememberRaw(raw,reason="değişiklik öncesi"){
 }
 function safetyPreUpdateSnapshot(){try{const prev=localStorage.getItem(SAFETY_VERSION_KEY)||"";if(prev!==APP_DATA_VERSION){const raw=localStorage.getItem(STORAGE_KEY);if(raw)safetyRememberRaw(raw,`güncelleme öncesi ${prev||"eski sürüm"} → ${APP_DATA_VERSION}`);const pack={createdAt:new Date().toISOString(),fromVersion:prev||"bilinmiyor",toVersion:APP_DATA_VERSION,stateRaw:raw||"",settingsRaw:localStorage.getItem(SETTINGS_KEY)||"",archivesRaw:localStorage.getItem(SCHOOL_ARCHIVE_KEY)||""};try{localStorage.setItem("odevTakipPreUpdateBackupV1",JSON.stringify(pack))}catch(e){}localStorage.setItem(SAFETY_VERSION_KEY,APP_DATA_VERSION)}}catch(e){console.warn("Güncelleme güvenlik yedeği alınamadı",e)}}
 function safetySuspiciousOverwrite(oldRaw,newObj){const old=safetyParseState(oldRaw);if(!old||window.__otsAllowEmptyStateSave)return false;const a=safetyStateStats(old),b=safetyStateStats(newObj);return a.classes>0&&b.classes===0}
-function save(){state.currentClassId=currentClassId;state.currentPeriod=currentPeriod;persistHomeworkImages().catch(e=>console.warn("Ödev görseli kaydedilemedi",e));try{const oldRaw=localStorage.getItem(STORAGE_KEY)||"";const nextObj=stateForLocalStorage();if(safetySuspiciousOverwrite(oldRaw,nextObj)){alert("Veri Güvenlik Katmanı, dolu çalışma alanının boş veriyle üzerine yazılmasını engelledi. Mevcut veriler korunuyor.");return false}safetyRememberRaw(oldRaw,"değişiklik öncesi otomatik");localStorage.setItem(STORAGE_KEY,JSON.stringify(nextObj))}catch(e){console.error(e);alert("Cihaz depolama alanı dolu. Tam yedek aldıktan sonra eski büyük görselleri kaldırmanız gerekebilir.");return false}modalDataRevision++;scheduleLiveRefresh841();return true}
+function save(){state.currentClassId=currentClassId;state.currentPeriod=currentPeriod;persistHomeworkImages().catch(e=>console.warn("Ödev görseli kaydedilemedi",e));try{const oldRaw=localStorage.getItem(STORAGE_KEY)||"";const nextObj=stateForLocalStorage();if(safetySuspiciousOverwrite(oldRaw,nextObj)){alert("Veri Güvenlik Katmanı, dolu çalışma alanının boş veriyle üzerine yazılmasını engelledi. Mevcut veriler korunuyor.");return false}localStorage.setItem(STORAGE_KEY,JSON.stringify(nextObj));safetyRememberRaw(oldRaw,"değişiklik öncesi otomatik")}catch(e){console.error(e);alert(e?.name==="QuotaExceededError"?"Uygulamanın yerel kayıt kotası doldu. Bu, telefon hafızasının tamamen dolduğu anlamına gelmez. Son değişiklik kalıcı kaydedilemedi. Önce tam yedek alın; uygulama verilerini veya Safari verilerini silmeyin.":"Değişiklik kaydedilemedi ("+(e?.name||"kayıt hatası")+"). Girdiğiniz bilgileri kontrol edip yeniden deneyin.");return false}modalDataRevision++;scheduleLiveRefresh841();return true}
 function saveSettings(){try{localStorage.setItem(SETTINGS_KEY,JSON.stringify(settings))}catch(e){console.error(e);alert("Ayarlar kaydedilemedi. Cihaz depolama alanını kontrol edin.");return false}modalDataRevision++;scheduleLiveRefresh841();return true}
 safetyPreUpdateSnapshot();
 function normalize(s){
@@ -12186,9 +12186,9 @@ html.app-locked,body.app-locked{
   }
   function saveRow(row){
     const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(row?.dataset.hid)),sid=row?.dataset.sid;if(!c||!h||!isTest(h)||!sid)return;const v=valuesFromRow(row),state=row.querySelector('.mm-test-save-state');h.testResults=(h.testResults&&typeof h.testResults==='object')?h.testResults:{};
-    if(!v.has){delete h.testResults[sid];save();if(state){state.textContent='Sonuç girilmedi';state.className='mm-test-save-state'}updateSummary(h.id);try{renderHomeworks()}catch(e){}return}
+    if(!v.has){const previous=h.testResults[sid];delete h.testResults[sid];if(save()===false){if(previous!==undefined)h.testResults[sid]=previous;if(state){state.textContent='Kaydedilemedi · Yeniden deneyin';state.className='mm-test-save-state error'}return}if(state){state.textContent='Sonuç girilmedi';state.className='mm-test-save-state'}updateSummary(h.id);try{renderHomeworks()}catch(e){}return}
     if(!v.valid)return;
-    h.testResults[sid]={correct:v.c,wrong:v.w,blank:v.b};save();if(state){state.textContent='✓ Otomatik kaydedildi';state.className='mm-test-save-state saved'}updateSummary(h.id);try{renderHomeworks()}catch(e){}
+    const previous=h.testResults[sid];h.testResults[sid]={correct:v.c,wrong:v.w,blank:v.b};if(save()===false){if(previous===undefined)delete h.testResults[sid];else h.testResults[sid]=previous;if(state){state.textContent='Kaydedilemedi · Yeniden deneyin';state.className='mm-test-save-state error'}return}if(state){state.textContent='✓ Otomatik kaydedildi';state.className='mm-test-save-state saved'}updateSummary(h.id);try{renderHomeworks()}catch(e){}
   }
   window.mmTestResultLive7859=function(input,immediate=false){const row=input?.closest('.mm-test-entry-v2');if(!row)return;const v=updateRowVisual(row),key=rowKey(row);clearTimeout(timers.get(key));if(!v.has||v.valid){if(immediate)saveRow(row);else timers.set(key,setTimeout(()=>saveRow(row),280))}};
   window.mmTestKeyNav7859=function(ev,input){if(ev.key!=='Enter')return;ev.preventDefault();mmTestResultLive7859(input,true);const all=[...document.querySelectorAll('.mm-test-entry-v2 input[data-test-score]')],i=all.indexOf(input);if(i>=0&&all[i+1]){all[i+1].focus();all[i+1].select?.()}}
@@ -16144,7 +16144,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.298';
+ const VERSION='v7.8.299';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -16513,7 +16513,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78128-layout-duty-ios-lock-script">
 (function(){
-  const VERSION='v7.8.298';
+  const VERSION='v7.8.299';
   const root=document.documentElement, body=document.body;
   let active=false, baseVvH=0, baseBgTop=0, bgShift=0, touchY=0, raf=0;
 
@@ -16871,7 +16871,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78129-landscape-responsive-final-script">
 (function(){
-  const VERSION='v7.8.298';
+  const VERSION='v7.8.299';
   const mq=window.matchMedia('(orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
 
   function validTestResult(h,sid){
@@ -17226,7 +17226,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script id="v78130-landscape-class-center-duty-script">
 (function(){
-  const VERSION='v7.8.298';
+  const VERSION='v7.8.299';
   function syncVersion(){
     document.querySelectorAll('.premium-brand .tiny').forEach(function(x){
       if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION;
@@ -17720,7 +17720,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78147-landscape-review-polish-script">
 (function(){
   'use strict';
-  const VERSION='v7.8.298';
+  const VERSION='v7.8.299';
 
   function testSummary147(c,h){
     const total=(c?.students||[]).length,q=Math.max(0,Math.floor(Number(h?.questionCount||0)));
@@ -17850,7 +17850,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script id="v78150-test-net-report-script">
 (function(){
 'use strict';
-const VERSION150='v7.8.298';
+const VERSION150='v7.8.299';
 function clamp150(v,a,b){return Math.max(a,Math.min(b,v))}
 function q150(h){const n=Math.floor(Number(h?.questionCount||0));return Number.isFinite(n)&&n>0?n:0}
 function valid150(h,r){const q=q150(h);if(!q||!r||typeof r!=='object')return false;const d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);return[d,w,b].every(Number.isFinite)&&d>=0&&w>=0&&b>=0&&d+w+b===q}
@@ -19277,7 +19277,7 @@ body.mm229-fresh-home #mobileHomeDashboard>.mm-home-card{height:auto!important;m
 <script id="mm-home242" src="home242.js"></script>
 
 <script id="mm-backup245" src="backup245.js"></script>
-<script id="mm-lesson-subject247" src="lesson-subject247.js?v=7.8.298"></script>
+<script id="mm-lesson-subject247" src="lesson-subject247.js?v=7.8.299"></script>
 <script id="mm-tasks263" src="tasks263.js"></script>
 
 <script id="mm-worksheet256" src="worksheet256.js"></script>
@@ -19295,23 +19295,23 @@ body.mm229-fresh-home #mobileHomeDashboard>.mm-home-card{height:auto!important;m
 
 <script id="mm-schedule-classes272" src="schedule-classes272.js?v=7.8.272"></script>
 
-<script id="mm-classes-scroll273" src="classes-scroll273.js?v=7.8.298"></script>
+<script id="mm-classes-scroll273" src="classes-scroll273.js?v=7.8.299"></script>
 
-<script id="mm-classes-order274" src="classes-order274.js?v=7.8.298"></script>
+<script id="mm-classes-order274" src="classes-order274.js?v=7.8.299"></script>
 
-<script id="mm-annual277" src="annual277.js?v=7.8.298"></script>
+<script id="mm-annual277" src="annual277.js?v=7.8.299"></script>
 
-<script id="mm-ios-return279" src="ios-return279.js?v=7.8.298"></script>
-<script id="mm-keyboard285" src="keyboard285.js?v=7.8.298"></script>
+<script id="mm-ios-return279" src="ios-return279.js?v=7.8.299"></script>
+<script id="mm-keyboard285" src="keyboard285.js?v=7.8.299"></script>
 
-<script id="mm-reports288" src="reports288.js?v=7.8.298"></script>
+<script id="mm-reports288" src="reports288.js?v=7.8.299"></script>
 
-<script id="mm-safe-area289" src="safe-area289.js?v=7.8.298"></script>
+<script id="mm-safe-area289" src="safe-area289.js?v=7.8.299"></script>
 
-<link id="mm-button-colors290" rel="stylesheet" href="button-colors290.css?v=7.8.298">
+<link id="mm-button-colors290" rel="stylesheet" href="button-colors290.css?v=7.8.299">
 
-<link id="mm-homework-buttons291" rel="stylesheet" href="homework-buttons291.css?v=7.8.298">
+<link id="mm-homework-buttons291" rel="stylesheet" href="homework-buttons291.css?v=7.8.299">
 
-<script id="mm-notifications296" src="notifications296.js?v=7.8.298"></script>
+<script id="mm-notifications296" src="notifications296.js?v=7.8.299"></script>
 
-<script src="duty-import297.js?v=7.8.298"></script>
+<script src="duty-import297.js?v=7.8.299"></script>
