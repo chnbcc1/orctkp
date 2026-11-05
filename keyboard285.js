@@ -15,6 +15,7 @@ function restore(map){for(const [node,saved]of map)for(const [key,[value,priorit
 function stack(e){const a=[];for(let n=e;n&&n!==body;n=n.parentElement){const c=getComputedStyle(n);if(c.zIndex!=='auto')a.unshift(Number(c.zIndex)||0);}return a;}
 function compare(a,b){if(a.contains(b))return -1;if(b.contains(a))return 1;const x=stack(a),y=stack(b);for(let i=0;i<Math.max(x.length,y.length);i++)if((x[i]||0)!==(y[i]||0))return(x[i]||0)-(y[i]||0);return a.compareDocumentPosition(b)&Node.DOCUMENT_POSITION_FOLLOWING?-1:1;}
 function describe(node){
+ if(node.id==='oy303')return {node,container:node,owner:node.querySelector('#oy303body'),head:node.querySelector('.oy-head'),oyss:true};
  if(node.id==='mmMobileDrawer')return {node,container:node,owner:node,side:true};
  if(node.id==='modal')return {node,container:node.querySelector('.modal-box'),owner:node.querySelector('.modal-box'),head:node.querySelector('.modal-head'),card:true};
  if(node.id==='classModuleOverlay')return {node,container:node.querySelector('.class-module-shell'),owner:node.querySelector('.class-module-body'),head:node.querySelector('.class-module-head')};
@@ -61,7 +62,7 @@ function fit(l,v){
  if(l.page){const top=Math.max(v.top,l.head?.getBoundingClientRect().bottom||v.top),available=Math.max(80,v.top+v.height-top);write(node,'position','fixed');write(node,'top',top+'px');write(node,'left','0px');write(node,'right','0px');write(node,'width','100%');write(owner,'height',available+'px');write(owner,'max-height',available+'px');}
  else{
   write(node,'position','fixed');write(node,'inset',l.side?'auto auto auto 0':'auto 0 auto 0');write(node,'top',v.top+'px');write(node,'height',v.height+'px');write(node,'max-height',v.height+'px');if(!l.side)write(node,'width','100%');write(node,'box-sizing','border-box');write(node,'overflow','hidden');write(node,'touch-action','auto');
-  write(node,'padding-top','max(12px, calc(var(--safe-top, env(safe-area-inset-top, 0px)) - '+v.top+'px + 12px))');write(node,'padding-bottom','12px');
+  write(node,'padding-top',l.oyss?'max(0px, calc(env(safe-area-inset-top, 0px) - '+v.top+'px))':'max(12px, calc(var(--safe-top, env(safe-area-inset-top, 0px)) - '+v.top+'px + 12px))');write(node,'padding-bottom',l.oyss?'0px':'12px');
   if(!l.side&&!l.popover){const color=getComputedStyle(node).backgroundColor,parts=color.match(/[\d.]+/g);if(!parts||parts.length===4&&Number(parts[3])<1)write(node,'background','#efe4ce');}
   if(l.card){if(node.id!=='modal')write(node,'display','flex');write(node,'align-items','center');write(node,'justify-content','center');}
   if(container!==node){write(container,'max-height','100%');write(container,'box-sizing','border-box');if(!l.card)write(container,'height','100%');}
@@ -72,9 +73,9 @@ function fit(l,v){
    write(owner,'display','block');write(owner,'height','100%');write(owner,'width','100%');write(owner,'margin','0px');write(owner,'border-radius','0px');write(owner,'border','0px');const content=$('modalBody');write(content,'overflow','visible');write(content,'height','auto');write(content,'max-height','none');write(content,'padding-bottom','32px');
    if(l.head){write(l.head,'position','sticky');write(l.head,'top','0px');write(l.head,'z-index','8');}
   }
-  if(owner!==container){const available=Math.max(40,node.getBoundingClientRect().bottom-12-owner.getBoundingClientRect().top);write(owner,'max-height',available+'px');}
+  if(owner!==container&&!l.oyss){const available=Math.max(40,node.getBoundingClientRect().bottom-12-owner.getBoundingClientRect().top);write(owner,'max-height',available+'px');}
  }
- write(owner,'min-height','0px');write(owner,'overflow-y','auto');write(owner,'overscroll-behavior','contain');write(owner,'touch-action','pan-y pinch-zoom');write(owner,'scroll-behavior','auto');write(owner,'overflow-anchor','none');write(owner,'scroll-padding-bottom','24px');write(owner,'scrollbar-width','none');
+ write(owner,'min-height','0px');write(owner,'overflow-y','auto');write(owner,'overscroll-behavior','contain');write(owner,'touch-action',l.oyss?'auto':'pan-y pinch-zoom');if(l.oyss)write(owner,'overflow-x','hidden');write(owner,'scroll-behavior','auto');write(owner,'overflow-anchor','none');write(owner,'scroll-padding-bottom','24px');write(owner,'scrollbar-width','none');
  if(l.head&&owner.contains(l.head))write(owner,'scroll-padding-top',(l.head.getBoundingClientRect().height+12)+'px');
 }
 function reveal(l){

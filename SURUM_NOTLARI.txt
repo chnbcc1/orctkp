@@ -1,3 +1,5 @@
+v7.8.306: OYSS senaryoyu uyguladıktan sonra yatay kayma düzeltmesi. Otomatik kaydırma yalnız içerik içinde dikey yapılır; iPhone klavye yöneticisi doğru kaydırma alanını kullanır.
+
 v7.8.305: Excel senaryoları sayfa/sınıf, dönem/yazılı ve senaryo sütunuyla ayrı seçilir. Fotoğraf çek, arşiv ve Excel/PDF dosya seçenekleri. Sayısal kazanım kodları korunur.
 
 v7.8.304: OYSS mobil başlık, kapatma, tarih alanı, alt çubuk ve soru kartları düzeltildi. Genel uygulama stillerinden yalıtıldı.
