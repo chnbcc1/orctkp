@@ -1,3 +1,5 @@
+v7.8.307: Sınav kaydında MAT / Matematik ders eşleştirmesi düzeltildi. Sınıf dersi boşsa kayıt sırasında açık seçimle atanır. Farklı dersler engellenir; kayıt hatasında ders/not değişiklikleri geri alınır.
+
 v7.8.306: OYSS senaryoyu uyguladıktan sonra yatay kayma düzeltmesi. Otomatik kaydırma yalnız içerik içinde dikey yapılır; iPhone klavye yöneticisi doğru kaydırma alanını kullanır.
 
 v7.8.305: Excel senaryoları sayfa/sınıf, dönem/yazılı ve senaryo sütunuyla ayrı seçilir. Fotoğraf çek, arşiv ve Excel/PDF dosya seçenekleri. Sayısal kazanım kodları korunur.
