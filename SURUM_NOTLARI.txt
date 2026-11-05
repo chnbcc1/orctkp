@@ -1,3 +1,5 @@
+v7.8.304: OYSS mobil başlık, kapatma, tarih alanı, alt çubuk ve soru kartları düzeltildi. Genel uygulama stillerinden yalıtıldı.
+
 MualliMate+ v7.8.303
 - Soru bazlı sınav puanlama, senaryo ve öğrenme çıktısı analizi eklendi.
 - PDF/JPEG raporları ve mevcut notlara kontrollü aktarım eklendi.
