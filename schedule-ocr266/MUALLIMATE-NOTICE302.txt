@@ -1,0 +1,2 @@
+Tesseract.js tesseract.min.js: optional onWorkerCreated302 lifecycle callback added by MualliMate (2026-11-02) to terminate workers on cancellation, timeout and modal close. Original notices and licenses retained. offline302.js packages the existing unmodified core, worker and compressed language data.
+worker.min.js: use language object code, rather than byte data, in the API language name list. offline302.js embeds this corrected worker.

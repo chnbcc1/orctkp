@@ -1,3 +1,8 @@
+MualliMate+ v7.8.303
+- Soru bazlı sınav puanlama, senaryo ve öğrenme çıktısı analizi eklendi.
+- PDF/JPEG raporları ve mevcut notlara kontrollü aktarım eklendi.
+- Nöbet fotoğrafı okumasında çevrimdışı motor ve iptal/zaman aşımı desteği eklendi.
+
 Öğrenci Takip Sistemi v7.7.04
 - ŞÖK PDF otomatik sayfa geçişinde ilk satırların küçülmesi düzeltildi.
 - Paragraf yeni sayfaya geçtiğinde 12 punto gövde yazı standardı korunuyor.
