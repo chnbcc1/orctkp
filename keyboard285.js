@@ -42,7 +42,7 @@ function freezeBackground(front,v){
  for(const node of ancestors)if(!parents.has(node)){const styles=new Map();parents.set(node,{top:node.scrollTop,left:node.scrollLeft,styles});write(node,'overflow','hidden',styles);write(node,'touch-action','auto',styles);}
  const drawer=front.id==='mmMobileDrawer',wanted=new Set(backgroundNodes(front).filter(n=>!drawer||n.id!=='mmDrawerBackdrop')); 
  for(const [node,entry]of frozen)if(!wanted.has(node)||!node.isConnected)clearFrozen(node,entry);
- for(const node of wanted){const context=drawer||(front.hasAttribute('data-mm-popover')&&node.matches('#modal.open,#classModuleOverlay.open,#teacherFileCard236,#worksheetStudio887,#schedule266'));const old=frozen.get(node);if(old?.context===context)continue;if(old)clearFrozen(node,old);const styles=new Map(),scrolls=new Map();
+ for(const node of wanted){const context=drawer||(front.hasAttribute('data-mm-popover')&&node.matches('#oy303,#modal.open,#classModuleOverlay.open,#teacherFileCard236,#worksheetStudio887,#schedule266'));const old=frozen.get(node);if(old?.context===context)continue;if(old)clearFrozen(node,old);const styles=new Map(),scrolls=new Map();
   for(const s of [node,...node.querySelectorAll('*')])if(s===node||s.matches('main,.modal-box,.class-module-body,.s266body,.mm-teacher-card-body,.ws-stage887,#mmAllClassesScreen')||s.scrollHeight>s.clientHeight+1||s.scrollWidth>s.clientWidth+1)scrolls.set(s,{top:s.scrollTop,left:s.scrollLeft});
   frozen.set(node,{styles,scrolls,context});
   // Keep layout intact. Do not translate, resize or clone the underlying app.
