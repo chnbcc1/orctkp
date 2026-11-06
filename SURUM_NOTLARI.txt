@@ -1,3 +1,5 @@
+v7.8.309: Modül adı OYSS; yan menüde Ders ve Takip bölümüne kısayol. Notlar bölümünden açılışta yalnız seçili sınıfın sınavları; tek sınav varsa doğrudan puan girişi. Sınav şablonunu birden çok sınıfa kopyalama; hedef öğrenci listeleri, boş sonuçlar, yeni kimlikler ve mevcut notları koruma.
+
 v7.8.308: Telefon için yeni puan giriş ekranı. Varsayılan öğrenci kartı, büyük soru kutuları, önceki/sonraki öğrenci; soru bazında sınıf girişi ve isteğe bağlı tablo görünümü. Enter ile sıradaki puana geçiş.
 
 v7.8.307: Sınav kaydında MAT / Matematik ders eşleştirmesi düzeltildi. Sınıf dersi boşsa kayıt sırasında açık seçimle atanır. Farklı dersler engellenir; kayıt hatasında ders/not değişiklikleri geri alınır.
