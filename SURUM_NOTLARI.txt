@@ -1,3 +1,5 @@
+v7.8.313: Puan ve boş puan çizelgesinde tüm sorular aynı tabloda; sütun genişliği ve sayısal yazı boyutu soru sayısına göre otomatik ayarlanır. Analizde öğrenme çıktısının sınıf ortalamasına göre üzerinde/altında/eşit karşılaştırması.
+
 v7.8.312: OYSS çıktılarında uygulama adı kaldırıldı; sade kapak, tüm raporlarda dikey A4 ve okunur soru grupları. Tarihler gün/ay/yıl gösterilir; kayıt biçimi korunur. Rapor kapatıldığında OYSS ekranına dönüş. Çok sayfalı görseller ZIP yerine ayrı JPEG sayfaları olarak hazırlanır.
 
 v7.8.311: Notlar ekranında tam genişlikte OYSS düğmesi. Yan menüden OYSS açılışında sınıf seçimi bulunan sınav listesi; Notlar düğmesinden seçili sınıfa doğrudan geçiş korunur.
