@@ -2571,7 +2571,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.313</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openBellNotifications296()" title="Bildirimler" aria-label="Bildirimler"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.314</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openBellNotifications296()" title="Bildirimler" aria-label="Bildirimler"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4841,7 +4841,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.313";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.314";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -12235,7 +12235,7 @@ html.app-locked,body.app-locked{
 <script type="application/x-mm300" id="v7860-guidance-file-center">
 (function(){
 const G_ITEMS=[
-[1,'Kapak','Uygulama bilgileriyle otomatik oluşturulur.'],[2,'Atatürk Portresi','Dosyada bulunması gereken sabit belge.'],[3,'İstiklal Marşı','Dosyada bulunması gereken sabit belge.'],[4,'Sınıf Rehber Öğretmenlerinin Görevleri','Görevler bölümü.'],[5,'Yıllık Sınıf Rehberlik Planı','Eğitim yılına göre güncellenir.'],[6,'Sınıf Listesi','Sınıftaki güncel öğrencilerden otomatik oluşturulur.'],[7,'Sınıf Sözleşmesi','Sınıf kuralları ve ortak sözleşme.'],[8,'Sınıf Oturma Planı','Mevcut oturma planı modülüne bağlıdır.'],[9,'Sınıf Başkan/Başkan Yardımcısı Seçim Tutanağı','Seçim sonucu formu.'],[10,'Kulüp Öğrenci Dağılım Listesi','Kulüp dağılım listesi.'],[11,'Sınıf Risk Haritası','Kasım ayında hazırlanacak.'],[12,'Öğrenci Bilgi Formları','Tüm öğrenciler için her yıl yenilenecek.'],[13,'Devamsızlık Takip Listesi','e-Okuldan alınabilir.'],[14,'Öğrenci Gözlem Kaydı','Sadece gerekli görülen öğrenciler için.'],[15,'Rehberlik Servisine Öğrenci Yönlendirme Formu','Öğretmen tarafından doldurulabilir.'],[16,'Psikolojik Destek Yönlendirme Formu','Gerekli durumlarda doldurulur.'],[17,'Ev Ziyaret Formu','Ev ziyareti sonrasında düzenlenir.'],[18,'Veli Toplantı Tutanakları','Toplantı kayıtları.'],[19,'Sınıf Rehberlik Etkinlikleri Uygulama Çıktıları','Yapılan etkinliklerin çıktıları.'],[20,'PDR Servisi Tarafından Uygulanan Test/Envanter Raporları','PDR servisinden gelen raporlar.'],[21,'I. Dönem Sonu Sınıf Rehberlik Faaliyet Raporu','1. dönem sonunda hazırlanır.'],[22,'Yıl Sonu Sınıf Rehberlik Faaliyet Raporu','Eğitim yılı sonunda hazırlanır.'],[23,'Geçmiş Yıldan Devreden Dokümanlar','Önceki yıldan aktarılan belgeler.']
+[1,'Kapak','Uygulama bilgileriyle otomatik oluşturulur.'],[2,'Atatürk Portresi','Dosyada bulunması gereken sabit belge.'],[3,'İstiklal Marşı','Dosyada bulunması gereken sabit belge.'],[4,'Sınıf Rehber Öğretmenlerinin Görevleri','Görevler bölümü.'],[5,'Yıllık Sınıf Rehberlik Planı','Eğitim yılına göre güncellenir.'],[6,'Sınıf Listesi','Sınıftaki güncel öğrencilerden otomatik oluşturulur.'],[7,'Sınıf Sözleşmesi','Sınıf kuralları ve ortak sözleşme.'],[8,'Sınıf Oturma Planı','Mevcut oturma planı modülüne bağlıdır.'],[9,'Sınıf Başkan/Başkan Yardımcısı Seçim Tutanağı','Seçim sonucu formu.'],[10,'Kulüp Öğrenci Dağılım Listesi','Kulüp dağılım listesi.'],[11,'Sınıf Risk Haritası','Öğrenci bazında işaretleme ve şablona uygun çıktı.'],[12,'Öğrenci Bilgi Formları','Tüm öğrenciler için her yıl yenilenecek.'],[13,'Devamsızlık Takip Listesi','e-Okuldan alınabilir.'],[14,'Öğrenci Gözlem Kaydı','Sadece gerekli görülen öğrenciler için.'],[15,'Rehberlik Servisine Öğrenci Yönlendirme Formu','Öğretmen tarafından doldurulabilir.'],[16,'Psikolojik Destek Yönlendirme Formu','Gerekli durumlarda doldurulur.'],[17,'Ev Ziyaret Formu','Ev ziyareti sonrasında düzenlenir.'],[18,'Veli Toplantı Tutanakları','Toplantı kayıtları.'],[19,'Sınıf Rehberlik Etkinlikleri Uygulama Çıktıları','Yapılan etkinliklerin çıktıları.'],[20,'PDR Servisi Tarafından Uygulanan Test/Envanter Raporları','PDR servisinden gelen raporlar.'],[21,'I. Dönem Sonu Sınıf Rehberlik Faaliyet Raporu','1. dönem sonunda hazırlanır.'],[22,'Yıl Sonu Sınıf Rehberlik Faaliyet Raporu','Eğitim yılı sonunda hazırlanır.'],[23,'Geçmiş Yıldan Devreden Dokümanlar','Önceki yıldan aktarılan belgeler.']
 ];
 window.guidanceDossierData238=function(){const c=cls();if(!c)return null;return{items:G_ITEMS.map(([id,title])=>({id,title})),profile:gProfile(),classId:c.id,className:c.name,anthem:window.G_STATIC7874.anthem}};
 const G_SCHEMAS={
@@ -12248,10 +12248,10 @@ const G_SCHEMAS={
 };
 function gEnsure(c){if(!c)return null;c.guidanceFile=c.guidanceFile&&typeof c.guidanceFile==='object'?c.guidanceFile:{};c.guidanceFile.manual=c.guidanceFile.manual||{};c.guidanceFile.studentInfo=c.guidanceFile.studentInfo||{};c.guidanceFile.records=c.guidanceFile.records||{};['election','observation','referral','psych','homeVisit'].forEach(k=>c.guidanceFile.records[k]=Array.isArray(c.guidanceFile.records[k])?c.guidanceFile.records[k]:[]);return c.guidanceFile}
 function gProfile(){return{teacher:String(settings?.profile?.name||'').trim()||'Öğretmen',school:String(settings?.profile?.school||settings?.schoolName||'').trim()||'Okul',year:String(settings?.currentSchoolYear||'').trim()||'2026-2027'}}
-function gStatus(c,id){const g=gEnsure(c),m=g.manual[id];if(id===2||id===3||id===4)return'Hazır';if(id===6)return(c.students||[]).length?'Hazır':'Eksik';if(id===8)return c.seatingPlan?'Hazır':'Eksik';if(id===9)return g.records.election.length?'Hazır':(m||'Eksik');if(id===12){const n=Object.keys(g.studentInfo).length,total=(c.students||[]).length;return total&&n>=total?'Hazır':n?`Güncellenecek ${n}/${total}`:(m||'Eksik')}if(id===14)return g.records.observation.length?'Hazır':(m||'Eksik');if(id===15)return g.records.referral.length?'Hazır':(m||'Eksik');if(id===16)return g.records.psych.length?'Hazır':(m||'Eksik');if(id===17)return g.records.homeVisit.length?'Hazır':(m||'Eksik');if(id===18){const n=(c.parentMeetings||[]).length;return n?'Hazır':(m||'Eksik')}if(id===11){const mo=(new Date()).getMonth()+1;if(m)return m;return mo<11?'Kasımda':'Güncellenecek'}return m||'Eksik'}
+function gStatus(c,id){const g=gEnsure(c),m=g.manual[id];if(id===2||id===3||id===4)return'Hazır';if(id===6)return(c.students||[]).length?'Hazır':'Eksik';if(id===8)return c.seatingPlan?'Hazır':'Eksik';if(id===9)return g.records.election.length?'Hazır':(m||'Eksik');if(id===12){const n=Object.keys(g.studentInfo).length,total=(c.students||[]).length;return total&&n>=total?'Hazır':n?`Güncellenecek ${n}/${total}`:(m||'Eksik')}if(id===14)return g.records.observation.length?'Hazır':(m||'Eksik');if(id===15)return g.records.referral.length?'Hazır':(m||'Eksik');if(id===16)return g.records.psych.length?'Hazır':(m||'Eksik');if(id===17)return g.records.homeVisit.length?'Hazır':(m||'Eksik');if(id===18){const n=(c.parentMeetings||[]).length;return n?'Hazır':(m||'Eksik')}if(id===11){if(c.guidanceFile?.risk314)return c.guidanceFile.risk314.years?.[gProfile().year]?'Hazır':'Eksik';const mo=(new Date()).getMonth()+1;if(m)return m;return mo<11?'Kasımda':'Güncellenecek'}return m||'Eksik'}
 function gStatusClass(s){if(String(s).startsWith('Hazır'))return'ready';if(String(s).startsWith('Güncellenecek'))return'update';if(s==='Kasımda')return'scheduled';return'missing'}
 function gCountReady(c){return G_ITEMS.filter(x=>gStatus(c,x[0])==='Hazır').length}
-function gAction(id){if(id===1)return`<button onclick="guidanceOpenCover()">Oluştur</button>`;if(id===2)return`<button onclick="guidanceOpenAtaturk7881()">Aç / Dışa Aktar</button>`;if(id===3)return`<button onclick="guidanceOpenIstiklal7881()">Aç / Dışa Aktar</button>`;if(id===4)return`<button onclick="guidanceOpenDuties7881()">Aç / Dışa Aktar</button>`;if(id===6)return`<button onclick="guidanceOpenClassList()">Aç</button>`;if(id===8)return`<button onclick="guidanceOpenSeating7861()">Aç</button>`;if(id===9)return`<button onclick="guidanceOpenElectionList7864()">Kayıtlar</button><button onclick="guidanceOpenForm('election')">＋ Yeni</button><button class="ghost" onclick="guidanceBlankMenu7861('election')">Boş Form</button>`;if(id===12)return`<button onclick="guidanceStudentInfoList()">Öğrenciler</button><button class="ghost" onclick="guidanceBlankMenu7861('studentInfo')">Boş Form</button>`;if(id===14)return`<button onclick="guidanceOpenRecordList('observation')">Kayıtlar</button><button class="ghost" onclick="guidanceBlankMenu7861('observation')">Boş Form</button>`;if(id===15)return`<button onclick="guidanceOpenRecordList('referral')">Kayıtlar</button><button class="ghost" onclick="guidanceBlankMenu7861('referral')">Boş Form</button>`;if(id===16)return`<button onclick="guidanceOpenRecordList('psych')">Kayıtlar</button><button class="ghost" onclick="guidanceBlankMenu7861('psych')">Boş Form</button>`;if(id===17)return`<button onclick="guidanceOpenRecordList('homeVisit')">Kayıtlar</button><button class="ghost" onclick="guidanceBlankMenu7861('homeVisit')">Boş Form</button>`;return''}
+function gAction(id){if(id===11)return`<button onclick="openClassRisk314()">Doldur / Çıktı</button>`;if(id===1)return`<button onclick="guidanceOpenCover()">Oluştur</button>`;if(id===2)return`<button onclick="guidanceOpenAtaturk7881()">Aç / Dışa Aktar</button>`;if(id===3)return`<button onclick="guidanceOpenIstiklal7881()">Aç / Dışa Aktar</button>`;if(id===4)return`<button onclick="guidanceOpenDuties7881()">Aç / Dışa Aktar</button>`;if(id===6)return`<button onclick="guidanceOpenClassList()">Aç</button>`;if(id===8)return`<button onclick="guidanceOpenSeating7861()">Aç</button>`;if(id===9)return`<button onclick="guidanceOpenElectionList7864()">Kayıtlar</button><button onclick="guidanceOpenForm('election')">＋ Yeni</button><button class="ghost" onclick="guidanceBlankMenu7861('election')">Boş Form</button>`;if(id===12)return`<button onclick="guidanceStudentInfoList()">Öğrenciler</button><button class="ghost" onclick="guidanceBlankMenu7861('studentInfo')">Boş Form</button>`;if(id===14)return`<button onclick="guidanceOpenRecordList('observation')">Kayıtlar</button><button class="ghost" onclick="guidanceBlankMenu7861('observation')">Boş Form</button>`;if(id===15)return`<button onclick="guidanceOpenRecordList('referral')">Kayıtlar</button><button class="ghost" onclick="guidanceBlankMenu7861('referral')">Boş Form</button>`;if(id===16)return`<button onclick="guidanceOpenRecordList('psych')">Kayıtlar</button><button class="ghost" onclick="guidanceBlankMenu7861('psych')">Boş Form</button>`;if(id===17)return`<button onclick="guidanceOpenRecordList('homeVisit')">Kayıtlar</button><button class="ghost" onclick="guidanceBlankMenu7861('homeVisit')">Boş Form</button>`;return''}
 window.openGuidanceFileCenter=function(){const c=cls();if(!c)return alert('Önce bir sınıf seçin.');const ready=gCountReady(c),total=G_ITEMS.length,missing=G_ITEMS.filter(x=>gStatus(c,x[0])==='Eksik').length;el('modalTitle').textContent='🗂️ Rehberlik Dosyası';el('modalSubtitle').textContent=`${c.name} · ${gProfile().year}`;const opts=(state.classes||[]).map(x=>`<option value="${x.id}" ${x.id===c.id?'selected':''}>${esc(x.name)}</option>`).join('');el('modalBody').innerHTML=`<div class="guidance-toolbar"><label>Sınıf<select onchange="currentClassId=this.value;save();openGuidanceFileCenter()">${opts}</select></label><button class="secondary" onclick="openDocumentAssistant()">Belge Asistanı</button></div><div class="guidance-summary"><div class="gstat"><b>${ready}</b><span>Hazır</span></div><div class="gstat"><b>${missing}</b><span>Eksik</span></div><div class="gstat"><b>${total}</b><span>Toplam</span></div></div><div class="guidance-list">${G_ITEMS.map(([id,title,note])=>{const st=gStatus(c,id);return`<div class="guidance-item"><div class="guidance-item-no">${id}</div><div><div class="guidance-item-title">${esc(title)}</div><div class="guidance-item-note">${esc(note)}</div></div><div class="guidance-item-actions"><span class="guidance-status ${gStatusClass(st)}">${esc(st)}</span>${gAction(id)}<button class="ghost" onclick="guidanceCycleStatus(${id})">Durum</button></div></div>`}).join('')}</div>`;el('modal').classList.add('open')}
 window.guidanceCycleStatus=function(id){const c=cls(),g=gEnsure(c),s=g.manual[id]||'Eksik';g.manual[id]=s==='Eksik'?'Hazır':s==='Hazır'?'Güncellenecek':'Eksik';save();openGuidanceFileCenter()}
 function gStudentOptions(c,sel=''){return(c.students||[]).map(s=>`<option value="${s.id}" ${String(s.id)===String(sel)?'selected':''}>${esc(s.number?s.number+' - ':'')}${esc(s.name)}</option>`).join('')}
@@ -16144,7 +16144,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script type="application/x-mm300" id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.313';
+ const VERSION='v7.8.314';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -16513,7 +16513,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script type="application/x-mm300" id="v78128-layout-duty-ios-lock-script">
 (function(){
-  const VERSION='v7.8.313';
+  const VERSION='v7.8.314';
   const root=document.documentElement, body=document.body;
   let active=false, baseVvH=0, baseBgTop=0, bgShift=0, touchY=0, raf=0;
 
@@ -16871,7 +16871,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script type="application/x-mm300" id="v78129-landscape-responsive-final-script">
 (function(){
-  const VERSION='v7.8.313';
+  const VERSION='v7.8.314';
   const mq=window.matchMedia('(orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
 
   function validTestResult(h,sid){
@@ -17226,7 +17226,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script type="application/x-mm300" id="v78130-landscape-class-center-duty-script">
 (function(){
-  const VERSION='v7.8.313';
+  const VERSION='v7.8.314';
   function syncVersion(){
     document.querySelectorAll('.premium-brand .tiny').forEach(function(x){
       if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION;
@@ -17720,7 +17720,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script type="application/x-mm300" id="v78147-landscape-review-polish-script">
 (function(){
   'use strict';
-  const VERSION='v7.8.313';
+  const VERSION='v7.8.314';
 
   function testSummary147(c,h){
     const total=(c?.students||[]).length,q=Math.max(0,Math.floor(Number(h?.questionCount||0)));
@@ -17850,7 +17850,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script type="application/x-mm300" id="v78150-test-net-report-script">
 (function(){
 'use strict';
-const VERSION150='v7.8.313';
+const VERSION150='v7.8.314';
 function clamp150(v,a,b){return Math.max(a,Math.min(b,v))}
 function q150(h){const n=Math.floor(Number(h?.questionCount||0));return Number.isFinite(n)&&n>0?n:0}
 function valid150(h,r){const q=q150(h);if(!q||!r||typeof r!=='object')return false;const d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);return[d,w,b].every(Number.isFinite)&&d>=0&&w>=0&&b>=0&&d+w+b===q}
@@ -19277,7 +19277,7 @@ body.mm229-fresh-home #mobileHomeDashboard>.mm-home-card{height:auto!important;m
 <script type="application/x-mm300" id="mm-home242" data-src300="home242.js"></script>
 
 <script type="application/x-mm300" id="mm-backup245" data-src300="backup245.js"></script>
-<script type="application/x-mm300" id="mm-lesson-subject247" data-src300="lesson-subject247.js?v=7.8.313"></script>
+<script type="application/x-mm300" id="mm-lesson-subject247" data-src300="lesson-subject247.js?v=7.8.314"></script>
 <script type="application/x-mm300" id="mm-tasks263" data-src300="tasks263.js"></script>
 
 <script type="application/x-mm300" id="mm-worksheet256" data-src300="worksheet256.js"></script>
@@ -19295,31 +19295,32 @@ body.mm229-fresh-home #mobileHomeDashboard>.mm-home-card{height:auto!important;m
 
 <script type="application/x-mm300" id="mm-schedule-classes272" data-src300="schedule-classes272.js?v=7.8.272"></script>
 
-<script type="application/x-mm300" id="mm-classes-scroll273" data-src300="classes-scroll273.js?v=7.8.313"></script>
+<script type="application/x-mm300" id="mm-classes-scroll273" data-src300="classes-scroll273.js?v=7.8.314"></script>
 
-<script type="application/x-mm300" id="mm-classes-order274" data-src300="classes-order274.js?v=7.8.313"></script>
+<script type="application/x-mm300" id="mm-classes-order274" data-src300="classes-order274.js?v=7.8.314"></script>
 
-<script type="application/x-mm300" id="mm-annual277" data-src300="annual277.js?v=7.8.313"></script>
+<script type="application/x-mm300" id="mm-annual277" data-src300="annual277.js?v=7.8.314"></script>
 
-<script type="application/x-mm300" id="mm-ios-return279" data-src300="ios-return279.js?v=7.8.313"></script>
-<script type="application/x-mm300" id="mm-keyboard285" data-src300="keyboard285.js?v=7.8.313"></script>
+<script type="application/x-mm300" id="mm-ios-return279" data-src300="ios-return279.js?v=7.8.314"></script>
+<script type="application/x-mm300" id="mm-keyboard285" data-src300="keyboard285.js?v=7.8.314"></script>
 
-<script type="application/x-mm300" id="mm-reports288" data-src300="reports288.js?v=7.8.313"></script>
+<script type="application/x-mm300" id="mm-reports288" data-src300="reports288.js?v=7.8.314"></script>
 
-<script type="application/x-mm300" id="mm-safe-area289" data-src300="safe-area289.js?v=7.8.313"></script>
+<script type="application/x-mm300" id="mm-safe-area289" data-src300="safe-area289.js?v=7.8.314"></script>
 
-<link id="mm-button-colors290" rel="stylesheet" href="button-colors290.css?v=7.8.313">
+<link id="mm-button-colors290" rel="stylesheet" href="button-colors290.css?v=7.8.314">
 
-<link id="mm-homework-buttons291" rel="stylesheet" href="homework-buttons291.css?v=7.8.313">
+<link id="mm-homework-buttons291" rel="stylesheet" href="homework-buttons291.css?v=7.8.314">
 
-<script type="application/x-mm300" id="mm-notifications296" data-src300="notifications296.js?v=7.8.313"></script>
+<script type="application/x-mm300" id="mm-notifications296" data-src300="notifications296.js?v=7.8.314"></script>
 
-<script type="application/x-mm300" data-src300="duty-import297.js?v=7.8.313"></script>
+<script type="application/x-mm300" data-src300="duty-import297.js?v=7.8.314"></script>
 
-<script type="application/x-mm300" data-src300="oyss-source305.js?v=7.8.313"></script>
-<script type="application/x-mm300" data-src300="oyss-core303.js?v=7.8.313"></script>
-<script type="application/x-mm300" data-src300="oyss-report303.js?v=7.8.313"></script>
-<script type="application/x-mm300" data-src300="oyss303.js?v=7.8.313"></script>
+<script type="application/x-mm300" data-src300="oyss-source305.js?v=7.8.314"></script>
+<script type="application/x-mm300" data-src300="oyss-core303.js?v=7.8.314"></script>
+<script type="application/x-mm300" data-src300="oyss-report303.js?v=7.8.314"></script>
+<script type="application/x-mm300" data-src300="oyss303.js?v=7.8.314"></script>
 <script type="application/x-mm300" data-src300="./dates312.js"></script>
+<script type="application/x-mm300" data-src300="./risk314.js"></script>
 
-<script src="storage300.js?v=7.8.313"></script>
+<script src="storage300.js?v=7.8.314"></script>

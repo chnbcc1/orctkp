@@ -1,3 +1,5 @@
+v7.8.314: Rehberlik Dosyası Sınıf Risk Haritası; sınıf öğrencileri, 36 Var/Yok kutusu, öğrenci kimliğine ve eğitim yılına bağlı kayıt, diğer açıklaması, otomatik X ve sütun toplamları. Kullanıcının Excel şablonu, öğrenci sayısına göre satırlar, PDF ve ayrı JPEG çıktıları.
+
 v7.8.313: Puan ve boş puan çizelgesinde tüm sorular aynı tabloda; sütun genişliği ve sayısal yazı boyutu soru sayısına göre otomatik ayarlanır. Analizde öğrenme çıktısının sınıf ortalamasına göre üzerinde/altında/eşit karşılaştırması.
 
 v7.8.312: OYSS çıktılarında uygulama adı kaldırıldı; sade kapak, tüm raporlarda dikey A4 ve okunur soru grupları. Tarihler gün/ay/yıl gösterilir; kayıt biçimi korunur. Rapor kapatıldığında OYSS ekranına dönüş. Çok sayfalı görseller ZIP yerine ayrı JPEG sayfaları olarak hazırlanır.
