@@ -1,3 +1,5 @@
+v7.8.319: Ortak denemede numaradan bağlı ve aynı optik yapısındaki sınıflar arasında öğrenci tanıma; sınıf/öğrenci seçimi, tekrar numarada elle seçim, belirsiz numara engeli. Sonuçlar hedef öğrencinin kendi sınıfındaki denemesine toplu aktarılır. Çift optik engeli, kayıt hatasında tüm hedefleri geri alma.
+
 v7.8.318: Eksik not uyarıları sınıf ve dönem içinde girilmeye başlanmış zorunlu not alanlarına göre hesaplanır. Hiç kimseye girilmeyen alanlar uyarı oluşturmaz; aynı alan başka öğrencide doluyken boş kalan öğrenciye uyarı verilir. Sıfır notu girilmiş sayılır, isteğe bağlı proje notu eksik uyarısı oluşturmaz. Notlar ekranının zorunlu alan göstergeleri korunur.
 
 v7.8.317: Denemede öğrenci kartları ayrı açık zemin, yeşil kenar, belirgin başlık ve ders çerçeveleriyle ayrıldı. Öğrenci eylemlerinde çıktı, bilgi düzenleme, taşıma, veli, deneme ve rehberlik renkleri ayrıldı. Öğrenci ad/numara değişikliği sonrası aynı öğrenciye ait gereksiz Geri adımı kaldırıldı; gerçek üst ekran geçmişi korundu. Kayıt başarısızsa düzenleme formu ve önceki öğrenci bilgileri korunur.
