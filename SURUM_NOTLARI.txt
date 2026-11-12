@@ -1,3 +1,5 @@
+v7.8.315: Yeni deneme tarih alanında çift görünüm düzeltildi. Deneme optik başlığı yalnız denemenin adını gösterir; PDF/JPEG dosya adına sınıf eklenmez. Aynı denemeye katılan sınıflar ortak form kullanır; sınıfa göre okuma ve sonuçlar korunur. Servis çalışanı önbellek bildirimi düzeltildi.
+
 v7.8.314: Rehberlik Dosyası Sınıf Risk Haritası; sınıf öğrencileri, 36 Var/Yok kutusu, öğrenci kimliğine ve eğitim yılına bağlı kayıt, diğer açıklaması, otomatik X ve sütun toplamları. Kullanıcının Excel şablonu, öğrenci sayısına göre satırlar, PDF ve ayrı JPEG çıktıları.
 
 v7.8.313: Puan ve boş puan çizelgesinde tüm sorular aynı tabloda; sütun genişliği ve sayısal yazı boyutu soru sayısına göre otomatik ayarlanır. Analizde öğrenme çıktısının sınıf ortalamasına göre üzerinde/altında/eşit karşılaştırması.
