@@ -1,3 +1,5 @@
+v7.8.317: Denemede öğrenci kartları ayrı açık zemin, yeşil kenar, belirgin başlık ve ders çerçeveleriyle ayrıldı. Öğrenci eylemlerinde çıktı, bilgi düzenleme, taşıma, veli, deneme ve rehberlik renkleri ayrıldı. Öğrenci ad/numara değişikliği sonrası aynı öğrenciye ait gereksiz Geri adımı kaldırıldı; gerçek üst ekran geçmişi korundu. Kayıt başarısızsa düzenleme formu ve önceki öğrenci bilgileri korunur.
+
 v7.8.316: Ders bazında kitapçıklar arası soru eşleştirme; temel kitapçığın anahtarından otomatik B/C/D anahtarları. Aynı/farklı şık sırası seçimi; değişen şıklarda doğru cevap girişi. Tam permütasyon kontrolü; eşleştirmelerin bağlı sınıflara kaydı ve ortak soru analizi. Eski anahtarlar ve sonuçlar kendiliğinden değiştirilmez.
 
 v7.8.315: Yeni deneme tarih alanında çift görünüm düzeltildi. Deneme optik başlığı yalnız denemenin adını gösterir; PDF/JPEG dosya adına sınıf eklenmez. Aynı denemeye katılan sınıflar ortak form kullanır; sınıfa göre okuma ve sonuçlar korunur. Servis çalışanı önbellek bildirimi düzeltildi.
