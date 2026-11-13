@@ -1,3 +1,5 @@
+v7.8.320: Ödev ve denemede öğrenciye özel optik form; öğrenci adı, sınıfı ve 5 haneli doldurulmuş numara kodu. Tek/toplu öğrenci seçimi; ortak denemenin bağlı sınıfları. Çok sayfalı PDF veya ZIP olmadan ayrı JPEG sayfaları. Boş form seçeneği ve optik soru geometrisi korunur.
+
 v7.8.319: Ortak denemede numaradan bağlı ve aynı optik yapısındaki sınıflar arasında öğrenci tanıma; sınıf/öğrenci seçimi, tekrar numarada elle seçim, belirsiz numara engeli. Sonuçlar hedef öğrencinin kendi sınıfındaki denemesine toplu aktarılır. Çift optik engeli, kayıt hatasında tüm hedefleri geri alma.
 
 v7.8.318: Eksik not uyarıları sınıf ve dönem içinde girilmeye başlanmış zorunlu not alanlarına göre hesaplanır. Hiç kimseye girilmeyen alanlar uyarı oluşturmaz; aynı alan başka öğrencide doluyken boş kalan öğrenciye uyarı verilir. Sıfır notu girilmiş sayılır, isteğe bağlı proje notu eksik uyarısı oluşturmaz. Notlar ekranının zorunlu alan göstergeleri korunur.

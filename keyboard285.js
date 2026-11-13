@@ -15,6 +15,7 @@ function restore(map){for(const [node,saved]of map)for(const [key,[value,priorit
 function stack(e){const a=[];for(let n=e;n&&n!==body;n=n.parentElement){const c=getComputedStyle(n);if(c.zIndex!=='auto')a.unshift(Number(c.zIndex)||0);}return a;}
 function compare(a,b){if(a.contains(b))return -1;if(b.contains(a))return 1;const x=stack(a),y=stack(b);for(let i=0;i<Math.max(x.length,y.length);i++)if((x[i]||0)!==(y[i]||0))return(x[i]||0)-(y[i]||0);return a.compareDocumentPosition(b)&Node.DOCUMENT_POSITION_FOLLOWING?-1:1;}
 function describe(node){
+ if(node.id==='personalOptic320')return {node,container:node,owner:node.querySelector('main'),head:node.querySelector('header')};
  if(node.id==='oy303')return {node,container:node,owner:node.querySelector('#oy303body'),head:node.querySelector('.oy-head'),oyss:true};
  if(node.id==='mmMobileDrawer')return {node,container:node,owner:node,side:true};
  if(node.id==='modal')return {node,container:node.querySelector('.modal-box'),owner:node.querySelector('.modal-box'),head:node.querySelector('.modal-head'),card:true};
@@ -42,7 +43,7 @@ function freezeBackground(front,v){
  for(const node of ancestors)if(!parents.has(node)){const styles=new Map();parents.set(node,{top:node.scrollTop,left:node.scrollLeft,styles});write(node,'overflow','hidden',styles);write(node,'touch-action','auto',styles);}
  const drawer=front.id==='mmMobileDrawer',wanted=new Set(backgroundNodes(front).filter(n=>!drawer||n.id!=='mmDrawerBackdrop')); 
  for(const [node,entry]of frozen)if(!wanted.has(node)||!node.isConnected)clearFrozen(node,entry);
- for(const node of wanted){const context=drawer||(front.hasAttribute('data-mm-popover')&&node.matches('#risk314,#oy303,#modal.open,#classModuleOverlay.open,#teacherFileCard236,#worksheetStudio887,#schedule266'));const old=frozen.get(node);if(old?.context===context)continue;if(old)clearFrozen(node,old);const styles=new Map(),scrolls=new Map();
+ for(const node of wanted){const context=drawer||(front.hasAttribute('data-mm-popover')&&node.matches('#personalOptic320,.mm-optic-preview795,#risk314,#oy303,#modal.open,#classModuleOverlay.open,#teacherFileCard236,#worksheetStudio887,#schedule266'));const old=frozen.get(node);if(old?.context===context)continue;if(old)clearFrozen(node,old);const styles=new Map(),scrolls=new Map();
   for(const s of [node,...node.querySelectorAll('*')])if(s===node||s.matches('main,.modal-box,.class-module-body,.s266body,.mm-teacher-card-body,.ws-stage887,#mmAllClassesScreen')||s.scrollHeight>s.clientHeight+1||s.scrollWidth>s.clientWidth+1)scrolls.set(s,{top:s.scrollTop,left:s.scrollLeft});
   frozen.set(node,{styles,scrolls,context});
   // Keep layout intact. Do not translate, resize or clone the underlying app.
