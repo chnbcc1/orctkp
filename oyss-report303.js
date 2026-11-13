@@ -22,6 +22,8 @@ if(kind==='cover'){
  if(y>H-115)page();y+=text('Toplam, tüm soruların toplamıdır. G: Katılmadı. —: Eksik giriş. 0: Sıfır puan.',M,y,TW,19,theme.muted)+10;text('Öğretmen imzası: ____________________',M,y,TW,21);
 }else if(kind==='analysis'){
  if(!e.mappingApproved)throw Error('Öğrenme çıktısı eşleştirmeleri onaylanmadı.');const a=C.analyze(e);
+ y+=text('Sınıfın sınav ortalaması: '+fmt(a.overall.average)+' / 100',M,y+23,TW,25,theme.green,true)+8;
+ y+=text('Hesaplanan: '+a.overall.n+' · Eksik/geçersiz: '+a.overall.missing+' · Katılmadı: '+a.overall.absent,M,y+18,TW,19,theme.muted)+12;
  table('Soru Analizi',['Soru','Tam puan','Giren','Eksik','Katılmadı','Ort. puan','Başarı %','Sıfır / Tam'],[.7,.8,.8,.7,.9,.9,.9,1],a.questions.map(q=>[q.label,q.max,q.n,q.missing,q.absent,q.average,q.percent,q.zero+' / '+q.full]));
  table('Öğrenme Çıktısı Analizi',['Kod / Açıklama','Sorular','Giren','Eksik','Katılmadı','Başarı %'],[3.8,1.1,.8,.7,.9,1],a.outcomes.map(o=>[o.code+'\n'+o.text,[...new Set(o.parts.map(p=>'S'+p.question))].join(', '),o.n,o.missing,o.absent,o.percent]));
  table('Öğrenci Bazında Öğrenme Çıktıları',['No / Öğrenci','Öğrenme çıktısı','Başarı %','Durum'],[2.8,1.9,1,1.6],a.students.flatMap(s=>s.outcomes.map(o=>[s.number+' · '+s.name,o.code,o.percent,o.absent?'Katılmadı':o.missing?'Eksik':averageStatus(o,a.outcomes.find(v=>v.id===o.id)?.percent)])));

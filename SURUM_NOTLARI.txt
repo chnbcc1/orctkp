@@ -1,3 +1,5 @@
+v7.8.321: Notlar ekranında 1. ve 2. sınavın sınıf ortalamaları ve not girilen öğrenci sayıları. Boşlar hariç, 0 dahil; sınıf/dönem ayrımı. OYSS analiz ekranı ve analiz raporunda sınavın genel sınıf ortalaması; tamamlanmış puanlar hesaplanır, eksik/geçersiz ve katılmayanlar ayrı sayılır.
+
 v7.8.320: Ödev ve denemede öğrenciye özel optik form; öğrenci adı, sınıfı ve 5 haneli doldurulmuş numara kodu. Tek/toplu öğrenci seçimi; ortak denemenin bağlı sınıfları. Çok sayfalı PDF veya ZIP olmadan ayrı JPEG sayfaları. Boş form seçeneği ve optik soru geometrisi korunur.
 
 v7.8.319: Ortak denemede numaradan bağlı ve aynı optik yapısındaki sınıflar arasında öğrenci tanıma; sınıf/öğrenci seçimi, tekrar numarada elle seçim, belirsiz numara engeli. Sonuçlar hedef öğrencinin kendi sınıfındaki denemesine toplu aktarılır. Çift optik engeli, kayıt hatasında tüm hedefleri geri alma.
