@@ -1,3 +1,5 @@
+v7.8.322: Sınav ortalaması alanları küçültüldü. Notlar ekranında yalnız 1./2. sınav etiketi ve ortalama; OYSS’de tek satırlık sınav ortalaması. Tekrarlanan sınıf/dönem/sayı bilgileri kaldırıldı; hesaplama açıklaması ve sayılar kapalı bilgi alanına alındı. Hesaplama ve raporlar değişmedi.
+
 v7.8.321: Notlar ekranında 1. ve 2. sınavın sınıf ortalamaları ve not girilen öğrenci sayıları. Boşlar hariç, 0 dahil; sınıf/dönem ayrımı. OYSS analiz ekranı ve analiz raporunda sınavın genel sınıf ortalaması; tamamlanmış puanlar hesaplanır, eksik/geçersiz ve katılmayanlar ayrı sayılır.
 
 v7.8.320: Ödev ve denemede öğrenciye özel optik form; öğrenci adı, sınıfı ve 5 haneli doldurulmuş numara kodu. Tek/toplu öğrenci seçimi; ortak denemenin bağlı sınıfları. Çok sayfalı PDF veya ZIP olmadan ayrı JPEG sayfaları. Boş form seçeneği ve optik soru geometrisi korunur.
