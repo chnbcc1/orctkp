@@ -2571,7 +2571,7 @@ html.mm-first-paint-lock,html.mm-first-paint-lock body{
 
 <header>
 <button id="mmMenuBtn" class="mm-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" title="Menü">☰</button>
-<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.325</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openBellNotifications296()" title="Bildirimler" aria-label="Bildirimler"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
+<div class="brand premium-brand mm-home-brand" onclick="mmGoHome842()" role="button" tabindex="0" title="Ana Sayfa" aria-label="Ana Sayfaya Dön"><img src="./icons/icon-192.png" alt=""><div><strong>MualliMate+</strong> <span class="tiny">v7.8.326</span><small>Öğrenci Takip Sistemi · çevrimdışı · güvenli yerel veri</small></div></div><button id="mmAlertBell" class="mm-alert-bell" onclick="openBellNotifications296()" title="Bildirimler" aria-label="Bildirimler"><span class="mm-bell-icon">🔔</span><span id="mmAlertBellBadge" class="mm-bell-badge" hidden>0</span></button>
 <div id="headerControls" class="header-controls">
 <div id="profileChip" class="profile-chip" onclick="openSettings()" title="Profil ve ayarlar">
   <div id="profileAvatarFallback" class="profile-avatar profile-avatar-fallback">Ö</div>
@@ -4841,7 +4841,7 @@ function stateForLocalStorage(){const x=JSON.parse(JSON.stringify(state));(x.cla
 async function persistHomeworkImages(){const jobs=[];(state.classes||[]).forEach(c=>(c.homeworks||[]).forEach(h=>{if(h.imageData){h.imageKey=h.imageKey||homeworkImageKey(c,h);jobs.push(idbPutHomeworkImage(h.imageKey,h.imageData))}}));if(jobs.length)await Promise.all(jobs)}
 async function hydrateHomeworkImages(){let changed=false;for(const c of (state.classes||[]))for(const h of (c.homeworks||[])){if(!h.imageData&&h.imageKey){try{const d=await idbGetHomeworkImage(h.imageKey);if(d){h.imageData=d;changed=true}}catch(e){console.warn("Ödev görseli okunamadı",e)}}}if(changed)render()}
 async function migrateHomeworkImagesToIDB(){try{await persistHomeworkImages();localStorage.setItem(STORAGE_KEY,JSON.stringify(stateForLocalStorage()))}catch(e){console.warn("Ödev görseli depolama geçişi tamamlanamadı",e)}}
-const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.325";
+const SAFETY_SNAPSHOTS_KEY="odevTakipSafetySnapshotsV1", SAFETY_VERSION_KEY="odevTakipSafetyAppVersionV1", APP_DATA_VERSION="v7.8.326";
 function safetyParseState(raw){try{const o=JSON.parse(raw||"");return o&&Array.isArray(o.classes)?o:null}catch(e){return null}}
 function safetyStateStats(o){const cs=Array.isArray(o?.classes)?o.classes:[];let students=0,homeworks=0,checks=0,trials=0,meetings=0;for(const c of cs){students+=(c.students||[]).length;homeworks+=(c.homeworks||[]).length;trials+=(c.trials||[]).length;meetings+=(c.parentMeetings||[]).length;for(const m of Object.values(c.checks||{}))checks+=Object.keys(m||{}).length}return{classes:cs.length,students,homeworks,checks,trials,meetings}}
 function loadSafetySnapshots(){try{const a=JSON.parse(localStorage.getItem(SAFETY_SNAPSHOTS_KEY)||"[]");return Array.isArray(a)?a:[]}catch(e){return []}}
@@ -13428,7 +13428,7 @@ function makeOpticalCanvas795(cfg,title,className,commonTrial=false,student=null
    /* V1 eski basılı form görünümü korunur. */
    x.textAlign='left';x.fillStyle='#111';x.font='bold 20px Arial';x.fillText('ÖĞRENCİ NO',128,188);x.font='15px Arial';x.fillStyle='#555';x.fillText('5 hane · kısa numarada soldaki haneleri boş bırakın.',128,214);const numberDigits=L.number.length||OMR_NUMBER_DIGITS795,numberBoxW=Math.max(330,numberDigits*66+90),numRowGap=L.number?.[0]?.[1]?Math.abs(L.number[0][1].y-L.number[0][0].y):18.5;if(L.number?.[0])for(let d=0;d<10;d++){const cy=L.number[0][d].y;x.fillStyle=d%2===0?'#e5eee7':'#fff6e3';x.fillRect(114,cy-numRowGap/2,numberBoxW-4,numRowGap)}L.number.forEach(col=>{x.strokeStyle='#777';x.lineWidth=1.6;x.strokeRect(col[0].x-19,230,38,24);col.forEach(b=>drawBubble795(x,b.x,b.y,b.r,''))});for(let d=0;d<10;d++){x.fillStyle='#333';x.font='bold 13px Arial';x.textAlign='right';x.textBaseline='middle';x.fillText(String(d),132,L.number[0][d].y)}x.textBaseline='alphabetic';x.textAlign='left';x.strokeStyle='#bbb';x.lineWidth=2;x.strokeRect(112,160,numberBoxW,300);const infoX=Math.max(560,numberDigits*66+250);x.fillStyle='#111';x.font='bold 20px Arial';x.fillText('AD SOYAD:',infoX,194);x.strokeStyle='#777';x.beginPath();x.moveTo(infoX+145,200);x.lineTo(L.w-145,200);x.stroke();x.font='bold 18px Arial';x.fillText('SINIF:',infoX,244);x.beginPath();x.moveTo(infoX+85,250);x.lineTo(Math.min(L.w-145,infoX+520),250);x.stroke();
  }
- L.subjects.forEach(s=>{const panelBottom=s.panelBottom??(L.layoutVersion>=6?L.h-245:L.h-100),panelH=panelBottom-s.headY;x.fillStyle='#fffaf0';x.strokeStyle='#8ba99f';x.lineWidth=2;x.fillRect(s.x,s.headY,s.w,panelH);x.strokeRect(s.x,s.headY,s.w,panelH);x.fillStyle='#064e3b';x.fillRect(s.x,s.headY,s.w,58);x.fillStyle='#fff';x.textAlign='center';x.font=`bold ${s.w<280?16:s.w<380?18:21}px Arial`;x.fillText(s.name,s.x+s.w/2,s.headY+37);s.rows.forEach((row,ri)=>{const top=row.y-s.rowH/2;x.fillStyle=ri%2===0?'#e5eee7':'#fff6e3';x.fillRect(s.x+2,top,s.w-4,s.rowH)});x.fillStyle='#17201d';x.font=`bold ${s.w<280?11:13}px Arial`;x.textBaseline='middle';if(s.rows[0])s.rows[0].bubbles.forEach(b=>x.fillText(b.choice,b.x,s.choiceY||636));x.font=`bold ${s.w<280?11:13}px Arial`;s.rows.forEach(row=>{x.textAlign='right';x.fillStyle='#17201d';x.fillText(String(row.q),row.qNumX,row.y);row.bubbles.forEach(b=>drawBubble795(x,b.x,b.y,b.r,''))});x.textBaseline='alphabetic'});
+ L.subjects.forEach(s=>{const panelBottom=s.panelBottom??(L.layoutVersion>=6?L.h-245:L.h-100),panelH=panelBottom-s.headY;x.fillStyle='#fffaf0';x.strokeStyle='#8ba99f';x.lineWidth=2;x.fillRect(s.x,s.headY,s.w,panelH);x.strokeRect(s.x,s.headY,s.w,panelH);x.fillStyle='#064e3b';x.fillRect(s.x,s.headY,s.w,58);x.fillStyle='#fff';x.textAlign='center';x.font=`bold ${s.w<280?16:s.w<380?18:21}px Arial`;x.fillText(s.name,s.x+s.w/2,s.headY+37);s.rows.forEach((row,ri)=>{const top=row.y-s.rowH/2;x.fillStyle=ri%2===0?'#e5eee7':'#fff6e3';x.fillRect(s.x+2,top,s.w-4,s.rowH)});if(L.numberStyle!=='classicV3'){x.fillStyle='#17201d';x.font=`bold ${s.w<280?11:13}px Arial`;x.textBaseline='middle';if(s.rows[0])s.rows[0].bubbles.forEach(b=>x.fillText(b.choice,b.x,s.choiceY||636));}else{x.fillStyle='#111';const first326=s.rows[0],choiceSize326=Math.max(16,Math.min(22,Math.floor(s.rowH*.7)));x.font=`900 ${choiceSize326}px Arial`;x.textAlign='center';x.textBaseline='middle';if(first326){const choiceY326=(s.headY+58+first326.y-s.rowH/2)/2;first326.bubbles.forEach(b=>x.fillText(b.choice,b.x,choiceY326));}}s.rows.forEach(row=>{const numberSize326=Math.max(16,Math.min(24,Math.floor(s.rowH*.7),Math.floor((row.qNumX-s.x-4)/1.12)));x.font=`900 ${numberSize326}px Arial`;x.textAlign='right';x.fillStyle='#111';x.fillText(String(row.q),row.qNumX,row.y);row.bubbles.forEach(b=>drawBubble795(x,b.x,b.y,b.r,''))});x.textBaseline='alphabetic'});
  x.textAlign='center';x.fillStyle='#555';x.font='13px Arial';x.fillText(L.layoutVersion>=8?'MualliMate+ · V6 Sık · A4 dikey, %100 boyutta yazdırın.':L.layoutVersion>=7?'MualliMate+ · V5 Sık · A4 dikey, %100 boyutta yazdırın.':L.layoutVersion===6?'MualliMate+ · V4 korumalı kare · A4 dikey, %100 boyutta yazdırın.':`MualliMate+ · Optik form ${L.numberStyle==='classicV3'?'V3 Klasik':'V1 Eski'} · Formun ölçeğini değiştirmeden A4 ${L.orientation==='portrait'?'dikey':'yatay'} yazdırın.`,L.w/2,L.h-46);if(student)fillPersonalOptic320(x,L,student);return{canvas:cv,layout:L}
 }
 
@@ -16241,7 +16241,7 @@ const oldOpenHomework795=window.openHomework;window.openHomework=function(id){co
 </style>
 <script type="application/x-mm300" id="v78117-test-analysis-script">
 (function(){
- const VERSION='v7.8.325';
+ const VERSION='v7.8.326';
  function getCtx(hid){const c=cls(),h=c?.homeworks?.find(x=>String(x.id)===String(hid));return c&&h?{c,h}:null}
  function isTest817(h){return !!h&&(h.type==='test'||Number(h.questionCount||0)>0)}
  function codeFromState817(st){if(!st)return'B';if(st.status==='correct')return'C';if(st.status==='wrong'||st.status==='double')return'W';if(st.status==='blank')return'B';if(st.status==='review')return st.decision==='correct'?'C':st.decision==='wrong'?'W':'B';return'B'}
@@ -16610,7 +16610,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script type="application/x-mm300" id="v78128-layout-duty-ios-lock-script">
 (function(){
-  const VERSION='v7.8.325';
+  const VERSION='v7.8.326';
   const root=document.documentElement, body=document.body;
   let active=false, baseVvH=0, baseBgTop=0, bgShift=0, touchY=0, raf=0;
 
@@ -16968,7 +16968,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script type="application/x-mm300" id="v78129-landscape-responsive-final-script">
 (function(){
-  const VERSION='v7.8.325';
+  const VERSION='v7.8.326';
   const mq=window.matchMedia('(orientation:landscape) and (max-height:600px) and (hover:none) and (pointer:coarse)');
 
   function validTestResult(h,sid){
@@ -17323,7 +17323,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 </style>
 <script type="application/x-mm300" id="v78130-landscape-class-center-duty-script">
 (function(){
-  const VERSION='v7.8.325';
+  const VERSION='v7.8.326';
   function syncVersion(){
     document.querySelectorAll('.premium-brand .tiny').forEach(function(x){
       if(/^v7\.8\.\d+$/i.test((x.textContent||'').trim()))x.textContent=VERSION;
@@ -17817,7 +17817,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script type="application/x-mm300" id="v78147-landscape-review-polish-script">
 (function(){
   'use strict';
-  const VERSION='v7.8.325';
+  const VERSION='v7.8.326';
 
   function testSummary147(c,h){
     const total=(c?.students||[]).length,q=Math.max(0,Math.floor(Number(h?.questionCount||0)));
@@ -17947,7 +17947,7 @@ body.mm-duty-modal-lock.mm-duty-keyboard #modal.open .modal-body{
 <script type="application/x-mm300" id="v78150-test-net-report-script">
 (function(){
 'use strict';
-const VERSION150='v7.8.325';
+const VERSION150='v7.8.326';
 function clamp150(v,a,b){return Math.max(a,Math.min(b,v))}
 function q150(h){const n=Math.floor(Number(h?.questionCount||0));return Number.isFinite(n)&&n>0?n:0}
 function valid150(h,r){const q=q150(h);if(!q||!r||typeof r!=='object')return false;const d=Number(r.correct),w=Number(r.wrong),b=Number(r.blank);return[d,w,b].every(Number.isFinite)&&d>=0&&w>=0&&b>=0&&d+w+b===q}
@@ -19374,7 +19374,7 @@ body.mm229-fresh-home #mobileHomeDashboard>.mm-home-card{height:auto!important;m
 <script type="application/x-mm300" id="mm-home242" data-src300="home242.js"></script>
 
 <script type="application/x-mm300" id="mm-backup245" data-src300="backup245.js"></script>
-<script type="application/x-mm300" id="mm-lesson-subject247" data-src300="lesson-subject247.js?v=7.8.325"></script>
+<script type="application/x-mm300" id="mm-lesson-subject247" data-src300="lesson-subject247.js?v=7.8.326"></script>
 <script type="application/x-mm300" id="mm-tasks263" data-src300="tasks263.js"></script>
 
 <script type="application/x-mm300" id="mm-worksheet256" data-src300="worksheet256.js"></script>
@@ -19392,36 +19392,36 @@ body.mm229-fresh-home #mobileHomeDashboard>.mm-home-card{height:auto!important;m
 
 <script type="application/x-mm300" id="mm-schedule-classes272" data-src300="schedule-classes272.js?v=7.8.272"></script>
 
-<script type="application/x-mm300" id="mm-classes-scroll273" data-src300="classes-scroll273.js?v=7.8.325"></script>
+<script type="application/x-mm300" id="mm-classes-scroll273" data-src300="classes-scroll273.js?v=7.8.326"></script>
 
-<script type="application/x-mm300" id="mm-classes-order274" data-src300="classes-order274.js?v=7.8.325"></script>
+<script type="application/x-mm300" id="mm-classes-order274" data-src300="classes-order274.js?v=7.8.326"></script>
 
-<script type="application/x-mm300" id="mm-annual277" data-src300="annual277.js?v=7.8.325"></script>
+<script type="application/x-mm300" id="mm-annual277" data-src300="annual277.js?v=7.8.326"></script>
 
-<script type="application/x-mm300" id="mm-ios-return279" data-src300="ios-return279.js?v=7.8.325"></script>
-<script type="application/x-mm300" id="mm-keyboard285" data-src300="keyboard285.js?v=7.8.325"></script>
+<script type="application/x-mm300" id="mm-ios-return279" data-src300="ios-return279.js?v=7.8.326"></script>
+<script type="application/x-mm300" id="mm-keyboard285" data-src300="keyboard285.js?v=7.8.326"></script>
 
-<script type="application/x-mm300" id="mm-reports288" data-src300="reports288.js?v=7.8.325"></script>
+<script type="application/x-mm300" id="mm-reports288" data-src300="reports288.js?v=7.8.326"></script>
 
-<script type="application/x-mm300" id="mm-safe-area289" data-src300="safe-area289.js?v=7.8.325"></script>
+<script type="application/x-mm300" id="mm-safe-area289" data-src300="safe-area289.js?v=7.8.326"></script>
 
-<link id="mm-button-colors290" rel="stylesheet" href="button-colors290.css?v=7.8.325">
+<link id="mm-button-colors290" rel="stylesheet" href="button-colors290.css?v=7.8.326">
 
-<link id="mm-homework-buttons291" rel="stylesheet" href="homework-buttons291.css?v=7.8.325">
+<link id="mm-homework-buttons291" rel="stylesheet" href="homework-buttons291.css?v=7.8.326">
 
-<script type="application/x-mm300" id="mm-notifications296" data-src300="notifications296.js?v=7.8.325"></script>
+<script type="application/x-mm300" id="mm-notifications296" data-src300="notifications296.js?v=7.8.326"></script>
 
-<script type="application/x-mm300" data-src300="duty-import297.js?v=7.8.325"></script>
+<script type="application/x-mm300" data-src300="duty-import297.js?v=7.8.326"></script>
 
-<script type="application/x-mm300" data-src300="oyss-source305.js?v=7.8.325"></script>
-<script type="application/x-mm300" data-src300="oyss-core303.js?v=7.8.325"></script>
-<script type="application/x-mm300" data-src300="oyss-report303.js?v=7.8.325"></script>
-<script type="application/x-mm300" data-src300="oyss303.js?v=7.8.325"></script>
+<script type="application/x-mm300" data-src300="oyss-source305.js?v=7.8.326"></script>
+<script type="application/x-mm300" data-src300="oyss-core303.js?v=7.8.326"></script>
+<script type="application/x-mm300" data-src300="oyss-report303.js?v=7.8.326"></script>
+<script type="application/x-mm300" data-src300="oyss303.js?v=7.8.326"></script>
 <script type="application/x-mm300" data-src300="./dates312.js"></script>
 <script type="application/x-mm300" data-src300="./risk314.js"></script>
 
-<script type="application/x-mm300" data-src300="./booklet316.js?v=7.8.325"></script>
-<link rel="stylesheet" href="student-ui317.css?v=7.8.325">
-<script type="application/x-mm300" data-src300="./personal-optic320.js?v=7.8.325"></script>
-<link rel="stylesheet" href="grade-averages321.css?v=7.8.325">
-<script src="storage300.js?v=7.8.325"></script>
+<script type="application/x-mm300" data-src300="./booklet316.js?v=7.8.326"></script>
+<link rel="stylesheet" href="student-ui317.css?v=7.8.326">
+<script type="application/x-mm300" data-src300="./personal-optic320.js?v=7.8.326"></script>
+<link rel="stylesheet" href="grade-averages321.css?v=7.8.326">
+<script src="storage300.js?v=7.8.326"></script>
