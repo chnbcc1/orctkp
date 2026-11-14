@@ -1,3 +1,5 @@
+v7.8.325: V6 Sık optik düzeni 2/3/4 dersli formlarda da kullanılır: her ders ayrı dar blok; yakın seçenekler, ayrık satırlar; her tablo kendi son sorusunda biter. Önceki V5/V4/V3/V1 formların çizimi ve okuma motoru korunur; mevcut kayıtlar açık seçim olmadan değiştirilmez.
+
 v7.8.324: V5 Sık optik form: tek dersin seçenekleri yakın, satırları daha ayrık, tablo son soruda biter. A4, referans kareleri, numara/kitapçık alanları ve optik okuma motoru korunur. Yeni ve önceki V4/V3/V1 formlar ayrı düzen seçimiyle okunur. Mevcut kayıtlar otomatik değiştirilmez; Sık form hazırla ile geçilir.
 
 v7.8.323: Öğrenciye özel optikte Formu Önizle, listenin altına görünmeyen form eklemek yerine ayrı önizleme açar. Seçilen öğrenciler arasında Önceki/Sonraki gezinme, öğrenci adı ve sayfa sayısı; listeye dönüşte seçimler korunur. Başlık kontrastı, genişliği ve geri düğmesi düzeltildi.
