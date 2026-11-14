@@ -1,3 +1,5 @@
+v7.8.323: Öğrenciye özel optikte Formu Önizle, listenin altına görünmeyen form eklemek yerine ayrı önizleme açar. Seçilen öğrenciler arasında Önceki/Sonraki gezinme, öğrenci adı ve sayfa sayısı; listeye dönüşte seçimler korunur. Başlık kontrastı, genişliği ve geri düğmesi düzeltildi.
+
 v7.8.322: Sınav ortalaması alanları küçültüldü. Notlar ekranında yalnız 1./2. sınav etiketi ve ortalama; OYSS’de tek satırlık sınav ortalaması. Tekrarlanan sınıf/dönem/sayı bilgileri kaldırıldı; hesaplama açıklaması ve sayılar kapalı bilgi alanına alındı. Hesaplama ve raporlar değişmedi.
 
 v7.8.321: Notlar ekranında 1. ve 2. sınavın sınıf ortalamaları ve not girilen öğrenci sayıları. Boşlar hariç, 0 dahil; sınıf/dönem ayrımı. OYSS analiz ekranı ve analiz raporunda sınavın genel sınıf ortalaması; tamamlanmış puanlar hesaplanır, eksik/geçersiz ve katılmayanlar ayrı sayılır.
