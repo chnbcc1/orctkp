@@ -88,7 +88,7 @@
     el('modalTitle').textContent = 'Ek Ders Hesaplama';
     el('modalSubtitle').textContent = result.start.split('-').reverse().join('.') + ' – ' + result.end.split('-').reverse().join('.');
     el('modalBody').innerHTML = `
-      <div class="form-grid">
+      <div class="form-grid mm-ek-form">
         <label>Hesap ayı<input type="month" id="mmEkMonth" value="${month}"></label>
         <label>Dönem ${select('mode',[['calendar','Ay bütünlüğü'],['week','Hafta bütünlüğü (MEBBİS)']])}</label>
         <label>Görev ${select('role',[['teacher','Branş öğretmeni'],['admin','Müdür yardımcısı']])}</label>
@@ -104,9 +104,9 @@
       <p class="tiny">Ders programı ve okul nöbet çizelgesi otomatik okunur. İzin, rapor, tatil ve yapılmayan nöbet için ilgili günü düzenleyin. Planlı görevleri bordro öncesi kontrol edin.</p>
       <p class="tiny">${assumedRate ? 'Brüt saat ücreti boşsa 2026 gündüz tarifesi uygulanır. ' : 'Tutar için brüt saat ücretini girin. '}Net tahminde girdiğiniz vergi oranı ve binde 7,59 damga vergisi kullanılır.</p>
       <button type="button" id="mmEkCsv" class="secondary">Excel için CSV indir</button>
-      <div style="overflow:auto;margin-top:12px"><table style="min-width:650px;width:100%;text-align:center">
+      <div class="mm-ek-days"><table class="mm-ek-table">
         <thead><tr><th>Gün</th><th>Ders yükü</th>${headings.map(h=>'<th>'+h+'</th>').join('')}</tr></thead>
-        <tbody>${result.rows.map(r=>`<tr><td><button type="button" class="secondary" data-mm-day="${r.iso}">${r.iso.slice(5).split('-').reverse().join('.')}${r.registered ? ' · Nöbet' : ''}</button></td><td>${r.count}${!r.schedule && changes[r.iso]?.lessons == null ? ' *' : ''}</td>${fields.map(f=>'<td>'+r[f]+'</td>').join('')}</tr>`).join('')}</tbody>
+        <tbody>${result.rows.map(r=>`<tr><td><button type="button" class="secondary" data-mm-day="${r.iso}">${r.iso.slice(5).split('-').reverse().join('.')}${r.registered ? ' · Nöbet' : ''}</button></td><td data-label="Ders yükü">${r.count}${!r.schedule && changes[r.iso]?.lessons == null ? ' *' : ''}</td>${fields.map((f,i)=>'<td data-label="'+headings[i]+'">'+r[f]+'</td>').join('')}</tr>`).join('')}</tbody>
       </table></div>
       ${result.rows.some(r=>!r.schedule) ? '<p class="tiny">* Bu tarihe ait ders programı bulunamadı. Ders yükünü gün üzerinden girebilirsiniz.</p>' : ''}
       <p class="tiny"><a target="_blank" rel="noopener" href="https://personel.meb.gov.tr/www/personel-genel-mudurlugu-mevzuat/icerik/363">MEB ek ders mevzuatı</a> · <a target="_blank" rel="noopener" href="https://tut.meb.gov.tr/meb_iys_dosyalar/2025_03/06154241_24095622_ek_ders_modulu_uygulama_kilavuzu.pdf">MEBBİS hesaplama dönemi</a></p>`;
@@ -139,7 +139,7 @@
     view.onchange = null;
     view.onclick = null;
     el('modalSubtitle').textContent = dutyDate(date);
-    view.innerHTML = `<form id="mmEkDayForm" class="form-grid">
+    view.innerHTML = `<form id="mmEkDayForm" class="form-grid mm-ek-form">
       <label>Ders yükü (programda ${row.planned})<input name="lessons" type="number" min="0" max="24" value="${change.lessons ?? ''}"></label>
       <label>Yönetim saati (günlük düzeltme)<input name="admin" type="number" min="0" max="24" value="${change.admin ?? ''}"></label>
       <label>Diğer gündüz ek ders saati<input name="other" type="number" min="0" max="24" value="${change.other ?? ''}"></label>
@@ -175,5 +175,33 @@
     setTimeout(() => URL.revokeObjectURL(url), 30000);
   }
 
+  const style = document.createElement('style');
+  style.textContent = `
+    #modalBody:has(.mm-ek-form) {overflow-x:hidden;min-width:0}
+    #modalBody .mm-ek-form, #modalBody .mm-ek-form label {min-width:0;max-width:100%}
+    #modalBody .mm-ek-form input:not([type=checkbox]), #modalBody .mm-ek-form select {
+      display:block;box-sizing:border-box;width:100%;min-width:0;max-width:100%;margin-inline:0
+    }
+    #mmEkMonth::-webkit-date-and-time-value {min-width:0;text-align:left}
+    .mm-ek-days {margin-top:12px;min-width:0}
+    #modalBody .mm-ek-table {width:100%;min-width:0;table-layout:fixed;text-align:center}
+    .mm-ek-table th,.mm-ek-table td {overflow-wrap:anywhere}
+    @media(max-width:720px) {
+      #modalBody .mm-ek-table, #modalBody .mm-ek-table tbody {display:block}
+      #modalBody .mm-ek-table thead {position:absolute;clip-path:inset(50%);width:1px;height:1px;overflow:hidden}
+      #modalBody .mm-ek-table tr {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;margin:0 0 10px;padding:8px;border:1px solid #b9a88a55;border-radius:10px}
+      #modalBody .mm-ek-table td {display:flex;align-items:center;justify-content:space-between;gap:6px;padding:5px;white-space:normal;min-width:0}
+      #modalBody .mm-ek-table td:first-child {grid-column:1/-1}
+      #modalBody .mm-ek-table td[data-label]::before {content:attr(data-label);text-align:left;font-size:.82em}
+    }`;
+  document.head.append(style);
+
+  function updateVersionLabel() {
+    const badge = document.querySelector('.mm-home-brand .tiny');
+    if (badge && /^v7[.]8[.][0-9]+$/.test(badge.textContent.trim())) badge.textContent = 'v7.8.329';
+  }
+
+  document.addEventListener('DOMContentLoaded', updateVersionLabel);
+  updateVersionLabel();
   window.openExtraLessons327 = open;
 })();

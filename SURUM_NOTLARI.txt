@@ -1,3 +1,5 @@
+v7.8.329: Ek Ders ekranı telefona sığar. Günlük çizelge dar ekranlarda kart olarak görünür ve ana ekranda doğru sürüm gösterilir.
+
 v7.8.328: Ek Ders, yan menüde Ders ve Takip grubundan açılır. Hesap için ders programı ve okul nöbeti kayıtları kullanılır.
 
 v7.8.326: Optik formlarda soru numaraları ve ABCDE sütun başlıkları daha büyük, kalın ve koyu; yazı boyutu satır ve numara alanına sığar. Dairelerin koordinatları/boyutları, sayfa yerleşimi ve okuma motoru değişmedi.
