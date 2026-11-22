@@ -1,3 +1,5 @@
+v7.8.328: Ek Ders, yan menüde Ders ve Takip grubundan açılır. Hesap için ders programı ve okul nöbeti kayıtları kullanılır.
+
 v7.8.326: Optik formlarda soru numaraları ve ABCDE sütun başlıkları daha büyük, kalın ve koyu; yazı boyutu satır ve numara alanına sığar. Dairelerin koordinatları/boyutları, sayfa yerleşimi ve okuma motoru değişmedi.
 
 v7.8.325: V6 Sık optik düzeni 2/3/4 dersli formlarda da kullanılır: her ders ayrı dar blok; yakın seçenekler, ayrık satırlar; her tablo kendi son sorusunda biter. Önceki V5/V4/V3/V1 formların çizimi ve okuma motoru korunur; mevcut kayıtlar açık seçim olmadan değiştirilmez.

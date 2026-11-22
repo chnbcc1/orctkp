@@ -10,6 +10,7 @@
   'Ödevler':'M4 3h12l4 4v14H4V3m12 0v5h4M8 12h8M8 16h6',
   'Denemeler':'M4 20h17M7 16v-5M12 16V6M17 16V9',
   'Ders Programı':'M4 5h16v16H4V5M4 10h16M8 3v4M16 3v4M8 14h2M14 14h2M8 18h2',
+  'Ek Ders':'M5 3h14v18H5zM8 8h8M8 12h2m4 0h2m-8 4h2m4 0h2',
   'Nöbet':'M12 3 3 7v6c0 5 9 9 9 9s9-4 9-9V7L12 3m-4 9 3 3 5-6',
   'Öğretmen Dosyası':'M3 7V4h7l2 3h9v14H3V7m5 5h8m-8 4h6',
   'Rehberlik Dosyası':'M3 7V4h7l2 3h9v14H3V7m11 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0m-6 7v-1a4 4 0 0 1 8 0v1',
@@ -27,7 +28,7 @@
  drawer.dataset.mmMenu240='true';nav.replaceChildren();nav.setAttribute('aria-label','Uygulama bölümleri');
  for(const [title,items]of[
   ['Başlangıç',['Ana Ekran','Sınıflarım']],
-  ['Ders ve Takip',['Ödevler','Denemeler','Ders Programı','Nöbet']],
+  ['Ders ve Takip',['Ödevler','Denemeler','Ders Programı','Nöbet','Ek Ders']],
   ['Belgeler',['Öğretmen Dosyası','Rehberlik Dosyası','Belge Asistanı','Raporlar']],
   ['Arşiv ve Yönetim',['Eğitim Yılı ve Arşiv','Ayarlar']]
  ]){

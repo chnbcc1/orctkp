@@ -1,0 +1,179 @@
+(() => {
+  'use strict';
+  const fields = ['lesson', 'prep', 'social', 'admin', 'duty', 'other'];
+  const headings = ['Ek ders', 'Hazırlık', 'Rehberlik / kulüp', 'Yönetim', 'Nöbet', 'Diğer'];
+  const number = value => Math.max(0, Math.min(99, Math.trunc(Number(value) || 0)));
+  const weekday = date => (dateFromISO(date).getDay() + 6) % 7;
+  const money = new Intl.NumberFormat('tr-TR', {style:'currency', currency:'TRY'});
+  let month;
+  let view;
+  let snapshot;
+
+  function period(key, mode) {
+    const first = key + '-01';
+    const next = shiftMonth(key, 1) + '-01';
+    if (mode === 'calendar') return [first, addDaysISO(next, -1)];
+    const boundary = date => weekday(date) >= 5
+      ? addDaysISO(date, 7 - weekday(date))
+      : addDaysISO(date, -weekday(date));
+    return [boundary(first), addDaysISO(boundary(next), -1)];
+  }
+
+  function calculate(key, options, schedules, duties, changes) {
+    const [start, end] = period(key, options.mode);
+    const firstMonday = addDaysISO(start, -weekday(start));
+    const lastSunday = addDaysISO(end, 6 - weekday(end));
+    const result = [];
+    const activeSchedules = schedules.filter(Boolean).sort((a,b) =>
+      String(b.effectiveDate || '').localeCompare(String(a.effectiveDate || '')));
+    const dutyDates = new Set(duties.filter(d => !d.type || d.type === 'school').map(d => d.date));
+    for (let date = firstMonday; date <= lastSunday; date = addDaysISO(date, 7)) {
+      let taught = 0;
+      let dutyPaid = false;
+      let socialPaid = false;
+      for (let day = 0; day < 7; day++) {
+        const iso = addDaysISO(date, day);
+        const change = changes[iso] || {};
+        const schedule = activeSchedules.find(s => !s.effectiveDate || s.effectiveDate <= iso);
+        const def = SCHEDULE_DAYS.find(d => d.js === dateFromISO(iso).getDay());
+        const slots = new Set();
+        for (const entry of schedule?.entries || []) {
+          if (!def || ![def.key, def.label, def.name].includes(entry.day)) continue;
+          if (/^rehberlik(?:\s|\/|$)/i.test(entry.course || '')) continue;
+          for (let p = number(entry.startPeriod || 1); p <= number(entry.endPeriod || entry.startPeriod || 1); p++) slots.add(p);
+        }
+        const count = change.off ? 0 : number(change.lessons ?? slots.size);
+        const quota = options.role === 'admin' ? 6 : 15;
+        const cap = options.role === 'admin' ? 6 : 15;
+        const extra = total => Math.min(cap, Math.max(0, total - quota));
+        const prep = total => Math.min(3, Math.floor(total / 10));
+        const social = Boolean(options.social && day === Number(options.socialDay) && !change.off && !socialPaid);
+        const duty = Boolean(dutyDates.has(iso) && day < 5 && !change.off && !change.noDuty && !dutyPaid);
+        const row = {
+          iso, count, planned:slots.size, registered:dutyDates.has(iso), schedule:!!schedule,
+          lesson:extra(taught + count) - extra(taught),
+          prep:options.role === 'admin' ? 0 : prep(taught + count) - prep(taught),
+          social:social ? 2 : 0,
+          admin:options.role === 'admin' && day < 5 && !change.off ? number(change.admin ?? options.admin) : 0,
+          duty:duty ? 3 : 0,
+          other:number(change.other)
+        };
+        taught += count;
+        dutyPaid ||= duty;
+        socialPaid ||= social;
+        if (iso >= start && iso <= end) result.push(row);
+      }
+    }
+    return {start, end, rows:result};
+  }
+
+  function open(key) {
+    month = /^\d{4}-(0[1-9]|1[0-2])$/.test(key || '') ? key : month || localISODate().slice(0,7);
+    const data = settings.extraLessons327 || {};
+    const options = {role:'teacher', mode:'calendar', social:false, socialDay:4, admin:4, tax:'', plus:0, rate:'', ...data.options, ...data.periods?.[month]};
+    const changes = data.days || {};
+    const schedules = [settings.schedule, ...(settings.scheduleArchive || [])];
+    const duties = normalizeDutySchedule(settings.dutySchedule).entries;
+    const result = calculate(month, options, schedules, duties, changes);
+    const totals = fields.map(field => result.rows.reduce((sum,row) => sum + row[field], 0));
+    const hours = totals.reduce((sum,value) => sum + value, 0);
+    const assumedRate = month.startsWith('2026-') ? 140 * (month < '2026-07' ? 1.387871 : 1.575512) : 0;
+    const rate = Number(options.rate || assumedRate);
+    const gross = rate * (hours + (totals[0] + totals[3]) * Number(options.plus) / 100);
+    const net = options.tax === '' ? null : gross * (1 - Number(options.tax) / 100 - 0.00759);
+    snapshot = {result, totals, hours};
+    const select = (name, pairs) => '<select data-mm-setting="' + name + '">' + pairs.map(([value,label]) =>
+      '<option value="' + value + '"' + (String(options[name]) === String(value) ? ' selected' : '') + '>' + label + '</option>').join('') + '</select>';
+    const input = (name, max, step = 1) => '<input type="number" min="0" max="' + max + '" step="' + step + '" data-mm-setting="' + name + '" value="' + esc(options[name]) + '">';
+    el('modalTitle').textContent = 'Ek Ders Hesaplama';
+    el('modalSubtitle').textContent = result.start.split('-').reverse().join('.') + ' – ' + result.end.split('-').reverse().join('.');
+    el('modalBody').innerHTML = `
+      <div class="form-grid">
+        <label>Hesap ayı<input type="month" id="mmEkMonth" value="${month}"></label>
+        <label>Dönem ${select('mode',[['calendar','Ay bütünlüğü'],['week','Hafta bütünlüğü (MEBBİS)']])}</label>
+        <label>Görev ${select('role',[['teacher','Branş öğretmeni'],['admin','Müdür yardımcısı']])}</label>
+        ${options.role === 'admin' ? '<label>Günlük yönetim saati ' + input('admin',24) + '</label>' : ''}
+        <label>Rehberlik / kulüp ${select('social',[['false','Yok'],['true','Var']])}</label>
+        ${options.social ? '<label>Görevin çizelge günü ' + select('socialDay',[[0,'Pazartesi'],[1,'Salı'],[2,'Çarşamba'],[3,'Perşembe'],[4,'Cuma']]) + '</label>' : ''}
+        <label>Öğrenim artırımı ${select('plus',[[0,'Yok'],[7,'Yüksek lisans (%7)'],[20,'Doktora (%20)']])}</label>
+        <label>Brüt gündüz saat ücreti (₺) ${input('rate',99999,0.000001)}</label>
+        <label>Gelir vergisi (%) ${input('tax',40)}</label>
+      </div>
+      <p><b>${hours} saat</b>${rate ? ' · Brüt ' + money.format(gross) : ''}${rate && net !== null ? ' · Tahmini net ' + money.format(net) : ''}</p>
+      <p>${fields.map((_,i) => headings[i] + ' ' + totals[i]).join(' · ')}</p>
+      <p class="tiny">Ders programı ve okul nöbet çizelgesi otomatik okunur. İzin, rapor, tatil ve yapılmayan nöbet için ilgili günü düzenleyin. Planlı görevleri bordro öncesi kontrol edin.</p>
+      <p class="tiny">${assumedRate ? 'Brüt saat ücreti boşsa 2026 gündüz tarifesi uygulanır. ' : 'Tutar için brüt saat ücretini girin. '}Net tahminde girdiğiniz vergi oranı ve binde 7,59 damga vergisi kullanılır.</p>
+      <button type="button" id="mmEkCsv" class="secondary">Excel için CSV indir</button>
+      <div style="overflow:auto;margin-top:12px"><table style="min-width:650px;width:100%;text-align:center">
+        <thead><tr><th>Gün</th><th>Ders yükü</th>${headings.map(h=>'<th>'+h+'</th>').join('')}</tr></thead>
+        <tbody>${result.rows.map(r=>`<tr><td><button type="button" class="secondary" data-mm-day="${r.iso}">${r.iso.slice(5).split('-').reverse().join('.')}${r.registered ? ' · Nöbet' : ''}</button></td><td>${r.count}${!r.schedule && changes[r.iso]?.lessons == null ? ' *' : ''}</td>${fields.map(f=>'<td>'+r[f]+'</td>').join('')}</tr>`).join('')}</tbody>
+      </table></div>
+      ${result.rows.some(r=>!r.schedule) ? '<p class="tiny">* Bu tarihe ait ders programı bulunamadı. Ders yükünü gün üzerinden girebilirsiniz.</p>' : ''}
+      <p class="tiny"><a target="_blank" rel="noopener" href="https://personel.meb.gov.tr/www/personel-genel-mudurlugu-mevzuat/icerik/363">MEB ek ders mevzuatı</a> · <a target="_blank" rel="noopener" href="https://tut.meb.gov.tr/meb_iys_dosyalar/2025_03/06154241_24095622_ek_ders_modulu_uygulama_kilavuzu.pdf">MEBBİS hesaplama dönemi</a></p>`;
+    view = el('modalBody');
+    view.onchange = event => {
+      const target = event.target;
+      if (target.id === 'mmEkMonth') return open(target.value);
+      const name = target.dataset.mmSetting;
+      if (!name) return;
+      const value = name === 'social' ? target.value === 'true' : target.value;
+      settings.extraLessons327 = data;
+      data.options = {...data.options, [name]:value};
+      data.periods ||= {};
+      data.periods[month] = {...options, [name]:value};
+      saveSettings();
+      open();
+    };
+    view.onclick = event => {
+      const day = event.target.closest('[data-mm-day]')?.dataset.mmDay;
+      if (day) editDay(day);
+      if (event.target.id === 'mmEkCsv') exportCsv();
+    };
+    el('modal').classList.add('open');
+  }
+
+  function editDay(date) {
+    const data = settings.extraLessons327 || {};
+    const change = data.days?.[date] || {};
+    const row = snapshot.result.rows.find(r => r.iso === date);
+    view.onchange = null;
+    view.onclick = null;
+    el('modalSubtitle').textContent = dutyDate(date);
+    view.innerHTML = `<form id="mmEkDayForm" class="form-grid">
+      <label>Ders yükü (programda ${row.planned})<input name="lessons" type="number" min="0" max="24" value="${change.lessons ?? ''}"></label>
+      <label>Yönetim saati (günlük düzeltme)<input name="admin" type="number" min="0" max="24" value="${change.admin ?? ''}"></label>
+      <label>Diğer gündüz ek ders saati<input name="other" type="number" min="0" max="24" value="${change.other ?? ''}"></label>
+      <label><input name="off" type="checkbox" ${change.off ? 'checked' : ''}> İzin, rapor veya ücret hesabına alınmayacak gün</label>
+      ${row.registered ? '<label><input name="noDuty" type="checkbox" ' + (change.noDuty ? 'checked' : '') + '> Okul nöbeti yapılmadı</label>' : ''}
+      <button type="submit">Kaydet</button><button type="button" id="mmEkDayBack" class="secondary">Geri</button>
+    </form>`;
+    el('mmEkDayBack').onclick = () => open();
+    el('mmEkDayForm').onsubmit = event => {
+      event.preventDefault();
+      const form = new FormData(event.currentTarget);
+      const next = {off:form.has('off'), noDuty:form.has('noDuty')};
+      for (const field of ['lessons','admin','other']) {
+        if (form.get(field) !== '') next[field] = number(form.get(field));
+      }
+      data.days ||= {};
+      data.days[date] = next;
+      settings.extraLessons327 = data;
+      saveSettings();
+      open();
+    };
+  }
+
+  function exportCsv() {
+    const {result,totals} = snapshot;
+    const lines = [['Tarih','Ders yükü',...headings],
+      ...result.rows.map(row => [row.iso,row.count,...fields.map(f=>row[f])]), ['Toplam','',...totals]];
+    const url = URL.createObjectURL(new Blob(['\ufeff' + lines.map(line=>line.join(';')).join('\r\n')], {type:'text/csv;charset=utf-8'}));
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = month + '_Ek_Ders.csv';
+    anchor.click();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+  }
+
+  window.openExtraLessons327 = open;
+})();
