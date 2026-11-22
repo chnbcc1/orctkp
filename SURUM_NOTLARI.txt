@@ -1,3 +1,5 @@
+v7.8.334: Düzenlenebilir haftalık ders görevi dağılımı, tatil ve seminer günleri.
+
 v7.8.333: Öğrenim Bilgisi profil kartında öğretmen adı ve okul adı arasına taşındı.
 
 v7.8.332: Pansiyon nöbeti görev başına 8 saat hesaplanır. Rehberlik ve öğrenim bilgileri aylar arasında kullanılır. Öğrenim artırımı seçili ay için kapatılabilir.

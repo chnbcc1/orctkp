@@ -1,5 +1,5 @@
-const CACHE_NAME='ots-v7.8.333-ek-ders';
-const PREVIOUS_STABLE_CACHE='ots-v7.8.332-ek-ders';
+const CACHE_NAME='ots-v7.8.334-ek-ders';
+const PREVIOUS_STABLE_CACHE='ots-v7.8.333-ek-ders';
 const APP_SHELL = ['./ekders327.js?v=7.8.328','./grade-averages321.css?v=7.8.326','./personal-optic320.js?v=7.8.326','./student-ui317.css?v=7.8.326','./booklet316.js?v=7.8.326',
 './oyss-source305.js?v=7.8.326',
 './oyss-core303.js?v=7.8.326', './oyss-report303.js?v=7.8.326', './oyss303.js?v=7.8.326','./dates312.js?v=7.8.326','./risk314.js?v=7.8.326','./risk314/sinif-risk-sablon.xlsx','./risk314/header.png','./risk314/row.png','./risk314/footer.png', './schedule-ocr266/offline302.js',
