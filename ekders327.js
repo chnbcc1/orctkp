@@ -85,11 +85,27 @@
     const select = (name, pairs) => '<select data-mm-setting="' + name + '">' + pairs.map(([value,label]) =>
       '<option value="' + value + '"' + (String(options[name]) === String(value) ? ' selected' : '') + '>' + label + '</option>').join('') + '</select>';
     const input = (name, max, step = 1) => '<input type="number" min="0" max="' + max + '" step="' + step + '" data-mm-setting="' + name + '" value="' + esc(options[name]) + '">';
+    const [year, monthNumber] = month.split('-');
+    const currentYear = Number(localISODate().slice(0,4));
+    const firstYear = Math.min(currentYear - 10, Number(year));
+    const lastYear = Math.max(currentYear + 5, Number(year));
+    const months = Array.from({length:12}, (_, i) => {
+      const value = String(i + 1).padStart(2, '0');
+      const name = new Date(2020,i,1).toLocaleDateString('tr-TR',{month:'long'});
+      return '<option value="'+value+'"'+(value===monthNumber?' selected':'')+'>'+name+'</option>';
+    }).join('');
+    const years = Array.from({length:lastYear-firstYear+1}, (_, i) => {
+      const value = String(firstYear+i);
+      return '<option value="'+value+'"'+(value===year?' selected':'')+'>'+value+'</option>';
+    }).join('');
     el('modalTitle').textContent = 'Ek Ders Hesaplama';
     el('modalSubtitle').textContent = result.start.split('-').reverse().join('.') + ' – ' + result.end.split('-').reverse().join('.');
     el('modalBody').innerHTML = `
       <div class="form-grid mm-ek-form">
-        <label>Hesap ayı<input type="month" id="mmEkMonth" value="${month}"></label>
+        <div class="mm-ek-period-picker">
+          <label>Hesap ayı<select id="mmEkMonth">${months}</select></label>
+          <label>Yıl<select id="mmEkYear">${years}</select></label>
+        </div>
         <label>Dönem ${select('mode',[['calendar','Ay bütünlüğü'],['week','Hafta bütünlüğü (MEBBİS)']])}</label>
         <label>Görev ${select('role',[['teacher','Branş öğretmeni'],['admin','Müdür yardımcısı']])}</label>
         ${options.role === 'admin' ? '<label>Günlük yönetim saati ' + input('admin',24) + '</label>' : ''}
@@ -113,7 +129,7 @@
     view = el('modalBody');
     view.onchange = event => {
       const target = event.target;
-      if (target.id === 'mmEkMonth') return open(target.value);
+      if (target.id === 'mmEkMonth' || target.id === 'mmEkYear') return open(el('mmEkYear').value + '-' + el('mmEkMonth').value);
       const name = target.dataset.mmSetting;
       if (!name) return;
       const value = name === 'social' ? target.value === 'true' : target.value;
@@ -182,7 +198,14 @@
     #modalBody .mm-ek-form input:not([type=checkbox]), #modalBody .mm-ek-form select {
       display:block;box-sizing:border-box;width:100%;min-width:0;max-width:100%;margin-inline:0
     }
-    #mmEkMonth::-webkit-date-and-time-value {min-width:0;text-align:left}
+    #modalBody .mm-ek-period-picker {display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:8px;min-width:0;grid-column:1/-1}
+    #modalBody .mm-ek-form select {width:100%!important;min-width:0!important;max-width:100%!important}
+    #modal.open:has(.mm-ek-form), #modal.open:has(.mm-ek-form) #modalBody {
+      overflow-x:hidden!important;overscroll-behavior-x:none;touch-action:pan-y pinch-zoom
+    }
+    html:has(#modal.open .mm-ek-form), body:has(#modal.open .mm-ek-form) {
+      overflow-x:clip;overscroll-behavior-x:none
+    }
     .mm-ek-days {margin-top:12px;min-width:0}
     #modalBody .mm-ek-table {width:100%;min-width:0;table-layout:fixed;text-align:center}
     .mm-ek-table th,.mm-ek-table td {overflow-wrap:anywhere}
@@ -198,7 +221,7 @@
 
   function updateVersionLabel() {
     const badge = document.querySelector('.mm-home-brand .tiny');
-    if (badge && /^v7[.]8[.][0-9]+$/.test(badge.textContent.trim())) badge.textContent = 'v7.8.329';
+    if (badge && /^v7[.]8[.][0-9]+$/.test(badge.textContent.trim())) badge.textContent = 'v7.8.330';
   }
 
   document.addEventListener('DOMContentLoaded', updateVersionLabel);
