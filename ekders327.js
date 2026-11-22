@@ -1,7 +1,7 @@
 (() => {
   'use strict';
-  const fields = ['lesson', 'prep', 'social', 'admin', 'duty', 'other'];
-  const headings = ['Ek ders', 'Hazırlık', 'Rehberlik / kulüp', 'Yönetim', 'Nöbet', 'Diğer'];
+  const fields = ['lesson', 'prep', 'social', 'admin', 'duty', 'boarding', 'other'];
+  const headings = ['Ek ders', 'Hazırlık', 'Rehberlik / kulüp', 'Yönetim', 'Okul nöbeti', 'Pansiyon nöbeti', 'Diğer'];
   const number = value => Math.max(0, Math.min(99, Math.trunc(Number(value) || 0)));
   const weekday = date => (dateFromISO(date).getDay() + 6) % 7;
   const money = new Intl.NumberFormat('tr-TR', {style:'currency', currency:'TRY'});
@@ -27,6 +27,20 @@
     const activeSchedules = schedules.filter(Boolean).sort((a,b) =>
       String(b.effectiveDate || '').localeCompare(String(a.effectiveDate || '')));
     const dutyDates = new Set(duties.filter(d => !d.type || d.type === 'school').map(d => d.date));
+    const boardingDates = new Map();
+    const boardingTotals = new Map();
+    for (const entry of duties.filter(d => d.type === 'boarding').sort((a,b) => a.date.localeCompare(b.date))) {
+      if (boardingDates.has(entry.date)) continue;
+      const change = changes[entry.date] || {};
+      const key = entry.date.slice(0,7);
+      const used = boardingTotals.get(key) || 0;
+      const allDay = entry.start && entry.start === entry.end;
+      const eligibleHours = allDay ? (key >= '2026-01' && key <= '2027-12' ? 8 : 6) : 4;
+      const cap = key >= '2026-01' && key <= '2027-12' ? 64 : 56;
+      const hours = change.off || change.noBoarding ? 0 : Math.min(eligibleHours, cap - used);
+      boardingDates.set(entry.date, hours);
+      boardingTotals.set(key, used + hours);
+    }
     for (let date = firstMonday; date <= lastSunday; date = addDaysISO(date, 7)) {
       let taught = 0;
       let dutyPaid = false;
@@ -56,6 +70,8 @@
           social:social ? 2 : 0,
           admin:options.role === 'admin' && day < 5 && !change.off ? number(change.admin ?? options.admin) : 0,
           duty:duty ? 3 : 0,
+          boarding:boardingDates.get(iso) || 0,
+          boardingRegistered:boardingDates.has(iso),
           other:number(change.other)
         };
         taught += count;
@@ -73,7 +89,8 @@
     const options = {role:'teacher', mode:'calendar', social:false, socialDay:4, admin:4, tax:'', plus:0, rate:'', ...data.options, ...data.periods?.[month]};
     const changes = data.days || {};
     const schedules = [settings.schedule, ...(settings.scheduleArchive || [])];
-    const duties = normalizeDutySchedule(settings.dutySchedule).entries;
+    const [from, to] = period(month, options.mode);
+    const duties = dutyEntriesForRange(addDaysISO(from, -weekday(from)).slice(0,7)+'-01', addDaysISO(to, 6));
     const result = calculate(month, options, schedules, duties, changes);
     const totals = fields.map(field => result.rows.reduce((sum,row) => sum + row[field], 0));
     const hours = totals.reduce((sum,value) => sum + value, 0);
@@ -117,12 +134,12 @@
       </div>
       <p><b>${hours} saat</b>${rate ? ' · Brüt ' + money.format(gross) : ''}${rate && net !== null ? ' · Tahmini net ' + money.format(net) : ''}</p>
       <p>${fields.map((_,i) => headings[i] + ' ' + totals[i]).join(' · ')}</p>
-      <p class="tiny">Ders programı ve okul nöbet çizelgesi otomatik okunur. İzin, rapor, tatil ve yapılmayan nöbet için ilgili günü düzenleyin. Planlı görevleri bordro öncesi kontrol edin.</p>
+      <p class="tiny">Ders programı, okul ve pansiyon nöbetleri otomatik okunur. İzin, rapor, tatil ve yapılmayan nöbet için ilgili günü düzenleyin. Planlı görevleri bordro öncesi kontrol edin.</p>
       <p class="tiny">${assumedRate ? 'Brüt saat ücreti boşsa 2026 gündüz tarifesi uygulanır. ' : 'Tutar için brüt saat ücretini girin. '}Net tahminde girdiğiniz vergi oranı ve binde 7,59 damga vergisi kullanılır.</p>
       <button type="button" id="mmEkCsv" class="secondary">Excel için CSV indir</button>
       <div class="mm-ek-days"><table class="mm-ek-table">
         <thead><tr><th>Gün</th><th>Ders yükü</th>${headings.map(h=>'<th>'+h+'</th>').join('')}</tr></thead>
-        <tbody>${result.rows.map(r=>`<tr><td><button type="button" class="secondary" data-mm-day="${r.iso}">${r.iso.slice(5).split('-').reverse().join('.')}${r.registered ? ' · Nöbet' : ''}</button></td><td data-label="Ders yükü">${r.count}${!r.schedule && changes[r.iso]?.lessons == null ? ' *' : ''}</td>${fields.map((f,i)=>'<td data-label="'+headings[i]+'">'+r[f]+'</td>').join('')}</tr>`).join('')}</tbody>
+        <tbody>${result.rows.map(r=>`<tr><td><button type="button" class="secondary" data-mm-day="${r.iso}">${r.iso.slice(5).split('-').reverse().join('.')}${r.registered ? ' · Okul' : ''}${r.boardingRegistered ? ' · Pansiyon' : ''}</button></td><td data-label="Ders yükü">${r.count}${!r.schedule && changes[r.iso]?.lessons == null ? ' *' : ''}</td>${fields.map((f,i)=>'<td data-label="'+headings[i]+'">'+r[f]+'</td>').join('')}</tr>`).join('')}</tbody>
       </table></div>
       ${result.rows.some(r=>!r.schedule) ? '<p class="tiny">* Bu tarihe ait ders programı bulunamadı. Ders yükünü gün üzerinden girebilirsiniz.</p>' : ''}
       <p class="tiny"><a target="_blank" rel="noopener" href="https://personel.meb.gov.tr/www/personel-genel-mudurlugu-mevzuat/icerik/363">MEB ek ders mevzuatı</a> · <a target="_blank" rel="noopener" href="https://tut.meb.gov.tr/meb_iys_dosyalar/2025_03/06154241_24095622_ek_ders_modulu_uygulama_kilavuzu.pdf">MEBBİS hesaplama dönemi</a></p>`;
@@ -161,13 +178,14 @@
       <label>Diğer gündüz ek ders saati<input name="other" type="number" min="0" max="24" value="${change.other ?? ''}"></label>
       <label><input name="off" type="checkbox" ${change.off ? 'checked' : ''}> İzin, rapor veya ücret hesabına alınmayacak gün</label>
       ${row.registered ? '<label><input name="noDuty" type="checkbox" ' + (change.noDuty ? 'checked' : '') + '> Okul nöbeti yapılmadı</label>' : ''}
+      ${row.boardingRegistered ? '<label><input name="noBoarding" type="checkbox" ' + (change.noBoarding ? 'checked' : '') + '> Pansiyon nöbeti yapılmadı</label>' : ''}
       <button type="submit">Kaydet</button><button type="button" id="mmEkDayBack" class="secondary">Geri</button>
     </form>`;
     el('mmEkDayBack').onclick = () => open();
     el('mmEkDayForm').onsubmit = event => {
       event.preventDefault();
       const form = new FormData(event.currentTarget);
-      const next = {off:form.has('off'), noDuty:form.has('noDuty')};
+      const next = {off:form.has('off'), noDuty:row.registered ? form.has('noDuty') : !!change.noDuty, noBoarding:row.boardingRegistered ? form.has('noBoarding') : !!change.noBoarding};
       for (const field of ['lessons','admin','other']) {
         if (form.get(field) !== '') next[field] = number(form.get(field));
       }
@@ -221,7 +239,7 @@
 
   function updateVersionLabel() {
     const badge = document.querySelector('.mm-home-brand .tiny');
-    if (badge && /^v7[.]8[.][0-9]+$/.test(badge.textContent.trim())) badge.textContent = 'v7.8.330';
+    if (badge && /^v7[.]8[.][0-9]+$/.test(badge.textContent.trim())) badge.textContent = 'v7.8.331';
   }
 
   document.addEventListener('DOMContentLoaded', updateVersionLabel);
