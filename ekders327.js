@@ -155,11 +155,8 @@
         ${options.role === 'teacher' && options.distribution === 'fixed' ? `<details class="mm-ek-week-editor"><summary>Haftalık saatleri düzenle</summary><div class="mm-ek-week-grid">${weekdays.map((name,i)=>'<label><abbr title="'+name+'">'+['Pzt','Sal','Çar','Per','Cum'][i]+'</abbr><input type="number" inputmode="numeric" aria-label="'+name+' ek ders saati" min="0" max="15" step="1" data-mm-pattern="'+i+'" value="'+number(options.pattern[i])+'"></label>').join('')}</div></details>` : ''}
         <label>Rehberlik / kulüp ${select('social',[['false','Yok'],['true','Var']])}</label>
         ${options.social ? '<label>Görevin çizelge günü ' + select('socialDay',[[0,'Pazartesi'],[1,'Salı'],[2,'Çarşamba'],[3,'Perşembe'],[4,'Cuma']]) + '</label>' : ''}
-        <details class="mm-ek-week-editor mm-ek-exercise">
-          <summary>Egzersiz ayarı · ${options.exerciseEnabled ? exerciseHours + ' saat' : 'Yok'}</summary>
-          <label>Bu ay egzersiz ${select('exerciseEnabled',[['false','Yok'],['true','Var']])}</label>
-          ${options.exerciseEnabled ? '<label>Aylık egzersiz saati ' + input('exerciseHours',99) + '</label>' : ''}
-        </details>
+        <label>Egzersiz ${select('exerciseEnabled',[['false','Yok'],['true','Var']])}</label>
+        ${options.exerciseEnabled ? '<label>Aylık egzersiz saati ' + input('exerciseHours',99) + '</label>' : ''}
         <label>Öğrenim bilgisi ${select('plus',[[0,'Lisans'],[7,'Yüksek Lisans'],[20,'Doktora']])}</label>
         <label>Bu ay öğrenim artırımı ${select('applyPlus',[['true','Uygula'],['false','Artırımsız hesapla']])}</label>
         <label>Brüt gündüz saat ücreti (₺) ${input('rate',99999,0.000001)}</label>
@@ -204,7 +201,6 @@
       }
       saveSettings();
       open();
-      if (name.startsWith('exercise')) view.querySelector('.mm-ek-exercise')?.setAttribute('open','');
     };
     view.onclick = event => {
       const day = event.target.closest('[data-mm-day]')?.dataset.mmDay;
@@ -318,7 +314,7 @@
 
   function updateVersionLabel() {
     const badge = document.querySelector('.mm-home-brand .tiny');
-    if (badge && /^v7[.]8[.][0-9]+$/.test(badge.textContent.trim())) badge.textContent = 'v7.8.337';
+    if (badge && /^v7[.]8[.][0-9]+$/.test(badge.textContent.trim())) badge.textContent = 'v7.8.338';
   }
 
   document.addEventListener('DOMContentLoaded', updateVersionLabel);
