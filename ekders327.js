@@ -34,8 +34,7 @@
       const change = changes[entry.date] || {};
       const key = entry.date.slice(0,7);
       const used = boardingTotals.get(key) || 0;
-      const allDay = entry.start && entry.start === entry.end;
-      const eligibleHours = allDay ? (key >= '2026-01' && key <= '2027-12' ? 8 : 6) : 4;
+      const eligibleHours = 8;
       const cap = key >= '2026-01' && key <= '2027-12' ? 64 : 56;
       const hours = change.off || change.noBoarding ? 0 : Math.min(eligibleHours, cap - used);
       boardingDates.set(entry.date, hours);
@@ -86,7 +85,8 @@
   function open(key) {
     month = /^\d{4}-(0[1-9]|1[0-2])$/.test(key || '') ? key : month || localISODate().slice(0,7);
     const data = settings.extraLessons327 || {};
-    const options = {role:'teacher', mode:'calendar', social:false, socialDay:4, admin:4, tax:'', plus:0, rate:'', ...data.options, ...data.periods?.[month]};
+    const shared = data.options || {};
+    const options = {role:'teacher', mode:'calendar', social:false, socialDay:4, admin:4, tax:'', plus:0, rate:'', ...shared, ...data.periods?.[month], social:shared.social ?? false, socialDay:shared.socialDay ?? 4, plus:shared.plus ?? 0, applyPlus:data.periods?.[month]?.applyPlus ?? true};
     const changes = data.days || {};
     const schedules = [settings.schedule, ...(settings.scheduleArchive || [])];
     const [from, to] = period(month, options.mode);
@@ -96,7 +96,7 @@
     const hours = totals.reduce((sum,value) => sum + value, 0);
     const assumedRate = month.startsWith('2026-') ? 140 * (month < '2026-07' ? 1.387871 : 1.575512) : 0;
     const rate = Number(options.rate || assumedRate);
-    const gross = rate * (hours + (totals[0] + totals[3]) * Number(options.plus) / 100);
+    const gross = rate * (hours + (totals[0] + totals[3]) * (options.applyPlus ? Number(options.plus) : 0) / 100);
     const net = options.tax === '' ? null : gross * (1 - Number(options.tax) / 100 - 0.00759);
     snapshot = {result, totals, hours};
     const select = (name, pairs) => '<select data-mm-setting="' + name + '">' + pairs.map(([value,label]) =>
@@ -128,7 +128,8 @@
         ${options.role === 'admin' ? '<label>Günlük yönetim saati ' + input('admin',24) + '</label>' : ''}
         <label>Rehberlik / kulüp ${select('social',[['false','Yok'],['true','Var']])}</label>
         ${options.social ? '<label>Görevin çizelge günü ' + select('socialDay',[[0,'Pazartesi'],[1,'Salı'],[2,'Çarşamba'],[3,'Perşembe'],[4,'Cuma']]) + '</label>' : ''}
-        <label>Öğrenim artırımı ${select('plus',[[0,'Yok'],[7,'Yüksek lisans (%7)'],[20,'Doktora (%20)']])}</label>
+        <label>Öğrenim bilgisi ${select('plus',[[0,'Lisans / artırım yok'],[7,'Yüksek lisans (%7)'],[20,'Doktora (%20)']])}</label>
+        <label>Bu ay öğrenim artırımı ${select('applyPlus',[['true','Uygula'],['false','Artırımsız hesapla']])}</label>
         <label>Brüt gündüz saat ücreti (₺) ${input('rate',99999,0.000001)}</label>
         <label>Gelir vergisi (%) ${input('tax',40)}</label>
       </div>
@@ -149,11 +150,14 @@
       if (target.id === 'mmEkMonth' || target.id === 'mmEkYear') return open(el('mmEkYear').value + '-' + el('mmEkMonth').value);
       const name = target.dataset.mmSetting;
       if (!name) return;
-      const value = name === 'social' ? target.value === 'true' : target.value;
+      const value = ['social','applyPlus'].includes(name) ? target.value === 'true' : target.value;
       settings.extraLessons327 = data;
-      data.options = {...data.options, [name]:value};
-      data.periods ||= {};
-      data.periods[month] = {...options, [name]:value};
+      const sharedFields = ['social','socialDay','plus'];
+      if (name !== 'applyPlus') data.options = {...shared, [name]:value};
+      if (!sharedFields.includes(name)) {
+        data.periods ||= {};
+        data.periods[month] = {...data.periods[month], [name]:value};
+      }
       saveSettings();
       open();
     };
@@ -239,10 +243,38 @@
 
   function updateVersionLabel() {
     const badge = document.querySelector('.mm-home-brand .tiny');
-    if (badge && /^v7[.]8[.][0-9]+$/.test(badge.textContent.trim())) badge.textContent = 'v7.8.331';
+    if (badge && /^v7[.]8[.][0-9]+$/.test(badge.textContent.trim())) badge.textContent = 'v7.8.332';
   }
 
   document.addEventListener('DOMContentLoaded', updateVersionLabel);
   updateVersionLabel();
+  const openSettingsBeforeExtraLessons = window.openSettings;
+  if (typeof openSettingsBeforeExtraLessons === 'function') {
+    window.openSettings = function (...args) {
+      const result = openSettingsBeforeExtraLessons.apply(this,args);
+      const body = el('modalBody');
+      if (!body || body.querySelector('#mmEkProfileEducation')) return result;
+      const label = document.createElement('label');
+      label.textContent = 'Öğrenim bilgisi (Ek Ders)';
+      label.style.display = 'block';
+      const picker = document.createElement('select');
+      picker.id = 'mmEkProfileEducation';
+      for (const [value,name] of [[0,'Lisans / artırım yok'],[7,'Yüksek lisans (%7)'],[20,'Doktora (%20)']]) {
+        const option = document.createElement('option');
+        option.value = value;
+        option.textContent = name;
+        picker.append(option);
+      }
+      picker.value = String(settings.extraLessons327?.options?.plus ?? 0);
+      picker.addEventListener('change', () => {
+        const data = settings.extraLessons327 ||= {};
+        data.options = {...data.options, plus:Number(picker.value)};
+        saveSettings();
+      });
+      label.append(picker);
+      body.append(label);
+      return result;
+    };
+  }
   window.openExtraLessons327 = open;
 })();
