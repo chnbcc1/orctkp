@@ -110,19 +110,20 @@
     month = /^\d{4}-(0[1-9]|1[0-2])$/.test(key || '') ? key : month || localISODate().slice(0,7);
     const data = settings.extraLessons327 || {};
     const shared = data.options || {};
-    const options = {role:'teacher', mode:'week', distribution:'fixed', pattern:defaultPattern, social:false, socialDay:4, admin:4, tax:'', plus:0, rate:'', ...shared, ...data.periods?.[month], distribution:shared.distribution ?? 'fixed', pattern:shared.pattern ?? defaultPattern, social:shared.social ?? false, socialDay:shared.socialDay ?? 4, plus:shared.plus ?? 0, applyPlus:data.periods?.[month]?.applyPlus ?? true};
+    const options = {role:'teacher', mode:'week', distribution:'fixed', pattern:defaultPattern, social:false, socialDay:4, admin:4, tax:'', plus:0, rate:'', ...shared, ...data.periods?.[month], exerciseEnabled:data.periods?.[month]?.exerciseEnabled ?? false, exerciseHours:data.periods?.[month]?.exerciseHours ?? '', distribution:shared.distribution ?? 'fixed', pattern:shared.pattern ?? defaultPattern, social:shared.social ?? false, socialDay:shared.socialDay ?? 4, plus:shared.plus ?? 0, applyPlus:data.periods?.[month]?.applyPlus ?? true};
     const changes = data.days || {};
     const schedules = [settings.schedule, ...(settings.scheduleArchive || [])];
     const [from, to] = period(month, options.mode);
     const duties = dutyEntriesForRange(addDaysISO(from, -weekday(from)).slice(0,7)+'-01', addDaysISO(to, 6));
     const result = calculate(month, options, schedules, duties, changes);
     const totals = fields.map(field => result.rows.reduce((sum,row) => sum + row[field], 0));
-    const hours = totals.reduce((sum,value) => sum + value, 0);
+    const exerciseHours = options.exerciseEnabled === true ? number(options.exerciseHours) : 0;
+    const hours = totals.reduce((sum,value) => sum + value, exerciseHours);
     const assumedRate = month.startsWith('2026-') ? 140 * (month < '2026-07' ? 1.387871 : 1.575512) : 0;
     const rate = Number(options.rate || assumedRate);
     const gross = rate * (hours + (totals[0] + totals[3]) * (options.applyPlus ? Number(options.plus) : 0) / 100);
     const net = options.tax === '' ? null : gross * (1 - Number(options.tax) / 100 - 0.00759);
-    snapshot = {result, totals, hours};
+    snapshot = {result, totals, hours, exerciseHours};
     const select = (name, pairs) => '<select data-mm-setting="' + name + '">' + pairs.map(([value,label]) =>
       '<option value="' + value + '"' + (String(options[name]) === String(value) ? ' selected' : '') + '>' + label + '</option>').join('') + '</select>';
     const input = (name, max, step = 1) => '<input type="number" min="0" max="' + max + '" step="' + step + '" data-mm-setting="' + name + '" value="' + esc(options[name]) + '">';
@@ -154,13 +155,18 @@
         ${options.role === 'teacher' && options.distribution === 'fixed' ? `<details class="mm-ek-week-editor"><summary>Haftalık saatleri düzenle</summary><div class="mm-ek-week-grid">${weekdays.map((name,i)=>'<label><abbr title="'+name+'">'+['Pzt','Sal','Çar','Per','Cum'][i]+'</abbr><input type="number" inputmode="numeric" aria-label="'+name+' ek ders saati" min="0" max="15" step="1" data-mm-pattern="'+i+'" value="'+number(options.pattern[i])+'"></label>').join('')}</div></details>` : ''}
         <label>Rehberlik / kulüp ${select('social',[['false','Yok'],['true','Var']])}</label>
         ${options.social ? '<label>Görevin çizelge günü ' + select('socialDay',[[0,'Pazartesi'],[1,'Salı'],[2,'Çarşamba'],[3,'Perşembe'],[4,'Cuma']]) + '</label>' : ''}
+        <details class="mm-ek-week-editor mm-ek-exercise">
+          <summary>Egzersiz ayarı · ${options.exerciseEnabled ? exerciseHours + ' saat' : 'Yok'}</summary>
+          <label>Bu ay egzersiz ${select('exerciseEnabled',[['false','Yok'],['true','Var']])}</label>
+          ${options.exerciseEnabled ? '<label>Aylık egzersiz saati ' + input('exerciseHours',99) + '</label>' : ''}
+        </details>
         <label>Öğrenim bilgisi ${select('plus',[[0,'Lisans'],[7,'Yüksek Lisans'],[20,'Doktora']])}</label>
         <label>Bu ay öğrenim artırımı ${select('applyPlus',[['true','Uygula'],['false','Artırımsız hesapla']])}</label>
         <label>Brüt gündüz saat ücreti (₺) ${input('rate',99999,0.000001)}</label>
         <label>Gelir vergisi (%) ${input('tax',40)}</label>
       </div>
       <p class="mm-ek-total"><b>${hours} saat</b>${rate ? ' · Brüt ' + money.format(gross) : ''}${rate && net !== null ? ' · Tahmini net ' + money.format(net) : ''}</p>
-      <p>${fields.map((_,i) => headings[i] + ' ' + totals[i]).join(' · ')}</p>
+      <p>${fields.map((_,i) => headings[i] + ' ' + totals[i]).join(' · ')}${options.exerciseEnabled ? ' · Egzersiz ' + exerciseHours : ''}</p>
       <p class="tiny">Ara tatil haftasında katılım varsa günde 3 saat seminer yazılır. Katılmadığınız günü Ödemesiz gün olarak işaretleyin. Resmî tatil satırının ödeme durumunu gün üzerinden değiştirebilirsiniz.</p>
       <p class="tiny">Ders programı, okul ve pansiyon nöbetleri otomatik okunur. İzin, rapor, tatil ve yapılmayan nöbet için ilgili günü düzenleyin. Planlı görevleri bordro öncesi kontrol edin.</p>
       <p class="tiny">${assumedRate ? 'Brüt saat ücreti boşsa 2026 gündüz tarifesi uygulanır. ' : 'Tutar için brüt saat ücretini girin. '}Net tahminde girdiğiniz vergi oranı ve binde 7,59 damga vergisi kullanılır.</p>
@@ -188,16 +194,17 @@
       }
       const name = target.dataset.mmSetting;
       if (!name) return;
-      const value = ['social','applyPlus'].includes(name) ? target.value === 'true' : target.value;
+      const value = ['social','applyPlus','exerciseEnabled'].includes(name) ? target.value === 'true' : target.value;
       settings.extraLessons327 = data;
       const sharedFields = ['social','socialDay','plus','distribution'];
-      if (name !== 'applyPlus') data.options = {...shared, [name]:value};
+      if (!['applyPlus','exerciseEnabled','exerciseHours'].includes(name)) data.options = {...shared, [name]:value};
       if (!sharedFields.includes(name)) {
         data.periods ||= {};
         data.periods[month] = {...data.periods[month], [name]:value};
       }
       saveSettings();
       open();
+      if (name.startsWith('exercise')) view.querySelector('.mm-ek-exercise')?.setAttribute('open','');
     };
     view.onclick = event => {
       const day = event.target.closest('[data-mm-day]')?.dataset.mmDay;
@@ -241,9 +248,9 @@
   }
 
   function exportCsv() {
-    const {result,totals} = snapshot;
-    const lines = [['Tarih','Ders yükü',...headings],
-      ...result.rows.map(row => [row.iso,row.count,...fields.map(f=>row[f])]), ['Toplam','',...totals]];
+    const {result,totals,exerciseHours,hours} = snapshot;
+    const lines = [['Tarih','Ders yükü',...headings,'Egzersiz (aylık)','Genel toplam'],
+      ...result.rows.map(row => [row.iso,row.count,...fields.map(f=>row[f]),'','']), ['Toplam','',...totals,exerciseHours,hours]];
     const url = URL.createObjectURL(new Blob(['\ufeff' + lines.map(line=>line.join(';')).join('\r\n')], {type:'text/csv;charset=utf-8'}));
     const anchor = document.createElement('a');
     anchor.href = url;
@@ -311,7 +318,7 @@
 
   function updateVersionLabel() {
     const badge = document.querySelector('.mm-home-brand .tiny');
-    if (badge && /^v7[.]8[.][0-9]+$/.test(badge.textContent.trim())) badge.textContent = 'v7.8.336';
+    if (badge && /^v7[.]8[.][0-9]+$/.test(badge.textContent.trim())) badge.textContent = 'v7.8.337';
   }
 
   document.addEventListener('DOMContentLoaded', updateVersionLabel);
