@@ -159,7 +159,7 @@
         <label>Brüt gündüz saat ücreti (₺) ${input('rate',99999,0.000001)}</label>
         <label>Gelir vergisi (%) ${input('tax',40)}</label>
       </div>
-      <p><b>${hours} saat</b>${rate ? ' · Brüt ' + money.format(gross) : ''}${rate && net !== null ? ' · Tahmini net ' + money.format(net) : ''}</p>
+      <p class="mm-ek-total"><b>${hours} saat</b>${rate ? ' · Brüt ' + money.format(gross) : ''}${rate && net !== null ? ' · Tahmini net ' + money.format(net) : ''}</p>
       <p>${fields.map((_,i) => headings[i] + ' ' + totals[i]).join(' · ')}</p>
       <p class="tiny">Ara tatil haftasında katılım varsa günde 3 saat seminer yazılır. Katılmadığınız günü Ödemesiz gün olarak işaretleyin. Resmî tatil satırının ödeme durumunu gün üzerinden değiştirebilirsiniz.</p>
       <p class="tiny">Ders programı, okul ve pansiyon nöbetleri otomatik okunur. İzin, rapor, tatil ve yapılmayan nöbet için ilgili günü düzenleyin. Planlı görevleri bordro öncesi kontrol edin.</p>
@@ -167,7 +167,7 @@
       <button type="button" id="mmEkCsv" class="secondary">Excel için CSV indir</button>
       <div class="mm-ek-days"><table class="mm-ek-table">
         <thead><tr><th>Gün</th><th>Ders yükü</th>${headings.map(h=>'<th>'+h+'</th>').join('')}</tr></thead>
-        <tbody>${result.rows.map(r=>`<tr><td><button type="button" class="secondary" data-mm-day="${r.iso}">${r.iso.slice(5).split('-').reverse().join('.')}${r.status !== 'normal' ? ' · ' + statusLabels[r.status] : ''}${r.registered ? ' · Okul' : ''}${r.boardingRegistered ? ' · Pansiyon' : ''}</button></td><td data-label="Ders yükü">${r.count}${!r.schedule && changes[r.iso]?.lessons == null ? ' *' : ''}</td>${fields.map((f,i)=>'<td data-label="'+headings[i]+'">'+r[f]+'</td>').join('')}</tr>`).join('')}</tbody>
+        <tbody>${result.rows.map(r=>`<tr data-ek-status="${r.status}"><td><button type="button" class="secondary" data-mm-day="${r.iso}">${r.iso.slice(5).split('-').reverse().join('.')}${r.status !== 'normal' ? ' · ' + statusLabels[r.status] : ''}${r.registered ? ' · Okul' : ''}${r.boardingRegistered ? ' · Pansiyon' : ''}</button></td><td data-label="Ders yükü" data-ek-kind="count" data-ek-active="${r.count > 0}">${r.count}${!r.schedule && changes[r.iso]?.lessons == null ? ' *' : ''}</td>${fields.map((f,i)=>'<td data-label="'+headings[i]+'" data-ek-kind="'+f+'" data-ek-active="'+(r[f]>0)+'">'+r[f]+'</td>').join('')}</tr>`).join('')}</tbody>
       </table></div>
       ${result.rows.some(r=>!r.schedule) ? '<p class="tiny">* Bu tarihe ait ders programı bulunamadı. Ders yükünü gün üzerinden girebilirsiniz.</p>' : ''}
       <p class="tiny"><a target="_blank" rel="noopener" href="https://personel.meb.gov.tr/www/personel-genel-mudurlugu-mevzuat/icerik/363">MEB ek ders mevzuatı</a> · <a target="_blank" rel="noopener" href="https://tut.meb.gov.tr/meb_iys_dosyalar/2025_03/06154241_24095622_ek_ders_modulu_uygulama_kilavuzu.pdf">MEBBİS hesaplama dönemi</a></p>`;
@@ -270,6 +270,28 @@
     .mm-ek-days {margin-top:12px;min-width:0}
     #modalBody .mm-ek-table {width:100%;min-width:0;table-layout:fixed;text-align:center}
     .mm-ek-table th,.mm-ek-table td {overflow-wrap:anywhere}
+    #modalBody .mm-ek-total {background:#075850;color:#fff;padding:14px;border-radius:12px;line-height:1.55}
+    #modalBody .mm-ek-total b {color:#fff;font-size:1.16em}
+    #modalBody .mm-ek-table th {background:#e1eeea;color:#123c36}
+    #modalBody .mm-ek-table [data-mm-day] {background:#075850!important;color:#fff!important;border-color:transparent!important;white-space:normal!important;max-width:100%;overflow-wrap:anywhere}
+    #modalBody .mm-ek-table tr[data-ek-status="seminar"] [data-mm-day] {background:#6d4813!important}
+    #modalBody .mm-ek-table tr[data-ek-status="holiday"] [data-mm-day] {background:#73345d!important}
+    #modalBody .mm-ek-table tr[data-ek-status="off"] [data-mm-day] {background:#4d5964!important}
+    #modalBody .mm-ek-table td[data-ek-kind] {border-color:#e6eae8!important}
+    #modalBody .mm-ek-table td[data-ek-active="false"] {background:#f4f6f5!important;color:#59655f!important}
+    #modalBody .mm-ek-table td[data-ek-active="true"] {background:var(--ek-tone,#e8eeeb)!important;color:var(--ek-ink,#26433c)!important;font-weight:700}
+    .mm-ek-table [data-ek-kind="count"] {--ek-tone:#e7eef4;--ek-ink:#2a4a61}
+    .mm-ek-table [data-ek-kind="lesson"] {--ek-tone:#d9f1e4;--ek-ink:#15583e}
+    .mm-ek-table [data-ek-kind="prep"] {--ek-tone:#e0f0fb;--ek-ink:#1c506f}
+    .mm-ek-table [data-ek-kind="social"] {--ek-tone:#efe4fb;--ek-ink:#57347a}
+    .mm-ek-table [data-ek-kind="admin"] {--ek-tone:#e6e9fa;--ek-ink:#353f77}
+    .mm-ek-table [data-ek-kind="duty"] {--ek-tone:#fff0d2;--ek-ink:#714519}
+    .mm-ek-table [data-ek-kind="boarding"] {--ek-tone:#fee5db;--ek-ink:#833c29}
+    .mm-ek-table [data-ek-kind="seminar"] {--ek-tone:#fce6f0;--ek-ink:#793754}
+    @media(max-width:720px) {
+      #modalBody .mm-ek-table tbody tr {background:#fffef9!important;border-color:#ccdcd6!important}
+      #modalBody .mm-ek-table td[data-ek-kind] {border-radius:7px;border-bottom:0!important}
+    }
     @media(max-width:720px) {
       #modalBody .mm-ek-table, #modalBody .mm-ek-table tbody {display:block}
       #modalBody .mm-ek-table thead {position:absolute;clip-path:inset(50%);width:1px;height:1px;overflow:hidden}
@@ -282,7 +304,7 @@
 
   function updateVersionLabel() {
     const badge = document.querySelector('.mm-home-brand .tiny');
-    if (badge && /^v7[.]8[.][0-9]+$/.test(badge.textContent.trim())) badge.textContent = 'v7.8.334';
+    if (badge && /^v7[.]8[.][0-9]+$/.test(badge.textContent.trim())) badge.textContent = 'v7.8.335';
   }
 
   document.addEventListener('DOMContentLoaded', updateVersionLabel);

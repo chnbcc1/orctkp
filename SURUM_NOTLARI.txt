@@ -1,3 +1,5 @@
+v7.8.335: Ek Ders çizelgesinde dolu kalemler görev türüne göre renklendirildi.
+
 v7.8.334: Düzenlenebilir haftalık ders görevi dağılımı, tatil ve seminer günleri.
 
 v7.8.333: Öğrenim Bilgisi profil kartında öğretmen adı ve okul adı arasına taşındı.
