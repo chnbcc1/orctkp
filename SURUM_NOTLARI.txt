@@ -1,3 +1,5 @@
+v7.8.333: Öğrenim Bilgisi profil kartında öğretmen adı ve okul adı arasına taşındı.
+
 v7.8.332: Pansiyon nöbeti görev başına 8 saat hesaplanır. Rehberlik ve öğrenim bilgileri aylar arasında kullanılır. Öğrenim artırımı seçili ay için kapatılabilir.
 
 v7.8.331: Pansiyon nöbetleri Ek Ders çizelgesine ve CSV çıktısına ayrı kalem olarak otomatik eklenir.

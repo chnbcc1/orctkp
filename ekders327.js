@@ -128,7 +128,7 @@
         ${options.role === 'admin' ? '<label>Günlük yönetim saati ' + input('admin',24) + '</label>' : ''}
         <label>Rehberlik / kulüp ${select('social',[['false','Yok'],['true','Var']])}</label>
         ${options.social ? '<label>Görevin çizelge günü ' + select('socialDay',[[0,'Pazartesi'],[1,'Salı'],[2,'Çarşamba'],[3,'Perşembe'],[4,'Cuma']]) + '</label>' : ''}
-        <label>Öğrenim bilgisi ${select('plus',[[0,'Lisans / artırım yok'],[7,'Yüksek lisans (%7)'],[20,'Doktora (%20)']])}</label>
+        <label>Öğrenim bilgisi ${select('plus',[[0,'Lisans'],[7,'Yüksek Lisans'],[20,'Doktora']])}</label>
         <label>Bu ay öğrenim artırımı ${select('applyPlus',[['true','Uygula'],['false','Artırımsız hesapla']])}</label>
         <label>Brüt gündüz saat ücreti (₺) ${input('rate',99999,0.000001)}</label>
         <label>Gelir vergisi (%) ${input('tax',40)}</label>
@@ -243,7 +243,7 @@
 
   function updateVersionLabel() {
     const badge = document.querySelector('.mm-home-brand .tiny');
-    if (badge && /^v7[.]8[.][0-9]+$/.test(badge.textContent.trim())) badge.textContent = 'v7.8.332';
+    if (badge && /^v7[.]8[.][0-9]+$/.test(badge.textContent.trim())) badge.textContent = 'v7.8.333';
   }
 
   document.addEventListener('DOMContentLoaded', updateVersionLabel);
@@ -253,13 +253,15 @@
     window.openSettings = function (...args) {
       const result = openSettingsBeforeExtraLessons.apply(this,args);
       const body = el('modalBody');
-      if (!body || body.querySelector('#mmEkProfileEducation')) return result;
+      const schoolLabel = body?.querySelector('#profileSchool')?.previousElementSibling;
+      if (!schoolLabel || schoolLabel.tagName !== 'LABEL' || body.querySelector('#mmEkProfileEducation')) return result;
       const label = document.createElement('label');
-      label.textContent = 'Öğrenim bilgisi (Ek Ders)';
-      label.style.display = 'block';
+      label.textContent = 'Öğrenim Bilgisi';
+      label.className = schoolLabel.className;
+      label.htmlFor = 'mmEkProfileEducation';
       const picker = document.createElement('select');
       picker.id = 'mmEkProfileEducation';
-      for (const [value,name] of [[0,'Lisans / artırım yok'],[7,'Yüksek lisans (%7)'],[20,'Doktora (%20)']]) {
+      for (const [value,name] of [[0,'Lisans'],[7,'Yüksek Lisans'],[20,'Doktora']]) {
         const option = document.createElement('option');
         option.value = value;
         option.textContent = name;
@@ -271,8 +273,8 @@
         data.options = {...data.options, plus:Number(picker.value)};
         saveSettings();
       });
-      label.append(picker);
-      body.append(label);
+      picker.style.cssText = 'width:100%;margin:4px 0 10px';
+      schoolLabel.before(label, picker);
       return result;
     };
   }
