@@ -1,3 +1,5 @@
+v7.8.336: Haftalık saat alanı beş sütunlu iki satır olarak düzenlendi.
+
 v7.8.335: Ek Ders çizelgesinde dolu kalemler görev türüne göre renklendirildi.
 
 v7.8.334: Düzenlenebilir haftalık ders görevi dağılımı, tatil ve seminer günleri.

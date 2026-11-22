@@ -151,7 +151,7 @@
         <label>Görev ${select('role',[['teacher','Branş öğretmeni'],['admin','Müdür yardımcısı']])}</label>
         ${options.role === 'admin' ? '<label>Günlük yönetim saati ' + input('admin',24) + '</label>' : ''}
         ${options.role === 'teacher' ? '<label>Ders görevi dağılımı ' + select('distribution',[['fixed','İdarenin haftalık dağılımı'],['auto','Ders yüküne göre otomatik']]) + '</label>' : ''}
-        ${options.role === 'teacher' && options.distribution === 'fixed' ? `<details class="mm-ek-period-picker"><summary>Haftalık saatleri düzenle</summary>${weekdays.map((name,i)=>'<label>'+name+'<input type="number" min="0" max="15" step="1" data-mm-pattern="'+i+'" value="'+number(options.pattern[i])+'"></label>').join('')}</details>` : ''}
+        ${options.role === 'teacher' && options.distribution === 'fixed' ? `<details class="mm-ek-week-editor"><summary>Haftalık saatleri düzenle</summary><div class="mm-ek-week-grid">${weekdays.map((name,i)=>'<label><abbr title="'+name+'">'+['Pzt','Sal','Çar','Per','Cum'][i]+'</abbr><input type="number" inputmode="numeric" aria-label="'+name+' ek ders saati" min="0" max="15" step="1" data-mm-pattern="'+i+'" value="'+number(options.pattern[i])+'"></label>').join('')}</div></details>` : ''}
         <label>Rehberlik / kulüp ${select('social',[['false','Yok'],['true','Var']])}</label>
         ${options.social ? '<label>Görevin çizelge günü ' + select('socialDay',[[0,'Pazartesi'],[1,'Salı'],[2,'Çarşamba'],[3,'Perşembe'],[4,'Cuma']]) + '</label>' : ''}
         <label>Öğrenim bilgisi ${select('plus',[[0,'Lisans'],[7,'Yüksek Lisans'],[20,'Doktora']])}</label>
@@ -183,7 +183,7 @@
         settings.extraLessons327 = data;
         saveSettings();
         open();
-        view.querySelector('details')?.setAttribute('open','');
+        view.querySelector('.mm-ek-week-editor')?.setAttribute('open','');
         return;
       }
       const name = target.dataset.mmSetting;
@@ -260,6 +260,13 @@
       display:block;box-sizing:border-box;width:100%;min-width:0;max-width:100%;margin-inline:0
     }
     #modalBody .mm-ek-period-picker {display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:8px;min-width:0;grid-column:1/-1}
+    #modalBody .mm-ek-week-editor {display:block;grid-column:1/-1;min-width:0;margin:4px 0 8px}
+    #modalBody .mm-ek-week-editor summary {cursor:pointer}
+    #modalBody .mm-ek-week-grid {display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:8px}
+    #modalBody .mm-ek-week-grid label {display:grid;grid-template-rows:auto auto;gap:4px;text-align:center}
+    #modalBody .mm-ek-week-grid abbr {text-decoration:none;font-size:0.875rem}
+    #modalBody .mm-ek-week-grid input {width:100%!important;min-width:0!important;max-width:100%!important;padding-inline:2px!important;min-height:44px;text-align:center;appearance:textfield}
+    #modalBody .mm-ek-week-grid input::-webkit-inner-spin-button {appearance:none;margin:0}
     #modalBody .mm-ek-form select {width:100%!important;min-width:0!important;max-width:100%!important}
     #modal.open:has(.mm-ek-form), #modal.open:has(.mm-ek-form) #modalBody {
       overflow-x:hidden!important;overscroll-behavior-x:none;touch-action:pan-y pinch-zoom
@@ -304,7 +311,7 @@
 
   function updateVersionLabel() {
     const badge = document.querySelector('.mm-home-brand .tiny');
-    if (badge && /^v7[.]8[.][0-9]+$/.test(badge.textContent.trim())) badge.textContent = 'v7.8.335';
+    if (badge && /^v7[.]8[.][0-9]+$/.test(badge.textContent.trim())) badge.textContent = 'v7.8.336';
   }
 
   document.addEventListener('DOMContentLoaded', updateVersionLabel);
