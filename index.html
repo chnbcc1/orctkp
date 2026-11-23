@@ -15657,6 +15657,22 @@ function v4204CrossSecondDecision(metrics,cal,ch){
  return {...ch,type:'review',indices:[ch.index,...competitors],
    reason:'V4.11 · ikinci balonda çarpı/kısmi merkez işareti; öğretmen kontrolü',v411Checked:true};
 }
+// Evaluate final single marks after all recovery passes. A relative peak alone
+// can be caused by a copy artifact or a shadow inside an otherwise blank bubble.
+function omrVerifySingleMark339(metrics,cal,decision){
+  if(decision.type!=='answer')return decision;
+  const picked=metrics[decision.index]||{};
+  const gray=Number(picked.grayDiff)||0;
+  const competing=metrics.reduce((best,m,i)=>i===decision.index?best:Math.max(best,Number(m.grayDiff)||0),0);
+  const mark=Number(cal?.markThreshold)||0;
+  const blank=Number(cal?.blankMedian)||0;
+  const margin=Math.max(10,Number(cal?.rowGap)||0);
+  const filled=Number(picked.coreFrac)>=Math.max(.32,(Number(cal?.blankCoreMedian)||0)+.14)
+    && Number(picked.innerFrac)>=Math.max(.32,(Number(cal?.blankInnerMedian)||0)+.12)
+    && Number(picked.qmin)>=Math.max(.12,(Number(cal?.blankQuadMedian)||0)+.07);
+  if(filled&&gray>=Math.max(mark+3,blank+22)&&gray-competing>=margin)return decision;
+  return {...decision,type:'review',reason:'Balon doluluğu kesin değil · işareti veya boş cevabı doğrulayın'};
+}
 function v4182ReadSubject(can,s,cal){
   const shift=cal?.subjectShifts?.[s.name]||v4183ZoneShift(can,(s.rows||[]).flatMap(r=>r.bubbles||[]),{maxDx:4,maxDy:4,hardCap:4,step:1,minGain:.010,maxSamples:30}),
         edgeCandidates=v4203EdgeCandidates(can,s,shift),
@@ -15670,7 +15686,7 @@ function v4182ReadSubject(can,s,cal){
           const diffuseBlank=v4190DiffuseNoiseBlank(metrics,localCal,v49);
           const v410=v4203PartialDecision(metrics,localCal,diffuseBlank||v49,edgeCandidates[qi]);
           const v411=v4204CrossSecondDecision(metrics,localCal,v410);
-          return{metrics,ch:v411,edge:edgeCandidates[qi]};
+          return{metrics,ch:omrVerifySingleMark339(metrics,localCal,v411),edge:edgeCandidates[qi]};
         });
   return{shift,rows}
 }
@@ -15897,7 +15913,12 @@ async function scanOneLegacy180(file,cfg,c){
     }
     const scores=rowRead.scores;
     const between=rowRead.between;
-    const ch=classifyAnswer795(scores,between);
+    const classified=classifyAnswer795(scores,between);
+    const ch=classified.type==='answer'&&(classified.score<.45||
+      classified.score-classified.second<.14||classified.score/Math.max(.01,classified.second)<1.32||
+      between>=.16||rowRead.robust179)
+      ?{...classified,type:'review',reason:'İşaret zayıf veya çevresinde iz var · cevabı doğrulayın'}
+      :classified;
     const key=String(cfg.subjects[si].key||'')[qi]||'';
     const issueId=`${si}:${qi}`;
     const st={
@@ -15990,7 +16011,13 @@ window.processOpticalFiles795=async function(files,kind,id){const arr=[...(files
  }
  rows.push(r);
  }catch(e){rows.push({fileName:arr[i].name||'Optik',error:e?.message||String(e),studentId:'',subjectResults:{},ambiguous:[],reviewItems:[],questionStates:{},numberAmbiguous:[],bookletType:'',_file:arr[i]})}}window._omrBatch795={kind,id,rows};renderOpticalBatch795()};
-function resultSummary795(r){return Object.entries(r.subjectResults||{}).map(([n,v])=>`${n}: ${v.correct}D · ${v.wrong}Y · ${v.blank}B`).join(' | ')}
+function resultSummary795(r){
+ return Object.entries(r.subjectResults||{}).map(([name,value])=>{
+  const pending=(r.questionStates?.[name]||[]).filter(st=>st.status==='review'&&!st.decision).length;
+  const marked=value.correct+value.wrong;
+  return `${name}: ${marked} işaret · ${value.correct}D · ${value.wrong}Y · ${Math.max(0,value.blank-pending)}B${pending?' · '+pending+' onay bekliyor':''}`;
+ }).join(' | ');
+}
 function cleanupOpticalImages795(q){try{closeOpticalImage795(true)}catch(e){}for(const r of(q?.rows||[])){if(r?._previewUrl){try{URL.revokeObjectURL(r._previewUrl)}catch(e){}r._previewUrl=null}if(r){r._file=null;r._v45Preview=null;r._omrMetrics196=null}}}
 window.renderOpticalBatch795=function(){const q=window._omrBatch795;if(!q)return;routeBatch319(q);const ctx=kindObj795(q.kind,q.id),cfg=currentConfig795(q.kind,q.id),grouped=omrGrouped199(cfg);el('modalTitle').textContent='Optik Okuma Sonuçları';el('modalSubtitle').textContent=scopeLabel319(q,ctx);el('modalBody').innerHTML=`<div class="mm-optic-info795">Sonuçları kontrol edin. <b>Yalnız iki net/koyu işaret otomatik yanlış sayılır.</b> Tek bir balon diğerlerinden belirgin biçimde ayrılıyorsa silik olsa da otomatik okunur. Silik işaret içeren çift işaretler ile gerçekten belirsiz tek işaretler kararınızı bekler; <b>Optiği Göster</b> ile görseli açıp Doğru / Yanlış / Boş kararını siz verirsiniz. Görseller yalnız bu kontrol sırasında geçici tutulur ve sonuç aktarımından sonra saklanmaz.</div>${q.rows.map((r,i)=>{if(r.error)return`<div class="mm-optic-scan-card795"><div class="mm-optic-bad795">✕ ${esc(r.error)}</div><div class="mm-optic-file795">${esc(r.fileName)}</div><div class="mm-optic-card-actions795"><button class="secondary" onclick="openOpticalImage795(${i})">🖼️ Optiği Göster</button></div></div>`;const pending=unresolvedReview795(r),numPending=!omrNumberReady205(r),issues=(r.reviewItems?.length||0)+(r.numberAmbiguous?.length||0),cls=r.studentId&&!pending&&!numPending?'mm-optic-good795':'mm-optic-warn795',canApply=!!r.studentId&&!pending&&!numPending&&!r.gridWarning&&(!grouped||omrActiveKey199(r,cfg)),checked=canApply?'checked':'';let stateText=numPending?'⚠ Öğrenci numarası doğrulanmalı':grouped&&!omrActiveKey199(r,cfg)?'⚠ Kitapçık grubu seçilmeli':pending?`⚠ ${pending} karar bekliyor`:issues?`⚠ ${issues} işaret uyarısı`:'✓ Net okuma';return`<div class="mm-optic-scan-card795"><div class="mm-optic-scan-head795"><label style="display:flex;align-items:center;gap:7px"><input type="checkbox" data-omr-apply="${i}" ${checked} ${canApply?'':'disabled'}> <span class="${cls}">${r.studentId?'✓ Öğrenci eşleşti':'⚠ Öğrenci seçin'}</span></label><span class="${pending?'mm-optic-pending795':''}">${stateText}</span></div>${r.routeWarning319?`<p class="mm-optic-warn795" role="status">${esc(r.routeWarning319)}</p>`:''}<label style="display:block;margin-top:8px">${q.kind==='trial'?'Sınıf / Öğrenci':'Öğrenci'}<select data-omr-student="${i}" onchange="omrAssignStudent795(${i},this.value)"><option value="">Seçin</option>${options319(q,r,ctx)}</select></label>${grouped?`<label style="display:block;margin-top:9px">Kitapçık grubu<select data-omr-booklet="${i}" onchange="omrSetBooklet199(${i},this.value)"><option value="" ${!r.selectedBooklet199?'selected':''}>Kitapçık seçin (zorunlu)</option>${omrGroups199(cfg).map(g=>`<option value="${g}" ${r.selectedBooklet199===g?'selected':''}>${g} Kitapçığı</option>`).join('')}</select></label><div class="tiny" style="margin-top:3px;color:${omrActiveKey199(r,cfg)?'#315f58':'#a14f08'}">${omrActiveKey199(r,cfg)?`✓ ${r.selectedBooklet199} grubunun anahtarı · ${r.bookletSource199==='öğretmen'?'öğretmen seçimi':'optikten okundu'}`:'Kitapçık boş, belirsiz veya tanımlı değil. Doğru/yanlış hesaplanmaz.'}</div>`:''}<div class="mm-optic-summary795">${grouped&&!omrActiveKey199(r,cfg)?'Kitapçık seçilmeden puanlama yapılmaz':esc(resultSummary795(r))}</div>${!grouped&&r.bookletType?`<div class="tiny" style="margin-top:4px;color:#52655e;font-weight:800">Kitapçık: ${esc(r.bookletType)}${r.bookletAmbiguous?' · belirsiz':''}</div>`:(!grouped&&r.bookletAmbiguous?`<div class="tiny" style="margin-top:4px;color:#a14f08;font-weight:800">Kitapçık: belirsiz / işaret yok</div>`:'')}${r.reviewItems?.length?`<div class="tiny" style="margin-top:5px;color:#a14f08">${r.reviewItems.map(x=>`${esc(x.subject)} ${x.question}: ${esc(reviewReasonLabel795(x))}${x.decision&&!x.fixed?' → '+(x.decision==='correct'?'Doğru':x.decision==='wrong'?'Yanlış':'Boş'):''}`).slice(0,12).join(' · ')}${r.reviewItems.length>12?'…':''}</div>`:''}<div class="mm-optic-file795">Okunan no: ${esc(r.studentNo||'—')} · ${esc(r.fileName)}</div>${omrNumberReviewMarkup205(r,i)}${r.preprocess?.applied?`<div class="tiny" style="margin-top:4px;color:#7a5a16;font-weight:800">${esc(opticalLightingLabel795(r.preprocess))}</div>`:''}${r.markerCorrection?.edgeAdjusted?`<div class="tiny" style="margin-top:4px;color:#315f58;font-weight:800">↗ Kesik/eğik köşe: ${esc(cornerName176(r.markerCorrection?.cornerIndex))}${r.markerCorrection?.cornerReconstructed?' · 3 sağlam köşeden yeniden kuruldu':' · otomatik düzeltildi'}${r.markerCorrection?.cornerStrategy?` · ${esc(r.markerCorrection.cornerStrategy)}`:''}</div>`:''}${r.gridWarning?`<div class="mm-optic-bad795" style="margin-top:6px">⚠ ${esc(r.gridWarning)}</div>`:''}<div class="mm-optic-card-actions795"><button class="secondary" onclick="openOpticalImage795(${i})">🖼️ Optiği Göster</button><button class="secondary" onclick="openRealPaperDiag795(${i})">🔬 Gerçek Kâğıt Teşhisi</button></div></div>`}).join('')}<div class="modal-actions"><button onclick="applyOpticalBatch795()">✓ Seçilileri Sonuçlara Aktar</button><button class="secondary" onclick="startOpticalScan795('${q.kind}','${q.id}')">Yeni Optik Oku</button></div>`;if(typeof modalUpdateBackButton==='function')modalUpdateBackButton()};
 window.omrAssignStudent795=function(i,sid){

@@ -1,3 +1,5 @@
+v7.8.339: Optik okumada doluluğu kesinleşmeyen tek işaretler öğretmen kontrolüne gönderilir. Sonuç özetinde işaret ve onay bekleyen soru sayıları görünür.
+
 v7.8.338: Egzersiz seçimi doğrudan görünür. Var seçilince aylık saat kutusu altta açılır.
 
 v7.8.337: Ek Ders ekranında seçili aya özel egzersiz ayarı ve saat girişi eklendi.
